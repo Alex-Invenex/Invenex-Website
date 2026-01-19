@@ -1,25 +1,10 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
+// CSS-based page transitions for better performance
+// Avoids loading framer-motion in critical rendering path
 
 export default function Template({ children }: { children: React.ReactNode }) {
-  const shouldReduceMotion = useReducedMotion();
-
-  if (shouldReduceMotion) {
-    return <>{children}</>;
-  }
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{
-        duration: 0.3,
-        ease: [0.16, 1, 0.3, 1], // Premium ease-out
-      }}
-    >
+    <div className="animate-page-enter motion-reduce:animate-none">
       {children}
-    </motion.div>
+    </div>
   );
 }

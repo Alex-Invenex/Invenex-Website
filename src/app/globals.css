@@ -87,4 +87,28 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-full: 9999px;
+
+  /* ----------------------------------------
+     Animations
+     ---------------------------------------- */
+  --animate-page-enter: page-enter 0.3s var(--ease-out) forwards;
+}
+
+/* Page transition animation */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation utility class */
+@layer utilities {
+  .animate-page-enter {
+    animation: var(--animate-page-enter);
+  }
 }
