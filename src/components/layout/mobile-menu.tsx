@@ -2,9 +2,16 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { Linkedin, Twitter, Instagram, Github } from "lucide-react";
 import { mainNav, socialLinks, siteConfig } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  linkedin: Linkedin,
+  twitter: Twitter,
+  instagram: Instagram,
+  github: Github,
+};
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -115,18 +122,25 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
         {/* Social Links */}
         <div className="flex items-center justify-center gap-6">
-          {socialLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-foreground/10 transition-colors"
-              aria-label={link.name}
-            >
-              <span className="text-foreground-muted">{link.name[0]}</span>
-            </a>
-          ))}
+          {socialLinks.map((link) => {
+            const Icon = iconMap[link.icon];
+            return (
+              <a
+                key={link.name}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-foreground/10 transition-colors"
+                aria-label={link.name}
+              >
+                {Icon ? (
+                  <Icon className="w-5 h-5 text-foreground-muted" />
+                ) : (
+                  <span className="text-foreground-muted">{link.name[0]}</span>
+                )}
+              </a>
+            );
+          })}
         </div>
       </div>
     </div>
