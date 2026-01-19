@@ -1,14 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { Linkedin, Twitter, Instagram, Github } from "lucide-react";
-import { siteConfig, footerNav, socialLinks, contactInfo } from "@/lib/constants";
+import { motion } from "framer-motion";
+import {
+  Linkedin,
+  Twitter,
+  Instagram,
+  Github,
+  Mail,
+  Phone,
+  MapPin,
+  ArrowUpRight,
+  Sparkles,
+  Heart,
+} from "lucide-react";
+import {
+  siteConfig,
+  footerNav,
+  socialLinks,
+  contactInfo,
+} from "@/lib/constants";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   linkedin: Linkedin,
   twitter: Twitter,
   instagram: Instagram,
   github: Github,
+};
+
+const socialGradients: Record<string, string> = {
+  linkedin: "hover:bg-blue-500/20 hover:border-blue-500/30 hover:text-blue-400",
+  twitter: "hover:bg-sky-500/20 hover:border-sky-500/30 hover:text-sky-400",
+  instagram:
+    "hover:bg-pink-500/20 hover:border-pink-500/30 hover:text-pink-400",
+  github: "hover:bg-gray-500/20 hover:border-gray-500/30 hover:text-gray-300",
 };
 
 export function Footer() {
@@ -19,45 +44,68 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-border bg-background-secondary">
-      <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-          {/* Company Info */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="text-2xl font-bold text-foreground">
-              {siteConfig.name}
+    <footer className="relative bg-background overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px]" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px]" />
+
+      {/* Top gradient border */}
+      <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="container mx-auto px-6 py-16 relative z-10">
+        {/* Main Footer Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
+          {/* Company Info - Takes 4 columns */}
+          <div className="lg:col-span-4">
+            <Link href="/" className="flex items-center gap-2 group">
+              <motion.div
+                className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 via-violet-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20"
+                whileHover={{ scale: 1.05, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <Sparkles className="w-5 h-5 text-white" />
+              </motion.div>
+              <span className="text-xl font-bold text-gradient">
+                {siteConfig.name}
+              </span>
             </Link>
-            <p className="mt-4 text-foreground-muted max-w-sm">
+
+            <p className="mt-4 text-foreground-muted leading-relaxed max-w-sm">
               {siteConfig.description}
             </p>
 
             {/* Social Links */}
-            <div className="flex items-center gap-4 mt-6">
+            <div className="flex items-center gap-3 mt-6">
               {socialLinks.map((link) => {
                 const Icon = iconMap[link.icon];
+                const gradientClass =
+                  socialGradients[link.icon] || "hover:bg-white/10";
                 return (
-                  <a
+                  <motion.a
                     key={link.name}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 flex items-center justify-center rounded-full border border-border hover:border-foreground hover:bg-foreground/5 transition-colors"
+                    className={`w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.03] border border-white/[0.08] text-foreground-muted transition-all duration-300 ${gradientClass}`}
                     aria-label={link.name}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     {Icon ? (
-                      <Icon className="w-5 h-5 text-foreground-muted" />
+                      <Icon className="w-5 h-5" />
                     ) : (
-                      <span className="text-sm text-foreground-muted">{link.name[0]}</span>
+                      <span className="text-sm">{link.name[0]}</span>
                     )}
-                  </a>
+                  </motion.a>
                 );
               })}
             </div>
           </div>
 
-          {/* Services Links */}
-          <div>
-            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+          {/* Services Links - 2 columns */}
+          <div className="lg:col-span-2">
+            <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
               Services
             </h3>
             <ul className="space-y-3">
@@ -65,18 +113,20 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-foreground-muted hover:text-foreground transition-colors"
+                    className="text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
                   >
                     {link.title}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Company Links */}
-          <div>
-            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+          {/* Company Links - 2 columns */}
+          <div className="lg:col-span-2">
+            <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
               Company
             </h3>
             <ul className="space-y-3">
@@ -84,68 +134,110 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-foreground-muted hover:text-foreground transition-colors"
+                    className="text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
                   >
                     {link.title}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
-              Contact
+          {/* Contact Info - 4 columns */}
+          <div className="lg:col-span-4">
+            <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              Get in Touch
             </h3>
-            <ul className="space-y-3 text-foreground-muted">
+            <ul className="space-y-4">
               <li>
-                <a
+                <motion.a
                   href={`mailto:${contactInfo.email}`}
-                  className="hover:text-foreground transition-colors"
+                  className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 group"
+                  whileHover={{ x: 5 }}
                 >
-                  {contactInfo.email}
-                </a>
+                  <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <span className="text-foreground-muted group-hover:text-foreground transition-colors">
+                    {contactInfo.email}
+                  </span>
+                </motion.a>
               </li>
               <li>
-                <a
+                <motion.a
                   href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
-                  className="hover:text-foreground transition-colors"
+                  className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 group"
+                  whileHover={{ x: 5 }}
                 >
-                  {contactInfo.phone}
-                </a>
+                  <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <span className="text-foreground-muted group-hover:text-foreground transition-colors">
+                    {contactInfo.phone}
+                  </span>
+                </motion.a>
               </li>
               <li>
-                {contactInfo.address.city}, {contactInfo.address.state}
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <span className="text-foreground-muted">
+                    {contactInfo.address.city}, {contactInfo.address.state}
+                  </span>
+                </div>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-foreground-muted">
-            &copy; {currentYear} {siteConfig.name}. All rights reserved.
-          </p>
-          <button
-            onClick={scrollToTop}
-            className="text-sm text-foreground-muted hover:text-foreground transition-colors flex items-center gap-2"
-          >
-            Back to top
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 10l7-7m0 0l7 7m-7-7v18"
-              />
-            </svg>
-          </button>
+        <div className="mt-12 pt-8 border-t border-white/[0.05]">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-foreground-muted flex items-center gap-1">
+              &copy; {currentYear} {siteConfig.name}. Made with
+              <Heart className="w-4 h-4 text-red-400 fill-red-400 animate-pulse" />
+              in India
+            </p>
+
+            <div className="flex items-center gap-6">
+              <Link
+                href="/privacy"
+                className="text-sm text-foreground-muted hover:text-foreground transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-sm text-foreground-muted hover:text-foreground transition-colors"
+              >
+                Terms of Service
+              </Link>
+              <motion.button
+                onClick={scrollToTop}
+                className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-foreground-muted hover:text-foreground hover:bg-white/[0.08] transition-all duration-300"
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Back to top"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 10l7-7m0 0l7 7m-7-7v18"
+                  />
+                </svg>
+              </motion.button>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

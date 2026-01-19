@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe,
   Smartphone,
@@ -9,6 +10,9 @@ import {
   ShoppingCart,
   Share2,
   Lightbulb,
+  ChevronDown,
+  Sparkles,
+  ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { mainNav, siteConfig } from "@/lib/constants";
@@ -16,13 +20,28 @@ import { Button } from "@/components/ui/button";
 import { MobileMenu } from "./mobile-menu";
 
 // Service icons mapped by href
-const serviceIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+const serviceIcons: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
   "/services/web-development": Globe,
   "/services/mobile-development": Smartphone,
   "/services/platform-development": Layers,
   "/services/ecommerce": ShoppingCart,
   "/services/social-media": Share2,
   "/services/digital-strategy": Lightbulb,
+};
+
+const serviceColors: Record<string, string> = {
+  "/services/web-development": "from-blue-500/20 to-cyan-500/20 text-blue-400",
+  "/services/mobile-development":
+    "from-green-500/20 to-emerald-500/20 text-green-400",
+  "/services/platform-development":
+    "from-purple-500/20 to-violet-500/20 text-purple-400",
+  "/services/ecommerce": "from-orange-500/20 to-amber-500/20 text-orange-400",
+  "/services/social-media": "from-pink-500/20 to-rose-500/20 text-pink-400",
+  "/services/digital-strategy":
+    "from-yellow-500/20 to-amber-500/20 text-yellow-400",
 };
 
 export function Navbar() {
@@ -56,19 +75,30 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-          scrolled && "bg-background/80 backdrop-blur-lg border-b border-border",
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+          scrolled
+            ? "bg-background/70 backdrop-blur-xl border-b border-white/[0.05] shadow-[0_4px_30px_rgba(0,0,0,0.3)]"
+            : "bg-transparent",
           !visible && "-translate-y-full"
         )}
       >
         <nav className="container mx-auto px-6 h-20 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold text-foreground">
-            {siteConfig.name}
+          <Link href="/" className="flex items-center gap-2 group">
+            <motion.div
+              className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 via-violet-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20"
+              whileHover={{ scale: 1.05, rotate: 5 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <Sparkles className="w-5 h-5 text-white" />
+            </motion.div>
+            <span className="text-xl font-bold text-gradient">
+              {siteConfig.name}
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-1">
             {mainNav.map((item) => (
               <div
                 key={item.title}
@@ -78,60 +108,128 @@ export function Navbar() {
               >
                 <Link
                   href={item.href}
-                  className="text-foreground-muted hover:text-foreground transition-colors"
+                  className={cn(
+                    "px-4 py-2 rounded-full text-foreground-muted hover:text-foreground transition-all duration-300 flex items-center gap-1",
+                    "hover:bg-white/5"
+                  )}
                 >
                   {item.title}
+                  {item.children && (
+                    <ChevronDown
+                      className={cn(
+                        "w-4 h-4 transition-transform duration-300",
+                        servicesOpen && "rotate-180"
+                      )}
+                    />
+                  )}
                 </Link>
 
-                {/* Mega Menu for Services */}
-                {item.children && servicesOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4">
-                    <div className="bg-background-secondary border border-border rounded-lg p-6 shadow-xl min-w-[600px] grid grid-cols-2 gap-4 animate-in fade-in duration-200">
-                      {item.children.map((child) => {
-                        const Icon = serviceIcons[child.href];
-                        return (
+                {/* Premium Mega Menu for Services */}
+                <AnimatePresence>
+                  {item.children && servicesOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 pt-4"
+                    >
+                      <div className="relative min-w-[650px] p-6 rounded-2xl bg-background-secondary/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+                        {/* Gradient border effect */}
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 pointer-events-none" />
+
+                        {/* Grid pattern */}
+                        <div className="absolute inset-0 rounded-2xl bg-grid opacity-30 pointer-events-none" />
+
+                        <div className="relative grid grid-cols-2 gap-2">
+                          {item.children.map((child, index) => {
+                            const Icon = serviceIcons[child.href];
+                            const colorClass =
+                              serviceColors[child.href] ||
+                              "from-gray-500/20 to-gray-500/20 text-gray-400";
+                            return (
+                              <motion.div
+                                key={child.href}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                              >
+                                <Link
+                                  href={child.href}
+                                  className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.05] transition-all duration-300 group/item"
+                                >
+                                  <div
+                                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colorClass.split(" ")[0]} ${colorClass.split(" ")[1]} flex items-center justify-center shrink-0 border border-white/10 group-hover/item:scale-110 transition-transform duration-300`}
+                                  >
+                                    {Icon ? (
+                                      <Icon
+                                        className={`w-6 h-6 ${colorClass.split(" ")[2]}`}
+                                      />
+                                    ) : (
+                                      <span className="text-foreground">●</span>
+                                    )}
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className="font-medium text-foreground flex items-center gap-2">
+                                      {child.title}
+                                      <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-300" />
+                                    </div>
+                                    <div className="text-sm text-foreground-muted mt-1">
+                                      {child.description}
+                                    </div>
+                                  </div>
+                                </Link>
+                              </motion.div>
+                            );
+                          })}
+                        </div>
+
+                        {/* CTA Banner */}
+                        <div className="relative mt-4 pt-4 border-t border-white/[0.05]">
                           <Link
-                            key={child.href}
-                            href={child.href}
-                            className="flex items-start gap-4 p-3 rounded-lg hover:bg-background-tertiary transition-colors"
+                            href="/services"
+                            className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-blue-500/10 hover:from-purple-500/20 hover:to-blue-500/20 transition-all duration-300 group/cta"
                           >
-                            <div className="w-10 h-10 rounded-lg bg-foreground/10 flex items-center justify-center shrink-0">
-                              {Icon ? (
-                                <Icon className="w-5 h-5 text-foreground" />
-                              ) : (
-                                <span className="text-foreground">●</span>
-                              )}
-                            </div>
                             <div>
-                              <div className="font-medium text-foreground">
-                                {child.title}
-                              </div>
-                              <div className="text-sm text-foreground-muted">
-                                {child.description}
-                              </div>
+                              <p className="font-medium text-foreground">
+                                Explore All Services
+                              </p>
+                              <p className="text-sm text-foreground-muted">
+                                Discover how we can help your business grow
+                              </p>
+                            </div>
+                            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover/cta:bg-white/20 transition-colors">
+                              <ArrowRight className="w-5 h-5 text-foreground" />
                             </div>
                           </Link>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
 
           {/* CTA Button */}
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex items-center gap-3">
+            <Button asChild size="sm" variant="ghost">
+              <Link href="/portfolio">Our Work</Link>
+            </Button>
             <Button asChild>
-              <Link href="/contact">Get a Quote</Link>
+              <Link href="/contact" className="group">
+                Get a Quote
+                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-2"
+          <motion.button
+            className="lg:hidden p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
             onClick={() => setMobileMenuOpen(true)}
             aria-label="Open menu"
+            whileTap={{ scale: 0.95 }}
           >
             <svg
               className="w-6 h-6"
@@ -146,7 +244,7 @@ export function Navbar() {
                 d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
-          </button>
+          </motion.button>
         </nav>
       </header>
 
