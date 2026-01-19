@@ -11,3 +11,5 @@ export {
   type CardProps,
 } from "./card";
 export { Badge, type BadgeProps } from "./badge";
+export { AnimatedSection } from "./animated-section";
+export { StaggerContainer, StaggerItem } from "./stagger-container";

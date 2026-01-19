@@ -1,10 +1,12 @@
 import { cn } from "@/lib/utils";
+import { Slot } from "@radix-ui/react-slot";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "ghost" | "link";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
+  asChild?: boolean;
   ref?: React.Ref<HTMLButtonElement>;
 }
 
@@ -13,42 +15,54 @@ export function Button({
   variant = "primary",
   size = "md",
   isLoading = false,
+  asChild = false,
   children,
   disabled,
   ref,
   ...props
 }: ButtonProps) {
+  const buttonClasses = cn(
+    // Base styles
+    "inline-flex items-center justify-center font-medium rounded-full",
+    "transition-all duration-normal ease-out",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+    "disabled:opacity-50 disabled:pointer-events-none",
+    "active:scale-[0.98]",
+
+    // Variants
+    variant === "primary" &&
+      "bg-accent text-background hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]",
+    variant === "secondary" &&
+      "bg-transparent border border-border text-foreground hover:border-border-hover hover:scale-[1.02]",
+    variant === "ghost" &&
+      "bg-transparent text-foreground hover:bg-background-secondary",
+    variant === "link" &&
+      "bg-transparent text-foreground underline-offset-4 hover:underline p-0 h-auto",
+
+    // Sizes (skip padding for link variant)
+    variant !== "link" && {
+      "h-9 px-4 text-body-sm": size === "sm",
+      "h-11 px-6 text-body": size === "md",
+      "h-14 px-8 text-body-lg": size === "lg",
+    },
+
+    className
+  );
+
+  // When asChild is true, use Slot to pass styles to child
+  if (asChild) {
+    return (
+      <Slot ref={ref} className={buttonClasses} {...props}>
+        {children}
+      </Slot>
+    );
+  }
+
   return (
     <button
       ref={ref}
       disabled={disabled || isLoading}
-      className={cn(
-        // Base styles
-        "inline-flex items-center justify-center font-medium rounded-full",
-        "transition-all duration-normal ease-out",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        "disabled:opacity-50 disabled:pointer-events-none",
-        "active:scale-[0.98]",
-
-        // Variants
-        variant === "primary" &&
-          "bg-accent text-background hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]",
-        variant === "secondary" &&
-          "bg-transparent border border-border text-foreground hover:border-border-hover hover:scale-[1.02]",
-        variant === "ghost" &&
-          "bg-transparent text-foreground hover:bg-background-secondary",
-        variant === "link" &&
-          "bg-transparent text-foreground underline-offset-4 hover:underline p-0 h-auto",
-
-        // Sizes (skip padding for link variant)
-        variant !== "link" && {
-          "h-9 px-4 text-body-sm": size === "sm",
-          "h-11 px-6 text-body": size === "md",
-          "h-14 px-8 text-body-lg": size === "lg",
-        },
-
-        className
-      )}
+      className={buttonClasses}
       {...props}
     >
       {isLoading && (
