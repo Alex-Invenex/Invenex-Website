@@ -1,0 +1,76 @@
+"use client";
+
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
+
+export interface Project {
+  id: string;
+  title: string;
+  client: string;
+  category: string;
+  excerpt: string;
+  image: string;
+  slug: string;
+}
+
+interface ProjectCardProps {
+  project: Project;
+}
+
+export function ProjectCard({ project }: ProjectCardProps) {
+  return (
+    <Link href={`/portfolio/${project.slug}`} data-testid="project-card">
+      <motion.article
+        className="group relative overflow-hidden rounded-2xl border border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300"
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.2 }}
+      >
+        {/* Thumbnail */}
+        <div
+          className="aspect-[4/3] overflow-hidden bg-background-secondary relative"
+          data-testid="project-thumbnail"
+        >
+          {/* Placeholder gradient - will be replaced with actual images */}
+          <div className="w-full h-full bg-gradient-to-br from-foreground/5 to-foreground/10 group-hover:scale-110 transition-transform duration-500" />
+
+          {/* Hover overlay */}
+          <div
+            className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+            data-testid="project-overlay"
+          >
+            <span className="text-white font-medium flex items-center gap-2">
+              View Case Study
+              <span aria-hidden="true">→</span>
+            </span>
+          </div>
+
+          {/* Border glow on hover */}
+          <div className="absolute inset-0 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ring-2 ring-primary/30 ring-inset pointer-events-none" />
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          <Badge size="sm" className="mb-3" data-testid="project-category">
+            {project.category}
+          </Badge>
+          <h3
+            className="font-semibold text-lg group-hover:text-white transition-colors"
+            data-testid="project-title"
+          >
+            {project.title}
+          </h3>
+          <p
+            className="text-sm text-foreground-muted mt-1"
+            data-testid="project-client"
+          >
+            {project.client}
+          </p>
+          <p className="text-sm text-foreground-muted mt-2 line-clamp-2">
+            {project.excerpt}
+          </p>
+        </div>
+      </motion.article>
+    </Link>
+  );
+}
