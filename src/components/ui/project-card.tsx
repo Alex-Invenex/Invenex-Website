@@ -12,6 +12,7 @@ export interface Project {
   excerpt: string;
   image: string;
   slug: string;
+  url?: string; // External live site URL
 }
 
 interface ProjectCardProps {

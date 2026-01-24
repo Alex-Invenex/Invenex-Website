@@ -145,30 +145,28 @@ test.describe('Story 4-2: Portfolio Filtering', () => {
   test('filtering shows only projects of that category', async ({ page }) => {
     await page.goto('/portfolio')
 
-    // Get initial count of all projects
+    // Get initial count of all projects (14 real projects)
     const initialCards = await page.getByTestId('project-card').count()
     expect(initialCards).toBeGreaterThan(0)
 
-    // Filter to Mobile
-    const mobileFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Mobile' })
-    await mobileFilter.click()
+    // Filter to E-Commerce (4 projects)
+    const ecommerceFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'E-Commerce' })
+    await ecommerceFilter.click()
 
     // Wait for URL to update (confirms filter was applied)
-    await expect(page).toHaveURL(/category=mobile/i)
+    await expect(page).toHaveURL(/category=e-commerce/i)
 
-    // Wait for animation to complete and check filtered results
-    // Mobile projects: "Fintech Mobile App" and "Restaurant Ordering App" = 2 projects
-    await expect(page.getByTestId('project-card')).toHaveCount(2)
+    // Wait for filtered results - E-Commerce has 4 projects
+    await expect(page.getByTestId('project-card')).toHaveCount(4)
 
-    // Verify each visible card has Mobile category
-    const mobileCards = page.getByTestId('project-card')
-    const cardCount = await mobileCards.count()
-    expect(cardCount).toBe(2)
+    const ecommerceCards = page.getByTestId('project-card')
+    const cardCount = await ecommerceCards.count()
+    expect(cardCount).toBe(4)
     expect(cardCount).toBeLessThan(initialCards)
 
     for (let i = 0; i < cardCount; i++) {
-      const categoryBadge = mobileCards.nth(i).getByTestId('project-category')
-      await expect(categoryBadge).toHaveText(/mobile/i)
+      const categoryBadge = ecommerceCards.nth(i).getByTestId('project-category')
+      await expect(categoryBadge).toHaveText(/e-commerce/i)
     }
   })
 
@@ -205,12 +203,12 @@ test.describe('Story 4-2: Portfolio Filtering', () => {
   test('direct URL with category shows only that category projects', async ({ page }) => {
     await page.goto('/portfolio?category=e-commerce')
 
+    // E-Commerce has 4 projects
+    await expect(page.getByTestId('project-card')).toHaveCount(4)
+
     // All visible cards should have E-Commerce category
     const cards = page.getByTestId('project-card')
-    const cardCount = await cards.count()
-    expect(cardCount).toBeGreaterThan(0)
-
-    for (let i = 0; i < cardCount; i++) {
+    for (let i = 0; i < 4; i++) {
       const categoryBadge = cards.nth(i).getByTestId('project-category')
       await expect(categoryBadge).toHaveText(/e-commerce/i)
     }
