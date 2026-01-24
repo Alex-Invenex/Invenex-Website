@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ProjectCard, type Project } from "@/components/ui/project-card";
 import { AnimatedSection } from "@/components/ui/animated-section";
@@ -10,17 +11,39 @@ interface ProjectGridProps {
   projects: Project[];
 }
 
-const categories = ["All", "Web", "Mobile", "Platform", "E-Commerce"];
+const categories = [
+  { value: "all", label: "All" },
+  { value: "web", label: "Web" },
+  { value: "mobile", label: "Mobile" },
+  { value: "platform", label: "Platform" },
+  { value: "e-commerce", label: "E-Commerce" },
+];
 
-export function ProjectGrid({ projects }: ProjectGridProps) {
-  const [activeFilter, setActiveFilter] = useState("All");
+function ProjectGridContent({ projects }: ProjectGridProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get("category");
+  const activeFilter = categoryParam || "all";
 
   const filteredProjects =
-    activeFilter === "All"
+    activeFilter === "all"
       ? projects
       : projects.filter(
           (p) => p.category.toLowerCase() === activeFilter.toLowerCase()
         );
+
+  const handleFilterChange = (category: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (category === "all") {
+      params.delete("category");
+    } else {
+      params.set("category", category);
+    }
+    const queryString = params.toString();
+    router.push(queryString ? `/portfolio?${queryString}` : "/portfolio", {
+      scroll: false,
+    });
+  };
 
   return (
     <section
@@ -41,20 +64,20 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
           aria-label="Filter projects by category"
           data-testid="portfolio-filters"
         >
-          {categories.map((category) => (
+          {categories.map((cat) => (
             <button
-              key={category}
-              onClick={() => setActiveFilter(category)}
+              key={cat.value}
+              onClick={() => handleFilterChange(cat.value)}
               className={cn(
                 "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                activeFilter === category
+                activeFilter === cat.value
                   ? "bg-primary text-primary-foreground"
                   : "bg-white/5 text-foreground-muted hover:bg-white/10 hover:text-foreground border border-white/10"
               )}
-              aria-pressed={activeFilter === category}
+              aria-pressed={activeFilter === cat.value}
             >
-              {category}
+              {cat.label}
             </button>
           ))}
         </div>
@@ -91,5 +114,37 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
         )}
       </div>
     </section>
+  );
+}
+
+// Wrapper with Suspense for useSearchParams
+export function ProjectGrid({ projects }: ProjectGridProps) {
+  return (
+    <Suspense
+      fallback={
+        <section className="py-16 pb-24" data-testid="portfolio-grid-section">
+          <div className="container mx-auto px-6">
+            <div className="flex justify-center gap-2 mb-12">
+              {categories.map((cat) => (
+                <div
+                  key={cat.value}
+                  className="px-4 py-2 rounded-full bg-white/5 animate-pulse w-20 h-9"
+                />
+              ))}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  className="aspect-[4/3] rounded-2xl bg-white/5 animate-pulse"
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      }
+    >
+      <ProjectGridContent projects={projects} />
+    </Suspense>
   );
 }

@@ -81,7 +81,7 @@ development_status:
   # ============================================
   epic-4: in-progress
   4-1-portfolio-grid-page: review
-  4-2-portfolio-filtering: ready-for-dev
+  4-2-portfolio-filtering: review
   4-3-case-study-detail-pages: ready-for-dev
   epic-4-retrospective: optional
 

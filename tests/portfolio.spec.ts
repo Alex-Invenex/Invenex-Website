@@ -115,3 +115,121 @@ test.describe('Story 4-1: Portfolio Grid Page', () => {
     await expect(grid).toHaveClass(/grid-cols-1/)
   })
 })
+
+test.describe('Story 4-2: Portfolio Filtering', () => {
+  // AC1: Filter Functionality
+  test('clicking a filter tab updates URL with category param', async ({ page }) => {
+    await page.goto('/portfolio')
+
+    const mobileFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Mobile' })
+    await mobileFilter.click()
+
+    // URL should update with category param
+    await expect(page).toHaveURL(/\/portfolio\?category=mobile/i)
+  })
+
+  test('clicking a filter tab highlights it as active', async ({ page }) => {
+    await page.goto('/portfolio')
+
+    const webFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Web' })
+    await webFilter.click()
+
+    // Web filter should now be active
+    await expect(webFilter).toHaveAttribute('aria-pressed', 'true')
+
+    // All filter should no longer be active
+    const allFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'All' })
+    await expect(allFilter).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  test('filtering shows only projects of that category', async ({ page }) => {
+    await page.goto('/portfolio')
+
+    // Get initial count of all projects
+    const initialCards = await page.getByTestId('project-card').count()
+    expect(initialCards).toBeGreaterThan(0)
+
+    // Filter to Mobile
+    const mobileFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Mobile' })
+    await mobileFilter.click()
+
+    // Wait for URL to update (confirms filter was applied)
+    await expect(page).toHaveURL(/category=mobile/i)
+
+    // Wait for animation to complete and check filtered results
+    // Mobile projects: "Fintech Mobile App" and "Restaurant Ordering App" = 2 projects
+    await expect(page.getByTestId('project-card')).toHaveCount(2)
+
+    // Verify each visible card has Mobile category
+    const mobileCards = page.getByTestId('project-card')
+    const cardCount = await mobileCards.count()
+    expect(cardCount).toBe(2)
+    expect(cardCount).toBeLessThan(initialCards)
+
+    for (let i = 0; i < cardCount; i++) {
+      const categoryBadge = mobileCards.nth(i).getByTestId('project-category')
+      await expect(categoryBadge).toHaveText(/mobile/i)
+    }
+  })
+
+  // AC2: All Filter
+  test('clicking All filter shows all projects and clears URL param', async ({ page }) => {
+    // Start with a filtered URL
+    await page.goto('/portfolio?category=web')
+
+    // Click All filter
+    const allFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'All' })
+    await allFilter.click()
+
+    // URL should not have category param
+    await expect(page).toHaveURL('/portfolio')
+
+    // All filter should be active
+    await expect(allFilter).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  // AC3: URL State
+  test('direct URL with category param pre-applies filter', async ({ page }) => {
+    // Navigate directly to filtered URL
+    await page.goto('/portfolio?category=platform')
+
+    // Platform filter should be active
+    const platformFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Platform' })
+    await expect(platformFilter).toHaveAttribute('aria-pressed', 'true')
+
+    // All filter should NOT be active
+    const allFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'All' })
+    await expect(allFilter).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  test('direct URL with category shows only that category projects', async ({ page }) => {
+    await page.goto('/portfolio?category=e-commerce')
+
+    // All visible cards should have E-Commerce category
+    const cards = page.getByTestId('project-card')
+    const cardCount = await cards.count()
+    expect(cardCount).toBeGreaterThan(0)
+
+    for (let i = 0; i < cardCount; i++) {
+      const categoryBadge = cards.nth(i).getByTestId('project-category')
+      await expect(categoryBadge).toHaveText(/e-commerce/i)
+    }
+  })
+
+  test('filter animation occurs on category change', async ({ page }) => {
+    await page.goto('/portfolio')
+
+    // Click a filter and verify grid animates
+    const webFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Web' })
+    await webFilter.click()
+
+    // Grid should still be visible after animation
+    const grid = page.getByTestId('portfolio-grid')
+    await expect(grid).toBeVisible()
+
+    // Cards should be visible after animation completes
+    await page.waitForTimeout(500)
+    const cards = page.getByTestId('project-card')
+    await expect(cards.first()).toBeVisible()
+  })
+})
