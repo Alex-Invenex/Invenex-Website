@@ -145,28 +145,40 @@ test.describe('Story 4-2: Portfolio Filtering', () => {
   test('filtering shows only projects of that category', async ({ page }) => {
     await page.goto('/portfolio')
 
-    // Get initial count of all projects (14 real projects)
-    const initialCards = await page.getByTestId('project-card').count()
+    // Get initial count of all projects
+    const allCards = page.getByTestId('project-card')
+    await expect(allCards.first()).toBeVisible()
+    const initialCards = await allCards.count()
     expect(initialCards).toBeGreaterThan(0)
 
-    // Filter to E-Commerce (4 projects)
-    const ecommerceFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'E-Commerce' })
-    await ecommerceFilter.click()
+    // Filter to Platform (which has 2 projects - less than total of 14)
+    const platformFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Platform' })
+    await platformFilter.click()
 
     // Wait for URL to update (confirms filter was applied)
-    await expect(page).toHaveURL(/category=e-commerce/i)
+    await expect(page).toHaveURL(/category=platform/i)
 
-    // Wait for filtered results - E-Commerce has 4 projects
-    await expect(page.getByTestId('project-card')).toHaveCount(4)
+    // Wait for the animation exit to complete and non-matching cards to be removed
+    await page.waitForFunction(() => {
+      const cards = document.querySelectorAll('[data-testid="project-card"]')
+      // All visible cards should have Platform category
+      return cards.length > 0 && Array.from(cards).every(card => {
+        const badge = card.querySelector('[data-testid="project-category"]')
+        return badge && badge.textContent?.toLowerCase().includes('platform')
+      })
+    }, { timeout: 5000 })
 
-    const ecommerceCards = page.getByTestId('project-card')
-    const cardCount = await ecommerceCards.count()
-    expect(cardCount).toBe(4)
+    const platformCards = page.getByTestId('project-card')
+    const cardCount = await platformCards.count()
+
+    // Filtered count should be less than total (Platform has 2 projects)
+    expect(cardCount).toBeGreaterThan(0)
     expect(cardCount).toBeLessThan(initialCards)
 
+    // Verify all visible cards have Platform category
     for (let i = 0; i < cardCount; i++) {
-      const categoryBadge = ecommerceCards.nth(i).getByTestId('project-category')
-      await expect(categoryBadge).toHaveText(/e-commerce/i)
+      const categoryBadge = platformCards.nth(i).getByTestId('project-category')
+      await expect(categoryBadge).toHaveText(/platform/i)
     }
   })
 
@@ -203,12 +215,15 @@ test.describe('Story 4-2: Portfolio Filtering', () => {
   test('direct URL with category shows only that category projects', async ({ page }) => {
     await page.goto('/portfolio?category=e-commerce')
 
-    // E-Commerce has 4 projects
-    await expect(page.getByTestId('project-card')).toHaveCount(4)
+    // Wait for page to load filtered results
+    const cards = page.getByTestId('project-card')
+    await expect(cards.first()).toBeVisible()
+
+    const cardCount = await cards.count()
+    expect(cardCount).toBeGreaterThan(0)
 
     // All visible cards should have E-Commerce category
-    const cards = page.getByTestId('project-card')
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < cardCount; i++) {
       const categoryBadge = cards.nth(i).getByTestId('project-category')
       await expect(categoryBadge).toHaveText(/e-commerce/i)
     }

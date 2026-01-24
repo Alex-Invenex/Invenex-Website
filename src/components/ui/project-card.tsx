@@ -32,7 +32,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
           className="aspect-[4/3] overflow-hidden bg-background-secondary relative"
           data-testid="project-thumbnail"
         >
-          {/* Placeholder gradient - will be replaced with actual images */}
+          {/* TODO: Replace with Next.js Image component when Sanity CMS integration is complete (Epic 7)
+              Currently using gradient placeholder. project.image field exists for future use.
+              See Story 7-2 for content schema implementation. */}
           <div className="w-full h-full bg-gradient-to-br from-foreground/5 to-foreground/10 group-hover:scale-110 transition-transform duration-500" />
 
           {/* Hover overlay */}

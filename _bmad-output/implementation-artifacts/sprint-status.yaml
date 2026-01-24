@@ -78,11 +78,12 @@ development_status:
 
   # ============================================
   # EPIC 4: Portfolio & Case Studies
+  # Status: COMPLETE 2026-01-24
   # ============================================
-  epic-4: in-progress
-  4-1-portfolio-grid-page: review
-  4-2-portfolio-filtering: review
-  4-3-case-study-detail-pages: ready-for-dev
+  epic-4: done
+  4-1-portfolio-grid-page: done
+  4-2-portfolio-filtering: done
+  4-3-case-study-detail-pages: done
   epic-4-retrospective: optional
 
   # ============================================
@@ -229,3 +230,35 @@ progress_log:
       (All/Web/Mobile/Platform/E-Commerce), responsive grid (1/2/3 cols), ProjectCard
       component with hover effects (image zoom, border glow, overlay). 8 sample projects.
       24 Playwright tests added (12 desktop + 12 mobile). Epic 4 started.
+  - date: "2026-01-24"
+    story: "4-3-case-study-detail-pages"
+    status: "review"
+    notes: |
+      Case Study Detail Pages verified complete. Dynamic routing with [slug], generateStaticParams,
+      generateMetadata for SEO. Full case study layout: Hero, Challenge, Solution, Results with
+      metric cards, Technologies badges, Testimonial (conditional), Related projects, CTA.
+      ImageGallery component with lightbox: click to open, arrow navigation, Escape/X/backdrop close,
+      body scroll lock. 14 real Invenex portfolio projects with full case study data.
+      50 Playwright tests (25 desktop + 25 mobile). All tests passing.
+  - date: "2026-01-24"
+    event: "epic-4-code-review"
+    stories_reviewed: "4-1, 4-2, 4-3"
+    issues_found: 7
+    issues_fixed: 5
+    notes: |
+      ADVERSARIAL CODE REVIEW completed for Epic 4 Portfolio & Case Studies.
+      Issues found: 1 HIGH, 3 MEDIUM, 3 LOW.
+
+      FIXED:
+      - [HIGH] Story 4-2 File List removed non-existent filter-tabs.tsx reference
+      - [MEDIUM] Added src/lib/projects.ts to File Lists for 4-1 and 4-2
+      - [MEDIUM] Added TODO comment in project-card.tsx for placeholder images pending CMS
+      - [LOW] Made test flexible (removed hardcoded e-commerce count of 4)
+      - [LOW] Updated Story 4-2 Dev Notes to match actual implementation
+
+      NOT FIXED (documented for future):
+      - [MEDIUM] project-context.md doesn't exist (not required)
+      - [LOW] No unit tests for utility functions (E2E coverage sufficient)
+
+      All 38 portfolio tests + 50 case study tests passing.
+      Epic 4 marked DONE.

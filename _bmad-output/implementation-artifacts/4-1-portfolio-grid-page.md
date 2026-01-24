@@ -1,6 +1,6 @@
 # Story 4.1: Portfolio Grid Page
 
-Status: review
+Status: done
 
 ## Story
 
@@ -180,7 +180,9 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 - src/app/portfolio/page.tsx (created)
 - src/components/ui/project-card.tsx (created)
 - src/components/sections/project-grid.tsx (created)
+- src/lib/projects.ts (created - shared project data source)
 - tests/portfolio.spec.ts (created)
 
 ### Change Log
 - 2026-01-24: Story implemented - Portfolio grid page with filter tabs, project cards, hover effects, and responsive layout
+- 2026-01-24: Code review complete - Added src/lib/projects.ts to File List. All 12 tests passing. Status → done.
