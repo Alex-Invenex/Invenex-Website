@@ -281,7 +281,7 @@ function VideoModal({
 
 export function InstagramReels() {
   return (
-    <section className="py-20 md:py-24 bg-background relative overflow-hidden">
+    <section className="py-20 md:py-24 bg-background relative overflow-hidden" aria-labelledby="instagram-reels-title" data-testid="instagram-reels-section">
         {/* Background decoration */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-pink-500/8 rounded-full blur-[150px]" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-[120px]" />
@@ -307,7 +307,7 @@ export function InstagramReels() {
               </span>
             </motion.a>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3">
+            <h2 id="instagram-reels-title" className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3">
               Our{" "}
               <span className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
                 Creative

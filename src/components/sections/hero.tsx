@@ -8,7 +8,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden" aria-labelledby="hero-title" data-testid="hero-section">
       {/* Animated gradient background */}
       <div className="absolute inset-0">
         {/* Primary gradient orb */}
@@ -77,7 +77,7 @@ export function Hero() {
         </AnimatedSection>
 
         <AnimatedSection>
-          <h1 className="text-5xl md:text-7xl lg:text-hero font-bold tracking-tight">
+          <h1 id="hero-title" className="text-5xl md:text-7xl lg:text-hero font-bold tracking-tight">
             We Build
             <br />
             <span className="text-gradient">Digital Excellence</span>
@@ -93,6 +93,7 @@ export function Hero() {
         </AnimatedSection>
 
         <AnimatedSection delay={0.2}>
+          {/* TODO: /contact pending Epic 5-1, /portfolio pending Epic 4-1 */}
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button asChild size="lg">
               <Link href="/contact" className="group">

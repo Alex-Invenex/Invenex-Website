@@ -125,7 +125,7 @@ test.describe('Story 3-1: Homepage', () => {
     test('should be mobile responsive', async ({ page, isMobile }) => {
       if (isMobile) {
         // Mobile menu button should be visible on mobile
-        const menuButton = page.getByRole('button', { name: /menu|open/i });
+        const menuButton = page.getByTestId('mobile-menu-button');
         await expect(menuButton).toBeVisible();
       }
     });

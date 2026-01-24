@@ -75,13 +75,13 @@ test.describe('Story 3-4: Service Detail Pages', () => {
       const processSteps = page.locator('[data-testid="process-step"]');
       await expect(processSteps).toHaveCount(5);
 
-      // Verify step titles
+      // Verify step titles (use heading role to avoid matching descriptions)
       const processSection = page.locator('[data-testid="service-process"]');
-      await expect(processSection.getByText('Discovery')).toBeVisible();
-      await expect(processSection.getByText('Strategy')).toBeVisible();
-      await expect(processSection.getByText('Design')).toBeVisible();
-      await expect(processSection.getByText('Development')).toBeVisible();
-      await expect(processSection.getByText('Launch')).toBeVisible();
+      await expect(processSection.getByRole('heading', { name: 'Discovery' })).toBeVisible();
+      await expect(processSection.getByRole('heading', { name: 'Strategy' })).toBeVisible();
+      await expect(processSection.getByRole('heading', { name: 'Design' })).toBeVisible();
+      await expect(processSection.getByRole('heading', { name: 'Development' })).toBeVisible();
+      await expect(processSection.getByRole('heading', { name: 'Launch' })).toBeVisible();
     });
 
     test('should display portfolio section with link (AC1)', async ({ page }) => {

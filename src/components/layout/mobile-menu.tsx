@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Linkedin, Twitter, Instagram, Github } from "lucide-react";
 import { mainNav, socialLinks, siteConfig } from "@/lib/constants";
@@ -19,15 +19,29 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
-  // Lock body scroll when open
+  const menuRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Lock body scroll and add aria-hidden to main content when open
   useEffect(() => {
+    const mainContent = document.getElementById("main-content");
+    const header = document.querySelector("header");
+
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      mainContent?.setAttribute("aria-hidden", "true");
+      header?.setAttribute("aria-hidden", "true");
+      // Focus the close button when menu opens
+      closeButtonRef.current?.focus();
     } else {
       document.body.style.overflow = "";
+      mainContent?.removeAttribute("aria-hidden");
+      header?.removeAttribute("aria-hidden");
     }
     return () => {
       document.body.style.overflow = "";
+      mainContent?.removeAttribute("aria-hidden");
+      header?.removeAttribute("aria-hidden");
     };
   }, [isOpen]);
 
@@ -40,14 +54,51 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     return () => window.removeEventListener("keydown", handleEscape);
   }, [onClose]);
 
+  // Focus trap - keep focus within menu
+  useEffect(() => {
+    if (!isOpen || !menuRef.current) return;
+
+    const focusableElements = menuRef.current.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstElement = focusableElements[0] as HTMLElement;
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleTabKey);
+    return () => document.removeEventListener("keydown", handleTabKey);
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 lg:hidden">
+    <div
+      ref={menuRef}
+      className="fixed inset-0 z-50 lg:hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Navigation menu"
+    >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-background/95 backdrop-blur-lg animate-in fade-in duration-200"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Menu Content */}
@@ -58,6 +109,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             {siteConfig.name}
           </Link>
           <button
+            ref={closeButtonRef}
             onClick={onClose}
             className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-foreground/10 transition-colors"
             aria-label="Close menu"

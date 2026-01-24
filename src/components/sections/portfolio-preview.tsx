@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 
+// TODO: Portfolio pages pending Epic 4 implementation
 const featuredProjects = [
   {
     title: "CaterFlow",
@@ -57,7 +58,7 @@ const accentColors: Record<string, string> = {
 
 export function PortfolioPreview() {
   return (
-    <section className="py-24 bg-background-secondary relative overflow-hidden">
+    <section className="py-24 bg-background-secondary relative overflow-hidden" aria-labelledby="portfolio-preview-title" data-testid="portfolio-preview-section">
       {/* Background decoration */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px]" />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px]" />
@@ -67,7 +68,7 @@ export function PortfolioPreview() {
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-foreground-muted mb-4">
             Our Work
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold">
+          <h2 id="portfolio-preview-title" className="text-4xl md:text-5xl font-bold">
             Featured <span className="text-gradient">Projects</span>
           </h2>
           <p className="mt-4 text-xl text-foreground-muted max-w-2xl mx-auto">

@@ -58,7 +58,7 @@ const products = [
 
 export function ProductsPreview() {
   return (
-    <section className="py-24 bg-background relative overflow-hidden">
+    <section className="py-24 bg-background relative overflow-hidden" aria-labelledby="products-preview-title" data-testid="products-preview-section">
       {/* Background decoration */}
       <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[150px] -translate-y-1/2" />
       <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-orange-500/5 rounded-full blur-[150px] -translate-y-1/2" />
@@ -76,7 +76,7 @@ export function ProductsPreview() {
               We Build Our Own Products
             </span>
           </motion.div>
-          <h2 className="text-4xl md:text-5xl font-bold">
+          <h2 id="products-preview-title" className="text-4xl md:text-5xl font-bold">
             Our <span className="text-gradient">Products</span>
           </h2>
           <p className="mt-4 text-xl text-foreground-muted max-w-2xl mx-auto">

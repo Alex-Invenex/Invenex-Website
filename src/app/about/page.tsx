@@ -31,7 +31,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
+      <section className="relative pt-32 pb-16 overflow-hidden" aria-labelledby="about-hero-title" data-testid="about-hero-section">
         {/* Animated gradient background */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse-glow" />
@@ -43,7 +43,7 @@ export default function AboutPage() {
 
         <div className="container mx-auto px-6 text-center relative z-10">
           <AnimatedSection>
-            <h1 className="text-5xl md:text-6xl font-bold">
+            <h1 id="about-hero-title" className="text-5xl md:text-6xl font-bold">
               Building the Future,
               <br />
               <span className="text-foreground-muted">One Project at a Time</span>
@@ -58,11 +58,11 @@ export default function AboutPage() {
       </section>
 
       {/* Story */}
-      <section className="py-24">
+      <section className="py-24" aria-labelledby="about-story-title" data-testid="about-story-section">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <AnimatedSection>
-              <h2 className="text-3xl font-bold mb-6">Our Story</h2>
+              <h2 id="about-story-title" className="text-3xl font-bold mb-6">Our Story</h2>
               <div className="space-y-4 text-foreground-muted">
                 <p>
                   Founded in Kochi, Kerala, Invenex Solutions started with a
@@ -95,10 +95,10 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Values */}
-      <section className="py-24 bg-background-secondary">
+      <section className="py-24 bg-background-secondary" aria-labelledby="about-values-title" data-testid="about-values-section">
         <div className="container mx-auto px-6">
           <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl font-bold">Our Values</h2>
+            <h2 id="about-values-title" className="text-3xl font-bold">Our Values</h2>
             <p className="mt-4 text-foreground-muted max-w-2xl mx-auto">
               The principles that guide everything we do
             </p>
@@ -120,10 +120,10 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <section className="py-24">
+      <section className="py-24" aria-labelledby="about-team-title" data-testid="about-team-section">
         <div className="container mx-auto px-6">
           <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl font-bold">Meet the Team</h2>
+            <h2 id="about-team-title" className="text-3xl font-bold">Meet the Team</h2>
             <p className="mt-4 text-foreground-muted">
               The people behind the magic
             </p>

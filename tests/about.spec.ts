@@ -28,11 +28,11 @@ test.describe('Story 3-2: About Page', () => {
       const valuesHeading = page.getByRole('heading', { name: /our values/i });
       await expect(valuesHeading).toBeVisible();
 
-      // Check for value items
-      await expect(page.getByText(/excellence/i)).toBeVisible();
-      await expect(page.getByText(/partnership/i)).toBeVisible();
-      await expect(page.getByText(/innovation/i)).toBeVisible();
-      await expect(page.getByText(/speed/i)).toBeVisible();
+      // Check for value items (using headings to avoid duplicate matches)
+      await expect(page.getByRole('heading', { name: 'Excellence' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Partnership' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Innovation' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Speed' })).toBeVisible();
     });
 
     test('should display team grid section', async ({ page }) => {

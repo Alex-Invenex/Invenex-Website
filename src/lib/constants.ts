@@ -105,6 +105,7 @@ export const footerNav = {
 
 // ============================================
 // Social Media Links
+// TODO: Replace with actual social media URLs before production launch
 // ============================================
 export interface SocialLink {
   name: string;
@@ -115,42 +116,43 @@ export interface SocialLink {
 export const socialLinks: SocialLink[] = [
   {
     name: "LinkedIn",
-    href: "https://linkedin.com/company/invenex",
+    href: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://linkedin.com/company/invenex",
     icon: "linkedin",
   },
   {
     name: "Twitter",
-    href: "https://twitter.com/invenex",
+    href: process.env.NEXT_PUBLIC_TWITTER_URL || "https://twitter.com/invenex",
     icon: "twitter",
   },
   {
     name: "Instagram",
-    href: "https://instagram.com/invenex",
+    href: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com/invenex",
     icon: "instagram",
   },
   {
     name: "GitHub",
-    href: "https://github.com/invenex",
+    href: process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/invenex",
     icon: "github",
   },
 ];
 
 // ============================================
 // Contact Information
+// TODO: Replace with actual contact details before production launch
 // ============================================
 export const contactInfo = {
-  email: "hello@invenex.com",
-  phone: "+91 98765 43210",
-  whatsapp: "+919876543210",
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@invenex.com",
+  phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+91 98765 43210",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || "+919876543210",
   address: {
-    street: "123 Tech Park",
+    street: process.env.NEXT_PUBLIC_ADDRESS_STREET || "123 Tech Park",
     city: "Kochi",
     state: "Kerala",
     country: "India",
     zip: "682001",
   },
   businessHours: "Mon - Fri: 9:00 AM - 6:00 PM IST",
-} as const;
+};
 
 // ============================================
 // Form Options (for dropdowns)

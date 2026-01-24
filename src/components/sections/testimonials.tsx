@@ -164,7 +164,7 @@ export function Testimonials() {
   const secondRow = testimonials.slice(3);
 
   return (
-    <section className="py-24 bg-background relative overflow-hidden">
+    <section className="py-24 bg-background relative overflow-hidden" aria-labelledby="testimonials-title" data-testid="testimonials-section">
       {/* Background decoration */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/5 rounded-full blur-[150px]" />
 
@@ -173,7 +173,7 @@ export function Testimonials() {
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-foreground-muted mb-4">
             Testimonials
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold">
+          <h2 id="testimonials-title" className="text-4xl md:text-5xl font-bold">
             What Our <span className="text-gradient">Clients Say</span>
           </h2>
           <p className="mt-4 text-xl text-foreground-muted max-w-2xl mx-auto">

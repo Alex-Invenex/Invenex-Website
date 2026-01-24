@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 
+// TODO: Some service hrefs don't have pages yet (ecommerce, social-media, digital-strategy)
+// These will be added when service detail pages are expanded
 const services = [
   {
     title: "Web Development",
@@ -78,7 +80,7 @@ const services = [
 
 export function ServicesPreview() {
   return (
-    <section className="py-24 bg-background relative overflow-hidden">
+    <section className="py-24 bg-background relative overflow-hidden" aria-labelledby="services-preview-title" data-testid="services-preview-section">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[150px]" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[120px]" />
@@ -88,7 +90,7 @@ export function ServicesPreview() {
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-foreground-muted mb-4">
             What We Do
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold">
+          <h2 id="services-preview-title" className="text-4xl md:text-5xl font-bold">
             Our <span className="text-gradient">Services</span>
           </h2>
           <p className="mt-4 text-xl text-foreground-muted max-w-2xl mx-auto">

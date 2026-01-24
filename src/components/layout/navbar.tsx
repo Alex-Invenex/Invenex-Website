@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -51,6 +51,18 @@ export function Navbar() {
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Close mega-menu on Escape key
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape" && servicesOpen) {
+      setServicesOpen(false);
+    }
+  }, [servicesOpen]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -70,6 +82,17 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
+  // Toggle services menu with keyboard
+  const handleServicesKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setServicesOpen(!servicesOpen);
+    } else if (e.key === "ArrowDown" && !servicesOpen) {
+      e.preventDefault();
+      setServicesOpen(true);
+    }
+  };
 
   return (
     <>
@@ -106,23 +129,39 @@ export function Navbar() {
                 onMouseEnter={() => item.children && setServicesOpen(true)}
                 onMouseLeave={() => setServicesOpen(false)}
               >
-                <Link
-                  href={item.href}
-                  className={cn(
-                    "px-4 py-2 rounded-full text-foreground-muted hover:text-foreground transition-all duration-300 flex items-center gap-1",
-                    "hover:bg-white/5"
-                  )}
-                >
-                  {item.title}
-                  {item.children && (
+                {item.children ? (
+                  // Services dropdown trigger - button for accessibility
+                  <button
+                    type="button"
+                    onClick={() => setServicesOpen(!servicesOpen)}
+                    onKeyDown={handleServicesKeyDown}
+                    aria-expanded={servicesOpen}
+                    aria-haspopup="true"
+                    className={cn(
+                      "px-4 py-2 rounded-full text-foreground-muted hover:text-foreground transition-all duration-300 flex items-center gap-1",
+                      "hover:bg-white/5"
+                    )}
+                  >
+                    {item.title}
                     <ChevronDown
                       className={cn(
                         "w-4 h-4 transition-transform duration-300",
                         servicesOpen && "rotate-180"
                       )}
                     />
-                  )}
-                </Link>
+                  </button>
+                ) : (
+                  // Regular nav link
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "px-4 py-2 rounded-full text-foreground-muted hover:text-foreground transition-all duration-300 flex items-center gap-1",
+                      "hover:bg-white/5"
+                    )}
+                  >
+                    {item.title}
+                  </Link>
+                )}
 
                 {/* Premium Mega Menu for Services */}
                 <AnimatePresence>
@@ -229,6 +268,7 @@ export function Navbar() {
             className="lg:hidden p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
             onClick={() => setMobileMenuOpen(true)}
             aria-label="Open menu"
+            data-testid="mobile-menu-button"
             whileTap={{ scale: 0.95 }}
           >
             <svg

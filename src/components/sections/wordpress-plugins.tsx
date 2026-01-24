@@ -165,7 +165,7 @@ function PluginCard({
 
 export function WordPressPlugins() {
   return (
-    <section className="py-24 bg-background relative overflow-hidden">
+    <section className="py-24 bg-background relative overflow-hidden" aria-labelledby="wordpress-plugins-title" data-testid="wordpress-plugins-section">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[150px]" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px]" />
@@ -183,7 +183,7 @@ export function WordPressPlugins() {
               Free WordPress Resources
             </span>
           </motion.div>
-          <h2 className="text-4xl md:text-5xl font-bold">
+          <h2 id="wordpress-plugins-title" className="text-4xl md:text-5xl font-bold">
             Premium <span className="text-gradient">WordPress Plugins</span>
           </h2>
           <p className="mt-4 text-xl text-foreground-muted max-w-2xl mx-auto">
@@ -202,6 +202,7 @@ export function WordPressPlugins() {
           <p className="text-foreground-muted mb-4">
             All plugins are free, open-source, and regularly updated
           </p>
+          {/* TODO: /plugins page not yet implemented */}
           <a
             href="/plugins"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-foreground hover:bg-white/10 hover:border-white/20 transition-all duration-300 group"

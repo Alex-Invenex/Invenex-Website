@@ -99,7 +99,7 @@ function LogoCarousel({
 
 export function ClientLogos() {
   return (
-    <section className="py-20 bg-background-secondary relative overflow-hidden">
+    <section className="py-20 bg-background-secondary relative overflow-hidden" aria-labelledby="client-logos-title" data-testid="client-logos-section">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/5 to-transparent" />
 
@@ -120,7 +120,7 @@ export function ClientLogos() {
               Trusted Partners
             </span>
           </motion.div>
-          <h3 className="text-2xl md:text-3xl font-bold">
+          <h3 id="client-logos-title" className="text-2xl md:text-3xl font-bold">
             Trusted by <span className="text-gradient">Innovative Companies</span>
           </h3>
           <p className="mt-2 text-foreground-muted">

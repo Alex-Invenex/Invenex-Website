@@ -53,7 +53,7 @@ const differentiators = [
 
 export function WhyChooseUs() {
   return (
-    <section className="py-24 bg-background-secondary relative overflow-hidden">
+    <section className="py-24 bg-background-secondary relative overflow-hidden" aria-labelledby="why-choose-us-title" data-testid="why-choose-us-section">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px]" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px]" />
@@ -63,7 +63,7 @@ export function WhyChooseUs() {
           <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-foreground-muted mb-4">
             Why Us
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold">
+          <h2 id="why-choose-us-title" className="text-4xl md:text-5xl font-bold">
             Why Choose <span className="text-gradient">Invenex</span>
           </h2>
           <p className="mt-4 text-xl text-foreground-muted max-w-2xl mx-auto">

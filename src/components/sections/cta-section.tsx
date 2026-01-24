@@ -9,7 +9,7 @@ import { contactInfo } from "@/lib/constants";
 
 export function CTASection() {
   return (
-    <section className="py-32 bg-background relative overflow-hidden">
+    <section className="py-32 bg-background relative overflow-hidden" aria-labelledby="cta-section-title" data-testid="cta-section">
       {/* Animated gradient backgrounds */}
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/20 rounded-full blur-[150px] animate-pulse-glow" />
@@ -84,7 +84,7 @@ export function CTASection() {
             </span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+          <h2 id="cta-section-title" className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
             Ready to Build Something
             <br />
             <span className="text-gradient">Extraordinary?</span>

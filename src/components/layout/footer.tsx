@@ -40,7 +40,9 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
@@ -139,6 +141,37 @@ export function Footer() {
                     {link.title}
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                   </Link>
+                </li>
+              ))}
+            </ul>
+
+            {/* Resources Links */}
+            <h3 className="text-sm font-semibold text-foreground mb-4 mt-6 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              Resources
+            </h3>
+            <ul className="space-y-3">
+              {footerNav.resources.map((link) => (
+                <li key={link.href}>
+                  {"external" in link && link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
+                    >
+                      {link.title}
+                      <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
+                    >
+                      {link.title}
+                      <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

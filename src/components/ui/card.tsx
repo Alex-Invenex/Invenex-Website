@@ -32,7 +32,7 @@ export function Card({
       ref={ref}
       className={cn(
         // Base styles
-        "relative overflow-hidden rounded-lg p-6",
+        "relative overflow-hidden rounded-2xl p-6", // 16px per design spec
         "bg-background-secondary border border-border",
         "transition-all duration-normal ease-out",
 
