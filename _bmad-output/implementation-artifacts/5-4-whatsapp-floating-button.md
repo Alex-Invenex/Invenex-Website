@@ -1,6 +1,6 @@
 # Story 5.4: WhatsApp Floating Button
 
-Status: review
+Status: done
 
 ## Story
 
@@ -59,6 +59,7 @@ import { contactInfo } from '@/lib/constants'
 
 export function WhatsAppButton() {
   const message = encodeURIComponent("Hi! I'm interested in learning more about your services.")
+  // Use contactInfo.whatsapp (not siteConfig.whatsapp)
   const whatsappUrl = `https://wa.me/${contactInfo.whatsapp.replace(/\D/g, '')}?text=${message}`
 
   return (
@@ -167,3 +168,4 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 
 ## Change Log
 - 2026-01-27: Initial implementation of WhatsApp floating button (Story 5-4)
+- 2026-01-28: Code review - Updated Dev Notes to correctly reference contactInfo.whatsapp

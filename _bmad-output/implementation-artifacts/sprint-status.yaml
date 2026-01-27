@@ -88,21 +88,22 @@ development_status:
 
   # ============================================
   # EPIC 5: Lead Generation & Contact
+  # Status: COMPLETE 2026-01-28
   # ============================================
-  epic-5: in-progress
+  epic-5: done
   5-1-contact-page-quote-form: done
-  5-2-form-submission-email-notifications: review
+  5-2-form-submission-email-notifications: done
   5-3-server-actions-form-infrastructure: done
-  5-4-whatsapp-floating-button: review
-  5-5-social-sharing-functionality: ready-for-dev
+  5-4-whatsapp-floating-button: done
+  5-5-social-sharing-functionality: done
   epic-5-retrospective: optional
 
   # ============================================
   # EPIC 6: Careers & Recruitment
   # ============================================
-  epic-6: backlog
-  6-1-careers-page-culture: ready-for-dev
-  6-2-job-listings-filtering: ready-for-dev
+  epic-6: in-progress
+  6-1-careers-page-culture: done
+  6-2-job-listings-filtering: done
   6-3-job-detail-pages: ready-for-dev
   6-4-job-application-form: ready-for-dev
   6-5-application-submission-notifications: ready-for-dev
@@ -307,3 +308,61 @@ progress_log:
       - Added email validation edge case tests (missing domain, missing local part)
       - Simplified Dev Notes documentation
       24 Playwright tests. Browser verification passed.
+  - date: "2026-01-27"
+    story: "5-5-social-sharing-functionality"
+    status: "review"
+    notes: |
+      Social Sharing Functionality implemented.
+      Created ShareButtons component with Twitter/X, LinkedIn, Facebook, Copy link buttons.
+      Toast notification integrated directly into component.
+      Added to case study pages and service detail pages.
+      Features: ARIA labels, focus-visible styles, 600x400 share windows.
+      Copy: clipboard API, checkmark icon (2s), toast notification (3s).
+      Browser verification passed via Playwright MCP.
+      15 Playwright tests added.
+  - date: "2026-01-27"
+    story: "6-1-careers-page-culture"
+    status: "review"
+    notes: |
+      Careers Page with Culture Showcase implemented.
+      Created src/app/careers/page.tsx with 5 sections:
+      - Hero with "Join Our Team" headline and "We're Hiring" badge
+      - Life at Invenex section with culture description (Kochi, remote work)
+      - Benefits grid (4 cards): Modern Tech Stack, Flexible Work, Learning Budget, Competitive Pay
+      - Tech Stack showcase (8 badges): Next.js, React, TypeScript, Tailwind CSS, Node.js, PostgreSQL, Sanity, Vercel
+      - Open Positions section with anchor link and placeholder for Story 6.2
+      Accessibility: aria-labelledby, data-testid on all sections.
+      Navigation link already exists in mainNav and footerNav.
+      18 Playwright tests written per viewport (36 total).
+      Browser verification passed via Playwright MCP.
+      Epic 6 started.
+  - date: "2026-01-28"
+    event: "adversarial-code-review"
+    stories_reviewed: "5-2, 5-4, 5-5, 6-1, 6-2"
+    issues_found: 16
+    issues_fixed: 8
+    notes: |
+      ADVERSARIAL CODE REVIEW completed for 5 stories.
+      Total: 2 HIGH, 6 MEDIUM, 8 LOW issues found.
+
+      FIXED:
+      - [HIGH] Story 5-2 File List updated with missing src/types/index.ts
+      - [HIGH] Story 6-2 Apply Now now uses mailto: instead of 404 links (until Story 6-3)
+      - [MEDIUM] Story 5-2 Added error handling test
+      - [MEDIUM] Story 5-4 Dev Notes updated to match implementation
+      - [MEDIUM] Story 5-5 Added error toast for clipboard failures
+      - [MEDIUM] Story 6-1 Removed false claim from completion notes
+      - [MEDIUM] Story 6-2 Job type exported and imported to prevent drift
+      - [MEDIUM] Story 6-2 Added useMemo for job counts performance
+
+      NOT FIXED (LOW priority, documented):
+      - Email domain mismatch (invenex.in vs vercel domain) - production config
+      - Code duplication in label lookup functions - minor
+      - Pulse animation speed - UX preference
+      - Blog posts sharing - future work
+      - animate-fade-in verification - minor
+      - Office photos placeholder - acceptable MVP
+      - No email CTA fallback - minor
+      - Inconsistent count display on All button - minor
+
+      Epic 5 marked DONE. Stories 6-1 and 6-2 marked DONE.
