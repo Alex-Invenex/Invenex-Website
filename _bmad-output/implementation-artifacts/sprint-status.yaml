@@ -84,13 +84,13 @@ development_status:
   4-1-portfolio-grid-page: done
   4-2-portfolio-filtering: done
   4-3-case-study-detail-pages: done
-  epic-4-retrospective: optional
+  epic-4-retrospective: done
 
   # ============================================
   # EPIC 5: Lead Generation & Contact
   # ============================================
-  epic-5: backlog
-  5-1-contact-page-quote-form: ready-for-dev
+  epic-5: in-progress
+  5-1-contact-page-quote-form: done
   5-2-form-submission-email-notifications: ready-for-dev
   5-3-server-actions-form-infrastructure: ready-for-dev
   5-4-whatsapp-floating-button: ready-for-dev
@@ -262,3 +262,48 @@ progress_log:
 
       All 38 portfolio tests + 50 case study tests passing.
       Epic 4 marked DONE.
+  - date: "2026-01-27"
+    event: "epic-4-retrospective"
+    notes: |
+      RETROSPECTIVE completed for Epic 4: Portfolio & Case Studies.
+
+      KEY WINS:
+      - Smooth performance, premium UI transitions
+      - 88 tests, zero regressions, zero blockers
+      - URL state persistence for filters
+      - Reusable patterns (ImageGallery, filter tabs)
+
+      KEY LEARNINGS:
+      - Ask for real content upfront (team used placeholders, Seb had to retrofit)
+      - Update story docs when implementation approach changes
+      - Foundation work compounds (Epic 1 & 2 investments paid off)
+
+      ACTION ITEMS:
+      - Capture real portfolio screenshots from live URLs
+      - Add content requirements checklist to story kickoff
+
+      EPIC 5 PREP:
+      - WhatsApp: +91 88484 14848
+      - Email: info@invenex.in
+      - Story 5-6 added: Reviews/Testimonials Page
+      - Design for future Invenex ERP integration
+
+      NEW EPIC PLANNED:
+      - Epic 9: Creative UI Enhancement
+      - References: Stokt, Visuvate, Averi.ai, Gleec
+      - Focus: Lenis scroll, glassmorphism, GSAP, typography hierarchy
+
+      Retrospective saved: epic-4-retro-2026-01-27.md
+  - date: "2026-01-27"
+    story: "5-1-contact-page-quote-form"
+    status: "done"
+    notes: |
+      Contact Page & Quote Form code review completed.
+      Issues found: 7 (2 HIGH, 3 MEDIUM, 2 LOW).
+      All HIGH/MEDIUM fixed:
+      - Page title duplication fixed (was showing "Invenex Solutions" twice)
+      - WhatsApp link now shows WhatsApp number instead of phone
+      - Added WhatsApp link test
+      - Added email validation edge case tests (missing domain, missing local part)
+      - Simplified Dev Notes documentation
+      24 Playwright tests. Browser verification passed.
