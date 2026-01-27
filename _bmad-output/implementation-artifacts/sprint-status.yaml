@@ -104,7 +104,7 @@ development_status:
   epic-6: in-progress
   6-1-careers-page-culture: done
   6-2-job-listings-filtering: done
-  6-3-job-detail-pages: ready-for-dev
+  6-3-job-detail-pages: done
   6-4-job-application-form: ready-for-dev
   6-5-application-submission-notifications: ready-for-dev
   epic-6-retrospective: optional
@@ -366,3 +366,20 @@ progress_log:
       - Inconsistent count display on All button - minor
 
       Epic 5 marked DONE. Stories 6-1 and 6-2 marked DONE.
+  - date: "2026-01-28"
+    story: "6-3-job-detail-pages"
+    status: "done"
+    notes: |
+      ADVERSARIAL CODE REVIEW completed for Story 6-3.
+      Issues found: 1 HIGH, 2 MEDIUM, 3 LOW (6 total).
+
+      ALL FIXED:
+      - [HIGH] Apply Now button led to 404 → Changed to mailto:careers@invenex.in
+      - [MEDIUM] AC2 CMS content note added (deferred to Epic 7)
+      - [MEDIUM] Dev Notes updated to match actual implementation
+      - [LOW] Benefits array moved to src/lib/jobs.ts
+      - [LOW] Test updated for mailto: href
+      - [LOW] aria-labelledby ID renamed for clarity
+
+      Files modified: page.tsx, jobs.ts, job-detail.spec.ts, story file.
+      Story 6-3 marked DONE.
