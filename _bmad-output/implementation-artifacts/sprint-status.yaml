@@ -91,9 +91,9 @@ development_status:
   # ============================================
   epic-5: in-progress
   5-1-contact-page-quote-form: done
-  5-2-form-submission-email-notifications: ready-for-dev
-  5-3-server-actions-form-infrastructure: ready-for-dev
-  5-4-whatsapp-floating-button: ready-for-dev
+  5-2-form-submission-email-notifications: review
+  5-3-server-actions-form-infrastructure: done
+  5-4-whatsapp-floating-button: review
   5-5-social-sharing-functionality: ready-for-dev
   epic-5-retrospective: optional
 

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -71,6 +72,9 @@ export default function RootLayout({
         <main id="main-content">{children}</main>
 
         <Footer />
+
+        {/* Floating WhatsApp Button - visible on all pages */}
+        <WhatsAppButton />
       </body>
     </html>
   );
