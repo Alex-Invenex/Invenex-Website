@@ -3,17 +3,10 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
+import type { SimpleProject } from "@/lib/projects";
 
-export interface Project {
-  id: string;
-  title: string;
-  client: string;
-  category: string;
-  excerpt: string;
-  image: string;
-  slug: string;
-  url?: string; // External live site URL
-}
+// Re-export for backward compatibility
+export type Project = SimpleProject;
 
 interface ProjectCardProps {
   project: Project;

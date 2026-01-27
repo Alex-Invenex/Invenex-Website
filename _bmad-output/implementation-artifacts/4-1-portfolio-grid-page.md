@@ -181,8 +181,10 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 - src/components/ui/project-card.tsx (created)
 - src/components/sections/project-grid.tsx (created)
 - src/lib/projects.ts (created - shared project data source)
-- tests/portfolio.spec.ts (created)
+- tests/portfolio.spec.ts (created - Story 4-1 & 4-2 tests)
+- tests/portfolio-grid.spec.ts (created - Story 4-1 desktop/mobile/performance tests)
 
 ### Change Log
 - 2026-01-24: Story implemented - Portfolio grid page with filter tabs, project cards, hover effects, and responsive layout
 - 2026-01-24: Code review complete - Added src/lib/projects.ts to File List. All 12 tests passing. Status → done.
+- 2026-01-27: Code review (adversarial) - Fixed data-testid mismatch (portfolio-hero-section→portfolio-hero), added project-count testid, updated File List with portfolio-grid.spec.ts, fixed stale TODO in portfolio-preview.tsx, refactored Project type to import from projects.ts.

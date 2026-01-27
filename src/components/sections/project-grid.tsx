@@ -106,7 +106,10 @@ function ProjectGridContent({ projects }: ProjectGridProps) {
 
         {/* Empty state */}
         {filteredProjects.length === 0 && (
-          <AnimatedSection className="text-center py-16">
+          <AnimatedSection
+            className="text-center py-16"
+            data-testid="portfolio-empty-state"
+          >
             <p className="text-foreground-muted text-lg">
               No projects found in this category.
             </p>

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 
-// TODO: Portfolio pages pending Epic 4 implementation
+// Featured projects for homepage preview - full portfolio at /portfolio (Epic 4)
 const featuredProjects = [
   {
     title: "CaterFlow",

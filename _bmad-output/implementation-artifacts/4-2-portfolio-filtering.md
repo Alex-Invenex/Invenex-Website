@@ -103,7 +103,9 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 - src/components/sections/project-grid.tsx (modified - added filter tabs, URL state, Suspense wrapper)
 - src/lib/projects.ts (shared - project data with category field)
 - tests/portfolio.spec.ts (modified - added Story 4-2 tests)
+- tests/portfolio-filtering.spec.ts (created - Story 4-2 comprehensive filter tests)
 
 ### Change Log
 - 2026-01-24: Story implemented - Portfolio filtering with URL state persistence
 - 2026-01-24: Code review complete - Fixed File List (removed non-existent filter-tabs.tsx), updated Dev Notes to match actual implementation (filters integrated in project-grid.tsx). Fixed test hardcoding issues. All 7 tests passing. Status → done.
+- 2026-01-27: Code review (adversarial) - Added portfolio-empty-state data-testid to project-grid.tsx, updated File List with portfolio-filtering.spec.ts.
