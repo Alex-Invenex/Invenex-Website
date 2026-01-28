@@ -105,7 +105,7 @@ development_status:
   6-1-careers-page-culture: done
   6-2-job-listings-filtering: done
   6-3-job-detail-pages: done
-  6-4-job-application-form: ready-for-dev
+  6-4-job-application-form: done
   6-5-application-submission-notifications: ready-for-dev
   epic-6-retrospective: optional
 
@@ -383,3 +383,23 @@ progress_log:
 
       Files modified: page.tsx, jobs.ts, job-detail.spec.ts, story file.
       Story 6-3 marked DONE.
+  - date: "2026-01-28"
+    story: "6-4-job-application-form"
+    status: "done"
+    notes: |
+      ADVERSARIAL CODE REVIEW completed for Story 6-4.
+      Issues found: 1 HIGH, 4 MEDIUM, 3 LOW (8 total).
+
+      ALL HIGH/MEDIUM FIXED:
+      - [HIGH] AC3 scope clarified - Vercel Blob/Server Action deferred to Story 6-5
+      - [MEDIUM] File type validation security - Added MIME type check (defense in depth)
+      - [MEDIUM] Simulated delay removed - No more artificial 1000ms setTimeout
+      - [MEDIUM] Phone validation added - 7-15 digit format validation
+      - [MEDIUM] Accessibility improved - aria-describedby added to FileUpload
+
+      LOW FIXED:
+      - Added phone validation test
+      - Added data-testid="form-error" for form error message
+
+      Files modified: application-form.tsx, file-upload.tsx, job-application.spec.ts, story file.
+      Story 6-4 marked DONE.
