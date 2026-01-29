@@ -117,7 +117,7 @@ development_status:
   7-1-sanity-studio-setup: done
   7-2-content-schemas-projects-services: done
   7-3-content-schemas-jobs-team: done
-  7-4-content-schemas-testimonials-blog: ready-for-dev
+  7-4-content-schemas-testimonials-blog: done
   7-5-webhook-revalidation-admin-auth: ready-for-dev
   epic-7-retrospective: optional
 
@@ -478,3 +478,41 @@ progress_log:
 
       Files modified: queries.ts, teamMember.ts, job.ts, sanity-schemas.spec.ts, story file.
       Story 7-3 marked DONE.
+  - date: "2026-01-29"
+    story: "7-4-content-schemas-testimonials-blog"
+    status: "review"
+    notes: |
+      Story 7-4 implemented: Testimonials (expanded) and Blog content schemas.
+
+      AC1 Testimonial Schema: 8 fields - clientName (required), clientRole, company,
+      quote (required), photo (image/hotspot), project (reference), rating (1-5),
+      featured (boolean, default false). Preview config with clientName/photo.
+
+      AC2 Blog Post Schema: 10 fields - title (required), slug (auto-generated),
+      excerpt (max 200 chars), featuredImage (with alt), content (blogContent),
+      author (teamMember reference), categories (category references), publishedAt,
+      readTime, seo (metaTitle, metaDescription, ogImage).
+
+      blogContent Schema: Extended rich text with code blocks (10 languages),
+      callouts (info/warning/tip/note), embedded images, and extended decorators
+      (underline, strike-through, link with blank option).
+
+      Category Schema: 3 fields - title, slug, description for blog organization.
+
+      TypeScript types updated in src/types/sanity.ts with accurate interfaces.
+      34 Playwright tests added for schema validation. All tests passing.
+  - date: "2026-01-29"
+    story: "7-4-content-schemas-testimonials-blog"
+    status: "done"
+    notes: |
+      ADVERSARIAL CODE REVIEW completed for Story 7-4.
+      Issues found: 0 HIGH, 4 MEDIUM, 4 LOW (8 total).
+
+      ALL MEDIUM FIXED:
+      - [M1] Type mismatch: Testimonial.featured → Added .required() validation
+      - [M2] AC deviation: Categories uses references instead of strings → Kept (superior)
+      - [M3] Code block validation missing → Added .required() to code field
+      - [M4] Callout validation missing → Added .required() to type and content fields
+
+      Files modified: testimonial.ts, blogContent.ts, story file.
+      Story 7-4 marked DONE.
