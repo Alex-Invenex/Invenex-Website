@@ -58,18 +58,18 @@ export const serviceBySlugQuery = groq`
   }
 `
 
-// Job queries
+// Job queries - Story 7-3: Updated to match job schema field names
 export const jobsQuery = groq`
-  *[_type == "job" && active == true] | order(publishedAt desc) {
+  *[_type == "job" && active == true] | order(postedAt desc) {
     _id,
     title,
     slug,
     department,
     location,
-    type,
-    experience,
-    shortDescription,
-    publishedAt
+    employmentType,
+    experienceLevel,
+    techStack,
+    postedAt
   }
 `
 
@@ -80,28 +80,29 @@ export const jobBySlugQuery = groq`
     slug,
     department,
     location,
-    type,
-    experience,
-    shortDescription,
-    fullDescription,
+    employmentType,
+    experienceLevel,
+    description,
     responsibilities,
     requirements,
-    niceToHave,
-    benefits,
+    techStack,
+    salary,
     active,
-    publishedAt
+    postedAt
   }
 `
 
-// Team member queries
+// Team member queries - Story 7-3: Updated to match teamMember schema field names
 export const teamQuery = groq`
-  *[_type == "teamMember"] | order(order asc) {
+  *[_type == "teamMember" && active == true] | order(order asc) {
     _id,
     name,
     role,
-    image,
+    photo,
     bio,
-    socialLinks
+    linkedIn,
+    twitter,
+    github
   }
 `
 

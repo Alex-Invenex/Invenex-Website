@@ -116,7 +116,7 @@ development_status:
   epic-7: in-progress
   7-1-sanity-studio-setup: done
   7-2-content-schemas-projects-services: done
-  7-3-content-schemas-jobs-team: ready-for-dev
+  7-3-content-schemas-jobs-team: done
   7-4-content-schemas-testimonials-blog: ready-for-dev
   7-5-webhook-revalidation-admin-auth: ready-for-dev
   epic-7-retrospective: optional
@@ -442,3 +442,39 @@ progress_log:
 
       Files modified: src/types/sanity.ts, tests/sanity-schemas.spec.ts, story file.
       Story 7-2 marked DONE.
+  - date: "2026-01-29"
+    story: "7-3-content-schemas-jobs-team"
+    status: "review"
+    notes: |
+      Story 7-3 implemented: Job and TeamMember Sanity schemas.
+
+      AC1 Job Schema: 13 fields - title, slug, department (4 options), location,
+      employmentType (4 options + internship), experienceLevel (4 options),
+      description (blockContent), requirements, responsibilities, techStack (tags),
+      salary (optional), active (default true), postedAt. Preview config included.
+
+      AC2 TeamMember Schema: 9 fields - name, role, photo (hotspot), bio, linkedIn,
+      twitter, github, order, active. Orderings for display order and name.
+
+      TypeScript types updated in src/types/sanity.ts with accurate interfaces.
+      40 Playwright tests added for schema validation.
+
+      Files: job.ts, teamMember.ts, index.ts, sanity.ts (types), sanity-schemas.spec.ts
+  - date: "2026-01-29"
+    story: "7-3-content-schemas-jobs-team"
+    status: "done"
+    notes: |
+      ADVERSARIAL CODE REVIEW completed for Story 7-3.
+      Issues found: 3 HIGH, 3 MEDIUM, 4 LOW (10 total).
+
+      ALL HIGH/MEDIUM FIXED:
+      - [HIGH] GROQ queries in queries.ts used wrong field names → Fixed all field mappings
+        (type→employmentType, experience→experienceLevel, image→photo, socialLinks→individual fields)
+      - [HIGH] queries.ts missing from File List → Added
+      - [HIGH] TypeScript test errors (23 errors) → Added type helper functions for schema introspection
+      - [MEDIUM] Employment type "internship" added without AC documentation → Documented as enhancement
+      - [MEDIUM] No URL domain validation for social links → Added validation for linkedin.com, x.com, github.com
+      - [MEDIUM] No array length validation → Added min(1)/max(20) for requirements/responsibilities, max(30) for techStack
+
+      Files modified: queries.ts, teamMember.ts, job.ts, sanity-schemas.spec.ts, story file.
+      Story 7-3 marked DONE.
