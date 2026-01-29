@@ -87,7 +87,7 @@ export async function submitQuoteRequest(
   try {
     // Send team notification email
     const { data: emailData, error: emailError } = await resend.emails.send({
-      from: 'Invenex Website <noreply@invenex.in>',
+      from: 'Invenex Website <hello@invenex.in>',
       to: [contactInfo.email],
       replyTo: data.email,
       subject: `New Quote Request from ${data.name}`,
@@ -109,7 +109,7 @@ export async function submitQuoteRequest(
 
     // Send visitor confirmation email
     await resend.emails.send({
-      from: 'Invenex Solutions <noreply@invenex.in>',
+      from: 'Invenex Solutions <hello@invenex.in>',
       to: [data.email],
       subject: 'Thank you for your inquiry!',
       react: QuoteConfirmation({

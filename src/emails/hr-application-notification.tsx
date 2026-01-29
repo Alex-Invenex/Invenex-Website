@@ -9,29 +9,32 @@ import {
   Section,
   Preview,
   Link,
+  Img,
   Row,
   Column,
 } from '@react-email/components';
 
-interface TeamNotificationProps {
+interface HRApplicationNotificationProps {
   name: string;
   email: string;
-  projectType: string;
-  budget: string;
-  description: string;
-  source?: string;
+  phone: string;
+  jobTitle: string;
+  resumeUrl: string;
+  portfolio?: string;
+  coverLetter?: string;
   submittedAt: string;
 }
 
-export default function TeamNotification({
+export default function HRApplicationNotification({
   name,
   email,
-  projectType,
-  budget,
-  description,
-  source,
+  phone,
+  jobTitle,
+  resumeUrl,
+  portfolio,
+  coverLetter,
   submittedAt,
-}: TeamNotificationProps) {
+}: HRApplicationNotificationProps) {
   return (
     <Html>
       <Head>
@@ -41,30 +44,31 @@ export default function TeamNotification({
           `}
         </style>
       </Head>
-      <Preview>New Quote Request from {name}</Preview>
+      <Preview>
+        New Application for {jobTitle} from {name}
+      </Preview>
       <Body style={styles.body}>
         <Container style={styles.container}>
           {/* Header with gradient */}
           <Section style={styles.header}>
             <Text style={styles.logo}>INVENEX</Text>
-            <Text style={styles.tagline}>New Quote Request</Text>
+            <Text style={styles.tagline}>New Job Application</Text>
           </Section>
 
           {/* Main Content */}
           <Section style={styles.content}>
-            {/* Project Type Badge */}
-            <Section style={styles.projectBadge}>
-              <Text style={styles.badgeLabel}>PROJECT TYPE</Text>
-              <Text style={styles.badgeTitle}>{projectType}</Text>
-              <Text style={styles.budgetText}>Budget: {budget}</Text>
+            {/* Position Badge */}
+            <Section style={styles.positionBadge}>
+              <Text style={styles.positionLabel}>POSITION</Text>
+              <Heading style={styles.positionTitle}>{jobTitle}</Heading>
             </Section>
 
             <Hr style={styles.divider} />
 
-            {/* Client Info Card */}
+            {/* Applicant Info Card */}
             <Section style={styles.infoCard}>
               <Heading as="h2" style={styles.sectionTitle}>
-                Client Details
+                Applicant Details
               </Heading>
 
               <Row style={styles.infoRow}>
@@ -89,25 +93,48 @@ export default function TeamNotification({
 
               <Row style={styles.infoRow}>
                 <Column style={styles.infoLabel}>
-                  <Text style={styles.labelText}>Source</Text>
+                  <Text style={styles.labelText}>Phone</Text>
                 </Column>
                 <Column style={styles.infoValue}>
-                  <Text style={styles.valueText}>
-                    {source || 'Not specified'}
-                  </Text>
+                  <Link href={`tel:${phone}`} style={styles.linkText}>
+                    {phone}
+                  </Link>
                 </Column>
               </Row>
+
+              {portfolio && (
+                <Row style={styles.infoRow}>
+                  <Column style={styles.infoLabel}>
+                    <Text style={styles.labelText}>Portfolio</Text>
+                  </Column>
+                  <Column style={styles.infoValue}>
+                    <Link href={portfolio} style={styles.linkText}>
+                      View Portfolio →
+                    </Link>
+                  </Column>
+                </Row>
+              )}
             </Section>
 
-            <Hr style={styles.divider} />
-
-            {/* Project Description */}
-            <Section style={styles.descriptionSection}>
-              <Heading as="h2" style={styles.sectionTitle}>
-                Project Description
-              </Heading>
-              <Text style={styles.descriptionText}>{description}</Text>
+            {/* Resume Download Button */}
+            <Section style={styles.ctaSection}>
+              <Link href={resumeUrl} style={styles.ctaButton}>
+                Download Resume
+              </Link>
             </Section>
+
+            {/* Cover Letter */}
+            {coverLetter && (
+              <>
+                <Hr style={styles.divider} />
+                <Section style={styles.coverLetterSection}>
+                  <Heading as="h2" style={styles.sectionTitle}>
+                    Cover Letter
+                  </Heading>
+                  <Text style={styles.coverLetterText}>{coverLetter}</Text>
+                </Section>
+              </>
+            )}
 
             <Hr style={styles.divider} />
 
@@ -122,9 +149,16 @@ export default function TeamNotification({
 
           {/* Footer */}
           <Section style={styles.footer}>
-            <Text style={styles.timestamp}>Received on {submittedAt}</Text>
+            <Text style={styles.timestamp}>
+              Received on {submittedAt}
+            </Text>
             <Text style={styles.footerText}>
               Invenex Solutions · Kochi, Kerala, India
+            </Text>
+            <Text style={styles.footerLink}>
+              <Link href="https://invenex.in" style={styles.footerLinkText}>
+                invenex.in
+              </Link>
             </Text>
           </Section>
         </Container>
@@ -135,8 +169,7 @@ export default function TeamNotification({
 
 const styles = {
   body: {
-    fontFamily:
-      'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     backgroundColor: '#0A0A0A',
     padding: '40px 20px',
     margin: 0,
@@ -149,8 +182,7 @@ const styles = {
     border: '1px solid #262626',
   },
   header: {
-    background:
-      'linear-gradient(135deg, #1a1a1a 0%, #0A0A0A 50%, #1a1a1a 100%)',
+    background: 'linear-gradient(135deg, #1a1a1a 0%, #0A0A0A 50%, #1a1a1a 100%)',
     padding: '40px 32px',
     textAlign: 'center' as const,
     borderBottom: '1px solid #262626',
@@ -173,7 +205,7 @@ const styles = {
     backgroundColor: '#141414',
     padding: '32px',
   },
-  projectBadge: {
+  positionBadge: {
     textAlign: 'center' as const,
     padding: '24px',
     backgroundColor: '#1A1A1A',
@@ -181,22 +213,17 @@ const styles = {
     border: '1px solid #262626',
     marginBottom: '24px',
   },
-  badgeLabel: {
+  positionLabel: {
     fontSize: '11px',
     fontWeight: '600' as const,
     color: '#737373',
     letterSpacing: '2px',
     margin: '0 0 8px 0',
   },
-  badgeTitle: {
+  positionTitle: {
     fontSize: '24px',
     fontWeight: '600' as const,
     color: '#FAFAFA',
-    margin: '0 0 8px 0',
-  },
-  budgetText: {
-    fontSize: '14px',
-    color: '#A3A3A3',
     margin: 0,
   },
   divider: {
@@ -222,7 +249,7 @@ const styles = {
     marginBottom: '16px',
   },
   infoLabel: {
-    width: '80px',
+    width: '100px',
     verticalAlign: 'top' as const,
   },
   infoValue: {
@@ -246,13 +273,28 @@ const styles = {
     fontWeight: '500' as const,
     borderBottom: '1px solid #404040',
   },
-  descriptionSection: {
+  ctaSection: {
+    textAlign: 'center' as const,
+    padding: '24px 0',
+  },
+  ctaButton: {
+    display: 'inline-block',
+    backgroundColor: '#FAFAFA',
+    color: '#0A0A0A',
+    fontSize: '14px',
+    fontWeight: '600' as const,
+    padding: '14px 32px',
+    borderRadius: '50px',
+    textDecoration: 'none',
+    letterSpacing: '0.5px',
+  },
+  coverLetterSection: {
     backgroundColor: '#1A1A1A',
     borderRadius: '12px',
     padding: '24px',
     border: '1px solid #262626',
   },
-  descriptionText: {
+  coverLetterText: {
     fontSize: '15px',
     color: '#A3A3A3',
     lineHeight: '1.7',
@@ -291,6 +333,14 @@ const styles = {
   footerText: {
     fontSize: '12px',
     color: '#525252',
+    margin: '0 0 4px 0',
+  },
+  footerLink: {
     margin: 0,
+  },
+  footerLinkText: {
+    fontSize: '12px',
+    color: '#525252',
+    textDecoration: 'none',
   },
 };

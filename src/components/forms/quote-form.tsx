@@ -7,6 +7,7 @@ import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { projectTypes, budgetRanges, referralSources } from '@/lib/constants';
+import { submitQuoteRequest } from '@/lib/actions/contact';
 
 export function QuoteForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -57,12 +58,14 @@ export function QuoteForm() {
       return;
     }
 
-    // Submit to Server Action (Story 5.3)
+    // Submit to Server Action
     try {
-      // Simulate API call for now - will be replaced with actual Server Action
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      // await submitQuoteRequest(data)
-      setIsSuccess(true);
+      const result = await submitQuoteRequest(formData);
+      if (result.success) {
+        setIsSuccess(true);
+      } else {
+        setErrors({ form: result.error || 'Something went wrong. Please try again.' });
+      }
     } catch {
       setErrors({ form: 'Something went wrong. Please try again.' });
     } finally {

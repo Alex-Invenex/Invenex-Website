@@ -5,28 +5,21 @@ import {
   Container,
   Heading,
   Text,
-  Section,
-  Link,
-  Preview,
   Hr,
+  Section,
+  Preview,
+  Link,
 } from '@react-email/components';
-import { contactInfo } from '@/lib/constants';
 
-interface QuoteConfirmationProps {
+interface ApplicantConfirmationProps {
   name: string;
-  projectType: string;
-  budget: string;
-  description: string;
+  jobTitle: string;
 }
 
-export default function QuoteConfirmation({
+export default function ApplicantConfirmation({
   name,
-  projectType,
-  budget,
-  description,
-}: QuoteConfirmationProps) {
-  const whatsappNumber = contactInfo.whatsapp.replace(/[^0-9]/g, '');
-
+  jobTitle,
+}: ApplicantConfirmationProps) {
   return (
     <Html>
       <Head>
@@ -36,7 +29,9 @@ export default function QuoteConfirmation({
           `}
         </style>
       </Head>
-      <Preview>Thank you for contacting Invenex Solutions!</Preview>
+      <Preview>
+        Thank you for applying to {jobTitle} at Invenex Solutions
+      </Preview>
       <Body style={styles.body}>
         <Container style={styles.container}>
           {/* Header */}
@@ -46,79 +41,66 @@ export default function QuoteConfirmation({
 
           {/* Hero Section */}
           <Section style={styles.hero}>
-            <Text style={styles.emoji}>✨</Text>
-            <Heading style={styles.heroTitle}>Thank You, {name}!</Heading>
+            <Text style={styles.emoji}>🎉</Text>
+            <Heading style={styles.heroTitle}>Application Received!</Heading>
             <Text style={styles.heroSubtitle}>
-              We&apos;ve received your quote request
+              Thank you for your interest in joining our team
             </Text>
           </Section>
 
           {/* Main Content */}
           <Section style={styles.content}>
+            <Text style={styles.greeting}>Hi {name},</Text>
+
             <Text style={styles.paragraph}>
-              Our team is reviewing your project details and will get back to
-              you within <strong style={styles.strong}>24 hours</strong>.
+              We&apos;ve received your application for the{' '}
+              <strong style={styles.strong}>{jobTitle}</strong> position at
+              Invenex Solutions. Our team is excited to review your profile.
             </Text>
 
-            {/* Summary Card */}
-            <Section style={styles.summaryCard}>
-              <Heading as="h2" style={styles.sectionTitle}>
-                Your Request Summary
-              </Heading>
-
-              <Section style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Project Type</Text>
-                <Text style={styles.summaryValue}>{projectType}</Text>
-              </Section>
-
-              <Section style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Budget Range</Text>
-                <Text style={styles.summaryValue}>{budget}</Text>
-              </Section>
-
-              <Section style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Project Description</Text>
-                <Text style={styles.summaryDescription}>{description}</Text>
-              </Section>
+            {/* Position Card */}
+            <Section style={styles.positionCard}>
+              <Text style={styles.positionLabel}>YOU APPLIED FOR</Text>
+              <Text style={styles.positionTitle}>{jobTitle}</Text>
             </Section>
 
             <Hr style={styles.divider} />
 
-            {/* Contact Options */}
-            <Section style={styles.contactSection}>
+            {/* What's Next Section */}
+            <Section style={styles.stepsSection}>
               <Heading as="h2" style={styles.sectionTitle}>
-                Need to Reach Us Sooner?
+                What Happens Next?
               </Heading>
 
-              <Section style={styles.contactGrid}>
-                <Section style={styles.contactItem}>
-                  <Text style={styles.contactLabel}>Email</Text>
-                  <Link
-                    href={`mailto:${contactInfo.email}`}
-                    style={styles.contactLink}
-                  >
-                    {contactInfo.email}
-                  </Link>
+              <Section style={styles.step}>
+                <Text style={styles.stepNumber}>01</Text>
+                <Section style={styles.stepContent}>
+                  <Text style={styles.stepTitle}>Application Review</Text>
+                  <Text style={styles.stepDescription}>
+                    Our team will carefully review your resume and cover letter
+                  </Text>
                 </Section>
+              </Section>
 
-                <Section style={styles.contactItem}>
-                  <Text style={styles.contactLabel}>WhatsApp</Text>
-                  <Link
-                    href={`https://wa.me/${whatsappNumber}`}
-                    style={styles.contactLink}
-                  >
-                    {contactInfo.whatsapp}
-                  </Link>
+              <Section style={styles.step}>
+                <Text style={styles.stepNumber}>02</Text>
+                <Section style={styles.stepContent}>
+                  <Text style={styles.stepTitle}>Initial Contact</Text>
+                  <Text style={styles.stepDescription}>
+                    If there&apos;s a match, we&apos;ll reach out within 5-7
+                    business days
+                  </Text>
                 </Section>
+              </Section>
 
-                <Section style={styles.contactItem}>
-                  <Text style={styles.contactLabel}>Phone</Text>
-                  <Link
-                    href={`tel:${contactInfo.phone.replace(/\s/g, '')}`}
-                    style={styles.contactLink}
-                  >
-                    {contactInfo.phone}
-                  </Link>
+              <Section style={styles.step}>
+                <Text style={styles.stepNumber}>03</Text>
+                <Section style={styles.stepContent}>
+                  <Text style={styles.stepTitle}>Interview Process</Text>
+                  <Text style={styles.stepDescription}>
+                    Technical assessment and team interviews to find the perfect
+                    fit
+                  </Text>
                 </Section>
               </Section>
             </Section>
@@ -128,10 +110,10 @@ export default function QuoteConfirmation({
             {/* CTA Section */}
             <Section style={styles.ctaSection}>
               <Text style={styles.ctaText}>
-                While you wait, explore our recent work
+                Want to learn more about life at Invenex?
               </Text>
-              <Link href="https://invenex.in/portfolio" style={styles.ctaButton}>
-                View Portfolio
+              <Link href="https://invenex.in/careers" style={styles.ctaButton}>
+                Explore Our Culture
               </Link>
             </Section>
           </Section>
@@ -139,7 +121,10 @@ export default function QuoteConfirmation({
           {/* Footer */}
           <Section style={styles.footer}>
             <Text style={styles.footerMain}>
-              We&apos;re excited to learn more about your project!
+              Questions? Reach out to us at{' '}
+              <Link href="mailto:hello@invenex.in" style={styles.footerLink}>
+                hello@invenex.in
+              </Link>
             </Text>
             <Hr style={styles.footerDivider} />
             <Text style={styles.footerText}>
@@ -225,53 +210,39 @@ const styles = {
     backgroundColor: '#141414',
     padding: '32px',
   },
+  greeting: {
+    fontSize: '18px',
+    color: '#FAFAFA',
+    margin: '0 0 16px 0',
+  },
   paragraph: {
     fontSize: '15px',
     color: '#A3A3A3',
     lineHeight: '1.7',
     margin: '0 0 24px 0',
-    textAlign: 'center' as const,
   },
   strong: {
     color: '#FAFAFA',
     fontWeight: '600' as const,
   },
-  summaryCard: {
+  positionCard: {
     backgroundColor: '#1A1A1A',
     borderRadius: '12px',
-    padding: '24px',
+    padding: '20px 24px',
     border: '1px solid #262626',
+    textAlign: 'center' as const,
   },
-  sectionTitle: {
-    fontSize: '14px',
+  positionLabel: {
+    fontSize: '11px',
     fontWeight: '600' as const,
     color: '#737373',
-    textTransform: 'uppercase' as const,
-    letterSpacing: '1px',
-    margin: '0 0 20px 0',
+    letterSpacing: '2px',
+    margin: '0 0 8px 0',
   },
-  summaryItem: {
-    marginBottom: '16px',
-  },
-  summaryLabel: {
-    fontSize: '12px',
+  positionTitle: {
+    fontSize: '20px',
     fontWeight: '600' as const,
-    color: '#737373',
-    textTransform: 'uppercase' as const,
-    letterSpacing: '1px',
-    margin: '0 0 6px 0',
-  },
-  summaryValue: {
-    fontSize: '16px',
     color: '#FAFAFA',
-    margin: 0,
-    fontWeight: '500' as const,
-  },
-  summaryDescription: {
-    fontSize: '14px',
-    color: '#A3A3A3',
-    lineHeight: '1.6',
-    whiteSpace: 'pre-wrap' as const,
     margin: 0,
   },
   divider: {
@@ -279,25 +250,41 @@ const styles = {
     borderWidth: '1px',
     margin: '32px 0',
   },
-  contactSection: {
-    textAlign: 'center' as const,
+  stepsSection: {
+    padding: '0',
   },
-  contactGrid: {
-    display: 'block',
-  },
-  contactItem: {
-    marginBottom: '16px',
-  },
-  contactLabel: {
-    fontSize: '12px',
+  sectionTitle: {
+    fontSize: '14px',
+    fontWeight: '600' as const,
     color: '#737373',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '1px',
+    margin: '0 0 24px 0',
+  },
+  step: {
+    marginBottom: '20px',
+  },
+  stepNumber: {
+    fontSize: '12px',
+    fontWeight: '700' as const,
+    color: '#404040',
+    letterSpacing: '1px',
+    margin: '0 0 8px 0',
+  },
+  stepContent: {
+    paddingLeft: '0',
+  },
+  stepTitle: {
+    fontSize: '16px',
+    fontWeight: '600' as const,
+    color: '#FAFAFA',
     margin: '0 0 4px 0',
   },
-  contactLink: {
-    fontSize: '15px',
-    color: '#FAFAFA',
-    textDecoration: 'none',
-    borderBottom: '1px solid #404040',
+  stepDescription: {
+    fontSize: '14px',
+    color: '#737373',
+    margin: 0,
+    lineHeight: '1.5',
   },
   ctaSection: {
     textAlign: 'center' as const,
@@ -329,6 +316,11 @@ const styles = {
     fontSize: '14px',
     color: '#A3A3A3',
     margin: '0 0 16px 0',
+  },
+  footerLink: {
+    color: '#FAFAFA',
+    textDecoration: 'none',
+    borderBottom: '1px solid #404040',
   },
   footerDivider: {
     borderColor: '#262626',

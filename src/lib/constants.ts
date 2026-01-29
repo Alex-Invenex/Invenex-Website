@@ -138,14 +138,13 @@ export const socialLinks: SocialLink[] = [
 
 // ============================================
 // Contact Information
-// TODO: Replace with actual contact details before production launch
 // ============================================
 export const contactInfo = {
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@invenex.com",
-  phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+91 98765 43210",
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "info@invenex.in",
+  phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+91 88484 14848",
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || "+918848414848",
   address: {
-    street: process.env.NEXT_PUBLIC_ADDRESS_STREET || "123 Tech Park",
+    street: process.env.NEXT_PUBLIC_ADDRESS_STREET || "Kochi",
     city: "Kochi",
     state: "Kerala",
     country: "India",

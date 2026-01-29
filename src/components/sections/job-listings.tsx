@@ -4,68 +4,15 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { JobCard } from "@/components/ui/job-card";
+import { getJobListings, type JobListing } from "@/lib/jobs";
+
+// Re-export Job type for backwards compatibility
+export type { JobListing as Job } from "@/lib/jobs";
 
 const departments = ["All", "Engineering", "Design", "Marketing", "Operations"];
 
-// Job type definition
-export interface Job {
-  id: string;
-  title: string;
-  department: string;
-  location: string;
-  experience: string;
-  techStack?: string[];
-  slug: string;
-}
-
-// Sample data - will come from Sanity CMS in Epic 7
-const jobs: Job[] = [
-  {
-    id: "1",
-    title: "Senior Frontend Developer",
-    department: "Engineering",
-    location: "Kochi / Remote",
-    experience: "Senior",
-    techStack: ["React", "Next.js", "TypeScript"],
-    slug: "senior-frontend-developer",
-  },
-  {
-    id: "2",
-    title: "Full Stack Developer",
-    department: "Engineering",
-    location: "Kochi",
-    experience: "Mid",
-    techStack: ["Node.js", "React", "PostgreSQL"],
-    slug: "full-stack-developer",
-  },
-  {
-    id: "3",
-    title: "Mobile Developer",
-    department: "Engineering",
-    location: "Remote",
-    experience: "Mid",
-    techStack: ["React Native", "TypeScript"],
-    slug: "mobile-developer",
-  },
-  {
-    id: "4",
-    title: "UI/UX Designer",
-    department: "Design",
-    location: "Kochi / Remote",
-    experience: "Mid",
-    techStack: ["Figma", "Adobe XD", "Prototyping"],
-    slug: "ui-ux-designer",
-  },
-  {
-    id: "5",
-    title: "Digital Marketing Manager",
-    department: "Marketing",
-    location: "Kochi",
-    experience: "Senior",
-    techStack: ["SEO", "Google Ads", "Analytics"],
-    slug: "digital-marketing-manager",
-  },
-];
+// Get jobs from shared data source
+const jobs: JobListing[] = getJobListings();
 
 export function JobListings() {
   const [activeDepartment, setActiveDepartment] = useState("All");

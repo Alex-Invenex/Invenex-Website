@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { FileUpload } from '@/components/ui/file-upload';
 import { Card } from '@/components/ui/card';
+import { submitJobApplication } from '@/lib/actions/application';
 
 interface ApplicationFormProps {
   jobSlug: string;
@@ -68,12 +69,12 @@ export function ApplicationForm({ jobSlug, jobTitle }: ApplicationFormProps) {
     }
 
     try {
-      // TODO: Story 6-5 will implement:
-      // 1. Server Action to handle submission
-      // 2. File upload to Vercel Blob storage
-      // 3. Email notification to HR
-      // await submitJobApplication(formData)
-      setIsSuccess(true);
+      const result = await submitJobApplication(formData);
+      if (result.success) {
+        setIsSuccess(true);
+      } else {
+        setErrors({ form: result.error });
+      }
     } catch {
       setErrors({ form: 'Something went wrong. Please try again.' });
     } finally {
