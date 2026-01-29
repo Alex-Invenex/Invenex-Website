@@ -114,8 +114,8 @@ development_status:
   # EPIC 7: Content Management System
   # ============================================
   epic-7: in-progress
-  7-1-sanity-studio-setup: in-progress
-  7-2-content-schemas-projects-services: ready-for-dev
+  7-1-sanity-studio-setup: done
+  7-2-content-schemas-projects-services: done
   7-3-content-schemas-jobs-team: ready-for-dev
   7-4-content-schemas-testimonials-blog: ready-for-dev
   7-5-webhook-revalidation-admin-auth: ready-for-dev
@@ -423,3 +423,22 @@ progress_log:
 
       Files modified: application.ts, story file.
       Story 6-5 marked DONE. EPIC 6 COMPLETE!
+  - date: "2026-01-29"
+    story: "7-2-content-schemas-projects-services"
+    status: "done"
+    notes: |
+      ADVERSARIAL CODE REVIEW completed for Story 7-2.
+      Issues found: 2 HIGH, 4 MEDIUM, 3 LOW (9 total).
+
+      ALL HIGH/MEDIUM FIXED:
+      - [HIGH] TypeScript types completely wrong (string instead of PortableTextBlock[], phantom fields)
+        → Rewrote src/types/sanity.ts to match actual schemas
+      - [HIGH] Service interface had wrong field names (longDescription vs fullDescription)
+        → Fixed all field names and removed non-existent fields
+      - [MEDIUM] src/types/sanity.ts missing from File List → Added
+      - [MEDIUM] excerpt field added without task documentation → Updated Task 1
+      - [MEDIUM] Tests were smoke tests only → Rewrote with 30+ field validation assertions
+      - [MEDIUM] blockContent schema not tracked → Added Task 4
+
+      Files modified: src/types/sanity.ts, tests/sanity-schemas.spec.ts, story file.
+      Story 7-2 marked DONE.
