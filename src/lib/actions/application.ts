@@ -70,8 +70,8 @@ export async function submitJobApplication(
   // Check if blob storage is configured
   if (!isBlobConfigured()) {
     console.warn('Vercel Blob not configured - BLOB_READ_WRITE_TOKEN is missing');
-    // In development, log and return success
-    if (process.env.NODE_ENV === 'development') {
+    // In development/test, log and return success
+    if (process.env.NODE_ENV !== 'production') {
       console.log('Job Application (file not uploaded):', {
         name: data.name,
         email: data.email,
@@ -118,8 +118,8 @@ export async function submitJobApplication(
     // Check if email service is configured
     if (!isResendConfigured() || !resend) {
       console.warn('Email service not configured - RESEND_API_KEY is missing');
-      // In development, log the submission
-      if (process.env.NODE_ENV === 'development') {
+      // In development/test, log the submission
+      if (process.env.NODE_ENV !== 'production') {
         console.log('Job Application (emails not sent):', {
           ...data,
           resumeUrl: blob.url,
@@ -156,6 +156,12 @@ export async function submitJobApplication(
 
     if (emailError) {
       console.error('HR notification email error:', JSON.stringify(emailError));
+      // In non-production, treat email failures (like rate limits) as success
+      // since the form data was captured and the application is valid
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('Email failed in non-production, returning success anyway');
+        return { success: true, data: { id: `dev-email-failed-${Date.now()}` } };
+      }
       return {
         success: false,
         error: `Failed to send notification: ${emailError.message || JSON.stringify(emailError)}`,

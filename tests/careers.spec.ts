@@ -33,9 +33,9 @@ test.describe('Story 6-1: Careers Page with Culture Showcase', () => {
       const sectionHeading = page.getByRole('heading', { name: /life at invenex/i });
       await expect(sectionHeading).toBeVisible();
 
-      // Should mention Kochi and remote work
-      await expect(page.getByText(/kochi/i)).toBeVisible();
-      await expect(page.getByText(/remote/i)).toBeVisible();
+      // Should mention Kochi and remote work (scoped to life section to avoid matching job listings)
+      await expect(lifeSection.getByText(/kochi/i).first()).toBeVisible();
+      await expect(lifeSection.getByText(/remote/i).first()).toBeVisible();
     });
 
     test('should display benefits grid with 4 benefit items', async ({ page }) => {
@@ -59,11 +59,11 @@ test.describe('Story 6-1: Careers Page with Culture Showcase', () => {
       const sectionHeading = page.getByRole('heading', { name: /our tech stack/i });
       await expect(sectionHeading).toBeVisible();
 
-      // Check for specific tech stack items
-      await expect(page.getByText('Next.js')).toBeVisible();
-      await expect(page.getByText('TypeScript')).toBeVisible();
-      await expect(page.getByText('Tailwind CSS')).toBeVisible();
-      await expect(page.getByText('React')).toBeVisible();
+      // Check for specific tech stack items (scoped to tech section to avoid matching job card badges)
+      await expect(techSection.getByText('Next.js')).toBeVisible();
+      await expect(techSection.getByText('TypeScript')).toBeVisible();
+      await expect(techSection.getByText('Tailwind CSS')).toBeVisible();
+      await expect(techSection.getByText('React')).toBeVisible();
     });
 
     test('should display open positions section with anchor link', async ({ page }) => {
@@ -167,6 +167,7 @@ test.describe('Story 6-1: Careers Page - Mobile Viewport', () => {
   test('should display tech stack badges on mobile', async ({ page }) => {
     const techSection = page.locator('[data-testid="careers-tech-section"]');
     await expect(techSection).toBeVisible();
-    await expect(page.getByText('Next.js')).toBeVisible();
+    // Scope to tech section to avoid matching job card badges
+    await expect(techSection.getByText('Next.js')).toBeVisible();
   });
 });

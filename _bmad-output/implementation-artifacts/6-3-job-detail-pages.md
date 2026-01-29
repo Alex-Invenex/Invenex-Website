@@ -135,7 +135,7 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 
 ### File List
 
-- src/app/careers/[slug]/page.tsx (new)
+- src/app/(site)/careers/[slug]/page.tsx (new)
 - src/lib/jobs.ts (new)
 - src/components/ui/job-card.tsx (modified)
 - src/components/sections/job-listings.tsx (modified)

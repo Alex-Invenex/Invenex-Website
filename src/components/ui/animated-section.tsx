@@ -3,7 +3,7 @@
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface AnimatedSectionProps {
+interface AnimatedSectionProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   className?: string;
   delay?: number;
@@ -34,11 +34,12 @@ export function AnimatedSection({
   className,
   delay = 0,
   variant = "fadeUp",
+  ...props
 }: AnimatedSectionProps) {
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
-    return <div className={className}>{children}</div>;
+    return <div className={className} {...props}>{children}</div>;
   }
 
   return (
@@ -53,6 +54,7 @@ export function AnimatedSection({
         delay,
         ease: [0.16, 1, 0.3, 1],
       }}
+      {...props}
     >
       {children}
     </motion.div>

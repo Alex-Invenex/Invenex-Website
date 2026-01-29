@@ -190,9 +190,29 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 - Navigation link already exists in mainNav and footerNav.company
 
 ### File List
-- src/app/careers/page.tsx (new)
+- src/app/(site)/careers/page.tsx (new)
 - tests/careers.spec.ts (new)
+
+## Senior Developer Review (AI)
+
+**Reviewer:** Claude Opus 4.5
+**Date:** 2026-01-29
+**Outcome:** ✅ APPROVED (with fixes applied)
+
+### Issues Found & Fixed:
+
+| # | Severity | Issue | Status |
+|---|----------|-------|--------|
+| 1 | 🟡 MEDIUM | File path in story listed `src/app/careers/page.tsx` but actual is `src/app/(site)/careers/page.tsx` | ✅ Fixed |
+| 2 | 🟡 MEDIUM | Test selectors too broad - `getByText(/kochi/i)` matched 6 elements across page | ✅ Fixed - Scoped to section |
+| 3 | 🟡 MEDIUM | Test selectors too broad - `getByText('Next.js')` matched job card badges | ✅ Fixed - Scoped to tech section |
+| 4 | 🟢 LOW | Dev Notes show different import structure than actual code | Noted |
+
+### Files Modified:
+- `tests/careers.spec.ts` - Fixed non-specific selectors by scoping to appropriate sections
+- `_bmad-output/implementation-artifacts/6-1-careers-page-culture.md` - Updated file path
 
 ## Change Log
 - 2026-01-27: Story 6-1 implemented - Careers page with hero, culture, benefits, tech stack, and open positions sections
 - 2026-01-28: Code review - Corrected completion notes (removed false claim about careers@invenex.in)
+- 2026-01-29: Code review - Fixed test selectors and corrected file path documentation

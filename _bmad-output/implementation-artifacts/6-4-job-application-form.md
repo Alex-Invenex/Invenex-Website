@@ -340,10 +340,10 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 - Note: Server Action for file upload to Vercel Blob will be implemented in Story 6-5
 
 ### File List
-- src/app/careers/[slug]/apply/page.tsx (created)
+- src/app/(site)/careers/[slug]/apply/page.tsx (created)
 - src/components/forms/application-form.tsx (created, modified in review - phone validation, removed delay)
 - src/components/ui/file-upload.tsx (created, modified in review - MIME validation, accessibility)
-- src/app/careers/[slug]/page.tsx (modified - Apply Now link updated)
+- src/app/(site)/careers/[slug]/page.tsx (modified - Apply Now link updated)
 - tests/job-application.spec.ts (created - 37 tests, added phone validation test)
 - tests/job-detail.spec.ts (modified - Apply Now href test updated)
 

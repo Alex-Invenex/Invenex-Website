@@ -52,9 +52,9 @@ test.describe("Job Listings - Desktop", () => {
       // Experience level
       await expect(firstCard.locator('[data-testid="job-experience"]')).toBeVisible();
 
-      // Apply button
+      // View Position button (entire card is clickable link to detail page)
       await expect(
-        firstCard.getByRole("link", { name: /Apply Now/i })
+        firstCard.getByRole("button", { name: /View Position/i })
       ).toBeVisible();
     });
 
@@ -67,16 +67,14 @@ test.describe("Job Listings - Desktop", () => {
       await expect(techTags.first()).toBeVisible();
     });
 
-    test("Apply button links to email application", async ({ page }) => {
-      const jobCards = page.locator('[data-testid="job-card"]');
-      const firstCard = jobCards.first();
+    test("job card links to job detail page", async ({ page }) => {
+      // Job cards are wrapped in a Link component - clicking anywhere navigates to detail
+      const firstCardLink = page.locator('a[href^="/careers/"]').filter({ has: page.locator('[data-testid="job-card"]') }).first();
 
-      const applyLink = firstCard.getByRole("link", { name: /Apply Now/i });
-      const href = await applyLink.getAttribute("href");
+      const href = await firstCardLink.getAttribute("href");
 
-      // Should link to mailto: with job title (until Story 6-3 job detail pages are built)
-      expect(href).toMatch(/^mailto:/);
-      expect(href).toContain("Application%20for");
+      // Should link to job detail page (e.g., /careers/senior-frontend-developer)
+      expect(href).toMatch(/^\/careers\/[a-z-]+$/);
     });
   });
 
@@ -203,11 +201,11 @@ test.describe("Job Listings - Desktop", () => {
     });
 
     test("job cards have proper focus styles", async ({ page }) => {
-      const firstCard = page.locator('[data-testid="job-card"]').first();
-      const applyLink = firstCard.getByRole("link", { name: /Apply Now/i });
+      // The job card is wrapped in a link - test that the link is focusable
+      const firstCardLink = page.locator('a[href^="/careers/"]').filter({ has: page.locator('[data-testid="job-card"]') }).first();
 
-      await applyLink.focus();
-      await expect(applyLink).toBeFocused();
+      await firstCardLink.focus();
+      await expect(firstCardLink).toBeFocused();
     });
   });
 });
@@ -250,15 +248,13 @@ test.describe("Job Listings - Mobile", () => {
     }
   });
 
-  test("Apply button is tappable on mobile", async ({ page }) => {
-    const jobCards = page.locator('[data-testid="job-card"]');
-    const firstCard = jobCards.first();
+  test("job card is tappable on mobile", async ({ page }) => {
+    // The entire job card is a link - test it's tappable
+    const firstCardLink = page.locator('a[href^="/careers/"]').filter({ has: page.locator('[data-testid="job-card"]') }).first();
+    await expect(firstCardLink).toBeVisible();
 
-    const applyButton = firstCard.getByRole("link", { name: /Apply Now/i });
-    await expect(applyButton).toBeVisible();
-
-    // Button should have adequate tap target size
-    const box = await applyButton.boundingBox();
+    // Card should have adequate tap target size
+    const box = await firstCardLink.boundingBox();
     expect(box).not.toBeNull();
     if (box) {
       expect(box.height).toBeGreaterThanOrEqual(44);
@@ -270,10 +266,10 @@ test.describe("Job Listings - Mobile", () => {
       '[data-testid="careers-positions-section"]'
     );
 
-    // Tap Engineering filter
+    // Click Engineering filter (works for both touch and mouse events)
     await positionsSection
       .getByRole("button", { name: /Engineering/i })
-      .tap();
+      .click();
 
     // Wait for animation
     await page.waitForTimeout(500);
