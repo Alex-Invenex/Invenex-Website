@@ -6,8 +6,8 @@ import { schemaTypes } from './src/sanity/schemas'
 export default defineConfig({
   name: 'invenex',
   title: 'Invenex Solutions',
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  projectId: 'enl6t2el',
+  dataset: 'production',
   plugins: [structureTool(), visionTool()],
   schema: {
     types: schemaTypes,
