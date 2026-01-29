@@ -2,7 +2,10 @@ import { test, expect } from '@playwright/test'
 import { project } from '../src/sanity/schemas/project'
 import { service } from '../src/sanity/schemas/service'
 import { blockContent } from '../src/sanity/schemas/blockContent'
+import { blogContent } from '../src/sanity/schemas/blogContent'
 import { testimonial } from '../src/sanity/schemas/testimonial'
+import { blogPost } from '../src/sanity/schemas/blogPost'
+import { category } from '../src/sanity/schemas/category'
 
 // Type helper for accessing Sanity schema field properties at runtime
 // Sanity's TypeScript types are strict but schemas have additional runtime properties
@@ -290,22 +293,271 @@ test.describe('Sanity Content Schemas - Story 7-2', () => {
     })
   })
 
-  test.describe('Testimonial Schema Validation (minimal for reference)', () => {
+  test.describe('AC1: Testimonial Schema Validation - Story 7-4', () => {
     test('should have correct document type configuration', () => {
       expect(testimonial.name).toBe('testimonial')
+      expect(testimonial.title).toBe('Testimonial')
       expect(testimonial.type).toBe('document')
     })
 
-    test('should have required quote field', () => {
+    test('should have clientName field (string, required)', () => {
+      const clientNameField = getField(testimonial.fields, 'clientName')
+      expect(clientNameField).toBeDefined()
+      expect(clientNameField?.type).toBe('string')
+      expect(clientNameField?.validation).toBeDefined()
+    })
+
+    test('should have clientRole field (string)', () => {
+      const clientRoleField = getField(testimonial.fields, 'clientRole')
+      expect(clientRoleField).toBeDefined()
+      expect(clientRoleField?.type).toBe('string')
+    })
+
+    test('should have company field (string)', () => {
+      const companyField = getField(testimonial.fields, 'company')
+      expect(companyField).toBeDefined()
+      expect(companyField?.type).toBe('string')
+    })
+
+    test('should have quote field (text, required)', () => {
       const quoteField = getField(testimonial.fields, 'quote')
       expect(quoteField).toBeDefined()
       expect(quoteField?.type).toBe('text')
+      expect(quoteField?.validation).toBeDefined()
     })
 
-    test('should have required author field', () => {
-      const authorField = getField(testimonial.fields, 'author')
+    test('should have photo field (image with hotspot)', () => {
+      const photoField = getField(testimonial.fields, 'photo')
+      expect(photoField).toBeDefined()
+      expect(photoField?.type).toBe('image')
+      expect(photoField?.options?.hotspot).toBe(true)
+    })
+
+    test('should have project field (reference to project)', () => {
+      const projectField = getField(testimonial.fields, 'project')
+      expect(projectField).toBeDefined()
+      expect(projectField?.type).toBe('reference')
+      expect(projectField?.to?.[0]?.type).toBe('project')
+    })
+
+    test('should have rating field (number with 1-5 options)', () => {
+      const ratingField = getField(testimonial.fields, 'rating')
+      expect(ratingField).toBeDefined()
+      expect(ratingField?.type).toBe('number')
+      const options = ratingField?.options?.list
+      expect(options).toContain(1)
+      expect(options).toContain(5)
+    })
+
+    test('should have featured field (boolean with default false)', () => {
+      const featuredField = getField(testimonial.fields, 'featured')
+      expect(featuredField).toBeDefined()
+      expect(featuredField?.type).toBe('boolean')
+      expect(featuredField?.initialValue).toBe(false)
+    })
+
+    test('should have all 8 fields from AC1', () => {
+      const requiredFieldNames = [
+        'clientName',
+        'clientRole',
+        'company',
+        'quote',
+        'photo',
+        'project',
+        'rating',
+        'featured',
+      ]
+      const actualFieldNames = testimonial.fields.map((f) => f.name)
+      requiredFieldNames.forEach((fieldName) => {
+        expect(actualFieldNames).toContain(fieldName)
+      })
+    })
+
+    test('should have preview configuration', () => {
+      expect(testimonial.preview).toBeDefined()
+      expect(testimonial.preview?.select?.title).toBe('clientName')
+      expect(testimonial.preview?.select?.media).toBe('photo')
+    })
+  })
+
+  test.describe('AC2: Blog Post Schema Validation - Story 7-4', () => {
+    test('should have correct document type configuration', () => {
+      expect(blogPost.name).toBe('blogPost')
+      expect(blogPost.title).toBe('Blog Post')
+      expect(blogPost.type).toBe('document')
+    })
+
+    test('should have title field (string, required)', () => {
+      const titleField = getField(blogPost.fields, 'title')
+      expect(titleField).toBeDefined()
+      expect(titleField?.type).toBe('string')
+      expect(titleField?.validation).toBeDefined()
+    })
+
+    test('should have slug field (auto-generated from title)', () => {
+      const slugField = getField(blogPost.fields, 'slug')
+      expect(slugField).toBeDefined()
+      expect(slugField?.type).toBe('slug')
+      expect(slugField?.options?.source).toBe('title')
+    })
+
+    test('should have excerpt field (text)', () => {
+      const excerptField = getField(blogPost.fields, 'excerpt')
+      expect(excerptField).toBeDefined()
+      expect(excerptField?.type).toBe('text')
+    })
+
+    test('should have featuredImage field (image)', () => {
+      const imageField = getField(blogPost.fields, 'featuredImage')
+      expect(imageField).toBeDefined()
+      expect(imageField?.type).toBe('image')
+      expect(imageField?.options?.hotspot).toBe(true)
+    })
+
+    test('should have content field (blogContent)', () => {
+      const contentField = getField(blogPost.fields, 'content')
+      expect(contentField).toBeDefined()
+      expect(contentField?.type).toBe('blogContent')
+    })
+
+    test('should have author field (reference to teamMember)', () => {
+      const authorField = getField(blogPost.fields, 'author')
       expect(authorField).toBeDefined()
-      expect(authorField?.type).toBe('string')
+      expect(authorField?.type).toBe('reference')
+      expect(authorField?.to?.[0]?.type).toBe('teamMember')
+    })
+
+    test('should have categories field (array of references)', () => {
+      const categoriesField = getField(blogPost.fields, 'categories')
+      expect(categoriesField).toBeDefined()
+      expect(categoriesField?.type).toBe('array')
+      expect(categoriesField?.of?.[0]?.type).toBe('reference')
+    })
+
+    test('should have publishedAt field (datetime)', () => {
+      const dateField = getField(blogPost.fields, 'publishedAt')
+      expect(dateField).toBeDefined()
+      expect(dateField?.type).toBe('datetime')
+    })
+
+    test('should have readTime field (number)', () => {
+      const readTimeField = getField(blogPost.fields, 'readTime')
+      expect(readTimeField).toBeDefined()
+      expect(readTimeField?.type).toBe('number')
+    })
+
+    test('should have seo field (object with meta fields)', () => {
+      const seoField = getField(blogPost.fields, 'seo')
+      expect(seoField).toBeDefined()
+      expect(seoField?.type).toBe('object')
+    })
+
+    test('should have all 10 fields from AC2', () => {
+      const requiredFieldNames = [
+        'title',
+        'slug',
+        'excerpt',
+        'featuredImage',
+        'content',
+        'author',
+        'categories',
+        'publishedAt',
+        'readTime',
+        'seo',
+      ]
+      const actualFieldNames = blogPost.fields.map((f) => f.name)
+      requiredFieldNames.forEach((fieldName) => {
+        expect(actualFieldNames).toContain(fieldName)
+      })
+    })
+
+    test('should have preview configuration', () => {
+      expect(blogPost.preview).toBeDefined()
+      expect(blogPost.preview?.select?.title).toBe('title')
+    })
+  })
+
+  test.describe('Category Schema Validation - Story 7-4', () => {
+    test('should have correct document type configuration', () => {
+      expect(category.name).toBe('category')
+      expect(category.title).toBe('Category')
+      expect(category.type).toBe('document')
+    })
+
+    test('should have title field (string, required)', () => {
+      const titleField = getField(category.fields, 'title')
+      expect(titleField).toBeDefined()
+      expect(titleField?.type).toBe('string')
+      expect(titleField?.validation).toBeDefined()
+    })
+
+    test('should have slug field (auto-generated from title)', () => {
+      const slugField = getField(category.fields, 'slug')
+      expect(slugField).toBeDefined()
+      expect(slugField?.type).toBe('slug')
+      expect(slugField?.options?.source).toBe('title')
+    })
+
+    test('should have description field (text)', () => {
+      const descField = getField(category.fields, 'description')
+      expect(descField).toBeDefined()
+      expect(descField?.type).toBe('text')
+    })
+
+    test('should have all 3 fields', () => {
+      const requiredFieldNames = ['title', 'slug', 'description']
+      const actualFieldNames = category.fields.map((f) => f.name)
+      requiredFieldNames.forEach((fieldName) => {
+        expect(actualFieldNames).toContain(fieldName)
+      })
+    })
+  })
+
+  test.describe('Blog Content Schema Validation - Story 7-4', () => {
+    test('should have correct type configuration', () => {
+      expect(blogContent.name).toBe('blogContent')
+      expect(blogContent.type).toBe('array')
+    })
+
+    test('should support text styles', () => {
+      const blockMember = getBlockMember(blogContent.of)
+      expect(blockMember).toBeDefined()
+      const styles = blockMember?.styles?.map((s: { value: string }) => s.value)
+      expect(styles).toContain('normal')
+      expect(styles).toContain('h2')
+      expect(styles).toContain('h3')
+      expect(styles).toContain('h4')
+      expect(styles).toContain('blockquote')
+    })
+
+    test('should support extended text decorators', () => {
+      const blockMember = getBlockMember(blogContent.of)
+      const decorators = blockMember?.marks?.decorators?.map(
+        (d: { value: string }) => d.value
+      )
+      expect(decorators).toContain('strong')
+      expect(decorators).toContain('em')
+      expect(decorators).toContain('code')
+      expect(decorators).toContain('underline')
+      expect(decorators).toContain('strike-through')
+    })
+
+    test('should support code blocks', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const codeMember = (blogContent.of as any[])?.find(
+        (m: { name?: string }) => m.name === 'code'
+      )
+      expect(codeMember).toBeDefined()
+      expect(codeMember?.type).toBe('object')
+    })
+
+    test('should support callouts', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const calloutMember = (blogContent.of as any[])?.find(
+        (m: { name?: string }) => m.name === 'callout'
+      )
+      expect(calloutMember).toBeDefined()
+      expect(calloutMember?.type).toBe('object')
     })
   })
 

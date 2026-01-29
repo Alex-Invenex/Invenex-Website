@@ -75,56 +75,79 @@ export interface Service {
   order?: number
 }
 
-// Job types - placeholder for Story 7-3
+// Job types - Story 7-3
+export type JobDepartment = 'engineering' | 'design' | 'marketing' | 'operations'
+export type EmploymentType = 'full-time' | 'part-time' | 'contract' | 'internship'
+export type ExperienceLevel = 'junior' | 'mid' | 'senior' | 'lead'
+
 export interface Job {
   _id: string
   _type: 'job'
   title: string
   slug: SanitySlug
-  department?: string
-  location?: string
-  type?: string
-  experience?: string
-  shortDescription?: string
-  publishedAt?: string
-}
-
-export interface JobDetail extends Job {
-  fullDescription?: PortableTextBlock[]
-  responsibilities?: string[]
+  department: JobDepartment
+  location: string
+  employmentType: EmploymentType
+  experienceLevel: ExperienceLevel
+  description?: PortableTextBlock[]
   requirements?: string[]
-  niceToHave?: string[]
-  benefits?: string[]
-  active?: boolean
+  responsibilities?: string[]
+  techStack?: string[]
+  salary?: string
+  active: boolean
+  postedAt: string
 }
 
-// Team types - placeholder for Story 7-3
+// Team types - Story 7-3
 export interface TeamMember {
   _id: string
   _type: 'teamMember'
   name: string
-  role?: string
-  image?: SanityImage
+  role: string
+  photo?: SanityImage
   bio?: string
-  socialLinks?: {
-    linkedin?: string
-    twitter?: string
-    github?: string
-  }
+  linkedIn?: string
+  twitter?: string
+  github?: string
+  order?: number
+  active: boolean
 }
 
-// Testimonial types - matches src/sanity/schemas/testimonial.ts
+// Testimonial types - Story 7-4 expanded schema
 export interface Testimonial {
   _id: string
   _type: 'testimonial'
-  quote: string
-  author: string
-  role?: string
+  clientName: string
+  clientRole?: string
   company?: string
-  image?: SanityImage
+  quote: string
+  photo?: SanityImage
+  project?: SanityReference<Project>
+  rating?: number
+  featured: boolean
 }
 
-// Blog types - placeholder for Story 7-4
+// Expanded testimonial with resolved project reference
+export interface TestimonialDetail extends Omit<Testimonial, 'project'> {
+  project?: Project
+}
+
+// Category types - Story 7-4
+export interface Category {
+  _id: string
+  _type: 'category'
+  title: string
+  slug: SanitySlug
+  description?: string
+}
+
+// Blog types - Story 7-4
+export interface BlogPostSeo {
+  metaTitle?: string
+  metaDescription?: string
+  ogImage?: SanityImage
+}
+
 export interface BlogPost {
   _id: string
   _type: 'blogPost'
@@ -132,12 +155,30 @@ export interface BlogPost {
   slug: SanitySlug
   excerpt?: string
   featuredImage?: SanityImage
+  content?: PortableTextBlock[]
   author?: SanityReference<TeamMember>
-  categories?: string[]
+  categories?: SanityReference<Category>[]
   publishedAt?: string
+  readTime?: number
+  seo?: BlogPostSeo
 }
 
-export interface BlogPostDetail extends Omit<BlogPost, 'author'> {
-  content?: PortableTextBlock[]
+// Expanded blog post with resolved references for detail pages
+export interface BlogPostDetail extends Omit<BlogPost, 'author' | 'categories'> {
   author?: TeamMember
+  categories?: Category[]
+}
+
+// Blog content block types for code blocks and callouts
+export interface CodeBlock {
+  _type: 'code'
+  language?: string
+  code?: string
+  filename?: string
+}
+
+export interface Callout {
+  _type: 'callout'
+  type?: 'info' | 'warning' | 'tip' | 'note'
+  content?: string
 }
