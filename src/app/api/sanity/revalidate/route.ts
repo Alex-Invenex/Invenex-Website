@@ -34,11 +34,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Revalidate by document type - affects all pages fetching this type
-    revalidateTag(body._type)
+    // Using 'max' profile for stale-while-revalidate semantics (Next.js 16+)
+    revalidateTag(body._type, 'max')
 
     // Also revalidate specific slug if available for granular cache invalidation
     if (body.slug?.current) {
-      revalidateTag(`${body._type}:${body.slug.current}`)
+      revalidateTag(`${body._type}:${body.slug.current}`, 'max')
     }
 
     // Only log in development to avoid noise in production
