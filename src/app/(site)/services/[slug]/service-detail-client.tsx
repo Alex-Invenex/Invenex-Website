@@ -19,6 +19,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ShareButtons } from "@/components/ui/share-buttons";
 
 // Icon mapping
 const iconMap: Record<string, LucideIcon> = {
@@ -115,6 +116,9 @@ export function ServiceDetailClient({ service }: ServiceDetailClientProps) {
             <p className="mt-6 text-xl text-foreground-muted max-w-2xl">
               {service.description}
             </p>
+
+            {/* Share buttons */}
+            <ShareButtons title={`${service.title} - Invenex Solutions`} className="mt-8" />
           </AnimatedSection>
         </div>
       </section>

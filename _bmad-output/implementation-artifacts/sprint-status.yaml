@@ -100,20 +100,21 @@ development_status:
 
   # ============================================
   # EPIC 6: Careers & Recruitment
+  # Status: COMPLETE 2026-01-28
   # ============================================
-  epic-6: in-progress
+  epic-6: done
   6-1-careers-page-culture: done
   6-2-job-listings-filtering: done
   6-3-job-detail-pages: done
   6-4-job-application-form: done
-  6-5-application-submission-notifications: ready-for-dev
+  6-5-application-submission-notifications: done
   epic-6-retrospective: optional
 
   # ============================================
   # EPIC 7: Content Management System
   # ============================================
-  epic-7: backlog
-  7-1-sanity-studio-setup: ready-for-dev
+  epic-7: in-progress
+  7-1-sanity-studio-setup: in-progress
   7-2-content-schemas-projects-services: ready-for-dev
   7-3-content-schemas-jobs-team: ready-for-dev
   7-4-content-schemas-testimonials-blog: ready-for-dev
@@ -403,3 +404,22 @@ progress_log:
 
       Files modified: application-form.tsx, file-upload.tsx, job-application.spec.ts, story file.
       Story 6-4 marked DONE.
+  - date: "2026-01-28"
+    story: "6-5-application-submission-notifications"
+    status: "done"
+    notes: |
+      ADVERSARIAL CODE REVIEW completed for Story 6-5.
+      Issues found: 1 HIGH, 2 MEDIUM, 3 LOW (6 total).
+
+      ALL HIGH/MEDIUM FIXED:
+      - [HIGH] Applicant confirmation email error not handled → Added error handling with logging
+      - [MEDIUM] Dev Notes filename mismatch → Fixed hr-notification.tsx → hr-application-notification.tsx
+      - [MEDIUM] Resume blob URL predictability → Added UUID to path, added security documentation comment
+
+      LOW NOTED (not fixed):
+      - Timeline messaging inconsistency ("within a week" vs "5-7 business days")
+      - Weak error handling test coverage
+      - Dev Notes import discrepancy (siteConfig)
+
+      Files modified: application.ts, story file.
+      Story 6-5 marked DONE. EPIC 6 COMPLETE!

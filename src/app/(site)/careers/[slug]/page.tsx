@@ -146,9 +146,8 @@ export default async function JobDetailPage({ params }: PageProps) {
                     Submit your application and we&apos;ll get back to you within a
                     week.
                   </p>
-                  {/* TODO: Update to /careers/${slug}/apply when Story 6-4 is implemented */}
                   <Button asChild size="lg" className="w-full mb-6">
-                    <Link href="mailto:careers@invenex.in?subject=Job%20Application">Apply Now</Link>
+                    <Link href={`/careers/${slug}/apply`}>Apply Now</Link>
                   </Button>
 
                   {/* Benefits reminder */}
