@@ -1,11 +1,23 @@
-import type { Metadata, Viewport } from "next";
+import type { Viewport } from "next";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { defaultMetadata } from "@/lib/metadata";
+import { OrganizationSchema, WebSiteSchema } from "@/components/seo";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+  preload: true,
+  fallback: [
+    "-apple-system",
+    "BlinkMacSystemFont",
+    "Segoe UI",
+    "Roboto",
+    "sans-serif",
+  ],
 });
 
 export const viewport: Viewport = {
@@ -14,39 +26,7 @@ export const viewport: Viewport = {
   themeColor: "#0A0A0A",
 };
 
-export const metadata: Metadata = {
-  title: {
-    default: "Invenex Solutions | Premium Web Development & Digital Solutions",
-    template: "%s | Invenex Solutions",
-  },
-  description:
-    "Premium web development, mobile apps, and digital solutions for businesses worldwide. Based in Kochi, serving clients globally.",
-  keywords: [
-    "web development",
-    "mobile apps",
-    "digital solutions",
-    "Kochi",
-    "India",
-  ],
-  authors: [{ name: "Invenex Solutions" }],
-  creator: "Invenex Solutions",
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://invenexsolutions.vercel.app"
-  ),
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    siteName: "Invenex Solutions",
-  },
-  twitter: {
-    card: "summary_large_image",
-    creator: "@invenex",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export const metadata = defaultMetadata;
 
 export default function RootLayout({
   children,
@@ -55,8 +35,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} antialiased`}>
+      <head>
+        {/* Preconnect to external domains for performance */}
+        <link rel="preconnect" href="https://cdn.sanity.io" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+      </head>
       <body className="bg-background text-foreground font-sans min-h-screen">
+        <OrganizationSchema />
+        <WebSiteSchema />
         {children}
+        {/* Vercel Analytics & Speed Insights (AC1: Lighthouse Scores) */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

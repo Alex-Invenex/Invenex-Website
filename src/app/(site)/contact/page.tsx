@@ -1,13 +1,14 @@
-import type { Metadata } from 'next';
 import { AnimatedSection } from '@/components/ui/animated-section';
 import { QuoteForm } from '@/components/forms/quote-form';
 import { contactInfo } from '@/lib/constants';
+import { generatePageMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
+export const metadata = generatePageMetadata({
   title: 'Contact Us',
   description:
-    'Get in touch with Invenex Solutions for your next project. Request a quote for web development, mobile apps, or digital solutions.',
-};
+    'Get in touch with Invenex Solutions. Request a quote, discuss your project, or visit our office in Kochi, Kerala. We respond within 24 hours.',
+  path: '/contact',
+});
 
 export default function ContactPage() {
   return (

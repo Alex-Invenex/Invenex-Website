@@ -1,4 +1,4 @@
-import { Hero } from "@/components/sections/hero";
+import { Hero } from "@/components/sections/hero-v2";
 import { ServicesPreview } from "@/components/sections/services-preview";
 import { PortfolioPreview } from "@/components/sections/portfolio-preview";
 import { ProductsPreview } from "@/components/sections/products-preview";
@@ -8,10 +8,12 @@ import { InstagramReels } from "@/components/sections/instagram-reels";
 import { Testimonials } from "@/components/sections/testimonials";
 import { ClientLogos } from "@/components/sections/client-logos";
 import { CTASection } from "@/components/sections/cta-section";
+import { LocalBusinessSchema } from "@/components/seo";
 
 export default function HomePage() {
   return (
     <>
+      <LocalBusinessSchema />
       <Hero />
       <ServicesPreview />
       <PortfolioPreview />

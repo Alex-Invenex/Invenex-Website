@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { StaggerContainer, StaggerItem } from "@/components/ui/stagger-container";
@@ -6,12 +5,14 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { JobListings } from "@/components/sections/job-listings";
+import { generatePageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = generatePageMetadata({
   title: "Careers",
   description:
-    "Join Invenex Solutions - Work with modern tech, grow your career, and build amazing products. Based in Kochi, Kerala with remote-friendly culture.",
-};
+    "Join Invenex Solutions - Work with modern tech stack, grow your career, and build amazing products. Remote-friendly culture based in Kochi, Kerala.",
+  path: "/careers",
+});
 
 const benefits = [
   {

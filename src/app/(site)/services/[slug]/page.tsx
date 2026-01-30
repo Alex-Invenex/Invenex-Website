@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ServiceDetailClient } from "./service-detail-client";
+import { getSiteUrl } from "@/lib/metadata";
+import { ServiceSchema } from "@/components/seo";
 
 // Icon type for mapping
 type IconName =
@@ -177,14 +179,29 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const service = services[slug as ServiceSlug];
+  const siteUrl = getSiteUrl();
 
   if (!service) {
     return { title: "Service Not Found" };
   }
 
+  const url = `${siteUrl}/services/${slug}`;
+
   return {
-    title: `${service.title} | Invenex Solutions`,
+    title: service.title,
     description: service.description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: service.title,
+      description: service.description,
+      url,
+    },
+    twitter: {
+      title: service.title,
+      description: service.description,
+    },
   };
 }
 
@@ -197,11 +214,18 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   }
 
   return (
-    <ServiceDetailClient
-      service={{
-        ...service,
-        slug,
-      }}
-    />
+    <>
+      <ServiceSchema
+        name={service.title}
+        description={service.description}
+        slug={slug}
+      />
+      <ServiceDetailClient
+        service={{
+          ...service,
+          slug,
+        }}
+      />
+    </>
   );
 }

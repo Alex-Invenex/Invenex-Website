@@ -1,6 +1,14 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
+import { CustomCursor } from "@/components/ui/custom-cursor";
+import { SkipLink } from "@/components/accessibility";
+import {
+  PageTransitionProvider,
+  TransitionOverlay,
+  PageLoader,
+} from "@/components/transitions";
+import { ToastProvider } from "@/components/ui/toast";
 
 export default function SiteLayout({
   children,
@@ -8,23 +16,29 @@ export default function SiteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      {/* Skip Link for Accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded-md"
-      >
-        Skip to main content
-      </a>
+    <ToastProvider>
+      <PageTransitionProvider exitDuration={300} enterDuration={400}>
+        {/* Transition Overlay - Cinematic page transitions (Story 9.3) */}
+        <TransitionOverlay blur />
+        <PageLoader />
 
-      <Navbar />
+        {/* Custom Cursor - Premium UI enhancement (Story 9.2) */}
+        <CustomCursor />
 
-      <main id="main-content">{children}</main>
+        {/* Skip Link for Accessibility - WCAG 2.1 AA SC 2.4.1 */}
+        <SkipLink />
 
-      <Footer />
+        <Navbar />
 
-      {/* Floating WhatsApp Button - visible on all pages */}
-      <WhatsAppButton />
-    </>
+        <main id="main-content" tabIndex={-1} className="outline-none">
+          {children}
+        </main>
+
+        <Footer />
+
+        {/* Floating WhatsApp Button - visible on all pages */}
+        <WhatsAppButton />
+      </PageTransitionProvider>
+    </ToastProvider>
   );
 }

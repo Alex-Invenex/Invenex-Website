@@ -95,9 +95,8 @@ test.describe('Story 6-3: Job Detail Pages', () => {
 
       const applyButton = page.getByRole('link', { name: /Apply Now|Apply for this Position/i });
       await expect(applyButton).toBeVisible();
-      // TODO: Update href check to /careers/senior-frontend-developer/apply when Story 6-4 is implemented
-      // Currently using mailto: as temporary workaround
-      await expect(applyButton).toHaveAttribute('href', /mailto:careers@invenex\.in/);
+      // Story 6-4 implemented: Apply Now links to application page
+      await expect(applyButton).toHaveAttribute('href', '/careers/senior-frontend-developer/apply');
     });
 
     test('should display back link to careers page', async ({ page }) => {

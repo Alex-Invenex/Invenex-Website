@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getJobBySlug, getAllJobSlugs, benefits } from "@/lib/jobs";
+import { getSiteUrl } from "@/lib/metadata";
+import { JobPostingSchema } from "@/components/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -18,14 +20,30 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const job = getJobBySlug(slug);
+  const siteUrl = getSiteUrl();
 
   if (!job) {
     return { title: "Job Not Found" };
   }
 
+  const url = `${siteUrl}/careers/${slug}`;
+  const description = `Join Invenex as a ${job.title}. ${job.location}, ${job.type}. ${job.experience} experience required. Apply now!`;
+
   return {
     title: `${job.title} - Careers`,
-    description: `Apply for ${job.title} at Invenex Solutions. ${job.location}, ${job.type}. ${job.experience} experience required.`,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: `${job.title} at Invenex Solutions`,
+      description,
+      url,
+    },
+    twitter: {
+      title: `${job.title} at Invenex Solutions`,
+      description,
+    },
   };
 }
 
@@ -41,6 +59,13 @@ export default async function JobDetailPage({ params }: PageProps) {
 
   return (
     <>
+      <JobPostingSchema
+        title={job.title}
+        description={job.description}
+        slug={slug}
+        location={job.location}
+        employmentType={job.type}
+      />
       {/* Hero / Header */}
       <section
         className="pt-32 pb-8"

@@ -32,6 +32,15 @@
   /* Accent */
   --color-accent: #FFFFFF;
 
+  /* Coral Accent Color Scale (Story 9.4)
+     Primary: #FF6B35
+     WCAG AA: Use coral-700+ for white text on buttons */
+  --color-coral-50: #FFF5F2;
+  --color-coral-100: #FFE5DD;
+  --color-coral-300: #FF9B75;
+  --color-coral-500: #FF6B35;
+  --color-coral-700: #CC4A1A;
+
   /* Semantic Colors */
   --color-success: #22C55E;
   --color-warning: #F59E0B;
@@ -165,6 +174,94 @@
   }
 }
 
+/* ============================================
+   Micro-interaction Animations (Story 9.5)
+   ============================================ */
+
+/* Ripple effect for buttons */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* Toast slide-in from right */
+@keyframes toast-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Toast slide-out to right */
+@keyframes toast-exit {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Hero Section 2.0 Keyframes (Story 9.6) */
+
+/* Fade in with upward movement */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scale in with bounce easing */
+@keyframes scale-in-bounce {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Scroll indicator animation */
+@keyframes scroll-indicator {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(12px);
+    opacity: 1;
+  }
+}
+
 @layer utilities {
   /* Text Gradient */
   .text-gradient {
@@ -263,6 +360,106 @@
     animation: pulse-glow 3s ease-in-out infinite;
   }
 
+  /* ----------------------------------------
+     Micro-interaction Utilities (Story 9.5)
+     ---------------------------------------- */
+
+  /* Ripple animation */
+  .animate-ripple {
+    animation: ripple 600ms ease-out forwards;
+  }
+
+  /* Toast animations */
+  .animate-toast-enter {
+    animation: toast-enter 300ms var(--ease-out) forwards;
+  }
+
+  .animate-toast-exit {
+    animation: toast-exit 200ms ease-in forwards;
+  }
+
+  /* Fade in */
+  .animate-fade-in {
+    animation: fade-in 200ms ease-out forwards;
+  }
+
+  /* Hero Section 2.0 Animations (Story 9.6) */
+
+  /* Fade in up - for staggered content */
+  .animate-fade-in-up {
+    opacity: 0;
+    animation: fade-in-up 600ms var(--ease-out) forwards;
+  }
+
+  /* Scale in with bounce - for CTAs */
+  .animate-scale-in-bounce {
+    opacity: 0;
+    animation: scale-in-bounce 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  /* Float animation variants for mobile */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 5s ease-in-out infinite 1s;
+  }
+
+  .animate-float-slow {
+    animation: float 7s ease-in-out infinite 2s;
+  }
+
+  /* Scroll indicator bounce */
+  .animate-scroll-indicator {
+    animation: scroll-indicator 2s ease-in-out infinite;
+  }
+
+  /* Card lift on hover - use with group/card */
+  .card-lift {
+    transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out);
+  }
+
+  .card-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Input focus enhancement */
+  .input-enhanced {
+    transition: transform 200ms ease-out, border-color 200ms ease-out, box-shadow 200ms ease-out;
+  }
+
+  .input-enhanced:focus {
+    transform: scale(1.01);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+
+  /* Reduced motion - disable animations */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-ripple,
+    .animate-toast-enter,
+    .animate-toast-exit,
+    .animate-fade-in,
+    .animate-fade-in-up,
+    .animate-scale-in-bounce,
+    .animate-float,
+    .animate-float-delayed,
+    .animate-float-slow,
+    .animate-scroll-indicator {
+      animation: none;
+      opacity: 1;
+    }
+
+    .card-lift:hover {
+      transform: none;
+    }
+
+    .input-enhanced:focus {
+      transform: none;
+    }
+  }
+
   /* Grid pattern background */
   .bg-grid {
     background-image:
@@ -300,5 +497,94 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Custom Cursor - Story 9.2 */
+  .cursor-none {
+    cursor: none;
+  }
+
+  /* Preserve native cursor on inputs for text selection */
+  .cursor-none input,
+  .cursor-none textarea,
+  .cursor-none select,
+  .cursor-none [contenteditable],
+  .cursor-none [contenteditable="true"] {
+    cursor: text;
+  }
+
+  /* Preserve pointer cursor on interactive elements (fallback) */
+  .cursor-none button,
+  .cursor-none a,
+  .cursor-none [role="button"] {
+    cursor: pointer;
+  }
+
+  /* ----------------------------------------
+     Coral Accent Utilities (Story 9.4)
+     ---------------------------------------- */
+
+  /* Background Colors */
+  .bg-coral-50 {
+    background-color: var(--color-coral-50);
+  }
+  .bg-coral-100 {
+    background-color: var(--color-coral-100);
+  }
+  .bg-coral-300 {
+    background-color: var(--color-coral-300);
+  }
+  .bg-coral-500 {
+    background-color: var(--color-coral-500);
+  }
+  .bg-coral-700 {
+    background-color: var(--color-coral-700);
+  }
+
+  /* Text Colors */
+  .text-coral-50 {
+    color: var(--color-coral-50);
+  }
+  .text-coral-100 {
+    color: var(--color-coral-100);
+  }
+  .text-coral-300 {
+    color: var(--color-coral-300);
+  }
+  .text-coral-500 {
+    color: var(--color-coral-500);
+  }
+  .text-coral-700 {
+    color: var(--color-coral-700);
+  }
+
+  /* Border Colors */
+  .border-coral-50 {
+    border-color: var(--color-coral-50);
+  }
+  .border-coral-100 {
+    border-color: var(--color-coral-100);
+  }
+  .border-coral-300 {
+    border-color: var(--color-coral-300);
+  }
+  .border-coral-500 {
+    border-color: var(--color-coral-500);
+  }
+  .border-coral-700 {
+    border-color: var(--color-coral-700);
+  }
+
+  /* Coral Glow Effect */
+  .glow-coral {
+    box-shadow: 0 0 40px rgba(255, 107, 53, 0.3);
+  }
+
+  /* Coral Text Gradient */
+  .text-gradient-coral {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF9B75 50%, #CC4A1A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }

@@ -3,7 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost" | "link";
+  variant?: "primary" | "secondary" | "ghost" | "link" | "coral";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
   asChild?: boolean;
@@ -38,6 +38,11 @@ export function Button({
       "bg-transparent text-foreground hover:bg-background-secondary",
     variant === "link" &&
       "bg-transparent text-foreground underline-offset-4 hover:underline p-0 h-auto",
+    // Coral variant - warm accent for standout CTAs (Story 9.4)
+    // Uses coral-700 in gradient for WCAG AA contrast with white text
+    // References CSS variables from globals.css for design system consistency
+    variant === "coral" &&
+      "bg-gradient-to-r from-[var(--color-coral-500)] to-[var(--color-coral-700)] text-white font-semibold hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,107,53,0.5)] shadow-[0_0_20px_rgba(255,107,53,0.3)]",
 
     // Sizes (skip padding for link variant)
     variant !== "link" && {

@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { TeamGrid } from "@/components/sections/team-grid";
+import { generatePageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = generatePageMetadata({
   title: "About Us",
   description:
-    "Learn about Invenex Solutions - our story, mission, team, and values. Based in Kochi, Kerala, delivering world-class digital solutions.",
-};
+    "Learn about Invenex Solutions - our story, mission, values, and the passionate team behind our innovative digital solutions. Based in Kochi, Kerala.",
+  path: "/about",
+});
 
 const values = [
   {

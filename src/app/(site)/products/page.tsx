@@ -1,14 +1,15 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { AnimatedSection } from '@/components/ui/animated-section'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { generatePageMetadata } from '@/lib/metadata'
 
-export const metadata: Metadata = {
-  title: 'Our Products | Invenex Solutions',
-  description: 'Discover our own products - CaterFlow catering ERP and Invenex ERP for businesses.',
-}
+export const metadata = generatePageMetadata({
+  title: 'Our Products',
+  description: 'Discover our own products - CaterFlow catering ERP and upcoming Invenex ERP. We build products that solve real business problems.',
+  path: '/products',
+})
 
 export default function ProductsPage() {
   return (

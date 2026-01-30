@@ -1,6 +1,6 @@
 # Story 7.1: Sanity Studio Setup
 
-Status: in-progress
+Status: done
 
 ## Story
 
@@ -83,7 +83,7 @@ import { createClient } from 'next-sanity'
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  apiVersion: '2024-01-01',
+  apiVersion: '2026-01-29',
   useCdn: false, // for ISR/tag-based revalidation
 })
 
@@ -271,15 +271,36 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 - package.json (modified - added Sanity dependencies)
 - package-lock.json (modified)
 - .env.local (modified - added Sanity env vars)
-- sanity.config.ts (new)
+- sanity.config.ts (new - hardcoded projectId/dataset)
+- src/app/layout.tsx (modified - removed navbar/footer for route group pattern)
+- src/app/(site)/layout.tsx (new - site shell with navbar/footer)
+- src/app/(site)/page.tsx (moved from src/app/)
+- src/app/(site)/about/ (moved from src/app/)
+- src/app/(site)/careers/ (moved from src/app/)
+- src/app/(site)/contact/ (moved from src/app/)
+- src/app/(site)/portfolio/ (moved from src/app/)
+- src/app/(site)/products/ (moved from src/app/)
+- src/app/(site)/services/ (moved from src/app/)
+- src/app/(site)/template.tsx (moved from src/app/)
+- src/app/studio/[[...tool]]/page.tsx (new)
+- src/app/studio/[[...tool]]/layout.tsx (new)
 - src/lib/sanity/client.ts (new)
 - src/lib/sanity/queries.ts (new)
 - src/lib/sanity/image.ts (new)
 - src/lib/sanity/index.ts (new)
 - src/sanity/schemas/index.ts (new - empty, ready for Story 7-2)
-- src/app/studio/[[...tool]]/page.tsx (new)
-- src/app/studio/[[...tool]]/layout.tsx (new)
+- src/types/sanity.ts (new - Sanity document TypeScript types)
+- src/types/index.ts (modified - re-export Sanity types)
 - tests/sanity-studio.spec.ts (new)
 
 ## Change Log
 - 2026-01-29: Initial Sanity Studio setup - installed dependencies, created client, queries, studio route
+- 2026-01-29: Fixed layout isolation using route groups - moved site pages to (site) route group
+- 2026-01-29: Fixed projectId config - hardcoded public values to resolve client-side env var issue
+- 2026-01-29: Studio accessible at /studio, CORS registration prompt displayed (user action required)
+- 2026-01-29: **Code Review** - 8 issues found (2 HIGH, 3 MEDIUM, 3 LOW). All HIGH/MEDIUM fixed:
+  - [H1] Fixed test placeholder assertion - now verifies studio content actually loaded
+  - [H2] Fixed test missing assertion - noindex meta now verified
+  - [M1] Created src/types/sanity.ts with TypeScript types for all Sanity documents
+  - [M2] Added documentation in sanity.config.ts explaining hardcoded values
+  - [M3] Updated Dev Notes apiVersion from '2024-01-01' to '2026-01-29'

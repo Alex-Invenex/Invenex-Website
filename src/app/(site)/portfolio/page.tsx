@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
 import { AnimatedSection } from "@/components/ui/animated-section";
-import { ProjectGrid } from "@/components/sections/project-grid";
+import { BentoPortfolioGrid } from "@/components/sections/bento-portfolio-grid";
 import { getSimpleProjects } from "@/lib/projects";
+import { generatePageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = generatePageMetadata({
   title: "Our Work",
   description:
-    "Browse our portfolio of web, mobile, and platform development projects. See how we transform ideas into exceptional digital experiences.",
-};
+    "Browse our portfolio of web, mobile, and platform development projects. See how Invenex transforms ideas into exceptional digital experiences.",
+  path: "/portfolio",
+});
 
 // Get projects from shared data source
 const projects = getSimpleProjects();
@@ -46,8 +47,8 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      {/* Project Grid */}
-      <ProjectGrid projects={projects} />
+      {/* Bento Portfolio Grid */}
+      <BentoPortfolioGrid projects={projects} />
     </>
   );
 }

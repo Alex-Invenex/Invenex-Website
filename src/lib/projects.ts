@@ -8,6 +8,7 @@ export interface CaseStudyProject {
   image: string;
   slug: string;
   url?: string; // External live site URL
+  featured?: boolean; // Featured projects get larger cards in bento grid
   // Case study specific fields
   challenge: string;
   solution: string;
@@ -37,6 +38,7 @@ export const projects: CaseStudyProject[] = [
     image: "/portfolio/cooltech-international.png",
     slug: "cooltech-international",
     url: "https://cooltechintl.com",
+    featured: true,
     challenge:
       "CoolTech International needed a modern corporate website that could effectively communicate their complex technology solutions to a global audience. Their existing website was outdated, difficult to navigate, and failed to showcase their expertise in the tech industry.",
     solution:
@@ -180,6 +182,7 @@ export const projects: CaseStudyProject[] = [
     image: "/portfolio/grabtogo.png",
     slug: "grabtogo",
     url: "https://www.grabtogo.in",
+    featured: true,
     challenge:
       "GrabToGo wanted to create a comprehensive deals platform that could aggregate offers from hundreds of local merchants while providing personalized recommendations to users based on their preferences and location.",
     solution:
@@ -286,6 +289,7 @@ export const projects: CaseStudyProject[] = [
     image: "/portfolio/onmyway-ai.png",
     slug: "onmyway-ai",
     url: "https://onmyway.ai",
+    featured: true,
     challenge:
       "OnMyWay AI needed a sophisticated logistics platform that could leverage machine learning for route optimization, provide real-time tracking, and handle complex multi-stop deliveries. The platform needed to scale for enterprise clients.",
     solution:
@@ -342,6 +346,7 @@ export const projects: CaseStudyProject[] = [
     image: "/portfolio/qbyrayeesa.png",
     slug: "q-by-rayeesa",
     url: "https://qbyrayeesa.com",
+    featured: true,
     challenge:
       "Q by Rayeesa, a luxury fashion boutique, needed an e-commerce platform that would provide a premium shopping experience matching the quality of their products. They required features like size guides, wishlist functionality, and a loyalty program.",
     solution:
@@ -446,12 +451,12 @@ export function getRelatedProjects(
 // Export simple project type for portfolio grid
 export type SimpleProject = Pick<
   CaseStudyProject,
-  "id" | "title" | "client" | "category" | "excerpt" | "image" | "slug" | "url"
+  "id" | "title" | "client" | "category" | "excerpt" | "image" | "slug" | "url" | "featured"
 >;
 
 // Get simple projects for portfolio grid
 export function getSimpleProjects(): SimpleProject[] {
-  return projects.map(({ id, title, client, category, excerpt, image, slug, url }) => ({
+  return projects.map(({ id, title, client, category, excerpt, image, slug, url, featured }) => ({
     id,
     title,
     client,
@@ -460,5 +465,11 @@ export function getSimpleProjects(): SimpleProject[] {
     image,
     slug,
     url,
+    featured,
   }));
+}
+
+// Get featured projects only
+export function getFeaturedProjects(): CaseStudyProject[] {
+  return projects.filter((project) => project.featured);
 }
