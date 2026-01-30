@@ -112,10 +112,13 @@ export function GSAPStaggerContainer({
     return (
       <div ref={containerRef} data-gsap-stagger className={cn(className)}>
         {Children.map(children, (child) => {
-          if (isValidElement(child) && child.props['data-stagger-item'] !== undefined) {
-            return cloneElement(child as ReactElement<{ className?: string; style?: React.CSSProperties }>, {
-              style: { ...child.props.style, opacity: 1, transform: 'none' },
-            })
+          if (isValidElement(child)) {
+            const props = child.props as Record<string, unknown>
+            if (props['data-stagger-item'] !== undefined) {
+              return cloneElement(child as ReactElement<{ className?: string; style?: React.CSSProperties }>, {
+                style: { ...(props.style as React.CSSProperties | undefined), opacity: 1, transform: 'none' },
+              })
+            }
           }
           return child
         })}
