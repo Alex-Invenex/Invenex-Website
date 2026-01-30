@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import type { SimpleProject } from "@/lib/projects";
@@ -25,10 +26,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
           className="aspect-[4/3] overflow-hidden bg-background-secondary relative"
           data-testid="project-thumbnail"
         >
-          {/* TODO: Replace with Next.js Image component when Sanity CMS integration is complete (Epic 7)
-              Currently using gradient placeholder. project.image field exists for future use.
-              See Story 7-2 for content schema implementation. */}
-          <div className="w-full h-full bg-gradient-to-br from-foreground/5 to-foreground/10 group-hover:scale-110 transition-transform duration-500" />
+          <Image
+            src={project.image}
+            alt={`${project.title} screenshot`}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover group-hover:scale-110 transition-transform duration-500"
+          />
 
           {/* Hover overlay */}
           <div
