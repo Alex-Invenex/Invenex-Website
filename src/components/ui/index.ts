@@ -13,7 +13,16 @@ export {
 export { Badge, type BadgeProps } from "./badge";
 export { AnimatedSection } from "./animated-section";
 export { StaggerContainer, StaggerItem } from "./stagger-container";
-export { ParallaxSection, ParallaxLayer } from "./parallax-section";
+export { ParallaxSection, ParallaxLayer, ParallaxBackground, type DepthLayer } from "./parallax-section";
+export { AmbientOrbs } from "./ambient-orbs";
+export {
+  SectionDivider,
+  WaveDivider,
+  DiagonalDivider,
+  CurvedDivider,
+  ArrowDivider,
+} from "./section-divider";
+export { SectionTransition, GradientOverlay } from "./section-transition";
 export { GSAPStaggerContainer, GSAPStaggerItem } from "./gsap-stagger-container";
 export { ScrollProgress, ScrollProgressCircle } from "./scroll-progress";
 export { CustomCursor } from "./custom-cursor";
