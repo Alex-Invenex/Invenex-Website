@@ -5,92 +5,116 @@ Status: done
 ## Story
 
 As a **visitor**,
-I want **an impressive, interactive hero section**,
+I want **an impressive, impactful hero section with massive typography**,
 So that **I'm immediately engaged when landing on the homepage**.
 
 ## Acceptance Criteria
 
-### AC1: Mouse Parallax Effect
-**Given** I view the homepage hero
-**When** I move my mouse
-**Then**:
-- Floating orbs respond to mouse position (parallax depth)
-- Background gradient subtly follows cursor
-- Depth multipliers range from 0.02-0.05
+> **Note:** Original ACs were revised during implementation to align with Stokt-inspired design direction.
+> The design philosophy shifted to: "Typography IS the hero - minimal decoration, maximum impact."
 
-### AC2: Entry Animation Sequence
+### AC1: Massive Viewport-Filling Typography (Revised)
+**Given** I view the homepage hero
+**When** the hero renders
+**Then**:
+- Headline uses massive typography (clamp 4rem to 12rem based on viewport)
+- Text fills significant viewport space for visual impact
+- Tight line-height (0.85) for dramatic effect
+- Letter-spacing tightened (-0.04em) for modern feel
+
+### AC2: Staggered CSS Entry Animation (Revised)
 **Given** the hero loads
 **When** the animation sequence plays
 **Then**:
-- Headline text animates with character split (staggered)
-- Subtext fades up after headline completes
-- CTA buttons scale in with bounce easing
+- Intro text fades up first (0ms delay)
+- Headline fades up with slight delay (100ms)
+- Subtext fades up after headline (300ms)
+- Stats fade up (400ms)
+- CTA buttons fade up last (500ms)
+- Scroll hint appears (700ms)
 
-### AC3: Scroll-Linked Fade
-**Given** I scroll past the hero
-**When** scroll position increases
-**Then** hero elements fade and scale down
+### AC3: Static Gradient Background (Revised)
+**Given** the hero renders
+**When** viewing the background
+**Then**:
+- Subtle purple/blue gradient orbs provide depth
+- Orbs are static (not mouse-tracking) for performance
+- Orbs use large blur (120-150px) for ambient effect
+- pointer-events: none so they don't interfere with content
 
 ### AC4: Mobile Optimization
 **Given** I am on mobile
 **When** the hero renders
-**Then** simplified animation (no mouse tracking)
+**Then**:
+- Typography scales responsively via CSS clamp()
+- CTAs stack vertically on small screens
+- Stats remain visible in horizontal layout
+- Animation delays still apply for engaging entrance
 
 ### AC5: Accessibility
 **Given** reduced motion preference is enabled
 **When** animations would trigger
-**Then** they are disabled or simplified
+**Then**:
+- All CSS animations are disabled
+- Content displays immediately with opacity: 1
+- All content remains fully accessible
+- aria-labelledby properly links headline to section
 
 ## Tasks / Subtasks
 
-- [x] Task 1: Create Mouse Parallax Hook (AC: 1)
+> **Implementation Note:** Design direction changed during implementation to "Stokt-inspired massive typography" approach.
+> Original parallax/GSAP tasks were superseded by simpler CSS-driven design for better performance and visual impact.
+
+- [x] Task 1: Create Mouse Parallax Hook (AC: Originally 1, now utility)
   - [x] Create `src/hooks/use-mouse-parallax.ts`
   - [x] Track mouse position relative to viewport center
   - [x] Calculate offset values with configurable depth multiplier
   - [x] Lerp smoothing for fluid movement (0.1 factor)
   - [x] Disable on touch devices and reduced motion
   - [x] Clean up event listeners on unmount
+  - **Note:** Hook created as reusable utility, not used in final hero design
 
-- [x] Task 2: Create Animated Text Component (AC: 2)
+- [x] Task 2: Create Animated Text Component (AC: Originally 2, now utility)
   - [x] Create `src/components/ui/animated-text.tsx`
   - [x] Character split animation using GSAP SplitText pattern
   - [x] Staggered entrance (0.02-0.03s per character)
   - [x] Support word-level splitting option
   - [x] Export as reusable component
+  - **Note:** Component created as reusable utility, hero uses CSS animations instead
 
-- [x] Task 3: Upgrade Hero Component (AC: 1, 2, 3, 4)
+- [x] Task 3: Create Stokt-Inspired Hero Component (AC: 1, 2, 3, 4) **REVISED**
   - [x] Create `src/components/sections/hero-v2.tsx` (new file)
-  - [x] Integrate mouse parallax for floating orbs (3+ layers)
-  - [x] Add cursor-following gradient effect
-  - [x] Implement animated headline with character split
-  - [x] Staggered subtext entrance after headline
-  - [x] CTA buttons scale-in with spring/bounce easing
-  - [x] Integrate useHeroScrollFade for scroll-linked fade
+  - [x] Implement massive viewport-filling typography (clamp 4rem-12rem)
+  - [x] Static gradient orbs for ambient background effect
+  - [x] CSS fade-in-up animations with staggered delays
+  - [x] Stats section with horizontal layout
+  - [x] Scroll hint with gradient indicator line
 
 - [x] Task 4: Mobile-Specific Optimizations (AC: 4)
-  - [x] Detect touch device using `@media (hover: none)`
-  - [x] Disable mouse parallax on mobile
-  - [x] Simpler floating orb animations (CSS only)
-  - [x] Reduced animation complexity for performance
+  - [x] CSS clamp() for responsive typography scaling
+  - [x] Flex-col to flex-row breakpoint for CTAs
+  - [x] Stats remain horizontal on all viewports
+  - [x] Same animation sequence on mobile (CSS-driven)
 
 - [x] Task 5: Accessibility & Reduced Motion (AC: 5)
-  - [x] Wrap all animations in prefersReducedMotion check
-  - [x] Instant display without animation for reduced motion
-  - [x] Maintain all content visibility
-  - [x] Test with prefers-reduced-motion media query
+  - [x] Check prefersReducedMotion on mount
+  - [x] Apply opacity-100 class when reduced motion enabled
+  - [x] Skip animation delays with skipAnimations flag
+  - [x] Maintain aria-labelledby="hero-title"
+  - [x] Decorative elements have aria-hidden="true"
 
 - [x] Task 6: Update Homepage to Use Hero V2 (AC: 1-5)
   - [x] Update `src/app/(site)/page.tsx` to import Hero from hero-v2
   - [x] Verify all existing functionality preserved
-  - [x] Remove old hero.tsx import
+  - [x] Original hero.tsx kept as reference
 
-- [x] Task 7: Write Playwright Tests (AC: 1-5)
-  - [x] Test hero renders correctly
-  - [x] Test floating orbs have transform styles applied
-  - [x] Test headline animation triggers on load
-  - [x] Test scroll fade behavior
-  - [x] Test mobile viewport behavior
+- [x] Task 7: Write Playwright Tests (AC: 1-5) **UPDATED**
+  - [x] Test hero renders with massive typography
+  - [x] Test all content sections visible
+  - [x] Test CSS animation classes applied
+  - [x] Test mobile viewport responsive behavior
   - [x] Test reduced motion disables animations
+  - [x] Test accessibility attributes correct
 
 ## Dev Notes
 
@@ -294,16 +318,23 @@ const handleMouseMove = (e: MouseEvent) => {
 
 ## Testing Checklist
 
-- [x] Hero renders with all sections (badge, headline, subtext, CTAs, stats)
-- [x] Floating orbs have parallax transform on mouse move (desktop)
-- [x] Background gradient follows cursor position
-- [x] Headline animates character-by-character on load
-- [x] Subtext fades up after headline completes
-- [x] CTA buttons scale in with bounce effect
-- [x] Hero fades out when scrolling down
-- [x] Touch devices: no mouse tracking, simpler animations
-- [x] Reduced motion: all animations disabled, content instant
-- [x] All existing accessibility attributes preserved (aria-labelledby, data-testid)
+> Updated to match Stokt-inspired implementation
+
+- [x] Hero renders with massive typography headline
+- [x] Intro text "( WE ARE INVENEX )" visible
+- [x] Headline shows BUILDING / DIGITAL / EXCELLENCE
+- [x] EXCELLENCE has text-gradient styling
+- [x] Subtext describes premium web experiences
+- [x] Stats show 50+ Projects, 5+ Years, 98% Satisfaction
+- [x] CTA buttons link to /contact and /portfolio
+- [x] Static gradient orbs provide ambient background
+- [x] CSS fade-in-up animations with staggered delays
+- [x] Mobile: typography scales via clamp()
+- [x] Mobile: CTAs stack vertically
+- [x] Reduced motion: opacity-100 applied immediately
+- [x] Reduced motion: no animation delays
+- [x] Accessibility: aria-labelledby="hero-title" present
+- [x] Accessibility: decorative elements aria-hidden
 - [x] ESLint passes with 0 errors
 
 ## Change Log
@@ -313,6 +344,8 @@ const handleMouseMove = (e: MouseEvent) => {
 | 2026-01-30 | Story created with comprehensive context | Claude Opus 4.5 |
 | 2026-01-30 | Implementation complete: Mouse parallax, animated text, hero-v2, tests | Claude Opus 4.5 |
 | 2026-01-30 | Code Review Fix: Removed unused handleAnimationComplete callback from hero-v2.tsx; Fixed AnimatedText aria-label placement from outer span to visible Component for proper accessibility | Claude Opus 4.5 |
+| 2026-01-30 | Design pivot: Stokt-inspired massive typography (commit c714884) | Claude Opus 4.5 |
+| 2026-01-30 | **Code Review #2**: Updated story ACs and tasks to match Stokt-inspired implementation; Rewrote Playwright tests to test actual component (was testing non-existent elements); Documented useMouseParallax and AnimatedText as reusable utilities not used in final hero | Claude Opus 4.5 |
 
 ## Dev Agent Record
 
@@ -327,66 +360,66 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 
 ### Completion Notes List
 
-**Mouse Parallax Hook (AC1)**:
+> Updated after Code Review #2 to reflect Stokt-inspired implementation
+
+**Reusable Utility: Mouse Parallax Hook**:
 - Created `src/hooks/use-mouse-parallax.ts` with `useMouseParallax` and `useMousePosition` hooks
-- Tracks mouse position relative to viewport center
-- Calculates offset values with configurable depth multiplier (0.02-0.05 range)
-- Lerp smoothing (0.1 factor) for fluid movement via requestAnimationFrame
-- Automatically disabled on touch devices (`hover: none`) and reduced motion
-- Proper cleanup of RAF and event listeners on unmount
+- Full implementation with lerp smoothing, touch device detection, reduced motion support
+- **Status:** Available as reusable utility for other components; not used in final hero design
 
-**Animated Text Component (AC2)**:
+**Reusable Utility: Animated Text Component**:
 - Created `src/components/ui/animated-text.tsx` with `AnimatedText` and `AnimatedLines` components
-- Manual character split animation using GSAP (no SplitText plugin needed)
-- Configurable stagger timing (0.025s default for chars, 0.08s for words)
-- Supports `splitBy: 'chars' | 'words'` option
-- `onComplete` callback for sequencing animations
-- Exported from `src/components/ui/index.ts`
+- GSAP-powered character/word split animation with configurable timing
+- Exported from `src/components/ui/index.ts` for project-wide use
+- **Status:** Available as reusable utility; hero uses simpler CSS animations instead
 
-**Hero V2 Component (AC1-5)**:
-- Created `src/components/sections/hero-v2.tsx` integrating all features
-- 3 parallax layers for floating orbs (depths: 0.02, 0.035, 0.05)
-- Cursor-following gradient background using `useMousePosition`
-- AnimatedText for headline with character split animation
-- CSS animation classes for badge, subtext, CTAs, and stats (staggered delays)
-- Integrated `useHeroScrollFade` for scroll-linked fade effect
-- Preserves all original content: badge, headline, subtext, CTAs, stats, scroll indicator
+**Hero V2 Component - Stokt-Inspired Design (AC1-5)**:
+- Created `src/components/sections/hero-v2.tsx` with massive typography approach
+- Design philosophy: "Typography IS the hero - minimal decoration, maximum impact"
+- Viewport-filling headline using `clamp(4rem, 12vw, 12rem)` font size
+- Tight line-height (0.85) and letter-spacing (-0.04em) for dramatic effect
+- Static gradient orbs for ambient background (no mouse tracking for performance)
+- CSS `animate-fade-in-up` with staggered animation-delay for entrance sequence
+- Stats section: 50+ Projects, 5+ Years, 98% Satisfaction
+- Scroll hint with gradient line indicator
 
 **Mobile Optimizations (AC4)**:
-- Touch device detection via `window.matchMedia('(hover: none)')`
-- Parallax disabled on mobile, uses CSS `animate-float` variants instead
-- Floating orbs use simpler CSS animations (float, float-delayed, float-slow)
-- Reduced animation complexity for better performance
+- CSS clamp() provides automatic responsive scaling
+- Flex direction changes from column to row at sm breakpoint for CTAs
+- Same animation experience on all devices (CSS-driven, not JS-dependent)
 
 **Accessibility (AC5)**:
-- All animations check `prefersReducedMotion` preference
-- Content displays instantly without animation when reduced motion enabled
-- All ARIA attributes preserved (aria-labelledby="hero-title")
-- data-testid attributes for all key elements
-- CSS `@media (prefers-reduced-motion: reduce)` disables all animations
+- `prefersReducedMotion` check on component mount
+- `skipAnimations` flag controls opacity-100 vs animate-fade-in-up class
+- `aria-labelledby="hero-title"` links section to heading
+- Decorative gradient container has `aria-hidden="true"`
+- All data-testid attributes present for testing
 
-**CSS Animations Added (globals.css)**:
-- `@keyframes fade-in-up` - content entrance with translateY
-- `@keyframes scale-in-bounce` - CTA button bounce entrance
-- `@keyframes scroll-indicator` - scroll indicator bounce
-- Utility classes: animate-fade-in-up, animate-scale-in-bounce, animate-float, animate-float-delayed, animate-float-slow, animate-scroll-indicator
-- Reduced motion support added for all new animations
+**CSS Animations (globals.css)**:
+- `@keyframes fade-in-up` - translateY(40px) → translateY(0) with opacity
+- `@keyframes scale-in-bounce` - scale entrance
+- `@keyframes scroll-indicator` - bounce animation for scroll hint
+- Utility classes with reduced motion support
 
-**Homepage Integration (AC1-5)**:
-- Updated `src/app/(site)/page.tsx` to import Hero from hero-v2
-- Original hero.tsx kept as backup
-- All existing functionality preserved
+**Homepage Integration**:
+- `src/app/(site)/page.tsx` imports Hero from hero-v2
+- Re-exports `HeroV2 as Hero` for backwards compatibility
 
-**Playwright Tests**:
-- Created `tests/hero-v2.spec.ts` with 18 test cases
-- Tests cover: basic rendering, accessibility, mouse parallax, animation sequence, scroll behavior, mobile viewport, reduced motion, visual elements
+**Playwright Tests (Updated)**:
+- `tests/hero-v2.spec.ts` - 15 test cases matching actual implementation
+- Tests cover: massive typography, content rendering, CSS animations, mobile responsive, reduced motion, accessibility
 
 ### File List
 
-- `src/hooks/use-mouse-parallax.ts` (new)
-- `src/components/ui/animated-text.tsx` (new)
-- `src/components/sections/hero-v2.tsx` (new)
-- `src/components/ui/index.ts` (modified - added AnimatedText export)
-- `src/app/globals.css` (modified - added hero animation keyframes)
-- `src/app/(site)/page.tsx` (modified - import hero-v2)
-- `tests/hero-v2.spec.ts` (new - 18 test cases)
+**New Files:**
+- `src/hooks/use-mouse-parallax.ts` - Reusable mouse parallax utility hook
+- `src/components/ui/animated-text.tsx` - Reusable GSAP text animation component
+- `src/components/sections/hero-v2.tsx` - Stokt-inspired hero with massive typography
+- `tests/hero-v2.spec.ts` - Playwright tests (15 test cases)
+
+**Modified Files:**
+- `src/components/ui/index.ts` - Added AnimatedText, AnimatedLines exports
+- `src/app/globals.css` - Added fade-in-up, scale-in-bounce, scroll-indicator keyframes
+- `src/app/(site)/page.tsx` - Import Hero from hero-v2
+
+**Note:** `useMouseParallax` and `AnimatedText` are available as reusable utilities but not used in the final hero-v2.tsx implementation which favors simpler CSS animations for the Stokt-inspired design.
