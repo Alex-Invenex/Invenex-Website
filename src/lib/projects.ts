@@ -34,7 +34,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Corporate website for an international technology solutions company with modern design and seamless user experience.",
-    image: "/images/projects/cooltech.jpg",
+    image: "/portfolio/cooltech-international.png",
     slug: "cooltech-international",
     url: "https://cooltechintl.com",
     challenge:
@@ -66,7 +66,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Creative agency website showcasing interior design and branding services in the UAE market.",
-    image: "/images/projects/ginger.jpg",
+    image: "/portfolio/ginger-designs.png",
     slug: "ginger-designs",
     url: "https://gingerdesigns.ae",
     challenge:
@@ -98,9 +98,9 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Portfolio website for a UAE-based design studio featuring elegant layouts and project showcases.",
-    image: "/images/projects/ahazz.jpg",
+    image: "/portfolio/ahazz-designs.png",
     slug: "ahazz-designs",
-    url: "https://ahazzdesigns.ae",
+    url: "https://ahazzdesigns.com",
     challenge:
       "Ahazz Designs wanted a portfolio website that could compete with international design studios while maintaining a distinct Middle Eastern identity. They needed to showcase diverse projects ranging from branding to product design.",
     solution:
@@ -123,7 +123,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Travel booking platform with flight search, comparison tools, and seamless reservation management.",
-    image: "/images/projects/easemyfly.jpg",
+    image: "/portfolio/easemyfly.png",
     slug: "easemyfly",
     url: "https://easemyfly.com",
     challenge:
@@ -155,7 +155,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Elegant restaurant website with online reservations, menu showcase, and event booking capabilities.",
-    image: "/images/projects/lamirage.jpg",
+    image: "/portfolio/la-mirage.png",
     slug: "la-mirage",
     url: "https://la-mirage.in",
     challenge:
@@ -180,7 +180,7 @@ export const projects: CaseStudyProject[] = [
     category: "Platform",
     excerpt:
       "Deals and offers aggregation platform helping users discover the best local promotions and discounts.",
-    image: "/images/projects/grabtogo.jpg",
+    image: "/portfolio/grabtogo.png",
     slug: "grabtogo",
     url: "https://www.grabtogo.in",
     challenge:
@@ -212,7 +212,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Technology consulting firm website with service showcases, case studies, and client testimonials.",
-    image: "/images/projects/babbage.jpg",
+    image: "/portfolio/babbage-solutions.png",
     slug: "babbage-solutions",
     url: "https://babbagesolutions.in",
     challenge:
@@ -237,7 +237,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Modern corporate website with clean aesthetics and comprehensive business information architecture.",
-    image: "/images/projects/molvexa.jpg",
+    image: "/portfolio/molvexa.png",
     slug: "molvexa",
     url: "https://molvexa.com",
     challenge:
@@ -262,7 +262,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Professional services website for a UAE-based company with multilingual support and regional focus.",
-    image: "/images/projects/emergence.jpg",
+    image: "/portfolio/emergence.png",
     slug: "emergence",
     url: "https://emergence.ae",
     challenge:
@@ -287,7 +287,7 @@ export const projects: CaseStudyProject[] = [
     category: "Platform",
     excerpt:
       "AI-powered travel and logistics platform with intelligent route optimization and real-time tracking.",
-    image: "/images/projects/onmyway.jpg",
+    image: "/portfolio/onmyway-ai.png",
     slug: "onmyway-ai",
     url: "https://onmyway.ai",
     challenge:
@@ -320,7 +320,7 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Marine equipment and supplies e-commerce store with product catalog, inventory management, and secure checkout.",
-    image: "/images/projects/alshahama.jpg",
+    image: "/portfolio/alshahama-marine.png",
     slug: "alshahama-marine",
     url: "https://alshahamamarine.com",
     challenge:
@@ -345,7 +345,7 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Fashion and lifestyle e-commerce boutique with elegant product displays and seamless shopping experience.",
-    image: "/images/projects/qbyrayeesa.jpg",
+    image: "/portfolio/qbyrayeesa.png",
     slug: "q-by-rayeesa",
     url: "https://qbyrayeesa.com",
     challenge:
@@ -377,7 +377,7 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Online retail platform with advanced product filtering, customer reviews, and integrated payment solutions.",
-    image: "/images/projects/ziera.jpg",
+    image: "/portfolio/zierainc.png",
     slug: "ziera-inc",
     url: "https://zierainc.com",
     challenge:
@@ -402,7 +402,7 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Car rental booking platform with vehicle catalog, availability calendar, and online reservation system.",
-    image: "/images/projects/aarentacar.jpg",
+    image: "/portfolio/aa-rentacar.png",
     slug: "aa-rentacar",
     url: "https://aa-rentacar.com",
     challenge:
