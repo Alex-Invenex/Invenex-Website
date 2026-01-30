@@ -3,11 +3,14 @@
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface AnimatedSectionProps extends React.HTMLAttributes<HTMLDivElement> {
+interface AnimatedSectionProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
   variant?: "fadeUp" | "fadeIn" | "slideLeft" | "slideRight";
+  id?: string;
+  "aria-labelledby"?: string;
+  "data-testid"?: string;
 }
 
 const variants: Record<string, Variants> = {
@@ -34,12 +37,23 @@ export function AnimatedSection({
   className,
   delay = 0,
   variant = "fadeUp",
-  ...props
+  id,
+  "aria-labelledby": ariaLabelledBy,
+  "data-testid": dataTestId,
 }: AnimatedSectionProps) {
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
-    return <div className={className} {...props}>{children}</div>;
+    return (
+      <div
+        className={className}
+        id={id}
+        aria-labelledby={ariaLabelledBy}
+        data-testid={dataTestId}
+      >
+        {children}
+      </div>
+    );
   }
 
   return (
@@ -54,7 +68,9 @@ export function AnimatedSection({
         delay,
         ease: [0.16, 1, 0.3, 1],
       }}
-      {...props}
+      id={id}
+      aria-labelledby={ariaLabelledBy}
+      data-testid={dataTestId}
     >
       {children}
     </motion.div>
