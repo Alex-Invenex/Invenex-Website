@@ -1,15 +1,33 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import dynamic from "next/dynamic";
 import { ArrowLeft, ExternalLink, Quote } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { StaggerContainer, StaggerItem } from "@/components/ui/stagger-container";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ImageGallery } from "@/components/ui/image-gallery";
 import { ShareButtons } from "@/components/ui/share-buttons";
 import type { CaseStudyProject } from "@/lib/projects";
+
+// Dynamically import ImageGallery for better initial page load (AC2: Bundle optimization)
+const ImageGallery = dynamic(
+  () => import("@/components/ui/image-gallery").then((mod) => mod.ImageGallery),
+  {
+    loading: () => (
+      <div className="grid md:grid-cols-2 gap-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={i}
+            className="aspect-video bg-background-secondary rounded-lg animate-pulse"
+          />
+        ))}
+      </div>
+    ),
+  }
+);
 
 interface CaseStudyClientProps {
   project: CaseStudyProject;
@@ -171,7 +189,7 @@ export function CaseStudyClient({ project, relatedProjects }: CaseStudyClientPro
           </AnimatedSection>
 
           <AnimatedSection delay={0.1}>
-            <ImageGallery images={project.gallery} />
+            <ImageGallery images={project.gallery} projectTitle={project.title} />
           </AnimatedSection>
         </div>
       </section>
@@ -265,7 +283,13 @@ export function CaseStudyClient({ project, relatedProjects }: CaseStudyClientPro
                     >
                       {/* Thumbnail */}
                       <div className="aspect-video bg-background-tertiary relative overflow-hidden">
-                        <div className="w-full h-full bg-gradient-to-br from-foreground/5 to-foreground/10 group-hover:scale-110 transition-transform duration-500" />
+                        <Image
+                          src={relatedProject.image}
+                          alt={`${relatedProject.title} screenshot`}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
                       </div>
 
                       {/* Content */}

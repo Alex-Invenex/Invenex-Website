@@ -48,9 +48,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
     gallery: [
-      "/images/projects/cooltech-1.jpg",
-      "/images/projects/cooltech-2.jpg",
-      "/images/projects/cooltech-3.jpg",
+      "/portfolio/cooltech-international.png",
     ],
     testimonial: {
       quote:
@@ -80,9 +78,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Tailwind CSS", "Sanity CMS", "GSAP"],
     gallery: [
-      "/images/projects/ginger-1.jpg",
-      "/images/projects/ginger-2.jpg",
-      "/images/projects/ginger-3.jpg",
+      "/portfolio/ginger-designs.png",
     ],
     testimonial: {
       quote:
@@ -112,8 +108,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "Contentful"],
     gallery: [
-      "/images/projects/ahazz-1.jpg",
-      "/images/projects/ahazz-2.jpg",
+      "/portfolio/ahazz-designs.png",
     ],
   },
   {
@@ -137,9 +132,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Node.js", "PostgreSQL", "Redis", "AWS"],
     gallery: [
-      "/images/projects/easemyfly-1.jpg",
-      "/images/projects/easemyfly-2.jpg",
-      "/images/projects/easemyfly-3.jpg",
+      "/portfolio/easemyfly.png",
     ],
     testimonial: {
       quote:
@@ -169,8 +162,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "OpenTable API"],
     gallery: [
-      "/images/projects/lamirage-1.jpg",
-      "/images/projects/lamirage-2.jpg",
+      "/portfolio/la-mirage.png",
     ],
   },
   {
@@ -194,9 +186,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["React Native", "Node.js", "PostgreSQL", "Firebase", "AWS"],
     gallery: [
-      "/images/projects/grabtogo-1.jpg",
-      "/images/projects/grabtogo-2.jpg",
-      "/images/projects/grabtogo-3.jpg",
+      "/portfolio/grabtogo.png",
     ],
     testimonial: {
       quote:
@@ -226,8 +216,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "Sanity CMS"],
     gallery: [
-      "/images/projects/babbage-1.jpg",
-      "/images/projects/babbage-2.jpg",
+      "/portfolio/babbage-solutions.png",
     ],
   },
   {
@@ -251,8 +240,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Strapi"],
     gallery: [
-      "/images/projects/molvexa-1.jpg",
-      "/images/projects/molvexa-2.jpg",
+      "/portfolio/molvexa.png",
     ],
   },
   {
@@ -276,8 +264,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "i18next", "Sanity CMS"],
     gallery: [
-      "/images/projects/emergence-1.jpg",
-      "/images/projects/emergence-2.jpg",
+      "/portfolio/emergence.png",
     ],
   },
   {
@@ -301,9 +288,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Python", "TensorFlow", "PostgreSQL", "AWS", "React Native"],
     gallery: [
-      "/images/projects/onmyway-1.jpg",
-      "/images/projects/onmyway-2.jpg",
-      "/images/projects/onmyway-3.jpg",
+      "/portfolio/onmyway-ai.png",
     ],
     testimonial: {
       quote:
@@ -334,8 +319,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["WooCommerce", "WordPress", "PHP", "MySQL", "Stripe"],
     gallery: [
-      "/images/projects/alshahama-1.jpg",
-      "/images/projects/alshahama-2.jpg",
+      "/portfolio/alshahama-marine.png",
     ],
   },
   {
@@ -359,9 +343,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Shopify", "Liquid", "JavaScript", "Klaviyo"],
     gallery: [
-      "/images/projects/qbyrayeesa-1.jpg",
-      "/images/projects/qbyrayeesa-2.jpg",
-      "/images/projects/qbyrayeesa-3.jpg",
+      "/portfolio/qbyrayeesa.png",
     ],
     testimonial: {
       quote:
@@ -391,8 +373,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Stripe", "PostgreSQL", "Redis", "AWS"],
     gallery: [
-      "/images/projects/ziera-1.jpg",
-      "/images/projects/ziera-2.jpg",
+      "/portfolio/zierainc.png",
     ],
   },
   {
@@ -416,8 +397,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Node.js", "PostgreSQL", "Stripe", "Google Maps API"],
     gallery: [
-      "/images/projects/aarentacar-1.jpg",
-      "/images/projects/aarentacar-2.jpg",
+      "/portfolio/aa-rentacar.png",
     ],
     testimonial: {
       quote:

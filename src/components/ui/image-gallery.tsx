@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 interface ImageGalleryProps {
   images: string[];
+  projectTitle?: string;
 }
 
-export function ImageGallery({ images }: ImageGalleryProps) {
+export function ImageGallery({ images, projectTitle = "Project" }: ImageGalleryProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const openLightbox = (index: number) => {
@@ -63,15 +65,16 @@ export function ImageGallery({ images }: ImageGalleryProps) {
             key={i}
             onClick={() => openLightbox(i)}
             data-testid="gallery-image"
-            className="aspect-video bg-background-secondary rounded-lg overflow-hidden hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background cursor-pointer"
+            className="aspect-video bg-background-secondary rounded-lg overflow-hidden hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background cursor-pointer relative"
             aria-label={`View image ${i + 1} of ${images.length} in fullscreen`}
           >
-            {/* Placeholder gradient - will be replaced with actual images */}
-            <div className="w-full h-full bg-gradient-to-br from-foreground/5 to-foreground/10 hover:from-foreground/10 hover:to-foreground/15 transition-all duration-300 flex items-center justify-center">
-              <span className="text-foreground-muted text-sm">
-                Image {i + 1}
-              </span>
-            </div>
+            <Image
+              src={image}
+              alt={`${projectTitle} screenshot ${i + 1}`}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover hover:scale-105 transition-transform duration-300"
+            />
           </button>
         ))}
       </div>
@@ -139,13 +142,17 @@ export function ImageGallery({ images }: ImageGalleryProps) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="max-w-5xl w-full aspect-video bg-background-secondary rounded-lg flex items-center justify-center"
+              className="max-w-5xl w-full aspect-video bg-background-secondary rounded-lg overflow-hidden relative"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Placeholder - will be replaced with actual image */}
-              <span className="text-foreground-muted">
-                Image {lightboxIndex + 1} of {images.length}
-              </span>
+              <Image
+                src={images[lightboxIndex]}
+                alt={`${projectTitle} screenshot ${lightboxIndex + 1}`}
+                fill
+                sizes="100vw"
+                className="object-contain"
+                priority
+              />
             </motion.div>
 
             {/* Image counter */}
