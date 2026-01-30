@@ -17,3 +17,5 @@ export {
   PageLoader,
   InlineLoader,
 } from './page-loader'
+
+export { InitialLoader } from './initial-loader'

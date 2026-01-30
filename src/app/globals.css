@@ -224,6 +224,74 @@
   }
 }
 
+/* ============================================
+   Initial Loader Animations (Story 9.9)
+   ============================================ */
+
+/* Loader entrance - scale + fade in */
+@keyframes loader-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Fade out for loader dismissal */
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Fade in with delay for brand text */
+@keyframes fade-in-delayed {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Logo pulse effect */
+@keyframes logo-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Slow spin for outer ring */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Skeleton shimmer animation - enhanced */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 /* Hero Section 2.0 Keyframes (Story 9.6) */
 
 /* Fade in with upward movement */
@@ -435,6 +503,48 @@
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.1);
   }
 
+  /* ----------------------------------------
+     Initial Loader Utilities (Story 9.9)
+     ---------------------------------------- */
+
+  /* Loader entrance animation */
+  .animate-loader-enter {
+    animation: loader-enter 400ms var(--ease-out) forwards;
+  }
+
+  /* Fade out animation */
+  .animate-fade-out {
+    animation: fade-out 300ms ease-out forwards;
+  }
+
+  /* Delayed fade in for brand text */
+  .animate-fade-in-delayed {
+    opacity: 0;
+    animation: fade-in-delayed 400ms var(--ease-out) 200ms forwards;
+  }
+
+  /* Logo pulse */
+  .animate-logo-pulse {
+    animation: logo-pulse 2s ease-in-out infinite;
+  }
+
+  /* Slow spin */
+  .animate-spin-slow {
+    animation: spin-slow 3s linear infinite;
+  }
+
+  /* Skeleton shimmer effect */
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--color-background-secondary) 0%,
+      var(--color-background-tertiary) 50%,
+      var(--color-background-secondary) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  }
+
   /* Reduced motion - disable animations */
   @media (prefers-reduced-motion: reduce) {
     .animate-ripple,
@@ -446,9 +556,20 @@
     .animate-float,
     .animate-float-delayed,
     .animate-float-slow,
-    .animate-scroll-indicator {
+    .animate-scroll-indicator,
+    .animate-loader-enter,
+    .animate-fade-out,
+    .animate-fade-in-delayed,
+    .animate-logo-pulse,
+    .animate-spin-slow,
+    .animate-shimmer {
       animation: none;
       opacity: 1;
+    }
+
+    /* [H1 Fix] Shimmer replaced with static background in reduced motion */
+    .animate-shimmer {
+      background: var(--color-background-secondary);
     }
 
     .card-lift:hover {
