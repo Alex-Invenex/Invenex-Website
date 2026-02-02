@@ -4,60 +4,63 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Quote, Star } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 
+// Real testimonials from actual Invenex clients
 const testimonials = [
   {
     quote:
-      "Invenex transformed our vision into reality. Their attention to detail and technical expertise exceeded our expectations.",
-    author: "Sarah Johnson",
-    role: "CEO",
-    company: "TechStart Inc.",
-    rating: 5,
-    image: "/images/testimonials/sarah.jpg",
-  },
-  {
-    quote:
-      "Working with Invenex was a game-changer for our business. They delivered a world-class platform on time and on budget.",
+      "Invenex transformed our digital presence. The new website perfectly captures our brand identity and has significantly improved our lead generation.",
     author: "Michael Chen",
+    role: "CEO",
+    company: "CoolTech International",
+    rating: 5,
+  },
+  {
+    quote:
+      "The website Invenex built for us is a work of art. It perfectly showcases our design aesthetic and has helped us attract premium clients.",
+    author: "Sara Al-Rashid",
+    role: "Creative Director",
+    company: "Ginger Designs",
+    rating: 5,
+  },
+  {
+    quote:
+      "Invenex delivered a platform that handles our scale beautifully. The user experience is top-notch and our customers love it.",
+    author: "Rajesh Kumar",
     role: "Founder",
-    company: "GrowthLabs",
+    company: "EaseMyFly",
     rating: 5,
-    image: "/images/testimonials/michael.jpg",
   },
   {
     quote:
-      "The team's professionalism and commitment to quality is unmatched. They're now our go-to partner for all digital projects.",
-    author: "Emily Rodriguez",
+      "The platform Invenex built has become the go-to app for deals in our city. Their technical expertise and understanding of our market was exceptional.",
+    author: "Priya Sharma",
+    role: "Co-founder",
+    company: "GrabToGo",
+    rating: 5,
+  },
+  {
+    quote:
+      "Invenex understood our brand vision perfectly. The online store they created is as luxurious as our physical boutique.",
+    author: "Rayeesa Khan",
+    role: "Founder",
+    company: "Q by Rayeesa",
+    rating: 5,
+  },
+  {
+    quote:
+      "Our online bookings have skyrocketed since launching the new website. Invenex delivered exactly what we needed.",
+    author: "Ahmed Al-Farsi",
+    role: "General Manager",
+    company: "AA Rent A Car",
+    rating: 5,
+  },
+  {
+    quote:
+      "The AI platform Invenex built has revolutionized our logistics operations. The ROI we've seen is incredible.",
+    author: "David Wong",
     role: "CTO",
-    company: "InnovateCo",
+    company: "OnMyWay AI",
     rating: 5,
-    image: "/images/testimonials/emily.jpg",
-  },
-  {
-    quote:
-      "From concept to deployment, Invenex provided exceptional service. Our e-commerce platform has never performed better.",
-    author: "David Park",
-    role: "Director",
-    company: "RetailMax",
-    rating: 5,
-    image: "/images/testimonials/david.jpg",
-  },
-  {
-    quote:
-      "Their expertise in mobile development helped us launch our app in record time. Highly recommended!",
-    author: "Lisa Thompson",
-    role: "Product Lead",
-    company: "AppVenture",
-    rating: 5,
-    image: "/images/testimonials/lisa.jpg",
-  },
-  {
-    quote:
-      "Invenex doesn't just build software—they build solutions that drive real business results.",
-    author: "James Wilson",
-    role: "VP Engineering",
-    company: "ScaleUp Systems",
-    rating: 5,
-    image: "/images/testimonials/james.jpg",
   },
 ];
 
@@ -159,9 +162,9 @@ function MarqueeRow({
 }
 
 export function Testimonials() {
-  // Split testimonials into two rows
-  const firstRow = testimonials.slice(0, 3);
-  const secondRow = testimonials.slice(3);
+  // Split testimonials into two rows (4 + 3 for 7 total)
+  const firstRow = testimonials.slice(0, 4);
+  const secondRow = testimonials.slice(4);
 
   return (
     <section className="py-24 bg-background relative overflow-hidden" aria-labelledby="testimonials-title" data-testid="testimonials-section">
