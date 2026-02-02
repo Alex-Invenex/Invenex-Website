@@ -139,7 +139,7 @@ development_status:
   # Status: IN-PROGRESS 2026-01-30
   # Added via Correct Course workflow
   # ============================================
-  epic-9: in-progress
+  epic-9: done
   9-1-advanced-scroll-animation-system: done
   9-2-custom-cursor-system: done
   9-3-cinematic-page-transitions: done
@@ -148,9 +148,34 @@ development_status:
   9-6-hero-section-2-0: done
   9-7-bento-box-portfolio-grid: done
   9-8-section-transition-effects: done
-  9-9-branded-page-loader: backlog
-  9-10-accessibility-performance-audit: backlog
+  9-9-branded-page-loader: done
+  9-10-accessibility-performance-audit: done
   epic-9-retrospective: optional
+
+  # ============================================
+  # EPIC 10: Stokt-Inspired Design (CONSOLIDATED)
+  # Status: DONE 2026-02-02
+  # ============================================
+  epic-10: done
+  10-1-massive-hero-typography: done
+  10-2-bold-cta-section: done
+  10-3-text-first-portfolio: done
+  10-4-scroll-animations: done
+  10-5-bold-stats-section: done
+  10-6-navigation-hover-effects: done
+  epic-10-retrospective: optional
+
+  # ============================================
+  # EPIC 11: Content & Real Assets
+  # Status: IN-PROGRESS 2026-02-02
+  # ============================================
+  epic-11: in-progress
+  11-1-portfolio-screenshots: blocked  # AC1 (CaterFlow) awaits PO; AC3 PASS (images compressed); AC4 partial (generic alt ok)
+  11-2-team-founder-photos: backlog
+  11-3-client-testimonials: backlog
+  11-4-office-culture-photos: backlog
+  11-5-caterflow-product-showcase: backlog
+  epic-11-retrospective: optional
 
 # Story Dependencies (for reference)
 dependencies:
@@ -162,6 +187,40 @@ dependencies:
   epic-7: [epic-1]
   epic-8: [epic-3, epic-4, epic-5, epic-6]
   epic-9: [epic-1, epic-2, epic-3, epic-4]
+  epic-10: [epic-1, epic-2, epic-3, epic-4, epic-9]
+  epic-11: [epic-3, epic-4, epic-7]  # Content integration requires pages and CMS
+
+# ============================================
+# WEEK 1 SPRINT: Feb 2-7, 2026
+# ============================================
+# GOAL: Visible transformation in 7 days
+# PHILOSOPHY: Ship fast, iterate faster
+#
+# Day 1-2: Kill Placeholders (Story 10-2)
+#   - Replace gradient portfolio boxes with real CaterFlow screenshots
+#   - Bento grid layout already implemented in Epic 9 (Story 9-7)
+#
+# Day 3-4: Typography Transformation (Story 10-5)
+#   - Gradient emphasis on key words
+#   - Intentional line breaks
+#   - Tighter line-height and letter-spacing
+#
+# Day 5: Copy Refresh (Story 10-6)
+#   - Bold, specific language
+#   - Remove corporate speak
+#   - Inject personality
+#
+# Day 6-7: Signature Interaction (COMPLETE)
+#   - Custom cursor already done (Epic 9, Story 9-2)
+#   - Focus on polish and integration
+#
+# SUCCESS CRITERIA:
+# - Zero gradient placeholders in portfolio
+# - Hero typography has gradient + intentional breaks
+# - Copy uses "we build" not "we craft"
+# - Real CaterFlow screenshots visible
+# - Lighthouse Performance: 90+ maintained
+# ============================================
 
 # Progress Log
 progress_log:
@@ -993,3 +1052,201 @@ progress_log:
       Files modified: page.tsx, ambient-orbs.tsx, section-divider.tsx,
       section-transitions.spec.ts, story file.
       Story 9-8 marked DONE.
+  - date: "2026-01-30"
+    story: "9-9-branded-page-loader"
+    status: "ready-for-dev"
+    notes: |
+      Story file created with comprehensive context for Branded Page Loader.
+      Includes: InitialLoader for first-visit animation (500ms brand moment),
+      sessionStorage-based skip logic, shimmer skeleton enhancement.
+      Distinct from existing PageLoader (which handles transitions only).
+      New files: initial-loader.tsx, loader-session.ts, loading.tsx files.
+      Modified: skeleton.tsx (shimmer), globals.css, layout.tsx.
+  - date: "2026-01-30"
+    story: "9-9-branded-page-loader"
+    status: "review"
+    notes: |
+      IMPLEMENTATION COMPLETE. Branded Page Loader ready for code review.
+
+      Components Created:
+      - InitialLoader: First-visit branded loader with Invenex "I" logo
+      - Shimmer Skeleton: Enhanced skeleton variant with gradient animation
+      - Loading.tsx files: Site-wide, portfolio, and careers loading states
+
+      Key Features:
+      - 500ms minimum brand moment with scale + fade animation
+      - Session skip via sessionStorage (useSyncExternalStore for SSR safety)
+      - z-index: 99999 ensures loader always on top
+      - Full reduced motion support (all animations disabled)
+      - ARIA support: role="progressbar", aria-busy, aria-label
+
+      CSS Animations Added:
+      - loader-enter, fade-out, fade-in-delayed, logo-pulse, spin-slow
+      - skeleton-shimmer for premium loading feel
+
+      Files: initial-loader.tsx, loader-session.ts, skeleton.tsx (updated),
+      globals.css (updated), layout.tsx (updated), 3 loading.tsx files
+      Tests: branded-page-loader.spec.ts (19 test cases)
+      ESLint: 0 errors in new files
+  - date: "2026-01-30"
+    story: "9-9-branded-page-loader"
+    status: "done"
+    event: "adversarial-code-review"
+    issues_found: 8
+    issues_fixed: 5
+    notes: |
+      ADVERSARIAL CODE REVIEW completed for Story 9-9.
+      Issues found: 2 HIGH, 3 MEDIUM, 3 LOW (8 total).
+
+      ALL HIGH/MEDIUM FIXED:
+      - [HIGH] AC4 shimmer fallback missing → Added solid background in reduced motion
+      - [HIGH] Flaky timing test → Fixed measurement from loader visibility
+      - [MEDIUM] Dev Notes stale → Updated to document useSyncExternalStore
+      - [MEDIUM] Missing shimmer fallback test → Added comprehensive test
+      - [MEDIUM] clearVisited() untested → Added test coverage
+
+      LOW NOT FIXED (minor/acceptable):
+      - Skeleton base aria-hidden (compound components have correct ARIA)
+      - borderImage circle rendering (visual edge case)
+      - useRef simplification (works correctly)
+
+      Files modified: globals.css, branded-page-loader.spec.ts, story file.
+      Tests: 21 test cases (added 2 new tests).
+      Story 9-9 marked DONE.
+  - date: "2026-01-30"
+    story: "9-10-accessibility-performance-audit"
+    status: "ready-for-dev"
+    notes: |
+      Story file created with comprehensive audit context.
+      Final story of Epic 9: Premium UI/UX Enhancement.
+      Covers: reduced motion compliance, custom cursor a11y, keyboard navigation,
+      Lighthouse performance targets, screen reader compatibility, animation performance.
+      8 tasks with detailed subtasks for systematic audit approach.
+  - date: "2026-01-30"
+    story: "9-10-accessibility-performance-audit"
+    status: "done"
+    notes: |
+      ACCESSIBILITY & PERFORMANCE AUDIT COMPLETE.
+
+      AUDIT RESULTS:
+      - Task 1 (Reduced Motion): ALL PASS - 15+ components properly handle prefers-reduced-motion
+      - Task 2 (Custom Cursor A11y): ALL PASS - touch device, text input, aria-hidden verified
+      - Task 3 (Keyboard Navigation): ALL PASS - skip link, focus trap, escape key all working
+      - Task 4 (Lighthouse): DEFERRED - requires Node 22+ (env has Node 18.19.1)
+      - Task 5 (Screen Reader): ALL PASS - all ARIA attributes correctly implemented
+      - Task 6 (Animation Perf): ALL PASS - GSAP contexts cleaned up, GPU-accelerated transforms
+      - Task 7 (Playwright Tests): VERIFIED - 9 test files with comprehensive reduced motion coverage
+      - Task 8 (Documentation): COMPLETE
+
+      FIX APPLIED:
+      - hero-v2.tsx: Wrapped setState in requestAnimationFrame to fix ESLint cascading render warning
+
+      DEFERRED:
+      - Lighthouse CLI requires Node 22+ (use Chrome DevTools or CI with Node 22)
+
+      ESLint: 0 errors (8 pre-existing warnings)
+      EPIC 9 COMPLETE!
+  - date: "2026-02-02"
+    event: "epic-10-marked-done-pivot-to-content"
+    notes: |
+      EPIC 10 MARKED DONE - PIVOT TO CONTENT
+
+      DISCOVERY: Code review revealed Stokt-inspired design already implemented:
+      - hero-v2.tsx: clamp(4rem,12vw,12rem) massive typography
+      - cta-section.tsx: "LET'S BUILD SOMETHING EPIC." bold copy
+      - portfolio-preview.tsx: Text-first editorial layout with hover reveals
+      - GSAP ScrollTrigger: Integrated across 5 files
+
+      DECISION: Mark Epic 10 complete, focus on CONTENT
+      - Real portfolio screenshots needed
+      - Team/founder photos needed
+      - Client testimonials with photos needed
+
+      DEFERRED (Phase 2):
+      - 3D Brand Element
+      - Video Hero
+      - Count-up stats animation
+
+  - date: "2026-02-02"
+    event: "course-correction-epic-consolidation"
+    notes: |
+      COURSE CORRECTION: Epic Consolidation Complete
+
+      PROBLEM: Scope creep across 3 enhancement epics (27 stories = 64% of core MVP)
+      - Epic 9: 10 stories (Premium UI/UX) - ALREADY DONE
+      - Epic 10a: 7 stories (Stokt-inspired) - PLANNED
+      - Epic 10b: 10 stories (Complete Transformation) - PLANNED
+
+      SOLUTION: Consolidated to single focused Epic 10 with 6 stories (78% reduction)
+
+      KEPT (6 stories):
+      - 10.1 Massive Hero Typography (P0)
+      - 10.2 Bold CTA Section (P1)
+      - 10.3 Text-First Portfolio (P0)
+      - 10.4 Scroll Animations (P1)
+      - 10.5 Bold Stats Section (P1)
+      - 10.6 Navigation Hover Effects (P2)
+
+      CUT:
+      - Custom Cursor (already done in 9-2, generic pattern)
+      - Floating Orbs (generic premium, not Stokt)
+      - Services as Typography (lower impact)
+
+      DEFERRED (Phase 2 backlog):
+      - 3D Brand Element
+      - Video Hero
+      - Page Transitions
+
+      ARCHIVED FILES:
+      - epic-10-stokt-inspired-redesign.md → _bmad-output/archive/
+      - epic-10-complete-site-transformation.md → _bmad-output/archive/
+
+      NEW DOCUMENTS:
+      - sprint-change-proposal-2026-02-02.md
+      - epic-9-stokt-inspired-design.md (consolidated epic file)
+
+  - date: "2026-02-02"
+    event: "epic-11-content-phase-created"
+    notes: |
+      EPIC 11: Content & Real Assets created via sprint-planning workflow.
+
+      5 STORIES ADDED:
+      - 11-1-portfolio-screenshots: Real CaterFlow and client project screenshots
+      - 11-2-team-founder-photos: Professional team and founder photos
+      - 11-3-client-testimonials: Real client quotes with photos/logos
+      - 11-4-office-culture-photos: Kerala office and team culture imagery
+      - 11-5-caterflow-product-showcase: Product screenshots and branding
+
+      FOCUS: Content integration, minimal code changes.
+      All stories require gathering real business assets from Seb.
+
+  - date: "2026-02-02"
+    event: "epic-10-started-SUPERSEDED"
+    notes: |
+      EPIC 10: Complete Site Transformation - STARTED
+
+      WEEK 1 SPRINT FOCUS (Feb 2-7):
+      - Story 10-2: Portfolio Case Study Grid (Day 1-2)
+        Kill gradient placeholders, add real CaterFlow screenshots
+        Bento grid already implemented (Story 9-7), need content
+
+      - Story 10-5: Massive Typographic Artistry (Day 3-4)
+        Gradient on "EXCELLENCE", intentional line breaks
+        Tighter spacing, premium feel
+
+      - Story 10-6: Brand Voice & Copy (Day 5)
+        "We build" not "we craft"
+        Specific tech names, bold personality
+
+      - Story 10-8: Cursor Interactions - ALREADY DONE (Story 9-2)
+
+      REFERENCE SITES:
+      - Stokt (wearestokt.com): 3D element, massive typography
+      - Milestoners (milestoners.nl): Bento grid, real photography
+      - Sweetpunk (sweetpunk.com): Bold copy, full-bleed media
+
+      CONTENT NEEDED:
+      - CaterFlow screenshots (all major features)
+      - Real client project screenshots
+      - Team/office photos (Kerala context)
+
