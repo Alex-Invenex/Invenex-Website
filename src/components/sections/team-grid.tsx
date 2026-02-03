@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { Linkedin } from "lucide-react";
@@ -8,33 +10,33 @@ interface TeamMember {
   name: string;
   role: string;
   image: string;
-  linkedin: string;
+  linkedin?: string;
 }
 
 const team: TeamMember[] = [
   {
-    name: "Seby Sebastian",
-    role: "CEO & Founder",
-    image: "/team/placeholder.jpg",
-    linkedin: "https://linkedin.com/in/",
+    name: "Lijo Varghese",
+    role: "Founder & Mentor",
+    image: "/team/lijo-varghese.jpg",
+    linkedin: "https://www.linkedin.com/in/lijo-varghese-7ab710310/",
   },
   {
-    name: "Team Member 2",
-    role: "Lead Developer",
-    image: "/team/placeholder.jpg",
-    linkedin: "https://linkedin.com/in/",
+    name: "Alex Sebastian",
+    role: "Founder & Marketing Lead",
+    image: "/team/alex-sebastian.jpg",
+    linkedin: "https://www.linkedin.com/in/alex-invenex/",
   },
   {
-    name: "Team Member 3",
-    role: "UX Designer",
-    image: "/team/placeholder.jpg",
-    linkedin: "https://linkedin.com/in/",
+    name: "Vishnu Manoj",
+    role: "Founder & Senior Developer",
+    image: "/team/vishnu-manoj.jpg",
+    linkedin: "https://www.linkedin.com/in/vishnu-manoj-invenex/",
   },
   {
-    name: "Team Member 4",
-    role: "Project Manager",
-    image: "/team/placeholder.jpg",
-    linkedin: "https://linkedin.com/in/",
+    name: "Jeffrey Jaison",
+    role: "Founder & Operational Manager",
+    image: "/team/jeffrey-jaison.jpg",
+    linkedin: "https://www.linkedin.com/in/jeffrey-invenex/",
   },
 ];
 
@@ -54,6 +56,9 @@ export function TeamGrid() {
 }
 
 function TeamMemberCard({ member }: { member: TeamMember }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
   return (
     <motion.div
       className="group relative"
@@ -62,21 +67,45 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
       transition={{ duration: 0.2 }}
     >
       <div className="aspect-square bg-background-secondary rounded-2xl overflow-hidden mb-4 relative">
-        {/* Image placeholder with gradient */}
-        <div className="w-full h-full bg-gradient-to-br from-purple-500/10 via-background-secondary to-blue-500/10 flex items-center justify-center">
-          <span className="text-5xl text-foreground-muted/50">👤</span>
-        </div>
+        {/* Loading skeleton */}
+        {isLoading && !hasError && (
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-background-secondary to-blue-500/10 animate-pulse" />
+        )}
+
+        {/* Error fallback with gradient placeholder */}
+        {hasError ? (
+          <div className="w-full h-full bg-gradient-to-br from-purple-500/10 via-background-secondary to-blue-500/10 flex items-center justify-center">
+            <span className="text-5xl text-foreground-muted/50">👤</span>
+          </div>
+        ) : (
+          <Image
+            src={member.image}
+            alt={`${member.name}, ${member.role} at Invenex Solutions`}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className={`object-cover transition-opacity duration-300 ${
+              isLoading ? "opacity-0" : "opacity-100"
+            }`}
+            onLoad={() => setIsLoading(false)}
+            onError={() => {
+              setIsLoading(false);
+              setHasError(true);
+            }}
+          />
+        )}
 
         {/* LinkedIn overlay on hover */}
-        <a
-          href={member.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`${member.name} LinkedIn`}
-          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 backdrop-blur-sm rounded-full p-2.5 hover:bg-background border border-white/10"
-        >
-          <Linkedin className="w-5 h-5" />
-        </a>
+        {member.linkedin && (
+          <a
+            href={member.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${member.name} LinkedIn profile`}
+            className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 backdrop-blur-sm rounded-full p-2.5 hover:bg-background border border-white/10"
+          >
+            <Linkedin className="w-5 h-5" />
+          </a>
+        )}
       </div>
 
       <h3 className="font-semibold">{member.name}</h3>

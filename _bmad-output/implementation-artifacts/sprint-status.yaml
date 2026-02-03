@@ -171,7 +171,7 @@ development_status:
   # ============================================
   epic-11: in-progress
   11-1-portfolio-screenshots: blocked  # AC1 (CaterFlow) awaits PO; AC3 PASS (images compressed); AC4 partial (generic alt ok)
-  11-2-team-founder-photos: backlog
+  11-2-team-founder-photos: review
   11-3-client-testimonials: backlog
   11-4-office-culture-photos: backlog
   11-5-caterflow-product-showcase: backlog
