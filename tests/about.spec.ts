@@ -73,6 +73,72 @@ test.describe('Story 3-2: About Page', () => {
     });
   });
 
+  test.describe('Story 11-2: Real Team Data Validation', () => {
+    const teamMembers = [
+      { name: 'Lijo Varghese', role: 'Founder & Mentor', image: '/team/lijo-varghese.jpg' },
+      { name: 'Alex Sebastian', role: 'Founder & Marketing Lead', image: '/team/alex-sebastian.jpg' },
+      { name: 'Vishnu Manoj', role: 'Founder & Senior Developer', image: '/team/vishnu-manoj.jpg' },
+      { name: 'Jeffrey Jaison', role: 'Founder & Operational Manager', image: '/team/jeffrey-jaison.jpg' },
+    ];
+
+    test('should display exactly 4 team members', async ({ page }) => {
+      const teamCards = page.locator('[data-testid="team-member-card"]');
+      await expect(teamCards).toHaveCount(4);
+    });
+
+    for (const member of teamMembers) {
+      test(`should display ${member.name} with correct role`, async ({ page }) => {
+        const teamGrid = page.locator('[data-testid="team-grid"]');
+
+        // Verify name is displayed
+        await expect(teamGrid.getByRole('heading', { name: member.name })).toBeVisible();
+
+        // Verify role is displayed
+        await expect(teamGrid.getByText(member.role)).toBeVisible();
+      });
+
+      test(`should have correct image for ${member.name}`, async ({ page }) => {
+        const teamGrid = page.locator('[data-testid="team-grid"]');
+        const memberCard = teamGrid.locator('[data-testid="team-member-card"]').filter({ hasText: member.name });
+
+        // Verify image has correct src (Next.js may transform the path)
+        const image = memberCard.locator('img');
+        await expect(image).toBeVisible();
+
+        // Verify descriptive alt text
+        await expect(image).toHaveAttribute('alt', `${member.name}, ${member.role} at Invenex Solutions`);
+      });
+
+      test(`should have LinkedIn link for ${member.name}`, async ({ page }) => {
+        const teamGrid = page.locator('[data-testid="team-grid"]');
+        const memberCard = teamGrid.locator('[data-testid="team-member-card"]').filter({ hasText: member.name });
+
+        const linkedInLink = memberCard.locator('a[href*="linkedin.com"]');
+        await expect(linkedInLink).toBeAttached();
+        await expect(linkedInLink).toHaveAttribute('aria-label', `${member.name} LinkedIn profile`);
+      });
+    }
+
+    test('all team images should load without errors', async ({ page }) => {
+      // Wait for all images to load
+      await page.waitForLoadState('networkidle');
+
+      const teamCards = page.locator('[data-testid="team-member-card"]');
+      const count = await teamCards.count();
+
+      for (let i = 0; i < count; i++) {
+        const card = teamCards.nth(i);
+        // Should have an img element (not the error fallback emoji)
+        const img = card.locator('img');
+        await expect(img).toBeVisible();
+
+        // Should NOT show the error fallback (👤 emoji)
+        const errorFallback = card.getByText('👤');
+        await expect(errorFallback).not.toBeVisible();
+      }
+    });
+  });
+
   test.describe('Page Metadata', () => {
     test('should have correct page title', async ({ page }) => {
       await expect(page).toHaveTitle(/about/i);

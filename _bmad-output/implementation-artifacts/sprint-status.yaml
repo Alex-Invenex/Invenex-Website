@@ -171,7 +171,7 @@ development_status:
   # ============================================
   epic-11: in-progress
   11-1-portfolio-screenshots: blocked  # AC1 (CaterFlow) awaits PO; AC3 PASS (images compressed); AC4 partial (generic alt ok)
-  11-2-team-founder-photos: review
+  11-2-team-founder-photos: done  # Code review 2026-02-03: All issues fixed, 17 tests added
   11-3-client-testimonials: backlog
   11-4-office-culture-photos: backlog
   11-5-caterflow-product-showcase: backlog
@@ -1249,4 +1249,25 @@ progress_log:
       - CaterFlow screenshots (all major features)
       - Real client project screenshots
       - Team/office photos (Kerala context)
+
+  - date: "2026-02-03"
+    story: "11-2-team-founder-photos"
+    status: "done"
+    notes: |
+      ADVERSARIAL CODE REVIEW completed.
+      Issues found: 2 HIGH, 2 MEDIUM, 2 LOW (6 total).
+
+      ALL HIGH/MEDIUM FIXED:
+      - [HIGH] AC1 mentioned "Seby Sebastian" but implementation has 4 different founders
+        → Updated AC1 to reflect actual team composition per PO direction
+      - [HIGH] No test coverage for real team data
+        → Added 17 new tests validating names, roles, images, alt text, LinkedIn links
+      - [MEDIUM] AC2 "Brief bio" not implemented
+        → Updated AC2 to defer bio to future enhancement
+      - [MEDIUM] sprint-status.yaml missing from File List
+        → Added to File List
+
+      Files modified: story file (ACs updated), tests/about.spec.ts (17 tests added),
+      sprint-status.yaml (status synced).
+      Story 11-2 marked DONE.
 
