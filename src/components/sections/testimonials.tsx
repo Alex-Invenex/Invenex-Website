@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { Quote, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 
 // Real testimonials from actual Invenex clients
@@ -79,28 +79,27 @@ function TestimonialCard({
 }) {
   return (
     <div className="flex-shrink-0 w-[350px] md:w-[400px] mx-3">
-      <div className="h-full p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-sm hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300">
+      <div className="h-full p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-sm hover:bg-white/[0.04] hover:border-[#FF6A37]/20 transition-all duration-300">
         {/* Stars */}
         <div className="flex gap-1 mb-4">
           {Array.from({ length: rating }).map((_, i) => (
             <Star
               key={i}
-              className="w-4 h-4 fill-yellow-400 text-yellow-400"
+              className="w-4 h-4 fill-[#FF6A37] text-[#FF6A37]"
             />
           ))}
         </div>
 
         {/* Quote */}
         <div className="relative mb-6">
-          <Quote className="absolute -top-2 -left-2 w-8 h-8 text-purple-500/20" />
-          <p className="text-foreground-muted leading-relaxed pl-4">{quote}</p>
+          <p className="text-foreground-muted leading-relaxed">{quote}</p>
         </div>
 
         {/* Author */}
         <div className="flex items-center gap-4">
           {/* Avatar */}
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-white/10 flex items-center justify-center">
-            <span className="text-lg font-semibold text-gradient">
+          <div className="w-12 h-12 rounded-full bg-[#FF6A37]/10 border border-[#FF6A37]/20 flex items-center justify-center">
+            <span className="text-lg font-semibold text-[#FF6A37]">
               {author.charAt(0)}
             </span>
           </div>
@@ -162,35 +161,85 @@ function MarqueeRow({
 }
 
 export function Testimonials() {
-  // Split testimonials into two rows (4 + 3 for 7 total)
-  const firstRow = testimonials.slice(0, 4);
+  // Featured spotlight quote — first testimonial
+  const spotlight = testimonials[0];
+  // Remaining for marquee
+  const firstRow = testimonials.slice(1, 4);
   const secondRow = testimonials.slice(4);
 
   return (
-    <section className="py-24 bg-background relative overflow-hidden" aria-labelledby="testimonials-title" data-testid="testimonials-section">
+    <section
+      className="py-24 md:py-32 bg-background-secondary relative overflow-hidden"
+      aria-labelledby="testimonials-title"
+      data-testid="testimonials-section"
+    >
       {/* Background decoration */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/5 rounded-full blur-[150px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px]" />
 
       <div className="container mx-auto px-6 mb-16 relative z-10">
-        <AnimatedSection className="text-center">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-foreground-muted mb-4">
-            Testimonials
+        <AnimatedSection className="text-center mb-16">
+          <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
+            // CLIENT TESTIMONIALS
           </span>
-          <h2 id="testimonials-title" className="text-4xl md:text-5xl font-bold">
-            What Our <span className="text-gradient">Clients Say</span>
+          <h2
+            id="testimonials-title"
+            className="text-4xl md:text-5xl lg:text-6xl tracking-tight"
+          >
+            <span style={{ fontWeight: 200 }}>What Our </span>
+            <span className="text-gradient-orange" style={{ fontWeight: 900 }}>
+              Clients Say
+            </span>
           </h2>
-          <p className="mt-4 text-xl text-foreground-muted max-w-2xl mx-auto">
-            Don&apos;t just take our word for it. Here&apos;s what our partners
-            have to say.
-          </p>
+        </AnimatedSection>
+
+        {/* Featured spotlight quote */}
+        <AnimatedSection className="max-w-4xl mx-auto text-center mb-8">
+          <div className="relative py-8">
+            {/* Decorative coral quotation marks */}
+            <span
+              className="block text-[#FF6A37]/20 font-serif leading-none select-none"
+              style={{ fontSize: "clamp(4rem, 10vw, 8rem)" }}
+              aria-hidden="true"
+            >
+              &ldquo;
+            </span>
+            <blockquote
+              className="text-xl md:text-2xl lg:text-3xl text-foreground/90 leading-relaxed -mt-8 md:-mt-12 px-4"
+              style={{ fontWeight: 300 }}
+            >
+              {spotlight.quote}
+            </blockquote>
+            <span
+              className="block text-[#FF6A37]/20 font-serif leading-none select-none text-right"
+              style={{ fontSize: "clamp(4rem, 10vw, 8rem)" }}
+              aria-hidden="true"
+            >
+              &rdquo;
+            </span>
+            <div className="mt-4 flex items-center justify-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#FF6A37]/10 border border-[#FF6A37]/20 flex items-center justify-center">
+                <span className="text-sm font-semibold text-[#FF6A37]">
+                  {spotlight.author.charAt(0)}
+                </span>
+              </div>
+              <div className="text-left">
+                <p className="font-semibold text-foreground text-sm">
+                  {spotlight.author}
+                </p>
+                <p className="text-xs text-foreground-muted">
+                  {spotlight.role}, {spotlight.company}
+                </p>
+              </div>
+            </div>
+          </div>
         </AnimatedSection>
       </div>
 
       {/* Marquee Rows */}
       <div className="relative">
         {/* Fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background-secondary to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background-secondary to-transparent z-10 pointer-events-none" />
 
         <div className="space-y-4">
           <MarqueeRow items={firstRow} direction="left" duration={35} />

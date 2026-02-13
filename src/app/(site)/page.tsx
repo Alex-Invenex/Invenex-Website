@@ -124,7 +124,7 @@ export default function HomePage() {
       {/* Visual separator before CTA - subtle curve adds rhythm without color change */}
       <CurvedDivider
         topColor="var(--color-background)"
-        bottomColor="var(--color-background-tertiary)"
+        bottomColor="var(--color-background)"
       />
 
       {/* CTA Section - bg-background with gradient transition */}
