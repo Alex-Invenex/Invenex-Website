@@ -8,7 +8,6 @@ import {
   Utensils,
   Building2,
   Check,
-  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedSection } from "@/components/ui/animated-section";
@@ -29,10 +28,6 @@ const products = [
     href: "https://caterflow.in",
     isExternal: true,
     icon: Utensils,
-    gradient: "from-purple-600 via-violet-500 to-blue-500",
-    bgGradient: "from-purple-500/10 via-violet-500/5 to-blue-500/10",
-    iconBg: "bg-purple-500/20",
-    iconColor: "text-purple-400",
   },
   {
     name: "Invenex ERP",
@@ -49,45 +44,45 @@ const products = [
     href: "/products#erp",
     isExternal: false,
     icon: Building2,
-    gradient: "from-orange-500 via-amber-500 to-yellow-500",
-    bgGradient: "from-orange-500/10 via-amber-500/5 to-yellow-500/10",
-    iconBg: "bg-orange-500/20",
-    iconColor: "text-orange-400",
   },
 ];
 
 export function ProductsPreview() {
   return (
-    <section className="py-24 bg-background relative overflow-hidden" aria-labelledby="products-preview-title" data-testid="products-preview-section">
-      {/* Background decoration */}
-      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[150px] -translate-y-1/2" />
-      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-orange-500/5 rounded-full blur-[150px] -translate-y-1/2" />
+    <section
+      className="py-24 md:py-32 bg-background relative overflow-hidden"
+      aria-labelledby="products-preview-title"
+      data-testid="products-preview-section"
+    >
+      {/* Coral background orbs */}
+      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px] -translate-y-1/2" />
+      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-[#FF6A37]/[0.03] rounded-full blur-[150px] -translate-y-1/2" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <AnimatedSection className="text-center mb-16">
-          <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-4"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
+        <AnimatedSection className="mb-16">
+          <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
+            // OUR PRODUCTS
+          </span>
+          <h2
+            id="products-preview-title"
+            className="text-4xl md:text-5xl lg:text-6xl tracking-tight"
           >
-            <Sparkles className="w-4 h-4 text-purple-400" />
-            <span className="text-sm text-foreground-muted">
-              We Build Our Own Products
+            <span style={{ fontWeight: 200 }}>Our </span>
+            <span className="text-gradient-orange" style={{ fontWeight: 900 }}>
+              Products
             </span>
-          </motion.div>
-          <h2 id="products-preview-title" className="text-4xl md:text-5xl font-bold">
-            Our <span className="text-gradient">Products</span>
           </h2>
-          <p className="mt-4 text-xl text-foreground-muted max-w-2xl mx-auto">
+          <p className="mt-4 text-lg md:text-xl text-foreground-muted max-w-2xl">
             We don&apos;t just build for others. We create products that solve
             real problems.
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Asymmetric grid — CaterFlow 60%, ERP 40% */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {products.map((product, index) => {
             const Icon = product.icon;
+            const isHero = index === 0;
             return (
               <motion.div
                 key={product.name}
@@ -95,56 +90,22 @@ export function ProductsPreview() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                className="group"
+                className={`group ${isHero ? "lg:col-span-3" : "lg:col-span-2"}`}
               >
-                <div className="relative h-full rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-white/10 transition-all duration-500">
-                  {/* Animated gradient border on hover */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${product.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-                  />
-
-                  {/* Gradient Header */}
+                <div className="relative h-full rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-[#FF6A37]/20 transition-all duration-500">
+                  {/* Gradient Header with grid pattern */}
                   <div className="relative h-40 overflow-hidden">
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${product.gradient} opacity-20`}
-                    />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A37]/20 via-[#FF8C5A]/10 to-[#FF4D1D]/20" />
                     <div className="absolute inset-0 bg-grid opacity-20" />
-
-                    {/* Floating shapes */}
-                    <motion.div
-                      className="absolute top-4 right-4 w-20 h-20 rounded-full bg-white/5"
-                      animate={{
-                        y: [0, -10, 0],
-                        scale: [1, 1.05, 1],
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    />
-                    <motion.div
-                      className="absolute bottom-4 left-4 w-12 h-12 rounded-lg bg-white/5"
-                      animate={{
-                        y: [0, 10, 0],
-                        rotate: [0, 5, 0],
-                      }}
-                      transition={{
-                        duration: 5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 1,
-                      }}
-                    />
 
                     {/* Icon */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <motion.div
-                        className={`w-20 h-20 rounded-2xl ${product.iconBg} backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-2xl`}
+                        className="w-20 h-20 rounded-2xl bg-[#FF6A37]/20 backdrop-blur-sm border border-[#FF6A37]/20 flex items-center justify-center shadow-2xl"
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <Icon className={`w-10 h-10 ${product.iconColor}`} />
+                        <Icon className="w-10 h-10 text-[#FF6A37]" />
                       </motion.div>
                     </div>
 
@@ -189,12 +150,8 @@ export function ProductsPreview() {
                           key={feature}
                           className="flex items-center gap-2 text-sm text-foreground-muted"
                         >
-                          <div
-                            className={`w-5 h-5 rounded-full ${product.iconBg} flex items-center justify-center flex-shrink-0`}
-                          >
-                            <Check
-                              className={`w-3 h-3 ${product.iconColor}`}
-                            />
+                          <div className="w-5 h-5 rounded-full bg-[#FF6A37]/10 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-3 h-3 text-[#FF6A37]" />
                           </div>
                           {feature}
                         </div>
@@ -203,7 +160,7 @@ export function ProductsPreview() {
 
                     {/* CTA */}
                     {product.isExternal ? (
-                      <Button asChild variant="primary" size="lg">
+                      <Button asChild variant="coral" size="lg">
                         <a
                           href={product.href}
                           target="_blank"

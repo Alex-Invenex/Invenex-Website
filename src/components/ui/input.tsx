@@ -4,6 +4,8 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
+  /** Enable enhanced micro-interactions (Story 9.5) */
+  enhanced?: boolean;
   ref?: React.Ref<HTMLInputElement>;
 }
 
@@ -12,6 +14,7 @@ export function Input({
   type = "text",
   label,
   error,
+  enhanced = false,
   id,
   ref,
   ...props
@@ -39,8 +42,17 @@ export function Input({
           "text-foreground placeholder:text-foreground-subtle",
           "transition-all duration-normal ease-out",
 
-          // Focus state
-          "focus:outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(255,255,255,0.1)]",
+          // Focus state - standard
+          !enhanced && "focus:outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(255,255,255,0.1)]",
+
+          // Focus state - enhanced (Story 9.5)
+          // Scale 1.01, accent glow, 200ms transition
+          enhanced && [
+            "focus:outline-none focus:border-accent",
+            "focus:shadow-[0_0_0_3px_rgba(255,255,255,0.15),0_0_20px_rgba(255,255,255,0.1)]",
+            "focus:scale-[1.01]",
+            "motion-reduce:focus:scale-100", // Respect reduced motion
+          ],
 
           // Disabled state
           "disabled:opacity-50 disabled:cursor-not-allowed",

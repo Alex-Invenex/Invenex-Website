@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { TransitionLink } from "@/components/transitions";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe,
@@ -105,11 +106,14 @@ export function Navbar() {
           !visible && "-translate-y-full"
         )}
       >
-        <nav className="container mx-auto px-6 h-20 flex items-center justify-between">
+        <nav
+          aria-label="Main navigation"
+          className="container mx-auto px-6 h-20 flex items-center justify-between"
+        >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <motion.div
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 via-violet-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20"
+              className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF6B35] to-[#CC4A1A] flex items-center justify-center shadow-lg shadow-[#FF6B35]/20"
               whileHover={{ scale: 1.05, rotate: 5 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
@@ -151,8 +155,8 @@ export function Navbar() {
                     />
                   </button>
                 ) : (
-                  // Regular nav link
-                  <Link
+                  // Regular nav link with transition
+                  <TransitionLink
                     href={item.href}
                     className={cn(
                       "px-4 py-2 rounded-full text-foreground-muted hover:text-foreground transition-all duration-300 flex items-center gap-1",
@@ -160,7 +164,7 @@ export function Navbar() {
                     )}
                   >
                     {item.title}
-                  </Link>
+                  </TransitionLink>
                 )}
 
                 {/* Premium Mega Menu for Services */}
@@ -175,7 +179,7 @@ export function Navbar() {
                     >
                       <div className="relative min-w-[650px] p-6 rounded-2xl bg-background-secondary/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
                         {/* Gradient border effect */}
-                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10 pointer-events-none" />
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#FF6B35]/10 via-transparent to-[#FF6B35]/5 pointer-events-none" />
 
                         {/* Grid pattern */}
                         <div className="absolute inset-0 rounded-2xl bg-grid opacity-30 pointer-events-none" />
@@ -193,7 +197,7 @@ export function Navbar() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.05 }}
                               >
-                                <Link
+                                <TransitionLink
                                   href={child.href}
                                   className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.05] transition-all duration-300 group/item"
                                 >
@@ -217,7 +221,7 @@ export function Navbar() {
                                       {child.description}
                                     </div>
                                   </div>
-                                </Link>
+                                </TransitionLink>
                               </motion.div>
                             );
                           })}
@@ -225,9 +229,9 @@ export function Navbar() {
 
                         {/* CTA Banner */}
                         <div className="relative mt-4 pt-4 border-t border-white/[0.05]">
-                          <Link
+                          <TransitionLink
                             href="/services"
-                            className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-blue-500/10 hover:from-purple-500/20 hover:to-blue-500/20 transition-all duration-300 group/cta"
+                            className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#FF6B35]/10 to-[#FF6B35]/5 hover:from-[#FF6B35]/20 hover:to-[#FF6B35]/10 transition-all duration-300 group/cta"
                           >
                             <div>
                               <p className="font-medium text-foreground">
@@ -240,7 +244,7 @@ export function Navbar() {
                             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover/cta:bg-white/20 transition-colors">
                               <ArrowRight className="w-5 h-5 text-foreground" />
                             </div>
-                          </Link>
+                          </TransitionLink>
                         </div>
                       </div>
                     </motion.div>
@@ -253,13 +257,13 @@ export function Navbar() {
           {/* CTA Button */}
           <div className="hidden lg:flex items-center gap-3">
             <Button asChild size="sm" variant="ghost">
-              <Link href="/portfolio">Our Work</Link>
+              <TransitionLink href="/portfolio">Our Work</TransitionLink>
             </Button>
             <Button asChild>
-              <Link href="/contact" className="group">
+              <TransitionLink href="/contact" className="group">
                 Get a Quote
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </TransitionLink>
             </Button>
           </div>
 

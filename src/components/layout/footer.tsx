@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Linkedin,
-  Twitter,
+  Facebook,
   Instagram,
   Github,
   Mail,
@@ -23,14 +23,14 @@ import {
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   linkedin: Linkedin,
-  twitter: Twitter,
+  facebook: Facebook,
   instagram: Instagram,
   github: Github,
 };
 
 const socialGradients: Record<string, string> = {
   linkedin: "hover:bg-blue-500/20 hover:border-blue-500/30 hover:text-blue-400",
-  twitter: "hover:bg-sky-500/20 hover:border-sky-500/30 hover:text-sky-400",
+  facebook: "hover:bg-blue-600/20 hover:border-blue-600/30 hover:text-blue-500",
   instagram:
     "hover:bg-pink-500/20 hover:border-pink-500/30 hover:text-pink-400",
   github: "hover:bg-gray-500/20 hover:border-gray-500/30 hover:text-gray-300",
@@ -48,8 +48,8 @@ export function Footer() {
   return (
     <footer className="relative bg-background overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px]" />
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px]" />
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#FF6B35]/5 rounded-full blur-[150px]" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#FF6B35]/[0.03] rounded-full blur-[120px]" />
 
       {/* Top gradient border */}
       <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -61,7 +61,7 @@ export function Footer() {
           <div className="lg:col-span-4">
             <Link href="/" className="flex items-center gap-2 group">
               <motion.div
-                className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 via-violet-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20"
+                className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF6B35] to-[#CC4A1A] flex items-center justify-center shadow-lg shadow-[#FF6B35]/20"
                 whileHover={{ scale: 1.05, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
@@ -107,7 +107,7 @@ export function Footer() {
           {/* Services Links - 2 columns */}
           <div className="lg:col-span-2">
             <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
               Services
             </h3>
             <ul className="space-y-3">
@@ -128,7 +128,7 @@ export function Footer() {
           {/* Company Links - 2 columns */}
           <div className="lg:col-span-2">
             <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
               Company
             </h3>
             <ul className="space-y-3">
@@ -147,7 +147,7 @@ export function Footer() {
 
             {/* Resources Links */}
             <h3 className="text-sm font-semibold text-foreground mb-4 mt-6 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
               Resources
             </h3>
             <ul className="space-y-3">
@@ -180,7 +180,7 @@ export function Footer() {
           {/* Contact Info - 4 columns */}
           <div className="lg:col-span-4">
             <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
               Get in Touch
             </h3>
             <ul className="space-y-4">
@@ -190,8 +190,8 @@ export function Footer() {
                   className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 group"
                   whileHover={{ x: 5 }}
                 >
-                  <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-purple-400" />
+                  <div className="w-10 h-10 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-[#FF6B35]" />
                   </div>
                   <span className="text-foreground-muted group-hover:text-foreground transition-colors">
                     {contactInfo.email}
@@ -204,8 +204,8 @@ export function Footer() {
                   className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 group"
                   whileHover={{ x: 5 }}
                 >
-                  <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-blue-400" />
+                  <div className="w-10 h-10 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-[#FF6B35]" />
                   </div>
                   <span className="text-foreground-muted group-hover:text-foreground transition-colors">
                     {contactInfo.phone}
@@ -214,8 +214,8 @@ export function Footer() {
               </li>
               <li>
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-                  <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-emerald-400" />
+                  <div className="w-10 h-10 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-[#FF6B35]" />
                   </div>
                   <span className="text-foreground-muted">
                     {contactInfo.address.city}, {contactInfo.address.state}

@@ -9,7 +9,7 @@ interface OrbConfig {
   left?: string
   right?: string
   size: number
-  color: 'purple' | 'blue' | 'coral'
+  color: 'coral' | 'coral-subtle'
   speed: number
   blur: number
   opacity: number
@@ -19,15 +19,15 @@ interface OrbConfig {
 // AC1 specifies: "Subtle parallax effect on scroll (0.1-0.3 speed ratio)"
 const defaultOrbs: OrbConfig[] = [
   // Top-left orb (Hero → Services overlap)
-  { id: 'orb-1', top: '5%', left: '10%', size: 900, color: 'purple', speed: 0.15, blur: 180, opacity: 0.06 },
+  { id: 'orb-1', top: '5%', left: '10%', size: 900, color: 'coral-subtle', speed: 0.15, blur: 180, opacity: 0.04 },
   // Top-right orb (Services area)
-  { id: 'orb-2', top: '25%', right: '5%', size: 700, color: 'blue', speed: 0.25, blur: 150, opacity: 0.05 },
+  { id: 'orb-2', top: '25%', right: '5%', size: 700, color: 'coral', speed: 0.25, blur: 150, opacity: 0.05 },
   // Middle-left orb (Portfolio → Products overlap)
-  { id: 'orb-3', top: '45%', left: '15%', size: 800, color: 'purple', speed: 0.2, blur: 200, opacity: 0.05 },
+  { id: 'orb-3', top: '45%', left: '15%', size: 800, color: 'coral-subtle', speed: 0.2, blur: 200, opacity: 0.04 },
   // Middle-right orb (WhyChooseUs area)
   { id: 'orb-4', top: '60%', right: '10%', size: 600, color: 'coral', speed: 0.3, blur: 160, opacity: 0.04 },
   // Bottom orb (Testimonials → CTA overlap)
-  { id: 'orb-5', top: '80%', left: '25%', size: 750, color: 'blue', speed: 0.22, blur: 170, opacity: 0.05 },
+  { id: 'orb-5', top: '80%', left: '25%', size: 750, color: 'coral', speed: 0.22, blur: 170, opacity: 0.05 },
 ]
 
 interface AmbientOrbsProps {
@@ -113,14 +113,12 @@ export function AmbientOrbs({ orbs = defaultOrbs, className }: AmbientOrbsProps)
 
   const getColorClass = (color: OrbConfig['color']) => {
     switch (color) {
-      case 'purple':
-        return 'bg-purple-500'
-      case 'blue':
-        return 'bg-blue-500'
       case 'coral':
         return 'bg-coral-500'
+      case 'coral-subtle':
+        return 'bg-coral-300'
       default:
-        return 'bg-purple-500'
+        return 'bg-coral-500'
     }
   }
 

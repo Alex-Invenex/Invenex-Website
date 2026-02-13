@@ -333,7 +333,7 @@
 @layer utilities {
   /* Text Gradient */
   .text-gradient {
-    background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #60a5fa 100%);
+    background: linear-gradient(135deg, #fff 0%, #FF9B75 50%, #FF6B35 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -707,5 +707,31 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  /* Hero Orange Gradient - for the DIGITAL text */
+  .text-gradient-orange {
+    background: linear-gradient(135deg, #FF6A37 0%, #FF8C5A 40%, #FF4D1D 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Hero thin weight for dramatic contrast */
+  .font-extralight {
+    font-weight: 200;
+  }
+
+  /* Coral glow background — radial for section accents */
+  .bg-glow-coral {
+    background: radial-gradient(ellipse at center, rgba(255, 106, 55, 0.08) 0%, transparent 70%);
+  }
+
+  /* Section number styling — oversized monospace numerals */
+  .section-number {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.02em;
   }
 }

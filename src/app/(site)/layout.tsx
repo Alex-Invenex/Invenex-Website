@@ -19,7 +19,8 @@ export default function SiteLayout({
   return (
     <ToastProvider>
       {/* Initial Loader - First-visit branded experience (Story 9.9) */}
-      <InitialLoader minDisplayTime={500} />
+      {/* TEMPORARILY DISABLED FOR DEVELOPMENT - uncomment before production */}
+      {/* <InitialLoader minDisplayTime={500} /> */}
 
       <PageTransitionProvider exitDuration={300} enterDuration={400}>
         {/* Transition Overlay - Cinematic page transitions (Story 9.3) */}

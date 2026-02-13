@@ -4,7 +4,13 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "elevated" | "interactive";
+  /** Card visual variant:
+   * - default: basic card
+   * - elevated: with shadow
+   * - interactive: with spotlight effect
+   * - lift: hover lifts 8px with enhanced shadow (Story 9.5)
+   */
+  variant?: "default" | "elevated" | "interactive" | "lift";
   ref?: React.Ref<HTMLDivElement>;
 }
 
@@ -43,6 +49,15 @@ export function Card({
           "cursor-pointer",
           "hover:border-border-hover hover:shadow-lg",
           "active:scale-[0.98]",
+        ],
+        // Lift variant - Story 9.5: Card lifts 8px on hover with shadow-2xl
+        variant === "lift" && [
+          "cursor-pointer",
+          "hover:border-border-hover",
+          "hover:-translate-y-2", // 8px lift
+          "hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]", // shadow-2xl equivalent
+          "active:scale-[0.98]",
+          "motion-reduce:hover:translate-y-0", // Respect reduced motion
         ],
 
         className

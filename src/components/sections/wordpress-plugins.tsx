@@ -8,7 +8,6 @@ import {
   Zap,
   Shield,
   ArrowUpRight,
-  Sparkles,
 } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { Button } from "@/components/ui/button";
@@ -22,10 +21,6 @@ const plugins = [
     downloads: "12,500+",
     rating: 4.9,
     version: "2.4.1",
-    gradient: "from-emerald-500/20 via-green-500/10 to-teal-500/20",
-    iconBg: "bg-emerald-500/20",
-    iconColor: "text-emerald-400",
-    borderColor: "border-emerald-500/30",
     downloadUrl: "#",
     features: ["AI Content Analysis", "Schema Markup", "Sitemap Generator"],
   },
@@ -37,10 +32,6 @@ const plugins = [
     downloads: "8,200+",
     rating: 4.8,
     version: "1.8.3",
-    gradient: "from-blue-500/20 via-cyan-500/10 to-sky-500/20",
-    iconBg: "bg-blue-500/20",
-    iconColor: "text-blue-400",
-    borderColor: "border-blue-500/30",
     downloadUrl: "#",
     features: ["Page Caching", "CSS/JS Minification", "Image Lazy Load"],
   },
@@ -52,10 +43,6 @@ const plugins = [
     downloads: "15,800+",
     rating: 4.9,
     version: "3.2.0",
-    gradient: "from-purple-500/20 via-violet-500/10 to-pink-500/20",
-    iconBg: "bg-purple-500/20",
-    iconColor: "text-purple-400",
-    borderColor: "border-purple-500/30",
     downloadUrl: "#",
     features: ["Firewall Protection", "Malware Scanner", "2FA Login"],
   },
@@ -67,10 +54,6 @@ const plugins = [
     downloads: "6,400+",
     rating: 4.7,
     version: "2.1.5",
-    gradient: "from-orange-500/20 via-amber-500/10 to-yellow-500/20",
-    iconBg: "bg-orange-500/20",
-    iconColor: "text-orange-400",
-    borderColor: "border-orange-500/30",
     downloadUrl: "#",
     features: ["Drag & Drop", "Payment Forms", "Email Integration"],
   },
@@ -93,21 +76,16 @@ function PluginCard({
       transition={{ delay: index * 0.1 }}
       className="group"
     >
-      <div className="relative h-full rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-white/10 transition-all duration-500">
-        {/* Hover gradient */}
-        <div
-          className={`absolute inset-0 bg-gradient-to-br ${plugin.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-        />
-
+      <div className="relative h-full rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-[#FF6A37]/20 hover:shadow-[0_0_30px_rgba(255,106,55,0.1)] transition-all duration-500">
         {/* Content */}
         <div className="relative p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <motion.div
-              className={`w-14 h-14 rounded-xl ${plugin.iconBg} border ${plugin.borderColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
+              className="w-14 h-14 rounded-xl bg-[#FF6A37]/10 border border-[#FF6A37]/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
               whileHover={{ rotate: 5 }}
             >
-              <Icon className={`w-7 h-7 ${plugin.iconColor}`} />
+              <Icon className="w-7 h-7 text-[#FF6A37]" />
             </motion.div>
 
             {/* Version Badge */}
@@ -140,14 +118,14 @@ function PluginCard({
               <Download className="w-4 h-4" />
               <span>{plugin.downloads}</span>
             </div>
-            <div className="flex items-center gap-1.5 text-yellow-400">
-              <Star className="w-4 h-4 fill-yellow-400" />
+            <div className="flex items-center gap-1.5 text-[#FF6A37]">
+              <Star className="w-4 h-4 fill-[#FF6A37]" />
               <span>{plugin.rating}</span>
             </div>
           </div>
 
           {/* Download Button */}
-          <Button asChild variant="secondary" className="w-full group/btn">
+          <Button asChild variant="coral" className="w-full group/btn">
             <a href={plugin.downloadUrl} download>
               <Download className="w-4 h-4 mr-2" />
               Download Free
@@ -155,9 +133,6 @@ function PluginCard({
             </a>
           </Button>
         </div>
-
-        {/* Decorative corner glow */}
-        <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-tl from-white/5 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
     </motion.div>
   );
@@ -165,28 +140,30 @@ function PluginCard({
 
 export function WordPressPlugins() {
   return (
-    <section className="py-24 bg-background relative overflow-hidden" aria-labelledby="wordpress-plugins-title" data-testid="wordpress-plugins-section">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[150px]" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px]" />
+    <section
+      className="py-24 md:py-32 bg-background relative overflow-hidden"
+      aria-labelledby="wordpress-plugins-title"
+      data-testid="wordpress-plugins-section"
+    >
+      {/* Coral background orbs */}
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px]" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#FF6A37]/[0.03] rounded-full blur-[120px]" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <AnimatedSection className="text-center mb-16">
-          <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-4"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
+        <AnimatedSection className="mb-16">
+          <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
+            // WORDPRESS PLUGINS
+          </span>
+          <h2
+            id="wordpress-plugins-title"
+            className="text-4xl md:text-5xl lg:text-6xl tracking-tight"
           >
-            <Sparkles className="w-4 h-4 text-emerald-400" />
-            <span className="text-sm text-foreground-muted">
-              Free WordPress Resources
+            <span style={{ fontWeight: 200 }}>Premium </span>
+            <span className="text-gradient-orange" style={{ fontWeight: 900 }}>
+              WordPress Plugins
             </span>
-          </motion.div>
-          <h2 id="wordpress-plugins-title" className="text-4xl md:text-5xl font-bold">
-            Premium <span className="text-gradient">WordPress Plugins</span>
           </h2>
-          <p className="mt-4 text-xl text-foreground-muted max-w-2xl mx-auto">
+          <p className="mt-4 text-lg md:text-xl text-foreground-muted max-w-2xl">
             Download our free, battle-tested plugins to supercharge your
             WordPress website
           </p>
@@ -202,7 +179,6 @@ export function WordPressPlugins() {
           <p className="text-foreground-muted mb-4">
             All plugins are free, open-source, and regularly updated
           </p>
-          {/* TODO: /plugins page not yet implemented */}
           <a
             href="/plugins"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-foreground hover:bg-white/10 hover:border-white/20 transition-all duration-300 group"

@@ -1,182 +1,176 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  Globe,
-  Smartphone,
-  Layers,
-  ShoppingCart,
-  Share2,
-  Lightbulb,
-  ArrowUpRight,
-} from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
+import { cn } from "@/lib/utils";
 
-// TODO: Some service hrefs don't have pages yet (ecommerce, social-media, digital-strategy)
-// These will be added when service detail pages are expanded
+// Core services - simplified to 4 key offerings
 const services = [
   {
     title: "Web Development",
     description:
-      "Custom websites and web applications built with cutting-edge technologies for optimal performance.",
-    icon: Globe,
+      "Custom websites and web applications built with Next.js, React, and modern technologies.",
     href: "/services/web-development",
-    gradient: "from-blue-500/20 via-cyan-500/10 to-transparent",
-    iconColor: "text-blue-400",
-    size: "large",
   },
   {
     title: "Mobile Apps",
     description:
       "Native iOS and Android applications that deliver exceptional user experiences.",
-    icon: Smartphone,
     href: "/services/mobile-development",
-    gradient: "from-green-500/20 via-emerald-500/10 to-transparent",
-    iconColor: "text-green-400",
-    size: "small",
   },
   {
     title: "Platform Development",
     description:
       "Enterprise platforms and SaaS solutions designed for scale and reliability.",
-    icon: Layers,
     href: "/services/platform-development",
-    gradient: "from-purple-500/20 via-violet-500/10 to-transparent",
-    iconColor: "text-purple-400",
-    size: "small",
-  },
-  {
-    title: "E-Commerce",
-    description:
-      "Online stores and marketplaces that convert visitors into customers.",
-    icon: ShoppingCart,
-    href: "/services/ecommerce",
-    gradient: "from-orange-500/20 via-amber-500/10 to-transparent",
-    iconColor: "text-orange-400",
-    size: "small",
-  },
-  {
-    title: "Social Media Marketing",
-    description:
-      "Digital marketing strategies that amplify your brand and drive growth.",
-    icon: Share2,
-    href: "/services/social-media",
-    gradient: "from-pink-500/20 via-rose-500/10 to-transparent",
-    iconColor: "text-pink-400",
-    size: "small",
   },
   {
     title: "Digital Strategy",
     description:
       "Technology consulting and roadmaps to guide your digital transformation.",
-    icon: Lightbulb,
     href: "/services/digital-strategy",
-    gradient: "from-yellow-500/20 via-amber-500/10 to-transparent",
-    iconColor: "text-yellow-400",
-    size: "large",
   },
 ];
 
 export function ServicesPreview() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   return (
-    <section className="py-24 bg-background relative overflow-hidden" aria-labelledby="services-preview-title" data-testid="services-preview-section">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[150px]" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[120px]" />
+    <section
+      className="py-24 md:py-32 bg-background relative overflow-hidden"
+      aria-labelledby="services-preview-title"
+      data-testid="services-preview-section"
+    >
+      {/* Coral background orb */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#FF6A37]/[0.03] rounded-full blur-[150px]" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <AnimatedSection className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-foreground-muted mb-4">
-            What We Do
-          </span>
-          <h2 id="services-preview-title" className="text-4xl md:text-5xl font-bold">
-            Our <span className="text-gradient">Services</span>
-          </h2>
-          <p className="mt-4 text-xl text-foreground-muted max-w-2xl mx-auto">
-            Everything you need to succeed in the digital world
-          </p>
-        </AnimatedSection>
-
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            const isLarge = service.size === "large";
-
-            return (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className={isLarge ? "md:col-span-1 lg:row-span-1" : ""}
-              >
-                <Link href={service.href} className="block h-full group">
-                  <div
-                    className={`
-                      relative h-full p-6 md:p-8 rounded-2xl
-                      bg-white/[0.02] border border-white/[0.05]
-                      hover:bg-white/[0.04] hover:border-white/10
-                      transition-all duration-300 ease-out
-                      overflow-hidden
-                    `}
-                  >
-                    {/* Gradient background */}
-                    <div
-                      className={`absolute top-0 right-0 w-full h-full bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-                    />
-
-                    {/* Content */}
-                    <div className="relative z-10">
-                      {/* Icon */}
-                      <div
-                        className={`
-                          w-12 h-12 rounded-xl
-                          bg-white/5 border border-white/10
-                          flex items-center justify-center mb-6
-                          group-hover:scale-110 group-hover:border-white/20
-                          transition-all duration-300
-                        `}
-                      >
-                        <Icon className={`w-6 h-6 ${service.iconColor}`} />
-                      </div>
-
-                      {/* Title with arrow */}
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-xl font-semibold">{service.title}</h3>
-                        <ArrowUpRight
-                          className="w-5 h-5 text-foreground-muted opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
-                        />
-                      </div>
-
-                      {/* Description */}
-                      <p className="text-foreground-muted leading-relaxed">
-                        {service.description}
-                      </p>
-                    </div>
-
-                    {/* Hover glow effect */}
-                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/[0.03] to-transparent" />
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        <AnimatedSection delay={0.3} className="text-center mt-12">
+        {/* Section Header — split weight */}
+        <AnimatedSection className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+          <div>
+            <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
+              // SERVICES & EXPERTISE
+            </span>
+            <h2
+              id="services-preview-title"
+              className="text-4xl md:text-5xl lg:text-6xl tracking-tight"
+            >
+              <span style={{ fontWeight: 200 }}>What </span>
+              <span className="text-gradient-orange" style={{ fontWeight: 900 }}>We Do</span>
+            </h2>
+          </div>
           <Link
             href="/services"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-foreground hover:bg-white/10 hover:border-white/20 transition-all duration-300 group"
+            className="group inline-flex items-center gap-2 text-foreground-muted hover:text-foreground transition-colors"
           >
-            View all services
-            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            <span>All Services</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </AnimatedSection>
+
+        {/* Typography-First Services List with oversized numbers */}
+        <div className="space-y-0">
+          {services.map((service, index) => (
+            <Link
+              key={service.title}
+              href={service.href}
+              className="group block"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              <div
+                className={cn(
+                  "py-8 md:py-10 border-b border-white/10",
+                  "flex items-center gap-6 md:gap-10",
+                  "transition-all duration-300",
+                  index === 0 && "border-t"
+                )}
+              >
+                {/* Oversized Number */}
+                <span
+                  className={cn(
+                    "hidden md:block font-mono tracking-tight transition-colors duration-300 select-none flex-shrink-0",
+                    hoveredIndex === index
+                      ? "text-[#FF6A37]/30"
+                      : "text-foreground/10"
+                  )}
+                  style={{ fontSize: "clamp(3rem, 6vw, 6rem)", fontWeight: 200, lineHeight: 1 }}
+                  aria-hidden="true"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
+                {/* Service content */}
+                <div className="flex-1 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  {/* Service Title - Large Typography */}
+                  <h3
+                    className={cn(
+                      "text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight",
+                      "transition-colors duration-300",
+                      "group-hover:text-white"
+                    )}
+                  >
+                    <span className="md:hidden text-foreground/20 font-mono text-lg mr-3" style={{ fontWeight: 200 }}>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    {service.title}
+                  </h3>
+
+                  {/* Description - Shows on Hover or Always on Mobile */}
+                  <div className="flex items-center gap-6">
+                    <AnimatePresence mode="wait">
+                      {hoveredIndex === index && (
+                        <motion.p
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className="text-foreground-muted max-w-sm text-sm md:text-base hidden md:block"
+                        >
+                          {service.description}
+                        </motion.p>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Mobile description - always visible */}
+                    <p className="text-foreground-muted text-sm md:hidden">
+                      {service.description}
+                    </p>
+
+                    {/* Arrow */}
+                    <div
+                      className={cn(
+                        "w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center",
+                        "border border-white/10 bg-white/[0.02]",
+                        "transition-all duration-300",
+                        "group-hover:bg-[#FF6A37] group-hover:border-[#FF6A37]"
+                      )}
+                    >
+                      <ArrowRight
+                        className={cn(
+                          "w-5 h-5 transition-all duration-300",
+                          "group-hover:text-white"
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Left border accent on hover */}
+                <div
+                  className={cn(
+                    "absolute left-0 w-[3px] h-0 bg-[#FF6A37] transition-all duration-300 rounded-full",
+                    hoveredIndex === index && "h-12"
+                  )}
+                  style={{ display: hoveredIndex === index ? "block" : "none" }}
+                />
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -169,7 +169,7 @@ export function Testimonials() {
 
   return (
     <section
-      className="py-24 md:py-32 bg-background-secondary relative overflow-hidden"
+      className="py-24 md:py-32 bg-background relative overflow-hidden"
       aria-labelledby="testimonials-title"
       data-testid="testimonials-section"
     >

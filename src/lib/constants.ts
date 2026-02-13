@@ -116,22 +116,22 @@ export interface SocialLink {
 export const socialLinks: SocialLink[] = [
   {
     name: "LinkedIn",
-    href: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://linkedin.com/company/invenex",
+    href: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/company/invenex/",
     icon: "linkedin",
   },
   {
-    name: "Twitter",
-    href: process.env.NEXT_PUBLIC_TWITTER_URL || "https://twitter.com/invenex",
-    icon: "twitter",
+    name: "Facebook",
+    href: process.env.NEXT_PUBLIC_FACEBOOK_URL || "https://www.facebook.com/invenexsolutions/",
+    icon: "facebook",
   },
   {
     name: "Instagram",
-    href: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://instagram.com/invenex",
+    href: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/invenexsolutions/",
     icon: "instagram",
   },
   {
     name: "GitHub",
-    href: process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/invenex",
+    href: process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/enterprises/invenex-solutions",
     icon: "github",
   },
 ];
