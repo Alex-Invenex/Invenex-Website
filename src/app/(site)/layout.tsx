@@ -10,6 +10,7 @@ import {
   InitialLoader,
 } from "@/components/transitions";
 import { ToastProvider } from "@/components/ui/toast";
+import { LenisProvider } from "@/components/providers/lenis-provider";
 
 export default function SiteLayout({
   children,
@@ -35,9 +36,11 @@ export default function SiteLayout({
 
         <Navbar />
 
-        <main id="main-content" tabIndex={-1} className="outline-none">
-          {children}
-        </main>
+        <LenisProvider>
+          <main id="main-content" tabIndex={-1} className="outline-none">
+            {children}
+          </main>
+        </LenisProvider>
 
         <Footer />
 

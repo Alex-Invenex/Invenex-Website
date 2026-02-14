@@ -1,126 +1,257 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Zap, Shield, Users, Rocket } from "lucide-react";
-import { AnimatedSection } from "@/components/ui/animated-section";
+import { useRef, useEffect, useState } from "react";
+import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { cn } from "@/lib/utils";
 
-const differentiators = [
+const steps = [
   {
-    icon: Zap,
-    title: "Cutting-Edge Technology",
+    number: "01",
+    title: "Discovery",
     description:
-      "We use the latest frameworks and tools to build fast, scalable, and future-proof solutions.",
-    highlight: "Next.js, React, Node.js",
+      "We dive deep into your business, audience, and goals. Through collaborative workshops and research, we uncover the insights that shape exceptional solutions.",
+    highlight: "Research & Strategy",
   },
   {
-    icon: Shield,
-    title: "Quality Guaranteed",
+    number: "02",
+    title: "Design",
     description:
-      "Every project undergoes rigorous testing and code reviews to ensure excellence.",
-    highlight: "100% Test Coverage",
+      "From wireframes to high-fidelity prototypes, we craft pixel-perfect interfaces that balance beauty with usability and align with your brand identity.",
+    highlight: "UI/UX & Prototyping",
   },
   {
-    icon: Users,
-    title: "Dedicated Team",
+    number: "03",
+    title: "Develop",
     description:
-      "Work directly with senior developers who understand your business needs.",
-    highlight: "Direct Communication",
+      "Clean, scalable code built with Next.js, React, and modern technologies. Every feature is tested, optimized, and ready for production at scale.",
+    highlight: "Engineering & QA",
   },
   {
-    icon: Rocket,
-    title: "Fast Delivery",
+    number: "04",
+    title: "Deliver",
     description:
-      "Agile methodology ensures rapid development without compromising quality.",
-    highlight: "2-Week Sprints",
+      "Launch day is just the beginning. We provide ongoing support, analytics insights, and iterative improvements to keep your product ahead of the curve.",
+    highlight: "Launch & Growth",
   },
 ];
 
 export function WhyChooseUs() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Horizontal scroll pinning on desktop
+  useGSAP(
+    () => {
+      if (prefersReducedMotion() || isMobile) {
+        gsap.set("[data-step]", { opacity: 1, y: 0 });
+        return;
+      }
+
+      const init = async () => {
+        const ScrollTrigger = await registerScrollTrigger();
+        const section = sectionRef.current;
+        const track = trackRef.current;
+        if (!section || !track) return;
+
+        // Header entrance
+        gsap.fromTo(
+          "[data-hw-header]",
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 80%",
+            },
+          }
+        );
+
+        // Horizontal scroll
+        const cards = track.querySelectorAll("[data-step]");
+        const totalWidth = track.scrollWidth - window.innerWidth;
+
+        gsap.to(track, {
+          x: -totalWidth,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: `+=${totalWidth * 1.5}`,
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // Staggered card entrance as they scroll into view
+        cards.forEach((card, i) => {
+          gsap.fromTo(
+            card,
+            { opacity: 0.3, scale: 0.92 },
+            {
+              opacity: 1,
+              scale: 1,
+              scrollTrigger: {
+                trigger: card,
+                containerAnimation: gsap.getById?.("hw-scroll") || undefined,
+                start: "left 80%",
+                end: "left 40%",
+                scrub: 1,
+                // Use the section as the main trigger instead
+                toggleActions: "play none none reverse",
+              },
+              ease: "power2.out",
+            }
+          );
+        });
+      };
+      init();
+    },
+    { scope: sectionRef, dependencies: [isMobile] }
+  );
+
   return (
     <section
-      className="py-24 md:py-32 bg-background relative overflow-hidden"
-      aria-labelledby="why-choose-us-title"
+      ref={sectionRef}
+      className="relative bg-background overflow-hidden"
+      aria-labelledby="how-we-work-title"
       data-testid="why-choose-us-section"
     >
       {/* Coral background orbs */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px]" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FF6A37]/[0.03] rounded-full blur-[120px]" />
 
-      <div className="container mx-auto px-6 relative z-10">
-        <AnimatedSection className="mb-16">
+      {/* Header — inside the pin so it stays visible */}
+      <div className="pt-32 md:pt-44 pb-12 md:pb-16 container mx-auto px-6 relative z-10">
+        <div data-hw-header className="opacity-0">
           <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
-            // WHY US
+            Our Process
           </span>
           <h2
-            id="why-choose-us-title"
+            id="how-we-work-title"
             className="text-4xl md:text-5xl lg:text-6xl tracking-tight"
           >
-            <span style={{ fontWeight: 200 }}>Why Choose </span>
+            <span style={{ fontWeight: 200 }}>How We </span>
             <span className="text-gradient-orange" style={{ fontWeight: 900 }}>
-              Invenex
+              Work
             </span>
           </h2>
           <p className="mt-4 text-lg md:text-xl text-foreground-muted max-w-2xl">
-            We&apos;re not just another agency. Here&apos;s what sets us apart.
+            A proven process refined over years to deliver exceptional results, every time.
           </p>
-        </AnimatedSection>
+        </div>
+      </div>
 
-        {/* Numbered list layout */}
-        <div className="space-y-0">
-          {differentiators.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className={`group py-8 md:py-10 border-b border-white/10 ${
-                  index === 0 ? "border-t" : ""
-                }`}
+      {/* DESKTOP: Horizontal scroll track */}
+      {!isMobile && (
+        <div className="pb-32 md:pb-44">
+          <div
+            ref={trackRef}
+            className="flex gap-8 pl-6 md:pl-[calc((100vw-1280px)/2+1.5rem)] pr-[20vw]"
+            style={{ width: "fit-content" }}
+          >
+            {steps.map((step, index) => (
+              <div
+                key={step.number}
+                data-step
+                className="flex-shrink-0 w-[400px] md:w-[480px] lg:w-[520px]"
               >
-                <div className="flex items-start gap-6 md:gap-10">
-                  {/* Massive coral gradient number */}
+                <div
+                  className={cn(
+                    "relative h-full p-8 md:p-10 rounded-2xl",
+                    "bg-white/[0.02] border border-white/[0.06]",
+                    "backdrop-blur-sm",
+                    "hover:bg-white/[0.04] hover:border-[#FF6A37]/20",
+                    "transition-all duration-500",
+                    "group"
+                  )}
+                >
+                  {/* Large coral gradient number */}
                   <span
-                    className="font-mono tracking-tight select-none flex-shrink-0 text-gradient-orange"
+                    className="block font-mono text-gradient-orange leading-none mb-6 select-none"
                     style={{
-                      fontSize: "clamp(3rem, 6vw, 5rem)",
+                      fontSize: "clamp(4rem, 8vw, 7rem)",
                       fontWeight: 200,
-                      lineHeight: 1,
                     }}
                     aria-hidden="true"
                   >
-                    {String(index + 1).padStart(2, "0")}
+                    {step.number}
                   </span>
 
-                  {/* Content */}
-                  <div className="flex-1 flex flex-col md:flex-row md:items-start md:justify-between gap-4 pt-2">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 rounded-lg bg-[#FF6A37]/10 border border-[#FF6A37]/20 flex items-center justify-center group-hover:bg-[#FF6A37]/20 transition-colors duration-300">
-                          <Icon className="w-5 h-5 text-[#FF6A37]" />
-                        </div>
-                        <h3 className="text-xl md:text-2xl font-semibold group-hover:text-white transition-colors duration-300">
-                          {item.title}
-                        </h3>
-                      </div>
-                      <p className="text-foreground-muted text-sm md:text-base leading-relaxed max-w-lg">
-                        {item.description}
-                      </p>
-                    </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4 group-hover:text-white transition-colors duration-300">
+                    {step.title}
+                  </h3>
 
-                    {/* Highlight tag */}
-                    <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-full bg-[#FF6A37]/10 text-[#FF6A37] border border-[#FF6A37]/20 flex-shrink-0 self-start mt-1">
-                      {item.highlight}
-                    </span>
+                  <p className="text-foreground-muted text-sm md:text-base leading-relaxed mb-6">
+                    {step.description}
+                  </p>
+
+                  {/* Highlight tag */}
+                  <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-full bg-[#FF6A37]/10 text-[#FF6A37] border border-[#FF6A37]/20">
+                    {step.highlight}
+                  </span>
+
+                  {/* Decorative corner line */}
+                  <div className="absolute top-0 right-0 w-16 h-16 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute top-4 right-4 w-8 h-[1px] bg-[#FF6A37]/30" />
+                    <div className="absolute top-4 right-4 w-[1px] h-8 bg-[#FF6A37]/30" />
                   </div>
                 </div>
-              </motion.div>
-            );
-          })}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* MOBILE: Vertical stacked cards with scroll snap */}
+      {isMobile && (
+        <div className="pb-24 px-6">
+          <div className="space-y-6">
+            {steps.map((step) => (
+              <div
+                key={step.number}
+                data-step
+                className={cn(
+                  "relative p-6 rounded-2xl",
+                  "bg-white/[0.02] border border-white/[0.06]",
+                  "backdrop-blur-sm"
+                )}
+              >
+                <span
+                  className="block font-mono text-gradient-orange leading-none mb-4 select-none"
+                  style={{ fontSize: "3rem", fontWeight: 200 }}
+                  aria-hidden="true"
+                >
+                  {step.number}
+                </span>
+
+                <h3 className="text-xl font-semibold tracking-tight mb-3">
+                  {step.title}
+                </h3>
+
+                <p className="text-foreground-muted text-sm leading-relaxed mb-4">
+                  {step.description}
+                </p>
+
+                <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-full bg-[#FF6A37]/10 text-[#FF6A37] border border-[#FF6A37]/20">
+                  {step.highlight}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

@@ -1,356 +1,379 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { Instagram, X, ExternalLink, Volume2, VolumeX } from "lucide-react";
-import { AnimatedSection } from "@/components/ui/animated-section";
+import { Instagram, X, ExternalLink } from "lucide-react";
+import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 
-// To enable images: Add cover photos to /public/images/reels/ and uncomment coverSrc
-// To enable autoplay: Add videos to /public/videos/ and uncomment videoSrc
-const reels = [
+const socialCards = [
   {
     id: "DEofbAcSLyL",
     url: "https://www.instagram.com/reel/DEofbAcSLyL/",
+    title: "Building CoolTech's new website",
+    gradient: "from-orange-500 via-pink-500 to-purple-600",
   },
   {
     id: "DFDGYdUIhku",
     url: "https://www.instagram.com/reel/DFDGYdUIhku/",
+    title: "Behind the scenes at Invenex",
+    gradient: "from-cyan-500 via-blue-500 to-purple-600",
   },
   {
     id: "C--W-KWhMkq",
     url: "https://www.instagram.com/reel/C--W-KWhMkq/",
+    title: "Mobile app development process",
+    gradient: "from-pink-500 via-red-500 to-orange-500",
   },
   {
     id: "C-u0w2OBBCF",
     url: "https://www.instagram.com/reel/C-u0w2OBBCF/",
+    title: "Our design philosophy",
+    gradient: "from-green-400 via-teal-500 to-blue-500",
   },
   {
     id: "C32ciCRvp91",
     url: "https://www.instagram.com/reel/C32ciCRvp91/",
-  },
-  {
-    id: "C3J-CVTPeVS",
-    url: "https://www.instagram.com/reel/C3J-CVTPeVS/",
+    title: "Client success stories",
+    gradient: "from-yellow-400 via-orange-500 to-red-500",
   },
 ];
 
-type ReelType = (typeof reels)[0] & { videoSrc?: string; coverSrc?: string };
+// Fanned card rotations and offsets (Lando Norris style)
+const CARD_TRANSFORMS = [
+  { rotate: -12, y: 20, x: -10 },
+  { rotate: -6, y: -10, x: -5 },
+  { rotate: 0, y: -20, x: 0 },
+  { rotate: 6, y: -10, x: 5 },
+  { rotate: 12, y: 20, x: 10 },
+];
 
-function ReelCard({
-  reel,
+function SocialCard({
+  card,
   index,
+  onOpen,
 }: {
-  reel: ReelType;
+  card: (typeof socialCards)[0];
   index: number;
+  onOpen: () => void;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(cardRef, { amount: 0.5 });
-  const hasLocalVideo = !!reel.videoSrc;
-  const hasCover = !!reel.coverSrc;
+  const transform = CARD_TRANSFORMS[index];
 
-  // Autoplay when in view (for local videos)
-  useEffect(() => {
-    if (hasLocalVideo && videoRef.current) {
-      if (isInView) {
-        videoRef.current.play().catch(() => {});
-      } else {
-        videoRef.current.pause();
-      }
-    }
-  }, [isInView, hasLocalVideo]);
+  const handleMouseEnter = () => {
+    if (prefersReducedMotion() || !cardRef.current) return;
+    gsap.to(cardRef.current, {
+      rotate: 0,
+      y: transform.y - 30,
+      scale: 1.08,
+      zIndex: 20,
+      duration: 0.4,
+      ease: "power2.out",
+    });
+  };
 
-  // Staggered heights: alternate tiles offset
-  const isOffset = index % 2 === 1;
+  const handleMouseLeave = () => {
+    if (prefersReducedMotion() || !cardRef.current) return;
+    gsap.to(cardRef.current, {
+      rotate: transform.rotate,
+      y: transform.y,
+      scale: 1,
+      zIndex: index,
+      duration: 0.5,
+      ease: "power3.out",
+    });
+  };
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
-      className={cn(
-        "relative group cursor-pointer",
-        isOffset && "md:mt-8"
-      )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={() => window.open(reel.url, "_blank")}
+      data-social-card
+      className="relative cursor-pointer group shrink-0"
+      style={{
+        transform: `rotate(${transform.rotate}deg) translateY(${transform.y}px)`,
+        zIndex: index,
+        marginLeft: index === 0 ? 0 : "-16px",
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={onOpen}
     >
-      {/* Instagram gradient border */}
+      {/* Card body */}
       <div
-        className={`absolute -inset-[2px] rounded-[24px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 transition-opacity duration-500 ${
-          isHovered ? "opacity-100" : "opacity-30"
-        }`}
-      />
+        className="rounded-2xl overflow-hidden relative shadow-2xl shadow-black/40"
+        style={{ width: "clamp(200px, 18vw, 260px)", aspectRatio: "9/16" }}
+      >
+        {/* Gradient background */}
+        <div className={cn("absolute inset-0 bg-gradient-to-br", card.gradient)} />
 
-      {/* Glow effect on hover */}
-      <div
-        className={`absolute -inset-[2px] rounded-[24px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 blur-xl transition-opacity duration-500 ${
-          isHovered ? "opacity-50" : "opacity-0"
-        }`}
-      />
-
-      {/* Card content */}
-      <div className="relative aspect-[9/16] rounded-[22px] overflow-hidden bg-black">
-        {hasLocalVideo ? (
-          <video
-            ref={videoRef}
-            src={reel.videoSrc}
-            className="absolute inset-0 w-full h-full object-cover"
-            loop
-            muted
-            playsInline
-            preload="metadata"
-          />
-        ) : hasCover ? (
-          <img
-            src={reel.coverSrc}
-            alt="Reel cover"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-pink-900/80 to-orange-900 flex items-center justify-center">
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_white_1px,_transparent_1px)] bg-[size:20px_20px]" />
-            <div className="text-center z-10">
-              <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center shadow-lg shadow-pink-500/30">
-                <Instagram className="w-7 h-7 text-white" />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Hover overlay */}
+        {/* Pattern overlay */}
         <div
-          className={`absolute inset-0 bg-black/0 transition-colors duration-300 ${
-            isHovered ? "bg-black/20" : ""
-          }`}
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: "radial-gradient(circle at center, white 1px, transparent 1px)",
+            backgroundSize: "16px 16px",
+          }}
         />
 
-        {/* Bottom gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
-
-        {/* Instagram badge */}
-        <div className="absolute bottom-3 left-3 flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center shadow-lg">
-            <Instagram className="w-3 h-3 text-white" />
+        {/* Content */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+          <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            <Instagram className="w-8 h-8 text-white" />
           </div>
-          <span className="text-white text-xs font-medium drop-shadow-lg">
-            Reel
-          </span>
+          <p className="text-white text-sm font-medium leading-tight opacity-80">
+            {card.title}
+          </p>
+        </div>
+
+        {/* Bottom gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
+
+        {/* Badge */}
+        <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
+          <div className="w-5 h-5 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+            <Instagram className="w-2.5 h-2.5 text-white" />
+          </div>
+          <span className="text-white text-[10px] font-medium">Reel</span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-function VideoModal({
-  reel,
+function ReelModal({
+  card,
   onClose,
 }: {
-  reel: ReelType | null;
+  card: (typeof socialCards)[0] | null;
   onClose: () => void;
 }) {
-  const [isMuted, setIsMuted] = useState(true);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const hasLocalVideo = reel?.videoSrc;
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (hasLocalVideo && videoRef.current) {
-      videoRef.current.play().catch(() => {});
-    }
-  }, [hasLocalVideo]);
+    if (!card) return;
 
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(!isMuted);
+    if (!prefersReducedMotion()) {
+      gsap.fromTo(
+        overlayRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3 }
+      );
+      gsap.fromTo(
+        contentRef.current,
+        { scale: 0.9, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
+      );
+    }
+  }, [card]);
+
+  if (!card) return null;
+
+  const handleClose = () => {
+    if (!prefersReducedMotion() && overlayRef.current && contentRef.current) {
+      gsap.to(contentRef.current, { scale: 0.9, opacity: 0, duration: 0.2 });
+      gsap.to(overlayRef.current, {
+        opacity: 0,
+        duration: 0.25,
+        onComplete: onClose,
+      });
+    } else {
+      onClose();
     }
   };
 
-  if (!reel) return null;
-
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl"
-        onClick={onClose}
+    <div
+      ref={overlayRef}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl"
+      onClick={handleClose}
+    >
+      <button
+        className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-20"
+        onClick={handleClose}
       >
-        {/* Close button */}
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-20"
-          onClick={onClose}
-        >
-          <X className="w-5 h-5 md:w-6 md:h-6" />
-        </motion.button>
+        <X className="w-5 h-5" />
+      </button>
 
-        {/* Video container */}
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ type: "spring", damping: 25 }}
-          className="relative w-full max-w-[360px] md:max-w-[400px] aspect-[9/16]"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Instagram gradient border */}
-          <div className="absolute -inset-[3px] rounded-[28px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600" />
-          <div className="absolute -inset-[3px] rounded-[28px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 blur-2xl opacity-40" />
+      <div
+        ref={contentRef}
+        className="relative w-full max-w-[360px] aspect-[9/16]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="absolute -inset-[3px] rounded-[28px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600" />
+        <div className="absolute -inset-[3px] rounded-[28px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 blur-2xl opacity-40" />
 
-          {/* Video frame */}
-          <div className="relative w-full h-full rounded-[25px] overflow-hidden bg-black">
-            {hasLocalVideo ? (
-              <video
-                ref={videoRef}
-                src={reel.videoSrc}
-                className="absolute inset-0 w-full h-full object-cover"
-                loop
-                muted={isMuted}
-                playsInline
-                autoPlay
-              />
-            ) : (
-              <iframe
-                src={`https://www.instagram.com/reel/${reel.id}/embed/`}
-                className="absolute border-0"
-                allow="autoplay; fullscreen"
-                allowFullScreen
-                style={{
-                  width: "100%",
-                  height: "calc(100% + 80px)",
-                  top: "-40px",
-                  position: "absolute",
-                }}
-              />
-            )}
-          </div>
+        <div className="relative w-full h-full rounded-[25px] overflow-hidden bg-black">
+          <iframe
+            src={`https://www.instagram.com/reel/${card.id}/embed/`}
+            className="absolute border-0"
+            allow="autoplay; fullscreen"
+            allowFullScreen
+            style={{
+              width: "100%",
+              height: "calc(100% + 80px)",
+              top: "-40px",
+              position: "absolute",
+            }}
+          />
+        </div>
+      </div>
 
-          {/* Mute toggle (only for local videos) */}
-          {hasLocalVideo && (
-            <button
-              className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/80 transition-colors z-10"
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleMute();
-              }}
-            >
-              {isMuted ? (
-                <VolumeX className="w-5 h-5" />
-              ) : (
-                <Volume2 className="w-5 h-5" />
-              )}
-            </button>
-          )}
-        </motion.div>
-
-        {/* Open in Instagram link */}
-        <motion.a
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          href={reel.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="absolute bottom-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-yellow-500/20 via-pink-500/20 to-purple-500/20 border border-pink-500/30 text-white text-sm hover:border-pink-500/50 transition-colors"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Instagram className="w-4 h-4" />
-          <span>Open in Instagram</span>
-          <ExternalLink className="w-3.5 h-3.5" />
-        </motion.a>
-      </motion.div>
-    </AnimatePresence>
+      <a
+        href={card.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute bottom-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-colors"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Instagram className="w-4 h-4" />
+        <span>Open in Instagram</span>
+        <ExternalLink className="w-3.5 h-3.5" />
+      </a>
+    </div>
   );
 }
 
 export function InstagramReels() {
+  const [activeCard, setActiveCard] = useState<(typeof socialCards)[0] | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // GSAP entrance animation — fanned cards stagger in
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+
+      const init = async () => {
+        await registerScrollTrigger();
+
+        gsap.fromTo(
+          "[data-social-header]",
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+            },
+          }
+        );
+
+        const cards = sectionRef.current?.querySelectorAll("[data-social-card]");
+        if (!cards) return;
+
+        cards.forEach((card, i) => {
+          const t = CARD_TRANSFORMS[i];
+          gsap.fromTo(
+            card,
+            {
+              opacity: 0,
+              y: 100,
+              rotate: 0,
+              scale: 0.8,
+            },
+            {
+              opacity: 1,
+              y: t.y,
+              rotate: t.rotate,
+              scale: 1,
+              duration: 0.8,
+              delay: i * 0.08,
+              ease: "back.out(1.4)",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top 65%",
+              },
+            }
+          );
+        });
+      };
+      init();
+    },
+    { scope: sectionRef }
+  );
+
   return (
     <section
-      className="py-20 md:py-28 bg-background relative overflow-hidden"
-      aria-labelledby="instagram-reels-title"
+      ref={sectionRef}
+      className="py-32 md:py-44 bg-background relative overflow-hidden"
+      aria-labelledby="social-showcase-title"
       data-testid="instagram-reels-section"
     >
-      {/* Background decoration — coral (not Instagram gradient) */}
+      {/* Background decoration */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px]" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#FF6A37]/[0.03] rounded-full blur-[120px]" />
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        {/* Header — coral accent, monospace label */}
-        <AnimatedSection className="text-center mb-10 md:mb-14">
-          <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-5 block font-mono">
-            // FOLLOW ALONG
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div data-social-header className="text-center mb-16 md:mb-24">
+          <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
+            Follow Along
           </span>
-
           <h2
-            id="instagram-reels-title"
-            className="text-3xl md:text-4xl lg:text-5xl tracking-tight mb-3"
+            id="social-showcase-title"
+            className="tracking-tight mb-4"
+            style={{
+              fontSize: "clamp(2rem, 5vw, 4rem)",
+              fontWeight: 900,
+              letterSpacing: "-0.03em",
+            }}
           >
-            <span style={{ fontWeight: 200 }}>Our </span>
-            <span className="text-gradient-orange" style={{ fontWeight: 900 }}>
-              Creative
-            </span>{" "}
-            <span style={{ fontWeight: 200 }}>Journey</span>
+            <span className="text-foreground/40" style={{ fontWeight: 200 }}>
+              WHAT&apos;S{" "}
+            </span>
+            <span className="text-gradient-orange">HAPPENING</span>
           </h2>
-          <p className="text-base md:text-lg text-foreground-muted max-w-xl mx-auto">
-            Behind the scenes, success stories, and creative moments
-          </p>
 
-          <motion.a
+          {/* Instagram follow badge */}
+          <a
             href="https://www.instagram.com/invenexsolutions/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-yellow-500/10 via-pink-500/10 to-purple-500/10 border border-pink-500/20 backdrop-blur-sm mt-5 hover:border-pink-500/40 transition-colors"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            whileHover={{ scale: 1.02 }}
+            className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm hover:bg-white/[0.08] hover:border-white/[0.15] transition-all duration-300 mt-4"
           >
             <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center">
               <Instagram className="w-3 h-3 text-white" />
             </div>
-            <span className="text-sm bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent font-semibold">
+            <span className="text-sm text-foreground-muted font-medium">
               @invenexsolutions
             </span>
-          </motion.a>
-        </AnimatedSection>
-
-        {/* Reels Grid — staggered heights */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-          {reels.map((reel, index) => (
-            <ReelCard
-              key={reel.id}
-              reel={reel}
-              index={index}
-            />
-          ))}
+          </a>
         </div>
 
-        {/* CTA — coral accent */}
-        <AnimatedSection delay={0.4} className="text-center mt-10 md:mt-14">
-          <motion.a
+        {/* Fanned cards layout */}
+        <div className="flex items-center justify-center relative min-h-[400px] md:min-h-[500px] lg:min-h-[600px]">
+          <div className="flex items-center justify-center">
+            {socialCards.map((card, index) => (
+              <SocialCard
+                key={card.id}
+                card={card}
+                index={index}
+                onOpen={() => setActiveCard(card)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="text-center mt-12 md:mt-16">
+          <a
             href="https://www.instagram.com/invenexsolutions/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex items-center gap-2.5 px-6 py-3 md:px-8 md:py-4 rounded-full overflow-hidden bg-[#FF6A37] hover:bg-[#FF4D1D] transition-colors"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            className="group relative inline-flex items-center gap-2.5 px-8 py-4 rounded-full overflow-hidden bg-[#FF6A37] hover:bg-[#FF4D1D] transition-colors"
           >
-            <Instagram className="w-5 h-5 text-white relative z-10" />
-            <span className="text-white font-semibold text-sm md:text-base relative z-10">
+            <Instagram className="w-5 h-5 text-white" />
+            <span className="text-white font-semibold text-sm md:text-base">
               Follow Our Journey
             </span>
-            <ExternalLink className="w-4 h-4 text-white/80 relative z-10 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </motion.a>
-        </AnimatedSection>
+            <ExternalLink className="w-4 h-4 text-white/80 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </a>
+        </div>
       </div>
+
+      {/* Modal */}
+      <ReelModal card={activeCard} onClose={() => setActiveCard(null)} />
     </section>
   );
 }

@@ -184,6 +184,38 @@ export function HeroV2() {
         repeat: -1,
         delay: 2,
       })
+
+      // ── Scroll-out parallax ──
+      // Text scrolls away faster, sphere pins briefly
+      const initScrollOut = async () => {
+        const { registerScrollTrigger } = await import('@/lib/gsap')
+        await registerScrollTrigger()
+
+        // Text parallax out (scrolls faster)
+        gsap.to('[data-a="word"], [data-a="tag"], [data-a="border"], [data-a="desc"], [data-a="cta"]', {
+          y: -80,
+          opacity: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'center center',
+            end: 'bottom top',
+            scrub: 1,
+          },
+        })
+
+        // Sphere glow dims as user scrolls away
+        gsap.to('[data-a="sphere-glow"]', {
+          opacity: 0,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: '60% center',
+            end: 'bottom top',
+            scrub: 1,
+          },
+        })
+      }
+      initScrollOut()
     },
     { scope: sectionRef, dependencies: [mounted] }
   )

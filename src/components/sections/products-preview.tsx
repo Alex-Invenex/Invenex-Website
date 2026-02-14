@@ -1,56 +1,114 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  ExternalLink,
-  ArrowRight,
-  Utensils,
-  Building2,
-  Check,
-} from "lucide-react";
+import { useRef } from "react";
+import { ExternalLink, ArrowRight, Utensils, Building2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { AnimatedSection } from "@/components/ui/animated-section";
+import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 
-const products = [
-  {
-    name: "CaterFlow",
-    tagline: "Catering Management, Simplified",
-    description:
-      "A complete catering management platform built for caterers who want to streamline operations, manage orders, and grow their business.",
-    features: [
-      "Order Management",
-      "Inventory Tracking",
-      "Customer Portal",
-      "Analytics Dashboard",
-    ],
-    status: "Live",
-    href: "https://caterflow.in",
-    isExternal: true,
-    icon: Utensils,
-  },
-  {
-    name: "Invenex ERP",
-    tagline: "Enterprise Resource Planning",
-    description:
-      "Next-generation ERP solution designed for modern businesses. Unified platform for finance, HR, inventory, and operations management.",
-    features: [
-      "Financial Management",
-      "HR & Payroll",
-      "Supply Chain",
-      "Business Intelligence",
-    ],
-    status: "Coming Soon",
-    href: "/products#erp",
-    isExternal: false,
-    icon: Building2,
-  },
+const CATERFLOW_METRICS = [
+  { value: "12K+", label: "Orders Managed" },
+  { value: "50+", label: "Active Caterers" },
+  { value: "99.9%", label: "Uptime" },
+];
+
+const CATERFLOW_FEATURES = [
+  "Order Management",
+  "Inventory Tracking",
+  "Customer Portal",
+  "Analytics Dashboard",
+  "Multi-location Support",
+  "Real-time Notifications",
 ];
 
 export function ProductsPreview() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) {
+        gsap.set("[data-prod]", { opacity: 1, y: 0, x: 0, scale: 1 });
+        return;
+      }
+
+      const init = async () => {
+        await registerScrollTrigger();
+
+        // Header
+        gsap.fromTo(
+          "[data-prod='header']",
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+            },
+          }
+        );
+
+        // CaterFlow showcase slides in from right
+        gsap.fromTo(
+          "[data-prod='showcase']",
+          { opacity: 0, x: 60 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: "[data-prod='showcase']",
+              start: "top 80%",
+            },
+          }
+        );
+
+        // Floating metric cards stagger in
+        gsap.fromTo(
+          "[data-prod='metric']",
+          { opacity: 0, y: 30, scale: 0.85 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.6,
+            stagger: 0.12,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: "[data-prod='showcase']",
+              start: "top 65%",
+            },
+          }
+        );
+
+        // ERP card
+        gsap.fromTo(
+          "[data-prod='erp']",
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: "[data-prod='erp']",
+              start: "top 85%",
+            },
+          }
+        );
+      };
+      init();
+    },
+    { scope: sectionRef }
+  );
+
   return (
     <section
-      className="py-24 md:py-32 bg-background relative overflow-hidden"
+      ref={sectionRef}
+      className="py-32 md:py-44 bg-background relative overflow-hidden"
       aria-labelledby="products-preview-title"
       data-testid="products-preview-section"
     >
@@ -59,9 +117,9 @@ export function ProductsPreview() {
       <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-[#FF6A37]/[0.03] rounded-full blur-[150px] -translate-y-1/2" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <AnimatedSection className="mb-16">
+        <div data-prod="header" className="opacity-0 mb-16">
           <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
-            // OUR PRODUCTS
+            Our Products
           </span>
           <h2
             id="products-preview-title"
@@ -76,120 +134,146 @@ export function ProductsPreview() {
             We don&apos;t just build for others. We create products that solve
             real problems.
           </p>
-        </AnimatedSection>
-
-        {/* Asymmetric grid — CaterFlow 60%, ERP 40% */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {products.map((product, index) => {
-            const Icon = product.icon;
-            const isHero = index === 0;
-            return (
-              <motion.div
-                key={product.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className={`group ${isHero ? "lg:col-span-3" : "lg:col-span-2"}`}
-              >
-                <div className="relative h-full rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-[#FF6A37]/20 transition-all duration-500">
-                  {/* Gradient Header with grid pattern */}
-                  <div className="relative h-40 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A37]/20 via-[#FF8C5A]/10 to-[#FF4D1D]/20" />
-                    <div className="absolute inset-0 bg-grid opacity-20" />
-
-                    {/* Icon */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <motion.div
-                        className="w-20 h-20 rounded-2xl bg-[#FF6A37]/20 backdrop-blur-sm border border-[#FF6A37]/20 flex items-center justify-center shadow-2xl"
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <Icon className="w-10 h-10 text-[#FF6A37]" />
-                      </motion.div>
-                    </div>
-
-                    {/* Status Badge */}
-                    <div className="absolute top-4 right-4">
-                      <span
-                        className={`
-                          inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium
-                          ${
-                            product.status === "Live"
-                              ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                              : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-                          }
-                        `}
-                      >
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full ${
-                            product.status === "Live"
-                              ? "bg-emerald-400 animate-pulse"
-                              : "bg-amber-400"
-                          }`}
-                        />
-                        {product.status}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative p-8">
-                    <h3 className="text-2xl font-bold mb-1">{product.name}</h3>
-                    <p className="text-foreground-muted mb-4">
-                      {product.tagline}
-                    </p>
-                    <p className="text-foreground-muted text-sm mb-6 leading-relaxed">
-                      {product.description}
-                    </p>
-
-                    {/* Features */}
-                    <div className="grid grid-cols-2 gap-3 mb-8">
-                      {product.features.map((feature) => (
-                        <div
-                          key={feature}
-                          className="flex items-center gap-2 text-sm text-foreground-muted"
-                        >
-                          <div className="w-5 h-5 rounded-full bg-[#FF6A37]/10 flex items-center justify-center flex-shrink-0">
-                            <Check className="w-3 h-3 text-[#FF6A37]" />
-                          </div>
-                          {feature}
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* CTA */}
-                    {product.isExternal ? (
-                      <Button asChild variant="coral" size="lg">
-                        <a
-                          href={product.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 w-full justify-center"
-                        >
-                          Visit {product.name}
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      </Button>
-                    ) : (
-                      <Button asChild variant="secondary" size="lg">
-                        <Link
-                          href={product.href}
-                          className="inline-flex items-center gap-2 w-full justify-center"
-                        >
-                          Learn More
-                          <ArrowRight className="w-4 h-4" />
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
         </div>
 
-        <AnimatedSection delay={0.3} className="text-center mt-12">
+        {/* CaterFlow — Full-width showcase */}
+        <div
+          data-prod="showcase"
+          className="opacity-0 relative rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-[#FF6A37]/20 transition-all duration-500 mb-8"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+            {/* Left: Content */}
+            <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+              {/* Status badge */}
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-[#FF6A37]/10 border border-[#FF6A37]/20 flex items-center justify-center">
+                  <Utensils className="w-6 h-6 text-[#FF6A37]" />
+                </div>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Live
+                </span>
+              </div>
+
+              <h3 className="text-3xl md:text-4xl font-bold mb-2">CaterFlow</h3>
+              <p className="text-foreground-muted text-lg mb-2">
+                Catering Management, Simplified
+              </p>
+              <p className="text-foreground-muted text-sm mb-8 leading-relaxed max-w-md">
+                A complete catering management platform built for caterers who want to
+                streamline operations, manage orders, and grow their business.
+              </p>
+
+              {/* Features grid */}
+              <div className="grid grid-cols-2 gap-3 mb-8">
+                {CATERFLOW_FEATURES.map((feature) => (
+                  <div
+                    key={feature}
+                    className="flex items-center gap-2 text-sm text-foreground-muted"
+                  >
+                    <div className="w-5 h-5 rounded-full bg-[#FF6A37]/10 flex items-center justify-center flex-shrink-0">
+                      <Check className="w-3 h-3 text-[#FF6A37]" />
+                    </div>
+                    {feature}
+                  </div>
+                ))}
+              </div>
+
+              <Button asChild variant="coral" size="lg" className="w-fit">
+                <a
+                  href="https://caterflow.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2"
+                >
+                  Visit CaterFlow
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </Button>
+            </div>
+
+            {/* Right: App screenshot with 3D tilt effect */}
+            <div className="relative min-h-[300px] lg:min-h-0 flex items-center justify-center p-8 lg:p-12">
+              {/* Background gradient */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A37]/20 via-[#FF8C5A]/10 to-[#FF4D1D]/20" />
+              <div className="absolute inset-0 bg-grid opacity-20" />
+
+              {/* App screenshot placeholder with 3D perspective */}
+              <div
+                className="relative w-full max-w-[400px] aspect-[4/3] rounded-xl overflow-hidden shadow-2xl shadow-[#FF6A37]/10 transition-transform duration-500 hover:rotate-0"
+                style={{
+                  perspective: "1000px",
+                  transform: "perspective(1000px) rotateY(-5deg) rotateX(2deg)",
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-background-tertiary to-background-secondary flex items-center justify-center">
+                  <div className="text-center">
+                    <Utensils className="w-16 h-16 text-[#FF6A37]/30 mx-auto mb-3" />
+                    <span className="text-foreground-muted text-sm">CaterFlow Dashboard</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating metric cards */}
+              {CATERFLOW_METRICS.map((metric, i) => (
+                <div
+                  key={metric.label}
+                  data-prod="metric"
+                  className={`absolute opacity-0 backdrop-blur-xl bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 shadow-xl ${
+                    i === 0
+                      ? "top-4 right-4 lg:top-8 lg:right-8"
+                      : i === 1
+                      ? "bottom-4 left-4 lg:bottom-8 lg:left-8"
+                      : "bottom-4 right-4 lg:bottom-8 lg:right-8"
+                  }`}
+                >
+                  <div className="text-xl md:text-2xl font-bold text-foreground">
+                    {metric.value}
+                  </div>
+                  <div className="text-xs text-foreground-muted">{metric.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ERP — Coming Soon teaser */}
+        <div
+          data-prod="erp"
+          className="opacity-0 relative rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden p-8 md:p-10 hover:border-amber-500/20 transition-all duration-500"
+        >
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+                <Building2 className="w-6 h-6 text-amber-400" />
+              </div>
+              <div>
+                <div className="flex items-center gap-3 mb-1">
+                  <h3 className="text-xl font-bold">Invenex ERP</h3>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                    Coming Soon
+                  </span>
+                </div>
+                <p className="text-foreground-muted text-sm max-w-lg">
+                  Next-generation ERP solution designed for modern businesses. Unified platform
+                  for finance, HR, inventory, and operations management.
+                </p>
+              </div>
+            </div>
+            <Button asChild variant="secondary" size="lg" className="flex-shrink-0">
+              <Link
+                href="/products#erp"
+                className="inline-flex items-center gap-2"
+              >
+                Learn More
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+
+        <div className="text-center mt-12">
           <Link
             href="/products"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-foreground hover:bg-white/10 hover:border-white/20 transition-all duration-300 group"
@@ -197,7 +281,7 @@ export function ProductsPreview() {
             Explore all products
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-        </AnimatedSection>
+        </div>
       </div>
     </section>
   );

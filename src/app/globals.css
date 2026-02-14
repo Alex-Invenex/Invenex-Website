@@ -1,6 +1,26 @@
 @import "tailwindcss";
 
 /* ============================================
+   Lenis Smooth Scroll
+   ============================================ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ============================================
    Invenex Design System - Story 1.2
    Complete Design Token Configuration
    ============================================ */
@@ -720,6 +740,24 @@
   /* Hero thin weight for dramatic contrast */
   .font-extralight {
     font-weight: 200;
+  }
+
+  /* Clip-path text reveal — use with GSAP to animate clipPath */
+  .clip-reveal {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .clip-reveal-visible {
+    clip-path: inset(0 0 0 0);
+  }
+
+  /* Horizontal clip reveal for images */
+  .clip-reveal-right {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .clip-reveal-right-visible {
+    clip-path: inset(0 0 0 0);
   }
 
   /* Coral glow background — radial for section accents */

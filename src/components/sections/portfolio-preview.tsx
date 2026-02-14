@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
-import { AnimatedSection } from "@/components/ui/animated-section";
+import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 
-// Featured projects for homepage preview
 const featuredProjects = [
   {
     title: "CoolTech International",
@@ -44,44 +43,97 @@ function ProjectCard({
   index: number;
   isHero?: boolean;
 }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (prefersReducedMotion() || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+
+    // Subtle cursor-tracking parallax on image
+    const img = cardRef.current.querySelector("[data-portfolio-img]");
+    if (img) {
+      gsap.to(img, {
+        x: nx * 8,
+        y: ny * 8,
+        duration: 0.6,
+        ease: "power2",
+        overwrite: "auto",
+      });
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (prefersReducedMotion() || !overlayRef.current) return;
+    // clipPath reveal for project overlay
+    gsap.to(overlayRef.current, {
+      clipPath: "inset(0 0% 0 0)",
+      duration: 0.5,
+      ease: "power3.inOut",
+    });
+  };
+
+  const handleMouseLeave = () => {
+    if (prefersReducedMotion() || !overlayRef.current || !cardRef.current) return;
+    gsap.to(overlayRef.current, {
+      clipPath: "inset(0 100% 0 0)",
+      duration: 0.3,
+      ease: "power3.inOut",
+    });
+    const img = cardRef.current.querySelector("[data-portfolio-img]");
+    if (img) {
+      gsap.to(img, { x: 0, y: 0, duration: 0.5, ease: "power2" });
+    }
+  };
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.15, duration: 0.5 }}
-    >
+    <div data-portfolio-card>
       <Link href={project.href} className="group block relative">
         <div
+          ref={cardRef}
           className={cn(
             "relative overflow-hidden rounded-2xl",
             "border border-white/[0.05] hover:border-[#FF6A37]/30",
-            "transition-all duration-500",
-            "hover:shadow-[0_0_40px_rgba(255,106,55,0.15)]",
+            "transition-colors duration-500",
             isHero ? "aspect-[21/9]" : "aspect-[4/3]"
           )}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          {/* Image */}
-          <Image
-            src={project.image}
-            alt={`${project.title} — ${project.categories.join(", ")}`}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-            sizes={isHero ? "100vw" : "(max-width: 768px) 100vw, 50vw"}
-          />
+          {/* Image with parallax */}
+          <div data-portfolio-img className="absolute inset-[-10px] will-change-transform">
+            <Image
+              src={project.image}
+              alt={`${project.title} — ${project.categories.join(", ")}`}
+              fill
+              className="object-cover"
+              sizes={isHero ? "100vw" : "(max-width: 768px) 100vw, 50vw"}
+            />
+          </div>
 
           {/* Gradient overlay from bottom */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-          {/* Monospace project number — top left */}
+          {/* ClipPath overlay for hover reveal */}
+          <div
+            ref={overlayRef}
+            className="absolute inset-0 bg-[#FF6A37]/10 backdrop-blur-[2px]"
+            style={{ clipPath: "inset(0 100% 0 0)" }}
+          />
+
+          {/* Counter */}
           <span
+            data-portfolio-counter
             className="absolute top-4 left-4 md:top-6 md:left-6 font-mono text-white/40 text-xs tracking-wider"
             aria-hidden="true"
           >
             {String(index + 1).padStart(2, "0")}/{String(featuredProjects.length).padStart(2, "0")}
           </span>
 
-          {/* Arrow — top right */}
+          {/* Arrow */}
           <div className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full border border-white/20 bg-white/[0.05] backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-[#FF6A37] group-hover:border-[#FF6A37]">
             <ArrowRight className="w-4 h-4 text-white" />
           </div>
@@ -111,17 +163,63 @@ function ProjectCard({
           </div>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }
 
 export function PortfolioPreview() {
+  const sectionRef = useRef<HTMLElement>(null);
   const heroProject = featuredProjects[0];
   const gridProjects = featuredProjects.slice(1);
 
+  // GSAP ScrollTrigger stagger entrance
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+
+      const init = async () => {
+        await registerScrollTrigger();
+
+        gsap.fromTo(
+          "[data-portfolio-header]",
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+            },
+          }
+        );
+
+        gsap.fromTo(
+          "[data-portfolio-card]",
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 65%",
+            },
+          }
+        );
+      };
+      init();
+    },
+    { scope: sectionRef }
+  );
+
   return (
     <section
-      className="py-24 md:py-32 bg-background relative overflow-hidden"
+      ref={sectionRef}
+      className="py-32 md:py-44 bg-background relative overflow-hidden"
       aria-labelledby="portfolio-preview-title"
       data-testid="portfolio-preview-section"
     >
@@ -129,11 +227,14 @@ export function PortfolioPreview() {
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF6A37]/[0.03] rounded-full blur-[150px]" />
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Section Header — split weight */}
-        <AnimatedSection className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+        {/* Section Header */}
+        <div
+          data-portfolio-header
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16"
+        >
           <div>
             <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
-              // FEATURED WORK
+              Featured Work
             </span>
             <h2
               id="portfolio-preview-title"
@@ -152,12 +253,12 @@ export function PortfolioPreview() {
             <span>All Work</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-        </AnimatedSection>
+        </div>
 
         {/* Hero card — full width */}
         <ProjectCard project={heroProject} index={0} isHero />
 
-        {/* 2-column staggered grid — right column offset */}
+        {/* 2-column staggered grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {gridProjects.map((project, i) => (
             <div

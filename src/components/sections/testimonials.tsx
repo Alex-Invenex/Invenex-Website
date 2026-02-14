@@ -1,10 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 import { Star } from "lucide-react";
-import { AnimatedSection } from "@/components/ui/animated-section";
+import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 
-// Real testimonials from actual Invenex clients
 const testimonials = [
   {
     quote:
@@ -28,7 +27,7 @@ const testimonials = [
     author: "Rajesh Kumar",
     role: "Founder",
     company: "EaseMyFly",
-    rating: 5,
+    rating: 4.9,
   },
   {
     quote:
@@ -44,7 +43,7 @@ const testimonials = [
     author: "Rayeesa Khan",
     role: "Founder",
     company: "Q by Rayeesa",
-    rating: 5,
+    rating: 4.8,
   },
   {
     quote:
@@ -60,8 +59,20 @@ const testimonials = [
     author: "David Wong",
     role: "CTO",
     company: "OnMyWay AI",
-    rating: 5,
+    rating: 4.9,
   },
+];
+
+// Client companies (merged from former client-logos section)
+const clients = [
+  "CoolTech International",
+  "Ginger Designs",
+  "La Mirage",
+  "OnMyWay AI",
+  "EaseMyFly",
+  "GrabToGo",
+  "Q by Rayeesa",
+  "AA Rent A Car",
 ];
 
 function TestimonialCard({
@@ -77,27 +88,36 @@ function TestimonialCard({
   company: string;
   rating: number;
 }) {
+  const fullStars = Math.floor(rating);
+  const hasHalf = rating % 1 >= 0.5;
+
   return (
     <div className="flex-shrink-0 w-[350px] md:w-[400px] mx-3">
       <div className="h-full p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-sm hover:bg-white/[0.04] hover:border-[#FF6A37]/20 transition-all duration-300">
-        {/* Stars */}
-        <div className="flex gap-1 mb-4">
-          {Array.from({ length: rating }).map((_, i) => (
+        {/* Stars with varied ratings for realism */}
+        <div className="flex items-center gap-1 mb-4">
+          {Array.from({ length: 5 }).map((_, i) => (
             <Star
               key={i}
-              className="w-4 h-4 fill-[#FF6A37] text-[#FF6A37]"
+              className={`w-4 h-4 ${
+                i < fullStars
+                  ? "fill-[#FF6A37] text-[#FF6A37]"
+                  : i === fullStars && hasHalf
+                  ? "fill-[#FF6A37]/50 text-[#FF6A37]"
+                  : "text-foreground-subtle"
+              }`}
             />
           ))}
+          <span className="text-xs text-foreground-muted ml-1">{rating}</span>
         </div>
 
         {/* Quote */}
-        <div className="relative mb-6">
-          <p className="text-foreground-muted leading-relaxed">{quote}</p>
-        </div>
+        <blockquote className="text-foreground-muted leading-relaxed mb-6">
+          &ldquo;{quote}&rdquo;
+        </blockquote>
 
-        {/* Author */}
+        {/* Author with company badge */}
         <div className="flex items-center gap-4">
-          {/* Avatar */}
           <div className="w-12 h-12 rounded-full bg-[#FF6A37]/10 border border-[#FF6A37]/20 flex items-center justify-center">
             <span className="text-lg font-semibold text-[#FF6A37]">
               {author.charAt(0)}
@@ -106,7 +126,8 @@ function TestimonialCard({
           <div>
             <p className="font-semibold text-foreground">{author}</p>
             <p className="text-sm text-foreground-muted">
-              {role}, {company}
+              {role},{" "}
+              <span className="text-[#FF6A37]/70">{company}</span>
             </p>
           </div>
         </div>
@@ -115,25 +136,58 @@ function TestimonialCard({
   );
 }
 
-function MarqueeRow({
+function GSAPMarquee({
   items,
   direction = "left",
-  duration = 40,
+  speed = 50,
 }: {
   items: typeof testimonials;
   direction?: "left" | "right";
-  duration?: number;
+  speed?: number;
 }) {
-  const shouldReduceMotion = useReducedMotion();
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
 
-  // Duplicate items for seamless loop
-  const duplicatedItems = [...items, ...items];
+  useEffect(() => setMounted(true), []);
 
-  if (shouldReduceMotion) {
+  useEffect(() => {
+    if (!mounted || prefersReducedMotion() || !trackRef.current) return;
+
+    const track = trackRef.current;
+    const totalWidth = track.scrollWidth / 3; // We tripled the items
+
+    // Set initial position for reverse direction
+    if (direction === "right") {
+      gsap.set(track, { x: -totalWidth });
+    }
+
+    const tl = gsap.timeline({ repeat: -1 });
+
+    if (direction === "left") {
+      tl.to(track, {
+        x: -totalWidth,
+        duration: items.length * (speed / 10),
+        ease: "none",
+      });
+    } else {
+      tl.to(track, {
+        x: 0,
+        duration: items.length * (speed / 10),
+        ease: "none",
+      });
+    }
+
+    return () => { tl.kill(); };
+  }, [mounted, direction, items.length, speed]);
+
+  // Triple items for seamless loop
+  const tripled = [...items, ...items, ...items];
+
+  if (!mounted) {
     return (
       <div className="flex overflow-hidden py-4">
-        {items.map((testimonial, index) => (
-          <TestimonialCard key={index} {...testimonial} />
+        {items.map((t, i) => (
+          <TestimonialCard key={i} {...t} />
         ))}
       </div>
     );
@@ -141,35 +195,113 @@ function MarqueeRow({
 
   return (
     <div className="flex overflow-hidden py-4">
-      <motion.div
-        className="flex"
-        animate={{
-          x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
-        }}
-        transition={{
-          duration,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      >
-        {duplicatedItems.map((testimonial, index) => (
+      <div ref={trackRef} className="flex will-change-transform">
+        {tripled.map((testimonial, index) => (
           <TestimonialCard key={index} {...testimonial} />
         ))}
-      </motion.div>
+      </div>
+    </div>
+  );
+}
+
+function ClientTicker() {
+  const tickerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (!mounted || prefersReducedMotion() || !tickerRef.current) return;
+
+    const track = tickerRef.current;
+    const width = track.scrollWidth / 3;
+
+    const tl = gsap.timeline({ repeat: -1 });
+    tl.to(track, {
+      x: -width,
+      duration: 20,
+      ease: "none",
+    });
+
+    return () => { tl.kill(); };
+  }, [mounted]);
+
+  const tripled = [...clients, ...clients, ...clients];
+
+  return (
+    <div className="overflow-hidden py-6 relative">
+      {/* Fade edges */}
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+
+      <div ref={tickerRef} className="flex will-change-transform">
+        {tripled.map((name, i) => (
+          <span
+            key={i}
+            className="flex-shrink-0 mx-6 md:mx-10 text-base md:text-lg font-medium text-foreground-muted/40 hover:text-foreground-muted/70 transition-colors duration-300 whitespace-nowrap"
+          >
+            {name}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
 
 export function Testimonials() {
-  // Featured spotlight quote — first testimonial
+  const sectionRef = useRef<HTMLElement>(null);
   const spotlight = testimonials[0];
-  // Remaining for marquee
   const firstRow = testimonials.slice(1, 4);
   const secondRow = testimonials.slice(4);
 
+  // Header + spotlight entrance animation
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+
+      const init = async () => {
+        await registerScrollTrigger();
+
+        gsap.fromTo(
+          "[data-test-header]",
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+            },
+          }
+        );
+
+        gsap.fromTo(
+          "[data-spotlight]",
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: 0.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 75%",
+            },
+          }
+        );
+      };
+      init();
+    },
+    { scope: sectionRef }
+  );
+
   return (
     <section
-      className="py-24 md:py-32 bg-background relative overflow-hidden"
+      ref={sectionRef}
+      className="py-32 md:py-44 bg-background relative overflow-hidden"
       aria-labelledby="testimonials-title"
       data-testid="testimonials-section"
     >
@@ -177,9 +309,9 @@ export function Testimonials() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px]" />
 
       <div className="container mx-auto px-6 mb-16 relative z-10">
-        <AnimatedSection className="text-center mb-16">
+        <div data-test-header className="text-center mb-16">
           <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
-            // CLIENT TESTIMONIALS
+            Client Testimonials
           </span>
           <h2
             id="testimonials-title"
@@ -190,12 +322,11 @@ export function Testimonials() {
               Clients Say
             </span>
           </h2>
-        </AnimatedSection>
+        </div>
 
         {/* Featured spotlight quote */}
-        <AnimatedSection className="max-w-4xl mx-auto text-center mb-8">
+        <div data-spotlight className="max-w-4xl mx-auto text-center mb-8">
           <div className="relative py-8">
-            {/* Decorative coral quotation marks */}
             <span
               className="block text-[#FF6A37]/20 font-serif leading-none select-none"
               style={{ fontSize: "clamp(4rem, 10vw, 8rem)" }}
@@ -232,19 +363,27 @@ export function Testimonials() {
               </div>
             </div>
           </div>
-        </AnimatedSection>
+        </div>
       </div>
 
-      {/* Marquee Rows */}
+      {/* Marquee Rows — now GSAP-powered */}
       <div className="relative">
         {/* Fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background-secondary to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background-secondary to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
         <div className="space-y-4">
-          <MarqueeRow items={firstRow} direction="left" duration={35} />
-          <MarqueeRow items={secondRow} direction="right" duration={40} />
+          <GSAPMarquee items={firstRow} direction="left" speed={50} />
+          <GSAPMarquee items={secondRow} direction="right" speed={55} />
         </div>
+      </div>
+
+      {/* Client ticker — absorbed from client-logos section */}
+      <div className="mt-12 md:mt-16">
+        <p className="text-center text-xs text-foreground-subtle uppercase tracking-[0.2em] mb-4 font-mono">
+          Trusted by innovative companies
+        </p>
+        <ClientTicker />
       </div>
     </section>
   );
