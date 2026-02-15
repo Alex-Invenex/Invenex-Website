@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ExternalLink, ArrowRight, Utensils, Building2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
@@ -23,6 +23,7 @@ const CATERFLOW_FEATURES = [
 
 export function ProductsPreview() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [tiltHovered, setTiltHovered] = useState(false);
 
   useGSAP(
     () => {
@@ -200,11 +201,14 @@ export function ProductsPreview() {
 
               {/* App screenshot placeholder with 3D perspective */}
               <div
-                className="relative w-full max-w-[400px] aspect-[4/3] rounded-xl overflow-hidden shadow-2xl shadow-[#FF6A37]/10 transition-transform duration-500 hover:rotate-0"
+                className="relative w-full max-w-[400px] aspect-[4/3] rounded-xl overflow-hidden shadow-2xl shadow-[#FF6A37]/10 transition-transform duration-500"
                 style={{
-                  perspective: "1000px",
-                  transform: "perspective(1000px) rotateY(-5deg) rotateX(2deg)",
+                  transform: tiltHovered
+                    ? "perspective(1000px) rotateY(0deg) rotateX(0deg)"
+                    : "perspective(1000px) rotateY(-5deg) rotateX(2deg)",
                 }}
+                onMouseEnter={() => setTiltHovered(true)}
+                onMouseLeave={() => setTiltHovered(false)}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-background-tertiary to-background-secondary flex items-center justify-center">
                   <div className="text-center">

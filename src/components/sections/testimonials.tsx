@@ -154,30 +154,45 @@ function GSAPMarquee({
     if (!mounted || prefersReducedMotion() || !trackRef.current) return;
 
     const track = trackRef.current;
-    const totalWidth = track.scrollWidth / 3; // We tripled the items
+    let tl: gsap.core.Timeline;
 
-    // Set initial position for reverse direction
-    if (direction === "right") {
-      gsap.set(track, { x: -totalWidth });
-    }
+    const buildMarquee = () => {
+      tl?.kill();
+      gsap.set(track, { x: 0 });
 
-    const tl = gsap.timeline({ repeat: -1 });
+      const totalWidth = track.scrollWidth / 3; // We tripled the items
 
-    if (direction === "left") {
-      tl.to(track, {
-        x: -totalWidth,
-        duration: items.length * (speed / 10),
-        ease: "none",
-      });
-    } else {
-      tl.to(track, {
-        x: 0,
-        duration: items.length * (speed / 10),
-        ease: "none",
-      });
-    }
+      // Set initial position for reverse direction
+      if (direction === "right") {
+        gsap.set(track, { x: -totalWidth });
+      }
 
-    return () => { tl.kill(); };
+      tl = gsap.timeline({ repeat: -1 });
+
+      if (direction === "left") {
+        tl.to(track, {
+          x: -totalWidth,
+          duration: items.length * (speed / 10),
+          ease: "none",
+        });
+      } else {
+        tl.to(track, {
+          x: 0,
+          duration: items.length * (speed / 10),
+          ease: "none",
+        });
+      }
+    };
+
+    buildMarquee();
+
+    const onResize = () => buildMarquee();
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      tl?.kill();
+      window.removeEventListener("resize", onResize);
+    };
   }, [mounted, direction, items.length, speed]);
 
   // Triple items for seamless loop
