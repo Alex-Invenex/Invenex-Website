@@ -21,8 +21,8 @@ const services = [
       "Custom websites and web applications built with cutting-edge technologies for optimal performance and user experience.",
     icon: Globe,
     href: "/services/web-development",
-    gradient: "from-blue-500/20 via-cyan-500/10 to-transparent",
-    iconColor: "text-blue-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
   {
     title: "Mobile App Development",
@@ -39,8 +39,8 @@ const services = [
       "Enterprise platforms and SaaS solutions designed for scale, reliability, and seamless growth.",
     icon: Layers,
     href: "/services/platform-development",
-    gradient: "from-purple-500/20 via-violet-500/10 to-transparent",
-    iconColor: "text-purple-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
   {
     title: "E-Commerce Solutions",
@@ -100,14 +100,14 @@ const process = [
 ];
 
 const technologies = [
-  { name: "React", logo: "⚛️" },
-  { name: "Next.js", logo: "▲" },
-  { name: "Node.js", logo: "🟢" },
-  { name: "TypeScript", logo: "📘" },
-  { name: "Python", logo: "🐍" },
-  { name: "AWS", logo: "☁️" },
-  { name: "PostgreSQL", logo: "🐘" },
-  { name: "MongoDB", logo: "🍃" },
+  { name: "React", abbr: "Re" },
+  { name: "Next.js", abbr: "N" },
+  { name: "Node.js", abbr: "No" },
+  { name: "TypeScript", abbr: "TS" },
+  { name: "Python", abbr: "Py" },
+  { name: "AWS", abbr: "AW" },
+  { name: "PostgreSQL", abbr: "Pg" },
+  { name: "MongoDB", abbr: "Mg" },
 ];
 
 export function ServicesClient() {
@@ -120,9 +120,9 @@ export function ServicesClient() {
       >
         {/* Animated gradient background */}
         <div className="absolute inset-0" aria-hidden="true">
-          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse-glow" />
+          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-coral-500/20 rounded-full blur-[120px] animate-pulse-glow" />
           <div
-            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-500/15 rounded-full blur-[100px] animate-pulse-glow"
+            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-coral-500/15 rounded-full blur-[100px] animate-pulse-glow"
             style={{ animationDelay: "1s" }}
           />
         </div>
@@ -154,8 +154,8 @@ export function ServicesClient() {
         className="py-24 bg-background relative overflow-hidden"
       >
         {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[150px]" aria-hidden="true" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[120px]" aria-hidden="true" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-coral-500/5 rounded-full blur-[150px]" aria-hidden="true" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-coral-400/5 rounded-full blur-[120px]" aria-hidden="true" />
 
         <div className="container mx-auto px-6 relative z-10">
           <h2 id="services-grid-heading" className="sr-only">
@@ -280,7 +280,7 @@ export function ServicesClient() {
           <div className="relative flex flex-col md:flex-row justify-between gap-8">
             {/* Connector line for desktop */}
             <div
-              className="hidden md:block absolute top-7 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-violet-500/30 via-purple-500/30 to-blue-500/30"
+              className="hidden md:block absolute top-7 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-coral-500/30 via-coral-400/30 to-coral-500/30"
               aria-hidden="true"
             />
 
@@ -292,7 +292,7 @@ export function ServicesClient() {
               >
                 <div className="text-center">
                   {/* Step number */}
-                  <div className="relative z-10 w-14 h-14 rounded-full bg-gradient-to-r from-violet-500 via-purple-500 to-blue-500 flex items-center justify-center mx-auto mb-4 font-bold text-white text-lg shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+                  <div className="relative z-10 w-14 h-14 rounded-full bg-gradient-to-r from-coral-500 via-coral-400 to-coral-500 flex items-center justify-center mx-auto mb-4 font-bold text-white text-lg shadow-[0_0_20px_rgba(255,106,55,0.3)]">
                     {step.step}
                   </div>
 
@@ -325,14 +325,13 @@ export function ServicesClient() {
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-6">
             {technologies.map((tech, i) => (
               <AnimatedSection key={tech.name} delay={i * 0.05}>
-                <div className="group p-6 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 text-center">
-                  <span
-                    className="text-3xl block mb-3 grayscale group-hover:grayscale-0 transition-all duration-300"
-                    role="img"
-                    aria-label={`${tech.name} logo`}
+                <div className="group p-6 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-coral-500/20 transition-all duration-300 text-center">
+                  <div
+                    className="w-12 h-12 rounded-lg bg-coral-500/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-3 group-hover:bg-coral-500/20 transition-colors duration-300"
+                    aria-hidden="true"
                   >
-                    {tech.logo}
-                  </span>
+                    <span className="text-sm font-bold text-coral-500">{tech.abbr}</span>
+                  </div>
                   <span className="text-sm text-foreground-muted group-hover:text-foreground transition-colors">
                     {tech.name}
                   </span>
@@ -350,7 +349,7 @@ export function ServicesClient() {
       >
         {/* Background glow */}
         <div className="absolute inset-0" aria-hidden="true">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-purple-500/10 rounded-full blur-[120px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-coral-500/10 rounded-full blur-[120px]" />
         </div>
 
         <div className="container mx-auto px-6 text-center relative z-10">

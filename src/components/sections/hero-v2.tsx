@@ -186,20 +186,20 @@ export function HeroV2() {
       })
 
       // ── Scroll-out parallax ──
-      // Gentle fade — text stays visible much longer
+      // All hero content fades together as one group with extended range
       const initScrollOut = async () => {
         const { registerScrollTrigger } = await import('@/lib/gsap')
         await registerScrollTrigger()
 
-        // Text parallax out (gentler range)
-        gsap.to('[data-a="word"], [data-a="tag"], [data-a="border"], [data-a="desc"], [data-a="cta"]', {
-          y: -40,
+        // Fade ALL hero content together — text stays visible until section is nearly off-screen
+        gsap.to('[data-a="word"], [data-a="tag"], [data-a="border"], [data-a="desc"], [data-a="cta"], [data-a="stat"], [data-a="bottom"]', {
+          y: -20,
           opacity: 0,
           ease: 'none',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: '70% center',
-            end: 'bottom -20%',
+            start: '80% center',
+            end: 'bottom -30%',
             scrub: 1,
           },
         })
@@ -209,34 +209,8 @@ export function HeroV2() {
           opacity: 0.3,
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: '80% center',
-            end: 'bottom -10%',
-            scrub: 1,
-          },
-        })
-
-        // Stat cards fade gently (separate from text)
-        gsap.to('[data-a="stat"]', {
-          opacity: 0,
-          y: -20,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: '75% center',
-            end: 'bottom -10%',
-            scrub: 1,
-          },
-        })
-
-        // Bottom bar fades first
-        gsap.to('[data-a="bottom"]', {
-          opacity: 0,
-          y: -15,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: '60% center',
-            end: '85% top',
+            start: '85% center',
+            end: 'bottom -20%',
             scrub: 1,
           },
         })
@@ -384,7 +358,8 @@ export function HeroV2() {
             {/* Monospace agency tag */}
             <p
               data-a="tag"
-              className="opacity-0 text-foreground-muted text-xs md:text-sm tracking-[0.2em] uppercase mb-8 font-mono"
+              data-animate
+              className="text-foreground-muted text-xs md:text-sm tracking-[0.2em] uppercase mb-8 font-mono"
             >
               // Creative Agency — Kochi, India
             </p>
@@ -397,7 +372,7 @@ export function HeroV2() {
               {/* WE — thin weight for dramatic contrast */}
               <span
                 data-a="word"
-                className="block text-foreground/50 opacity-0 will-change-transform"
+                className="block text-foreground/50 will-change-transform" data-animate
                 style={{
                   fontSize: 'clamp(1.8rem, 4vw, 3.5rem)',
                   fontWeight: 200,
@@ -409,7 +384,7 @@ export function HeroV2() {
               {/* CRAFT — maximum impact */}
               <span
                 data-a="word"
-                className="block text-foreground opacity-0 will-change-transform"
+                className="block text-foreground will-change-transform" data-animate
                 style={{
                   fontSize: 'clamp(3rem, 6.5vw, 6.5rem)',
                   fontWeight: 900,
@@ -421,7 +396,7 @@ export function HeroV2() {
               {/* DIGITAL — orange gradient */}
               <span
                 data-a="word"
-                className="block opacity-0 will-change-transform"
+                className="block will-change-transform" data-animate
                 style={{
                   fontSize: 'clamp(3rem, 6.5vw, 6.5rem)',
                   fontWeight: 900,
@@ -438,7 +413,7 @@ export function HeroV2() {
               {/* FUTURES. — with orange period */}
               <span
                 data-a="word"
-                className="block text-foreground opacity-0 will-change-transform"
+                className="block text-foreground will-change-transform" data-animate
                 style={{
                   fontSize: 'clamp(3rem, 6.5vw, 6.5rem)',
                   fontWeight: 900,
@@ -457,7 +432,7 @@ export function HeroV2() {
               />
               <p
                 data-a="desc"
-                className="opacity-0 pl-4 md:pl-5 text-base md:text-lg lg:text-xl text-foreground-muted max-w-lg leading-relaxed"
+                className="pl-4 md:pl-5 text-base md:text-lg lg:text-xl text-foreground-muted max-w-lg leading-relaxed" data-animate
               >
                 Premium web experiences, mobile apps &amp; platforms for
                 businesses that demand excellence and innovation.
@@ -466,7 +441,7 @@ export function HeroV2() {
 
             {/* CTA row */}
             <div className="mt-10 md:mt-12 flex flex-col sm:flex-row items-start gap-4">
-              <div data-a="cta" className="opacity-0">
+              <div data-a="cta" data-animate>
                 <Button
                   asChild
                   variant="coral"
@@ -479,7 +454,7 @@ export function HeroV2() {
                   </Link>
                 </Button>
               </div>
-              <div data-a="cta" className="opacity-0">
+              <div data-a="cta" data-animate>
                 <Button
                   asChild
                   variant="ghost"
@@ -586,7 +561,8 @@ export function HeroV2() {
                 key={stat.label}
                 data-a="stat"
                 data-p={`s${i}`}
-                className={`absolute opacity-0 will-change-transform backdrop-blur-xl bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 md:px-5 md:py-4 transition-all duration-300 hover:bg-white/[0.1] hover:border-white/[0.15] hover:shadow-[0_0_30px_rgba(255,106,55,0.1)] ${STAT_POSITIONS[i]}`}
+                data-animate
+                className={`absolute will-change-transform backdrop-blur-xl bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 md:px-5 md:py-4 transition-all duration-300 hover:bg-white/[0.1] hover:border-white/[0.15] hover:shadow-[0_0_30px_rgba(255,106,55,0.1)] ${STAT_POSITIONS[i]}`}
               >
                 {/* Status indicator dot */}
                 <div className="flex items-center gap-1.5 mb-1">
@@ -616,7 +592,8 @@ export function HeroV2() {
         {/* ── Bottom bar ── */}
         <div
           data-a="bottom"
-          className="opacity-0 mt-16 md:mt-20 flex items-center justify-between"
+          data-animate
+          className="mt-16 md:mt-20 flex items-center justify-between"
         >
           {/* Scroll indicator */}
           <div className="flex items-center gap-3">

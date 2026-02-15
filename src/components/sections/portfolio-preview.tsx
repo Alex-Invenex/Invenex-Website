@@ -108,7 +108,7 @@ function ProjectCard({
   const watermarkText = project.title.split(" ")[0].toUpperCase();
 
   return (
-    <div data-portfolio-card>
+    <div data-portfolio-card data-animate>
       <Link href={project.href} className="group block relative">
         <div
           ref={cardRef}
@@ -286,6 +286,7 @@ export function PortfolioPreview() {
         {/* Section Header */}
         <div
           data-portfolio-header
+          data-animate
           className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16"
         >
           <div>

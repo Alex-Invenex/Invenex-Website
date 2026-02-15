@@ -1,6 +1,7 @@
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { TeamGrid } from "@/components/sections/team-grid";
 import { generatePageMetadata } from "@/lib/metadata";
+import { Target, Handshake, Lightbulb, Zap, Rocket } from "lucide-react";
 
 export const metadata = generatePageMetadata({
   title: "About Us",
@@ -11,21 +12,21 @@ export const metadata = generatePageMetadata({
 
 const values = [
   {
-    icon: "🎯",
+    icon: Target,
     title: "Excellence",
     description: "We deliver nothing but the best",
   },
   {
-    icon: "🤝",
+    icon: Handshake,
     title: "Partnership",
     description: "Your success is our success",
   },
   {
-    icon: "💡",
+    icon: Lightbulb,
     title: "Innovation",
     description: "Always pushing boundaries",
   },
-  { icon: "⚡", title: "Speed", description: "Fast delivery without compromise" },
+  { icon: Zap, title: "Speed", description: "Fast delivery without compromise" },
 ];
 
 export default function AboutPage() {
@@ -35,9 +36,9 @@ export default function AboutPage() {
       <section className="relative pt-32 pb-16 overflow-hidden" aria-labelledby="about-hero-title" data-testid="about-hero-section">
         {/* Animated gradient background */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse-glow" />
+          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-coral-500/20 rounded-full blur-[120px] animate-pulse-glow" />
           <div
-            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-500/15 rounded-full blur-[100px] animate-pulse-glow"
+            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-coral-500/15 rounded-full blur-[100px] animate-pulse-glow"
             style={{ animationDelay: "1s" }}
           />
         </div>
@@ -84,9 +85,11 @@ export default function AboutPage() {
             </AnimatedSection>
             <AnimatedSection delay={0.1} variant="slideRight">
               {/* Placeholder for image/illustration */}
-              <div className="aspect-video bg-background-secondary rounded-2xl flex items-center justify-center">
+              <div className="aspect-video bg-background-secondary rounded-2xl flex items-center justify-center border border-white/5">
                 <div className="text-center text-foreground-muted">
-                  <div className="text-6xl mb-4">🚀</div>
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-coral-500/20 to-coral-600/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
+                    <Rocket className="w-10 h-10 text-coral-500" aria-hidden="true" />
+                  </div>
                   <p className="text-sm">Innovation at work</p>
                 </div>
               </div>
@@ -105,17 +108,22 @@ export default function AboutPage() {
             </p>
           </AnimatedSection>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, i) => (
-              <AnimatedSection key={value.title} delay={i * 0.1}>
-                <div className="text-center p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-white/5 hover:border-white/10 transition-colors">
-                  <span className="text-4xl mb-4 block">{value.icon}</span>
-                  <h3 className="font-semibold mb-2">{value.title}</h3>
-                  <p className="text-sm text-foreground-muted">
-                    {value.description}
-                  </p>
-                </div>
-              </AnimatedSection>
-            ))}
+            {values.map((value, i) => {
+              const Icon = value.icon;
+              return (
+                <AnimatedSection key={value.title} delay={i * 0.1}>
+                  <div className="text-center p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-white/5 hover:border-white/10 transition-colors">
+                    <div className="w-14 h-14 rounded-xl bg-coral-500/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
+                      <Icon className="w-7 h-7 text-coral-500" aria-hidden="true" />
+                    </div>
+                    <h3 className="font-semibold mb-2">{value.title}</h3>
+                    <p className="text-sm text-foreground-muted">
+                      {value.description}
+                    </p>
+                  </div>
+                </AnimatedSection>
+              );
+            })}
           </div>
         </div>
       </section>

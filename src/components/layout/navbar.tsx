@@ -12,7 +12,6 @@ import {
   Share2,
   Lightbulb,
   ChevronDown,
-  Sparkles,
   ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -34,11 +33,11 @@ const serviceIcons: Record<
 };
 
 const serviceColors: Record<string, string> = {
-  "/services/web-development": "from-blue-500/20 to-cyan-500/20 text-blue-400",
+  "/services/web-development": "from-coral-500/20 to-coral-400/20 text-coral-400",
   "/services/mobile-development":
     "from-green-500/20 to-emerald-500/20 text-green-400",
   "/services/platform-development":
-    "from-purple-500/20 to-violet-500/20 text-purple-400",
+    "from-coral-500/20 to-coral-400/20 text-coral-400",
   "/services/ecommerce": "from-orange-500/20 to-amber-500/20 text-orange-400",
   "/services/social-media": "from-pink-500/20 to-rose-500/20 text-pink-400",
   "/services/digital-strategy":
@@ -117,7 +116,7 @@ export function Navbar() {
               whileHover={{ scale: 1.05, rotate: 5 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <Sparkles className="w-5 h-5 text-white" />
+              <span className="text-sm font-black text-white tracking-tight leading-none">IX</span>
             </motion.div>
             <span className="text-xl font-bold text-gradient">
               {siteConfig.name}

@@ -212,7 +212,7 @@ export function ServiceDetailClient({ service }: ServiceDetailClientProps) {
           <div className="relative flex flex-col md:flex-row justify-between gap-8">
             {/* Connector line for desktop */}
             <div
-              className="hidden md:block absolute top-7 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-violet-500/30 via-purple-500/30 to-blue-500/30"
+              className="hidden md:block absolute top-7 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-coral-500/30 via-coral-400/30 to-coral-500/30"
               aria-hidden="true"
             />
 
@@ -224,7 +224,7 @@ export function ServiceDetailClient({ service }: ServiceDetailClientProps) {
               >
                 <div className="text-center" data-testid="process-step">
                   {/* Step number */}
-                  <div className="relative z-10 w-14 h-14 rounded-full bg-gradient-to-r from-violet-500 via-purple-500 to-blue-500 flex items-center justify-center mx-auto mb-4 font-bold text-white text-lg shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+                  <div className="relative z-10 w-14 h-14 rounded-full bg-gradient-to-r from-coral-500 via-coral-400 to-coral-500 flex items-center justify-center mx-auto mb-4 font-bold text-white text-lg shadow-[0_0_20px_rgba(255,106,55,0.3)]">
                     {step.step}
                   </div>
 

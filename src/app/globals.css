@@ -145,6 +145,16 @@ html.lenis body {
 }
 
 /* ============================================
+   GSAP Animation Fallback (A3)
+   Content is visible by default (no JS / slow JS).
+   Once JS loads, elements with [data-animate] hide
+   so GSAP can reveal them via ScrollTrigger.
+   ============================================ */
+html.js-ready [data-animate] {
+  opacity: 0;
+}
+
+/* ============================================
    Premium Design Effects
    ============================================ */
 
@@ -387,7 +397,7 @@ html.lenis body {
   .gradient-border {
     position: relative;
     background: linear-gradient(var(--color-background-secondary), var(--color-background-secondary)) padding-box,
-                linear-gradient(135deg, rgba(167, 139, 250, 0.5), rgba(96, 165, 250, 0.5), rgba(52, 211, 153, 0.3)) border-box;
+                linear-gradient(135deg, rgba(255, 106, 55, 0.5), rgba(255, 140, 90, 0.5), rgba(255, 155, 117, 0.3)) border-box;
     border: 1px solid transparent;
   }
 
@@ -403,7 +413,7 @@ html.lenis body {
     position: absolute;
     inset: -1px;
     border-radius: 17px;
-    background: linear-gradient(135deg, #a78bfa, #60a5fa, #34d399, #a78bfa);
+    background: linear-gradient(135deg, var(--color-coral-500), var(--color-coral-400), var(--color-coral-300), var(--color-coral-500));
     background-size: 300% 300%;
     animation: gradient-shift 4s ease infinite;
     z-index: -1;
@@ -416,14 +426,6 @@ html.lenis body {
   }
 
   /* Glow Effects */
-  .glow-purple {
-    box-shadow: 0 0 40px rgba(167, 139, 250, 0.3);
-  }
-
-  .glow-blue {
-    box-shadow: 0 0 40px rgba(96, 165, 250, 0.3);
-  }
-
   .glow-white {
     box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
   }

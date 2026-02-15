@@ -242,7 +242,7 @@ export function ServicesPreview() {
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
-        <div data-service-header className="opacity-0 flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 md:mb-20">
+        <div data-service-header data-animate className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 md:mb-20">
           <div>
             <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
               Services &amp; Expertise
@@ -267,7 +267,7 @@ export function ServicesPreview() {
         {/* Editorial service rows */}
         <div>
           {services.map((service, index) => (
-            <div key={service.title} data-service-row className="opacity-0">
+            <div key={service.title} data-service-row data-animate>
               <ServiceRow
                 service={service}
                 index={index}

@@ -45,8 +45,8 @@ export function CaseStudyClient({ project, relatedProjects }: CaseStudyClientPro
       >
         {/* Animated gradient background */}
         <div className="absolute inset-0" aria-hidden="true">
-          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-transparent rounded-full blur-[120px] animate-pulse-glow" />
-          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-blue-500/10 via-cyan-500/5 to-transparent rounded-full blur-[100px]" />
+          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-coral-500/10 via-coral-400/5 to-transparent rounded-full blur-[120px] animate-pulse-glow" />
+          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-coral-500/10 via-coral-400/5 to-transparent rounded-full blur-[100px]" />
         </div>
 
         <div className="container mx-auto px-6 relative z-10">
@@ -321,7 +321,7 @@ export function CaseStudyClient({ project, relatedProjects }: CaseStudyClientPro
       >
         {/* Background glow */}
         <div className="absolute inset-0" aria-hidden="true">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-transparent rounded-full blur-[120px] opacity-50" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-br from-coral-500/10 via-coral-400/5 to-transparent rounded-full blur-[120px] opacity-50" />
         </div>
 
         <div className="container mx-auto px-6 text-center relative z-10">

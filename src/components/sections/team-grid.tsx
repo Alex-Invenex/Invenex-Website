@@ -69,12 +69,12 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
       <div className="aspect-square bg-background-secondary rounded-2xl overflow-hidden mb-4 relative">
         {/* Loading skeleton */}
         {isLoading && !hasError && (
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-background-secondary to-blue-500/10 animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-br from-coral-500/10 via-background-secondary to-coral-400/10 animate-pulse" />
         )}
 
         {/* Error fallback with gradient placeholder */}
         {hasError ? (
-          <div className="w-full h-full bg-gradient-to-br from-purple-500/10 via-background-secondary to-blue-500/10 flex items-center justify-center">
+          <div className="w-full h-full bg-gradient-to-br from-coral-500/10 via-background-secondary to-coral-400/10 flex items-center justify-center">
             <span className="text-5xl text-foreground-muted/50">👤</span>
           </div>
         ) : (

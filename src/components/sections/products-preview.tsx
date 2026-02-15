@@ -118,7 +118,7 @@ export function ProductsPreview() {
       <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-coral-500/[0.03] rounded-full blur-[150px] -translate-y-1/2" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div data-prod="header" className="opacity-0 mb-16">
+        <div data-prod="header" data-animate className="mb-16">
           <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
             Our Products
           </span>
@@ -140,7 +140,7 @@ export function ProductsPreview() {
         {/* CaterFlow — Full-width showcase */}
         <div
           data-prod="showcase"
-          className="opacity-0 relative rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-coral-500/20 transition-all duration-500 mb-8"
+          className="relative rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-coral-500/20 transition-all duration-500 mb-8" data-animate
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Left: Content */}
@@ -244,7 +244,7 @@ export function ProductsPreview() {
         {/* ERP — Coming Soon teaser */}
         <div
           data-prod="erp"
-          className="opacity-0 relative rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden p-8 md:p-10 hover:border-amber-500/20 transition-all duration-500"
+          className="relative rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden p-8 md:p-10 hover:border-amber-500/20 transition-all duration-500" data-animate
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="flex items-start gap-4">

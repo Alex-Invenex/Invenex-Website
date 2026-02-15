@@ -268,7 +268,7 @@ export function WhyChooseUs() {
 
       {/* Header */}
       <div className="pt-32 md:pt-44 pb-12 md:pb-16 container mx-auto px-6 relative z-10">
-        <div data-hw-header className="opacity-0">
+        <div data-hw-header data-animate>
           <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
             Our Process
           </span>
@@ -296,32 +296,15 @@ export function WhyChooseUs() {
         <div className="flex">
           {/* Sticky left context panel */}
           <div
-            className="w-[35%] shrink-0 pl-6 lg:pl-[calc((100vw-1280px)/2+1.5rem)]"
+            className="w-[35%] shrink-0 pl-6 lg:pl-[calc((100vw-1280px)/2+1.5rem)] relative z-0"
           >
             <div
               data-hw-context
-              className="opacity-0 sticky top-[40vh] pb-20"
+              className="sticky top-[40vh] pb-20" data-animate
             >
-              {/* Large step counter */}
-              <div className="mb-6">
-                <span
-                  className="block font-mono leading-none select-none transition-all duration-500"
-                  style={{
-                    fontSize: "clamp(4rem, 10vw, 8rem)",
-                    fontWeight: 200,
-                    WebkitTextStroke: "1.5px var(--color-coral-500)",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                  data-hw-counter
-                  aria-hidden="true"
-                >
-                  {steps[activeStep].number}
-                </span>
-              </div>
-
               {/* Active step title */}
               <h3
-                className="text-2xl lg:text-3xl font-semibold tracking-tight text-white mb-2 transition-all duration-300"
+                className="text-2xl lg:text-3xl font-semibold tracking-tight text-white mb-3 transition-all duration-300"
                 data-hw-step-title
               >
                 {steps[activeStep].title}
@@ -365,7 +348,7 @@ export function WhyChooseUs() {
           {/* Scrolling right card track */}
           <div
             ref={trackRef}
-            className="flex gap-8 pr-[20vw]"
+            className="flex gap-8 pr-[20vw] relative z-10"
             style={{ width: "fit-content" }}
           >
             {steps.map((step) => (

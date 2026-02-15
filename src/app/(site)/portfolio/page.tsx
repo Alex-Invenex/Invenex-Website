@@ -23,8 +23,8 @@ export default function PortfolioPage() {
         data-testid="portfolio-hero"
       >
         {/* Background decoration */}
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[150px]" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-coral-500/5 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-coral-400/5 rounded-full blur-[120px]" />
 
         <div className="container mx-auto px-6 text-center relative z-10">
           <AnimatedSection>

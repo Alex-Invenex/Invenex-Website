@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { UtensilsCrossed, Building2 } from 'lucide-react'
 import { AnimatedSection } from '@/components/ui/animated-section'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -76,7 +77,9 @@ export default function ProductsPage() {
               {/* TODO: Replace with actual CaterFlow screenshot/demo video */}
               <Card className="aspect-video flex items-center justify-center">
                 <div className="text-center text-foreground-muted">
-                  <p className="text-6xl mb-4" aria-hidden="true">🍽️</p>
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-coral-500/20 to-coral-600/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
+                    <UtensilsCrossed className="w-10 h-10 text-coral-500" aria-hidden="true" />
+                  </div>
                   <p>CaterFlow Dashboard Preview</p>
                 </div>
               </Card>
@@ -93,7 +96,9 @@ export default function ProductsPage() {
               {/* TODO: Replace with Invenex ERP teaser visual when available */}
               <Card className="aspect-video flex items-center justify-center bg-gradient-to-br from-foreground/5 to-foreground/10">
                 <div className="text-center">
-                  <p className="text-6xl mb-4" aria-hidden="true">🚀</p>
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-coral-500/20 to-coral-600/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
+                    <Building2 className="w-10 h-10 text-coral-500" aria-hidden="true" />
+                  </div>
                   <p className="text-foreground-muted">Coming Soon</p>
                 </div>
               </Card>

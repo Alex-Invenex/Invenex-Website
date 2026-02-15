@@ -324,7 +324,7 @@ export function Testimonials() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-coral-500/[0.04] rounded-full blur-[150px]" />
 
       <div className="container mx-auto px-6 mb-16 relative z-10">
-        <div data-test-header className="text-center mb-16">
+        <div data-test-header data-animate className="text-center mb-16">
           <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
             Client Testimonials
           </span>
@@ -340,7 +340,7 @@ export function Testimonials() {
         </div>
 
         {/* Featured spotlight quote */}
-        <div data-spotlight className="max-w-4xl mx-auto text-center mb-8">
+        <div data-spotlight data-animate className="max-w-4xl mx-auto text-center mb-8">
           <div className="relative py-8">
             <span
               className="block text-coral-500/20 font-serif leading-none select-none"

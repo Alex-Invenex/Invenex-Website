@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Monitor, Home, BookOpen, Wallet, Building } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { StaggerContainer, StaggerItem } from "@/components/ui/stagger-container";
 import { Card } from "@/components/ui/card";
@@ -16,22 +17,22 @@ export const metadata = generatePageMetadata({
 
 const benefits = [
   {
-    icon: "💻",
+    icon: Monitor,
     title: "Modern Tech Stack",
     description: "Work with Next.js, TypeScript, React, and more",
   },
   {
-    icon: "🏠",
+    icon: Home,
     title: "Flexible Work",
     description: "Remote-friendly with flexible hours",
   },
   {
-    icon: "📚",
+    icon: BookOpen,
     title: "Learning Budget",
     description: "Annual budget for courses and conferences",
   },
   {
-    icon: "💰",
+    icon: Wallet,
     title: "Competitive Pay",
     description: "Market-rate compensation + bonuses",
   },
@@ -59,9 +60,9 @@ export default function CareersPage() {
       >
         {/* Animated gradient background */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse-glow" />
+          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-coral-500/20 rounded-full blur-[120px] animate-pulse-glow" />
           <div
-            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-500/15 rounded-full blur-[100px] animate-pulse-glow"
+            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-coral-500/15 rounded-full blur-[100px] animate-pulse-glow"
             style={{ animationDelay: "1s" }}
           />
         </div>
@@ -117,7 +118,9 @@ export default function CareersPage() {
             <AnimatedSection delay={0.1} variant="slideRight">
               <div className="aspect-video bg-background rounded-2xl flex items-center justify-center border border-border">
                 <div className="text-center text-foreground-muted">
-                  <div className="text-6xl mb-4">🏢</div>
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-coral-500/20 to-coral-600/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
+                    <Building className="w-10 h-10 text-coral-500" aria-hidden="true" />
+                  </div>
                   <p className="text-sm">Our workspace</p>
                 </div>
               </div>
@@ -143,20 +146,25 @@ export default function CareersPage() {
             </p>
           </AnimatedSection>
           <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {benefits.map((benefit) => (
-              <StaggerItem key={benefit.title}>
-                <Card
-                  className="p-6 text-center h-full"
-                  data-testid="benefit-card"
-                >
-                  <span className="text-4xl block mb-4">{benefit.icon}</span>
-                  <h3 className="font-semibold mb-2">{benefit.title}</h3>
-                  <p className="text-sm text-foreground-muted">
-                    {benefit.description}
-                  </p>
-                </Card>
-              </StaggerItem>
-            ))}
+            {benefits.map((benefit) => {
+              const Icon = benefit.icon;
+              return (
+                <StaggerItem key={benefit.title}>
+                  <Card
+                    className="p-6 text-center h-full"
+                    data-testid="benefit-card"
+                  >
+                    <div className="w-14 h-14 rounded-xl bg-coral-500/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
+                      <Icon className="w-7 h-7 text-coral-500" aria-hidden="true" />
+                    </div>
+                    <h3 className="font-semibold mb-2">{benefit.title}</h3>
+                    <p className="text-sm text-foreground-muted">
+                      {benefit.description}
+                    </p>
+                  </Card>
+                </StaggerItem>
+              );
+            })}
           </StaggerContainer>
         </div>
       </section>

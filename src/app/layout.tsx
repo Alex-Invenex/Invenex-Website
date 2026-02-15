@@ -39,6 +39,12 @@ export default function RootLayout({
         {/* Preconnect to external domains for performance */}
         <link rel="preconnect" href="https://cdn.sanity.io" />
         <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+        {/* A3: Add js-ready class so GSAP-animated elements hide only when JS is available */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.classList.add('js-ready');`,
+          }}
+        />
       </head>
       <body className="bg-background text-foreground font-sans min-h-screen">
         <OrganizationSchema />

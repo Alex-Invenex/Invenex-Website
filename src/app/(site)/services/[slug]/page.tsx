@@ -51,8 +51,8 @@ const services: Record<string, ServiceData> = {
       "PostgreSQL",
     ],
     iconName: "globe",
-    gradient: "from-blue-500/20 via-cyan-500/10 to-transparent",
-    iconColor: "text-blue-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
   "mobile-development": {
     title: "Mobile App Development",
@@ -93,8 +93,8 @@ const services: Record<string, ServiceData> = {
     ],
     technologies: ["Next.js", "Node.js", "PostgreSQL", "Redis", "AWS", "Docker"],
     iconName: "layers",
-    gradient: "from-purple-500/20 via-violet-500/10 to-transparent",
-    iconColor: "text-purple-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
   ecommerce: {
     title: "E-Commerce Solutions",

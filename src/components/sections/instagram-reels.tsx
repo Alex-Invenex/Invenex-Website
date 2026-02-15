@@ -87,6 +87,7 @@ function SocialCard({
     <div
       ref={cardRef}
       data-social-card
+      data-animate
       className="relative cursor-pointer group shrink-0"
       style={{
         transform: `rotate(${transform.rotate}deg) translateY(${transform.y}px)`,
@@ -306,7 +307,7 @@ export function InstagramReels() {
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
-        <div data-social-header className="text-center mb-16 md:mb-24">
+        <div data-social-header data-animate className="text-center mb-16 md:mb-24">
           <span className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 block font-mono">
             Follow Along
           </span>

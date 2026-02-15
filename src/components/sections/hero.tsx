@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { AnimatedSection } from "@/components/ui/animated-section";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Zap } from "lucide-react";
 
 export function Hero() {
   return (
@@ -71,7 +71,7 @@ export function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <Sparkles className="w-4 h-4 text-purple-400" />
+            <Zap className="w-4 h-4 text-coral-400" />
             <span className="text-sm text-foreground-muted">Crafting Digital Excellence Since 2020</span>
           </motion.div>
         </AnimatedSection>

@@ -194,7 +194,7 @@ export function CTASection() {
           {/* Subtext and CTAs — fade in after text reveal */}
           <div
             data-cta-content
-            className="opacity-0 flex flex-col md:flex-row md:items-end md:justify-between gap-8"
+            className="flex flex-col md:flex-row md:items-end md:justify-between gap-8" data-animate
           >
             <p className="text-lg md:text-xl text-foreground-muted max-w-md text-center md:text-left">
               Ready to stand out? Let&apos;s create something that makes an
