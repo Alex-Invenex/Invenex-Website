@@ -186,31 +186,57 @@ export function HeroV2() {
       })
 
       // ── Scroll-out parallax ──
-      // Text scrolls away faster, sphere pins briefly
+      // Gentle fade — text stays visible much longer
       const initScrollOut = async () => {
         const { registerScrollTrigger } = await import('@/lib/gsap')
         await registerScrollTrigger()
 
-        // Text parallax out (scrolls faster)
+        // Text parallax out (gentler range)
         gsap.to('[data-a="word"], [data-a="tag"], [data-a="border"], [data-a="desc"], [data-a="cta"]', {
-          y: -80,
+          y: -40,
           opacity: 0,
           ease: 'none',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'center center',
-            end: 'bottom top',
+            start: '70% center',
+            end: 'bottom -20%',
             scrub: 1,
           },
         })
 
-        // Sphere glow dims as user scrolls away
+        // Sphere glow dims later, never fully disappears
         gsap.to('[data-a="sphere-glow"]', {
+          opacity: 0.3,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: '80% center',
+            end: 'bottom -10%',
+            scrub: 1,
+          },
+        })
+
+        // Stat cards fade gently (separate from text)
+        gsap.to('[data-a="stat"]', {
           opacity: 0,
+          y: -20,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: '75% center',
+            end: 'bottom -10%',
+            scrub: 1,
+          },
+        })
+
+        // Bottom bar fades first
+        gsap.to('[data-a="bottom"]', {
+          opacity: 0,
+          y: -15,
+          ease: 'none',
           scrollTrigger: {
             trigger: sectionRef.current,
             start: '60% center',
-            end: 'bottom top',
+            end: '85% top',
             scrub: 1,
           },
         })

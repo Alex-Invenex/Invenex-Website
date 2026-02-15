@@ -66,27 +66,46 @@ function ProjectCard({
   };
 
   const handleMouseEnter = () => {
-    if (prefersReducedMotion() || !overlayRef.current) return;
+    if (prefersReducedMotion() || !cardRef.current) return;
     // clipPath reveal for project overlay
-    gsap.to(overlayRef.current, {
-      clipPath: "inset(0 0% 0 0)",
+    if (overlayRef.current) {
+      gsap.to(overlayRef.current, {
+        clipPath: "inset(0 0% 0 0)",
+        duration: 0.5,
+        ease: "power3.inOut",
+      });
+    }
+    // Subtle scale up
+    gsap.to(cardRef.current, {
+      scale: 1.015,
       duration: 0.5,
-      ease: "power3.inOut",
+      ease: "power2.out",
     });
   };
 
   const handleMouseLeave = () => {
-    if (prefersReducedMotion() || !overlayRef.current || !cardRef.current) return;
-    gsap.to(overlayRef.current, {
-      clipPath: "inset(0 100% 0 0)",
-      duration: 0.3,
-      ease: "power3.inOut",
-    });
+    if (prefersReducedMotion() || !cardRef.current) return;
+    if (overlayRef.current) {
+      gsap.to(overlayRef.current, {
+        clipPath: "inset(0 100% 0 0)",
+        duration: 0.3,
+        ease: "power3.inOut",
+      });
+    }
     const img = cardRef.current.querySelector("[data-portfolio-img]");
     if (img) {
       gsap.to(img, { x: 0, y: 0, duration: 0.5, ease: "power2" });
     }
+    // Scale back
+    gsap.to(cardRef.current, {
+      scale: 1,
+      duration: 0.4,
+      ease: "power2.out",
+    });
   };
+
+  // Extract first word for watermark
+  const watermarkText = project.title.split(" ")[0].toUpperCase();
 
   return (
     <div data-portfolio-card>
@@ -94,14 +113,29 @@ function ProjectCard({
         <div
           ref={cardRef}
           className={cn(
-            "relative overflow-hidden rounded-2xl",
+            "relative overflow-hidden rounded-2xl will-change-transform",
             "border border-white/[0.05] hover:border-coral-500/30",
-            "transition-colors duration-500",
+            "transition-all duration-500",
             isHero ? "aspect-[21/9]" : "aspect-[4/3]"
           )}
+          style={{
+            boxShadow: "0 0 0 rgba(255,106,55,0)",
+          }}
           onMouseMove={handleMouseMove}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          onMouseEnter={(e) => {
+            handleMouseEnter();
+            // Add coral glow shadow
+            if (cardRef.current) {
+              cardRef.current.style.boxShadow =
+                "0 0 40px rgba(255,106,55,0.08)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            handleMouseLeave();
+            if (cardRef.current) {
+              cardRef.current.style.boxShadow = "0 0 0 rgba(255,106,55,0)";
+            }
+          }}
         >
           {/* Image with parallax */}
           <div data-portfolio-img className="absolute inset-[-10px] will-change-transform">
@@ -117,6 +151,23 @@ function ProjectCard({
           {/* Gradient overlay from bottom */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
+          {/* Watermark text overlay */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
+            aria-hidden="true"
+          >
+            <span
+              className="font-black tracking-tighter text-white/[0.06]"
+              style={{
+                fontSize: isHero
+                  ? "clamp(4rem, 12vw, 10rem)"
+                  : "clamp(3rem, 8vw, 6rem)",
+              }}
+            >
+              {watermarkText}
+            </span>
+          </div>
+
           {/* ClipPath overlay for hover reveal */}
           <div
             ref={overlayRef}
@@ -124,13 +175,14 @@ function ProjectCard({
             style={{ clipPath: "inset(0 100% 0 0)" }}
           />
 
-          {/* Counter */}
+          {/* Counter — coral accent, just number */}
           <span
             data-portfolio-counter
-            className="absolute top-4 left-4 md:top-6 md:left-6 font-mono text-white/40 text-xs tracking-wider"
+            className="absolute top-4 left-4 md:top-6 md:left-6 font-mono text-xs tracking-wider"
+            style={{ color: "rgba(255,106,55,0.6)" }}
             aria-hidden="true"
           >
-            00/{String(featuredProjects.length).padStart(2, "0")}
+            {String(index + 1).padStart(2, "0")}
           </span>
 
           {/* Arrow */}
@@ -172,22 +224,15 @@ export function PortfolioPreview() {
   const heroProject = featuredProjects[0];
   const gridProjects = featuredProjects.slice(1);
 
-  // GSAP ScrollTrigger stagger entrance
+  // GSAP ScrollTrigger — per-card entrance
   useGSAP(
     () => {
-      if (prefersReducedMotion()) {
-        // Show final counter values immediately
-        const counters = sectionRef.current?.querySelectorAll("[data-portfolio-counter]");
-        const total = String(featuredProjects.length).padStart(2, "0");
-        counters?.forEach((counter, i) => {
-          (counter as HTMLElement).textContent = `${String(i + 1).padStart(2, "0")}/${total}`;
-        });
-        return;
-      }
+      if (prefersReducedMotion()) return;
 
       const init = async () => {
         await registerScrollTrigger();
 
+        // Header entrance
         gsap.fromTo(
           "[data-portfolio-header]",
           { opacity: 0, y: 30 },
@@ -203,40 +248,23 @@ export function PortfolioPreview() {
           }
         );
 
-        gsap.fromTo(
-          "[data-portfolio-card]",
-          { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            stagger: 0.15,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 65%",
-            },
-          }
-        );
-
-        // Counter digit count-up animation
-        const counters = sectionRef.current?.querySelectorAll("[data-portfolio-counter]");
-        const total = String(featuredProjects.length).padStart(2, "0");
-        counters?.forEach((counter, i) => {
-          const proxy = { v: 0 };
-          gsap.to(proxy, {
-            v: i + 1,
-            duration: 1.2,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 65%",
-            },
-            delay: 0.15 * i + 0.3,
-            onUpdate: () => {
-              (counter as HTMLElement).textContent = `${String(Math.round(proxy.v)).padStart(2, "0")}/${total}`;
-            },
-          });
+        // Per-card individual scroll triggers
+        const cards = sectionRef.current?.querySelectorAll("[data-portfolio-card]");
+        cards?.forEach((card) => {
+          gsap.fromTo(
+            card,
+            { opacity: 0, y: 50 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 85%",
+              },
+            }
+          );
         });
       };
       init();
