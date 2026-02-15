@@ -81,7 +81,7 @@ export function ClientLogos() {
       data-testid="client-logos-section"
     >
       {/* Coral background accent */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#FF6A37]/[0.03] to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-coral-500/[0.03] to-transparent" />
 
       {/* Fade edges */}
       <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />

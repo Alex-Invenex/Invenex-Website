@@ -76,16 +76,16 @@ function PluginCard({
       transition={{ delay: index * 0.1 }}
       className="group"
     >
-      <div className="relative h-full rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-[#FF6A37]/20 hover:shadow-[0_0_30px_rgba(255,106,55,0.1)] transition-all duration-500">
+      <div className="relative h-full rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-coral-500/20 hover:shadow-[0_0_30px_rgba(255,106,55,0.1)] transition-all duration-500">
         {/* Content */}
         <div className="relative p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <motion.div
-              className="w-14 h-14 rounded-xl bg-[#FF6A37]/10 border border-[#FF6A37]/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+              className="w-14 h-14 rounded-xl bg-coral-500/10 border border-coral-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
               whileHover={{ rotate: 5 }}
             >
-              <Icon className="w-7 h-7 text-[#FF6A37]" />
+              <Icon className="w-7 h-7 text-coral-500" />
             </motion.div>
 
             {/* Version Badge */}
@@ -118,8 +118,8 @@ function PluginCard({
               <Download className="w-4 h-4" />
               <span>{plugin.downloads}</span>
             </div>
-            <div className="flex items-center gap-1.5 text-[#FF6A37]">
-              <Star className="w-4 h-4 fill-[#FF6A37]" />
+            <div className="flex items-center gap-1.5 text-coral-500">
+              <Star className="w-4 h-4 fill-coral-500" />
               <span>{plugin.rating}</span>
             </div>
           </div>
@@ -146,8 +146,8 @@ export function WordPressPlugins() {
       data-testid="wordpress-plugins-section"
     >
       {/* Coral background orbs */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px]" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#FF6A37]/[0.03] rounded-full blur-[120px]" />
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-coral-500/[0.04] rounded-full blur-[150px]" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-coral-500/[0.03] rounded-full blur-[120px]" />
 
       <div className="container mx-auto px-6 relative z-10">
         <AnimatedSection className="mb-16">

@@ -95,7 +95,7 @@ function ProjectCard({
           ref={cardRef}
           className={cn(
             "relative overflow-hidden rounded-2xl",
-            "border border-white/[0.05] hover:border-[#FF6A37]/30",
+            "border border-white/[0.05] hover:border-coral-500/30",
             "transition-colors duration-500",
             isHero ? "aspect-[21/9]" : "aspect-[4/3]"
           )}
@@ -120,7 +120,7 @@ function ProjectCard({
           {/* ClipPath overlay for hover reveal */}
           <div
             ref={overlayRef}
-            className="absolute inset-0 bg-[#FF6A37]/10 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-coral-500/10 backdrop-blur-[2px]"
             style={{ clipPath: "inset(0 100% 0 0)" }}
           />
 
@@ -130,11 +130,11 @@ function ProjectCard({
             className="absolute top-4 left-4 md:top-6 md:left-6 font-mono text-white/40 text-xs tracking-wider"
             aria-hidden="true"
           >
-            {String(index + 1).padStart(2, "0")}/{String(featuredProjects.length).padStart(2, "0")}
+            00/{String(featuredProjects.length).padStart(2, "0")}
           </span>
 
           {/* Arrow */}
-          <div className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full border border-white/20 bg-white/[0.05] backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-[#FF6A37] group-hover:border-[#FF6A37]">
+          <div className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full border border-white/20 bg-white/[0.05] backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-coral-500 group-hover:border-coral-500">
             <ArrowRight className="w-4 h-4 text-white" />
           </div>
 
@@ -175,7 +175,15 @@ export function PortfolioPreview() {
   // GSAP ScrollTrigger stagger entrance
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
+      if (prefersReducedMotion()) {
+        // Show final counter values immediately
+        const counters = sectionRef.current?.querySelectorAll("[data-portfolio-counter]");
+        const total = String(featuredProjects.length).padStart(2, "0");
+        counters?.forEach((counter, i) => {
+          (counter as HTMLElement).textContent = `${String(i + 1).padStart(2, "0")}/${total}`;
+        });
+        return;
+      }
 
       const init = async () => {
         await registerScrollTrigger();
@@ -210,6 +218,26 @@ export function PortfolioPreview() {
             },
           }
         );
+
+        // Counter digit count-up animation
+        const counters = sectionRef.current?.querySelectorAll("[data-portfolio-counter]");
+        const total = String(featuredProjects.length).padStart(2, "0");
+        counters?.forEach((counter, i) => {
+          const proxy = { v: 0 };
+          gsap.to(proxy, {
+            v: i + 1,
+            duration: 1.2,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 65%",
+            },
+            delay: 0.15 * i + 0.3,
+            onUpdate: () => {
+              (counter as HTMLElement).textContent = `${String(Math.round(proxy.v)).padStart(2, "0")}/${total}`;
+            },
+          });
+        });
       };
       init();
     },
@@ -224,7 +252,7 @@ export function PortfolioPreview() {
       data-testid="portfolio-preview-section"
     >
       {/* Coral background orb */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF6A37]/[0.03] rounded-full blur-[150px]" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-coral-500/[0.03] rounded-full blur-[150px]" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}

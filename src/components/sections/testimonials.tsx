@@ -93,7 +93,7 @@ function TestimonialCard({
 
   return (
     <div className="flex-shrink-0 w-[350px] md:w-[400px] mx-3">
-      <div className="h-full p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-sm hover:bg-white/[0.04] hover:border-[#FF6A37]/20 transition-all duration-300">
+      <div className="h-full p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-sm hover:bg-white/[0.04] hover:border-coral-500/20 transition-all duration-300">
         {/* Stars with varied ratings for realism */}
         <div className="flex items-center gap-1 mb-4">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -101,9 +101,9 @@ function TestimonialCard({
               key={i}
               className={`w-4 h-4 ${
                 i < fullStars
-                  ? "fill-[#FF6A37] text-[#FF6A37]"
+                  ? "fill-coral-500 text-coral-500"
                   : i === fullStars && hasHalf
-                  ? "fill-[#FF6A37]/50 text-[#FF6A37]"
+                  ? "fill-coral-500/50 text-coral-500"
                   : "text-foreground-subtle"
               }`}
             />
@@ -118,8 +118,8 @@ function TestimonialCard({
 
         {/* Author with company badge */}
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-[#FF6A37]/10 border border-[#FF6A37]/20 flex items-center justify-center">
-            <span className="text-lg font-semibold text-[#FF6A37]">
+          <div className="w-12 h-12 rounded-full bg-coral-500/10 border border-coral-500/20 flex items-center justify-center">
+            <span className="text-lg font-semibold text-coral-500">
               {author.charAt(0)}
             </span>
           </div>
@@ -127,7 +127,7 @@ function TestimonialCard({
             <p className="font-semibold text-foreground">{author}</p>
             <p className="text-sm text-foreground-muted">
               {role},{" "}
-              <span className="text-[#FF6A37]/70">{company}</span>
+              <span className="text-coral-500/70">{company}</span>
             </p>
           </div>
         </div>
@@ -321,7 +321,7 @@ export function Testimonials() {
       data-testid="testimonials-section"
     >
       {/* Background decoration */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-coral-500/[0.04] rounded-full blur-[150px]" />
 
       <div className="container mx-auto px-6 mb-16 relative z-10">
         <div data-test-header className="text-center mb-16">
@@ -343,7 +343,7 @@ export function Testimonials() {
         <div data-spotlight className="max-w-4xl mx-auto text-center mb-8">
           <div className="relative py-8">
             <span
-              className="block text-[#FF6A37]/20 font-serif leading-none select-none"
+              className="block text-coral-500/20 font-serif leading-none select-none"
               style={{ fontSize: "clamp(4rem, 10vw, 8rem)" }}
               aria-hidden="true"
             >
@@ -356,15 +356,15 @@ export function Testimonials() {
               {spotlight.quote}
             </blockquote>
             <span
-              className="block text-[#FF6A37]/20 font-serif leading-none select-none text-right"
+              className="block text-coral-500/20 font-serif leading-none select-none text-right"
               style={{ fontSize: "clamp(4rem, 10vw, 8rem)" }}
               aria-hidden="true"
             >
               &rdquo;
             </span>
             <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#FF6A37]/10 border border-[#FF6A37]/20 flex items-center justify-center">
-                <span className="text-sm font-semibold text-[#FF6A37]">
+              <div className="w-10 h-10 rounded-full bg-coral-500/10 border border-coral-500/20 flex items-center justify-center">
+                <span className="text-sm font-semibold text-coral-500">
                   {spotlight.author.charAt(0)}
                 </span>
               </div>

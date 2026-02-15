@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Instagram, X, ExternalLink } from "lucide-react";
+import { Instagram, X, ExternalLink, Play } from "lucide-react";
 import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 
@@ -116,10 +116,10 @@ function SocialCard({
 
         {/* Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-          <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-            <Instagram className="w-8 h-8 text-white" />
+          <div className="w-16 h-16 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-black/50 transition-all duration-300">
+            <Play className="w-7 h-7 text-white fill-white ml-1" />
           </div>
-          <p className="text-white text-sm font-medium leading-tight opacity-80">
+          <p className="text-white text-sm font-medium leading-tight opacity-90">
             {card.title}
           </p>
         </div>
@@ -302,7 +302,7 @@ export function InstagramReels() {
       data-testid="instagram-reels-section"
     >
       {/* Background decoration */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px]" />
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-coral-500/[0.04] rounded-full blur-[150px]" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
@@ -361,7 +361,7 @@ export function InstagramReels() {
             href="https://www.instagram.com/invenexsolutions/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex items-center gap-2.5 px-8 py-4 rounded-full overflow-hidden bg-[#FF6A37] hover:bg-[#FF4D1D] transition-colors"
+            className="group relative inline-flex items-center gap-2.5 px-8 py-4 rounded-full overflow-hidden bg-coral-500 hover:bg-coral-600 transition-colors"
           >
             <Instagram className="w-5 h-5 text-white" />
             <span className="text-white font-semibold text-sm md:text-base">

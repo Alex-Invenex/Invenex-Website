@@ -52,7 +52,7 @@ function StepCard({
           "relative h-full p-8 md:p-10 rounded-2xl",
           "bg-white/[0.02] border border-white/[0.06]",
           "backdrop-blur-sm",
-          "hover:bg-white/[0.04] hover:border-[#FF6A37]/20",
+          "hover:bg-white/[0.04] hover:border-coral-500/20",
           "transition-all duration-500",
           "group"
         )}
@@ -78,14 +78,14 @@ function StepCard({
         </p>
 
         {/* Highlight tag */}
-        <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-full bg-[#FF6A37]/10 text-[#FF6A37] border border-[#FF6A37]/20">
+        <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-full bg-coral-500/10 text-coral-500 border border-coral-500/20">
           {step.highlight}
         </span>
 
         {/* Decorative corner line */}
         <div className="absolute top-0 right-0 w-16 h-16 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="absolute top-4 right-4 w-8 h-[1px] bg-[#FF6A37]/30" />
-          <div className="absolute top-4 right-4 w-[1px] h-8 bg-[#FF6A37]/30" />
+          <div className="absolute top-4 right-4 w-8 h-[1px] bg-coral-500/30" />
+          <div className="absolute top-4 right-4 w-[1px] h-8 bg-coral-500/30" />
         </div>
       </div>
     </div>
@@ -198,8 +198,8 @@ export function WhyChooseUs() {
       data-testid="why-choose-us-section"
     >
       {/* Coral background orbs */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px]" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FF6A37]/[0.03] rounded-full blur-[120px]" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-coral-500/[0.04] rounded-full blur-[150px]" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-coral-500/[0.03] rounded-full blur-[120px]" />
 
       {/* Header — inside the pin so it stays visible */}
       <div className="pt-32 md:pt-44 pb-12 md:pb-16 container mx-auto px-6 relative z-10">
@@ -268,7 +268,7 @@ export function WhyChooseUs() {
                 {step.description}
               </p>
 
-              <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-full bg-[#FF6A37]/10 text-[#FF6A37] border border-[#FF6A37]/20">
+              <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-full bg-coral-500/10 text-coral-500 border border-coral-500/20">
                 {step.highlight}
               </span>
             </div>

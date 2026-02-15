@@ -400,7 +400,7 @@ export function HeroV2() {
                   fontSize: 'clamp(3rem, 6.5vw, 6.5rem)',
                   fontWeight: 900,
                   background:
-                    'linear-gradient(135deg, #FF6A37 0%, #FF8C5A 40%, #FF4D1D 100%)',
+                    'linear-gradient(135deg, var(--color-coral-500) 0%, var(--color-coral-400) 40%, var(--color-coral-600) 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
@@ -418,7 +418,7 @@ export function HeroV2() {
                   fontWeight: 900,
                 }}
               >
-                FUTURES<span className="text-[#FF6A37]">.</span>
+                FUTURES<span className="text-coral-500">.</span>
               </span>
             </h1>
 
@@ -426,7 +426,7 @@ export function HeroV2() {
             <div className="mt-8 md:mt-10 flex">
               <div
                 data-a="border"
-                className="w-0.5 min-h-[3rem] bg-[#FF6A37] shrink-0"
+                className="w-0.5 min-h-[3rem] bg-coral-500 shrink-0"
                 style={{ transform: 'scaleY(0)' }}
               />
               <p
@@ -463,7 +463,7 @@ export function HeroV2() {
                 >
                   <Link href="/portfolio" className="group">
                     Our Work
-                    <ArrowRight className="ml-2 w-5 h-5 text-[#FF6A37] group-hover:translate-x-1.5 transition-transform duration-300" />
+                    <ArrowRight className="ml-2 w-5 h-5 text-coral-500 group-hover:translate-x-1.5 transition-transform duration-300" />
                   </Link>
                 </Button>
               </div>
@@ -519,7 +519,7 @@ export function HeroV2() {
                   className="absolute inset-0 rounded-full"
                   style={{
                     background:
-                      'radial-gradient(circle at 30% 25%, #FFB088 0%, #FF8C5A 15%, #FF6A37 35%, #CC4A1A 60%, #7A2D10 80%, #2A0F05 100%)',
+                      `radial-gradient(circle at 30% 25%, #FFB088 0%, var(--color-coral-400) 15%, var(--color-coral-500) 35%, var(--color-coral-700) 60%, #7A2D10 80%, #2A0F05 100%)`,
                     boxShadow:
                       '0 0 80px rgba(255,106,55,0.5), 0 0 160px rgba(255,106,55,0.2), inset 0 0 80px rgba(0,0,0,0.3)',
                   }}
@@ -597,7 +597,7 @@ export function HeroV2() {
             <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-foreground-muted font-mono">
               Scroll to Explore
             </span>
-            <div className="w-8 md:w-12 h-[1px] bg-[#FF6A37]" />
+            <div className="w-8 md:w-12 h-[1px] bg-coral-500" />
           </div>
 
           {/* Social links */}

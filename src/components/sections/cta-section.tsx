@@ -138,7 +138,7 @@ export function CTASection() {
     >
       {/* Static coral gradient orb */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-[#FF6A37]/[0.06] rounded-full blur-[200px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-coral-500/[0.06] rounded-full blur-[200px]" />
       </div>
 
       {/* Mouse-tracking spotlight */}
@@ -187,7 +187,7 @@ export function CTASection() {
             </span>
             <span className="block" style={{ fontWeight: 900 }}>
               <CharRevealText text="SOMETHING EPIC" gradient />
-              <span data-char style={{ color: "#FF6A37", display: "inline-block", opacity: 0.1 }}>.</span>
+              <span data-char style={{ color: "var(--color-coral-500)", display: "inline-block", opacity: 0.1 }}>.</span>
             </span>
           </h2>
 
@@ -205,7 +205,7 @@ export function CTASection() {
               <Button
                 asChild
                 size="lg"
-                className="bg-[#FF6A37] hover:bg-[#FF4D1D] text-white rounded-full px-8 shadow-[0_0_20px_rgba(255,106,55,0.3)] hover:shadow-[0_0_30px_rgba(255,106,55,0.5)]"
+                className="bg-coral-500 hover:bg-coral-600 text-white rounded-full px-8 shadow-[0_0_20px_rgba(255,106,55,0.3)] hover:shadow-[0_0_30px_rgba(255,106,55,0.5)]"
               >
                 <Link href="/contact" className="group">
                   Start a Project
@@ -218,7 +218,7 @@ export function CTASection() {
                   className="group text-foreground-muted hover:text-foreground"
                 >
                   View Our Work
-                  <ArrowRight className="ml-2 w-5 h-5 text-[#FF6A37] group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 w-5 h-5 text-coral-500 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </div>

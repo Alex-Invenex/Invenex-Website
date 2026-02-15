@@ -103,7 +103,7 @@ function ServiceRow({
             <span
               className={cn(
                 "font-mono text-sm md:text-base tracking-wider transition-colors duration-300 flex-shrink-0",
-                isActive ? "text-[#FF6A37]" : "text-foreground-subtle"
+                isActive ? "text-coral-500" : "text-foreground-subtle"
               )}
             >
               {String(index + 1).padStart(2, "0")}
@@ -140,7 +140,7 @@ function ServiceRow({
               "w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center",
               "border transition-all duration-300",
               isActive
-                ? "bg-[#FF6A37] border-[#FF6A37] scale-100"
+                ? "bg-coral-500 border-coral-500 scale-100"
                 : "bg-transparent border-white/10 scale-90 opacity-50"
             )}
           >
@@ -171,7 +171,7 @@ function ServiceRow({
         {/* Coral underline — animates from left */}
         <div
           ref={underlineRef}
-          className="absolute bottom-0 left-0 w-full h-[2px] bg-[#FF6A37] origin-left"
+          className="absolute bottom-0 left-0 w-full h-[2px] bg-coral-500 origin-left"
           style={{ transform: "scaleX(0)" }}
         />
       </div>
@@ -238,7 +238,7 @@ export function ServicesPreview() {
       data-testid="services-preview-section"
     >
       {/* Coral background orb */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#FF6A37]/[0.03] rounded-full blur-[150px]" />
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-coral-500/[0.03] rounded-full blur-[150px]" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}

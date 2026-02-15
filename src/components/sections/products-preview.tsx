@@ -114,8 +114,8 @@ export function ProductsPreview() {
       data-testid="products-preview-section"
     >
       {/* Coral background orbs */}
-      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#FF6A37]/[0.04] rounded-full blur-[150px] -translate-y-1/2" />
-      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-[#FF6A37]/[0.03] rounded-full blur-[150px] -translate-y-1/2" />
+      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-coral-500/[0.04] rounded-full blur-[150px] -translate-y-1/2" />
+      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-coral-500/[0.03] rounded-full blur-[150px] -translate-y-1/2" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div data-prod="header" className="opacity-0 mb-16">
@@ -140,15 +140,15 @@ export function ProductsPreview() {
         {/* CaterFlow — Full-width showcase */}
         <div
           data-prod="showcase"
-          className="opacity-0 relative rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-[#FF6A37]/20 transition-all duration-500 mb-8"
+          className="opacity-0 relative rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-coral-500/20 transition-all duration-500 mb-8"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Left: Content */}
             <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
               {/* Status badge */}
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-[#FF6A37]/10 border border-[#FF6A37]/20 flex items-center justify-center">
-                  <Utensils className="w-6 h-6 text-[#FF6A37]" />
+                <div className="w-12 h-12 rounded-xl bg-coral-500/10 border border-coral-500/20 flex items-center justify-center">
+                  <Utensils className="w-6 h-6 text-coral-500" />
                 </div>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -172,8 +172,8 @@ export function ProductsPreview() {
                     key={feature}
                     className="flex items-center gap-2 text-sm text-foreground-muted"
                   >
-                    <div className="w-5 h-5 rounded-full bg-[#FF6A37]/10 flex items-center justify-center flex-shrink-0">
-                      <Check className="w-3 h-3 text-[#FF6A37]" />
+                    <div className="w-5 h-5 rounded-full bg-coral-500/10 flex items-center justify-center flex-shrink-0">
+                      <Check className="w-3 h-3 text-coral-500" />
                     </div>
                     {feature}
                   </div>
@@ -196,12 +196,12 @@ export function ProductsPreview() {
             {/* Right: App screenshot with 3D tilt effect */}
             <div className="relative min-h-[300px] lg:min-h-0 flex items-center justify-center p-8 lg:p-12">
               {/* Background gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A37]/20 via-[#FF8C5A]/10 to-[#FF4D1D]/20" />
+              <div className="absolute inset-0 bg-gradient-to-br from-coral-500/20 via-coral-400/10 to-coral-600/20" />
               <div className="absolute inset-0 bg-grid opacity-20" />
 
               {/* App screenshot placeholder with 3D perspective */}
               <div
-                className="relative w-full max-w-[400px] aspect-[4/3] rounded-xl overflow-hidden shadow-2xl shadow-[#FF6A37]/10 transition-transform duration-500"
+                className="relative w-full max-w-[400px] aspect-[4/3] rounded-xl overflow-hidden shadow-2xl shadow-coral-500/10 transition-transform duration-500"
                 style={{
                   transform: tiltHovered
                     ? "perspective(1000px) rotateY(0deg) rotateX(0deg)"
@@ -212,7 +212,7 @@ export function ProductsPreview() {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-background-tertiary to-background-secondary flex items-center justify-center">
                   <div className="text-center">
-                    <Utensils className="w-16 h-16 text-[#FF6A37]/30 mx-auto mb-3" />
+                    <Utensils className="w-16 h-16 text-coral-500/30 mx-auto mb-3" />
                     <span className="text-foreground-muted text-sm">CaterFlow Dashboard</span>
                   </div>
                 </div>
