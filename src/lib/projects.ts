@@ -35,7 +35,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Corporate website for an international technology solutions company with modern design and seamless user experience.",
-    image: "/portfolio/cooltech-international.png",
+    image: "/portfolio/cooltech-international-mockup.jpeg",
     slug: "cooltech-international",
     url: "https://cooltechintl.com",
     featured: true,
@@ -50,6 +50,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
     gallery: [
+      "/portfolio/cooltech-international-mockup.jpeg",
       "/portfolio/cooltech-international.png",
       "/portfolio/cooltech-international-2.png",
     ],
@@ -67,7 +68,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Creative agency website showcasing interior design and branding services in the UAE market.",
-    image: "/portfolio/ginger-designs.png",
+    image: "/portfolio/ginger-designs-mockup.png",
     slug: "ginger-designs",
     url: "https://gingerdesigns.ae",
     challenge:
@@ -81,6 +82,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Tailwind CSS", "Sanity CMS", "GSAP"],
     gallery: [
+      "/portfolio/ginger-designs-mockup.png",
       "/portfolio/ginger-designs.png",
       "/portfolio/ginger-designs-2.png",
     ],
@@ -98,7 +100,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Portfolio website for a UAE-based design studio featuring elegant layouts and project showcases.",
-    image: "/portfolio/ahazz-designs.png",
+    image: "/portfolio/ahazz-designs-mockup.png",
     slug: "ahazz-designs",
     url: "https://ahazzdesigns.com",
     challenge:
@@ -112,6 +114,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "Contentful"],
     gallery: [
+      "/portfolio/ahazz-designs-mockup.png",
       "/portfolio/ahazz-designs.png",
       "/portfolio/ahazz-designs-2.png",
     ],
@@ -154,7 +157,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Elegant restaurant website with online reservations, menu showcase, and event booking capabilities.",
-    image: "/portfolio/la-mirage.png",
+    image: "/portfolio/la-mirage-mockup.png",
     slug: "la-mirage",
     url: "https://la-mirage.in",
     challenge:
@@ -168,6 +171,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "OpenTable API"],
     gallery: [
+      "/portfolio/la-mirage-mockup.png",
       "/portfolio/la-mirage.png",
       "/portfolio/la-mirage-2.png",
     ],
@@ -179,7 +183,7 @@ export const projects: CaseStudyProject[] = [
     category: "Platform",
     excerpt:
       "Deals and offers aggregation platform helping users discover the best local promotions and discounts.",
-    image: "/portfolio/grabtogo.png",
+    image: "/portfolio/grabtogo-mockup.png",
     slug: "grabtogo",
     url: "https://www.grabtogo.in",
     featured: true,
@@ -194,6 +198,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["React Native", "Node.js", "PostgreSQL", "Firebase", "AWS"],
     gallery: [
+      "/portfolio/grabtogo-mockup.png",
       "/portfolio/grabtogo.png",
       "/portfolio/grabtogo-2.png",
     ],
@@ -211,7 +216,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Technology consulting firm website with service showcases, case studies, and client testimonials.",
-    image: "/portfolio/babbage-solutions.png",
+    image: "/portfolio/babbage-solutions-mockup.png",
     slug: "babbage-solutions",
     url: "https://babbagesolutions.in",
     challenge:
@@ -225,6 +230,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "Sanity CMS"],
     gallery: [
+      "/portfolio/babbage-solutions-mockup.png",
       "/portfolio/babbage-solutions.png",
       "/portfolio/babbagesolutions-2.png",
     ],
@@ -236,7 +242,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Modern corporate website with clean aesthetics and comprehensive business information architecture.",
-    image: "/portfolio/molvexa.png",
+    image: "/portfolio/molvexa-mockup.png",
     slug: "molvexa",
     url: "https://molvexa.com",
     challenge:
@@ -250,6 +256,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Strapi"],
     gallery: [
+      "/portfolio/molvexa-mockup.png",
       "/portfolio/molvexa.png",
       "/portfolio/molvexa-2.png",
     ],
@@ -375,7 +382,7 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Online retail platform with advanced product filtering, customer reviews, and integrated payment solutions.",
-    image: "/portfolio/zierainc.png",
+    image: "/portfolio/ziera-mockup.png",
     slug: "ziera-inc",
     url: "https://zierainc.com",
     challenge:
@@ -389,6 +396,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Stripe", "PostgreSQL", "Redis", "AWS"],
     gallery: [
+      "/portfolio/ziera-mockup.png",
       "/portfolio/zierainc.png",
       "/portfolio/zierainc-2.png",
     ],

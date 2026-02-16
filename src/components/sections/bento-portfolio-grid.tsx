@@ -2,12 +2,10 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useMemo } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  BentoProjectCard,
-  type BentoCardSize,
-} from "@/components/ui/bento-project-card";
-import { AnimatedSection } from "@/components/ui/animated-section";
 import { cn } from "@/lib/utils";
 import type { SimpleProject } from "@/lib/projects";
 
@@ -23,54 +21,183 @@ const categories = [
   { value: "e-commerce", label: "E-Commerce" },
 ];
 
-// Determine card size based on featured status and position
-function getCardSize(
-  project: SimpleProject,
-  index: number,
-  totalFeatured: number
-): BentoCardSize {
-  // Featured projects get the largest size
-  if (project.featured) return "featured";
+type CardSize = "hero" | "medium" | "small";
 
-  // Calculate position among non-featured projects
-  const nonFeaturedIndex = index - totalFeatured;
-
-  // Pattern for visual interest: small, small, medium, small, large, small
-  const pattern: BentoCardSize[] = [
-    "small",
-    "small",
-    "medium",
-    "small",
-    "large",
-    "small",
-  ];
-  return pattern[nonFeaturedIndex % pattern.length];
+interface LayoutItem {
+  project: SimpleProject;
+  size: CardSize;
 }
 
-// Check for reduced motion preference (SSR-safe pattern)
+// Build editorial layout: featured hero cards interleaved with regular project rows
+function buildEditorialLayout(projects: SimpleProject[]): LayoutItem[] {
+  const featured = projects.filter((p) => p.featured);
+  const regular = projects.filter((p) => !p.featured);
+  const result: LayoutItem[] = [];
+
+  let fi = 0;
+  let ri = 0;
+  let regularRowType: "pair" | "trio" = "pair";
+
+  while (fi < featured.length || ri < regular.length) {
+    // Insert a featured hero card if available
+    if (fi < featured.length) {
+      result.push({ project: featured[fi++], size: "hero" });
+    }
+
+    // Insert a row of regular projects
+    if (ri < regular.length) {
+      if (regularRowType === "pair") {
+        const count = Math.min(2, regular.length - ri);
+        for (let i = 0; i < count; i++) {
+          result.push({ project: regular[ri++], size: "medium" });
+        }
+        regularRowType = "trio";
+      } else {
+        const count = Math.min(3, regular.length - ri);
+        for (let i = 0; i < count; i++) {
+          result.push({ project: regular[ri++], size: "small" });
+        }
+        regularRowType = "pair";
+      }
+    }
+  }
+
+  return result;
+}
+
+// Simpler layout for filtered views with fewer projects
+function buildFilteredLayout(projects: SimpleProject[]): LayoutItem[] {
+  return projects.map((project, index) => ({
+    project,
+    size: project.featured ? "hero" : (index % 3 === 0 ? "medium" : "small") as CardSize,
+  }));
+}
+
+// Grid span classes per card size
+function getGridClasses(size: CardSize) {
+  switch (size) {
+    case "hero":
+      return "col-span-1 md:col-span-2 lg:col-span-6";
+    case "medium":
+      return "col-span-1 md:col-span-1 lg:col-span-3";
+    case "small":
+      return "col-span-1 md:col-span-1 lg:col-span-2";
+  }
+}
+
+// Check for reduced motion preference
 function usePrefersReducedMotion(): boolean {
   const [prefersReducedMotion, setPrefersReducedMotion] = React.useState(false);
-
   React.useEffect(() => {
     if (typeof window === "undefined") return;
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
-
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
-
   return prefersReducedMotion;
 }
 
-function BentoPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
+// Editorial project card
+function EditorialCard({
+  project,
+  size,
+  index,
+}: {
+  project: SimpleProject;
+  size: CardSize;
+  index: number;
+}) {
+  return (
+    <Link href={`/portfolio/${project.slug}`} className="group block">
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-2xl",
+          "border border-white/[0.06] hover:border-coral-500/30",
+          "transition-all duration-500",
+          "bg-[#111]",
+          size === "hero" && "aspect-[16/9] lg:aspect-[21/9]",
+          size === "medium" && "aspect-[3/2]",
+          size === "small" && "aspect-[4/3]"
+        )}
+        style={{
+          boxShadow: "0 0 0 rgba(255,107,53,0)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = "0 0 40px rgba(255,107,53,0.08)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = "0 0 0 rgba(255,107,53,0)";
+        }}
+      >
+        {/* Image with hover scale */}
+        <Image
+          src={project.image}
+          alt={`${project.title} — ${project.category}`}
+          fill
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+          sizes={
+            size === "hero"
+              ? "100vw"
+              : size === "medium"
+                ? "(max-width: 768px) 100vw, 50vw"
+                : "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          }
+        />
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+
+        {/* Counter — coral accent */}
+        <span
+          className="absolute top-4 left-4 md:top-6 md:left-6 font-mono text-xs tracking-wider"
+          style={{ color: "rgba(255,107,53,0.6)" }}
+          aria-hidden="true"
+        >
+          {String(index + 1).padStart(2, "0")}
+        </span>
+
+        {/* Arrow — appears on hover */}
+        <div className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full border border-white/20 bg-white/[0.05] backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-coral-500 group-hover:border-coral-500">
+          <ArrowRight className="w-4 h-4 text-white" />
+        </div>
+
+        {/* Content overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 lg:p-8">
+          <span className="text-xs px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-sm text-white/80 border border-white/10 mb-3 inline-block">
+            {project.category}
+          </span>
+          <h3
+            className={cn(
+              "font-semibold text-white tracking-tight",
+              size === "hero"
+                ? "text-2xl md:text-3xl lg:text-4xl"
+                : size === "medium"
+                  ? "text-xl md:text-2xl"
+                  : "text-lg md:text-xl"
+            )}
+          >
+            {project.title}
+          </h3>
+          {size !== "small" && (
+            <p className="text-white/50 mt-2 text-sm md:text-base line-clamp-2 max-w-2xl">
+              {project.excerpt}
+            </p>
+          )}
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
   const activeFilter = categoryParam || "all";
+  const prefersReduced = usePrefersReducedMotion();
 
-  // Filter projects
   const filteredProjects = useMemo(() => {
     if (activeFilter === "all") return projects;
     return projects.filter(
@@ -78,17 +205,12 @@ function BentoPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
     );
   }, [projects, activeFilter]);
 
-  // Sort: featured first, then by ID
-  const sortedProjects = useMemo(() => {
-    return [...filteredProjects].sort((a, b) => {
-      if (a.featured && !b.featured) return -1;
-      if (!a.featured && b.featured) return 1;
-      return parseInt(a.id) - parseInt(b.id);
-    });
-  }, [filteredProjects]);
-
-  // Count featured projects for size calculation
-  const featuredCount = sortedProjects.filter((p) => p.featured).length;
+  const layoutItems = useMemo(() => {
+    if (activeFilter === "all") {
+      return buildEditorialLayout(filteredProjects);
+    }
+    return buildFilteredLayout(filteredProjects);
+  }, [filteredProjects, activeFilter]);
 
   const handleFilterChange = (category: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -97,30 +219,24 @@ function BentoPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
     } else {
       params.set("category", category);
     }
-    const queryString = params.toString();
-    router.push(queryString ? `/portfolio?${queryString}` : "/portfolio", {
-      scroll: false,
-    });
+    const qs = params.toString();
+    router.push(qs ? `/portfolio?${qs}` : "/portfolio", { scroll: false });
   };
-
-  // Check reduced motion preference
-  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <section
       className="py-16 pb-24"
-      aria-labelledby="bento-portfolio-grid-title"
+      aria-labelledby="portfolio-grid-title"
       data-testid="bento-portfolio-grid-section"
     >
       <div className="container mx-auto px-6">
-        {/* Section Title (visually hidden but accessible) */}
-        <h2 id="bento-portfolio-grid-title" className="sr-only">
+        <h2 id="portfolio-grid-title" className="sr-only">
           Project Portfolio
         </h2>
 
         {/* Filter Tabs */}
         <div
-          className="flex flex-wrap justify-center gap-2 mb-12"
+          className="flex flex-wrap justify-center gap-2 mb-16"
           role="group"
           aria-label="Filter projects by category"
           data-testid="portfolio-filters"
@@ -130,11 +246,11 @@ function BentoPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
               key={cat.value}
               onClick={() => handleFilterChange(cat.value)}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                 activeFilter === cat.value
-                  ? "bg-coral-500 text-white"
-                  : "bg-white/5 text-foreground-muted hover:bg-white/10 hover:text-foreground border border-white/10"
+                  ? "bg-coral-500 text-white shadow-lg shadow-coral-500/25"
+                  : "bg-white/[0.03] text-foreground-muted hover:bg-white/[0.08] hover:text-foreground border border-white/[0.08]"
               )}
               aria-pressed={activeFilter === cat.value}
             >
@@ -143,75 +259,56 @@ function BentoPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
           ))}
         </div>
 
-        {/* Bento Grid */}
+        {/* Editorial Grid */}
         <motion.div
-          layout={!prefersReducedMotion}
-          className={cn(
-            "grid gap-4",
-            // Mobile: 1 column
-            "grid-cols-1",
-            // Tablet: 2 columns
-            "md:grid-cols-2",
-            // Desktop: 4 columns with auto-row sizing
-            "lg:grid-cols-4",
-            // Row heights
-            "auto-rows-[200px] md:auto-rows-[280px]"
-          )}
+          layout={!prefersReduced}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5"
           data-testid="bento-portfolio-grid"
         >
           <AnimatePresence mode="popLayout">
-            {sortedProjects.map((project, index) => {
-              const size = getCardSize(project, index, featuredCount);
-
-              // Determine grid span based on size
-              const colSpan =
-                size === "featured" || size === "medium"
-                  ? "lg:col-span-2"
-                  : "";
-              const rowSpan =
-                size === "featured" || size === "large" ? "lg:row-span-2" : "";
-
-              return (
-                <motion.div
-                  key={project.id}
-                  layoutId={prefersReducedMotion ? undefined : project.id}
-                  initial={
-                    prefersReducedMotion ? false : { opacity: 0, y: 20 }
-                  }
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={
-                    prefersReducedMotion
-                      ? { opacity: 0 }
-                      : { opacity: 0, scale: 0.95 }
-                  }
-                  transition={
-                    prefersReducedMotion
-                      ? { duration: 0 }
-                      : {
-                          duration: 0.4,
-                          delay: index * 0.05,
-                          layout: { type: "spring", damping: 25, stiffness: 200 },
-                        }
-                  }
-                  className={cn(colSpan, rowSpan)}
-                >
-                  <BentoProjectCard project={project} size={size} />
-                </motion.div>
-              );
-            })}
+            {layoutItems.map((item, index) => (
+              <motion.div
+                key={item.project.id}
+                layoutId={prefersReduced ? undefined : item.project.id}
+                initial={prefersReduced ? false : { opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={
+                  prefersReduced
+                    ? { opacity: 0 }
+                    : { opacity: 0, scale: 0.97 }
+                }
+                transition={
+                  prefersReduced
+                    ? { duration: 0 }
+                    : {
+                        duration: 0.5,
+                        delay: index * 0.06,
+                        layout: {
+                          type: "spring",
+                          damping: 28,
+                          stiffness: 180,
+                        },
+                      }
+                }
+                className={getGridClasses(item.size)}
+              >
+                <EditorialCard
+                  project={item.project}
+                  size={item.size}
+                  index={index}
+                />
+              </motion.div>
+            ))}
           </AnimatePresence>
         </motion.div>
 
         {/* Empty state */}
-        {sortedProjects.length === 0 && (
-          <AnimatedSection
-            className="text-center py-16"
-            data-testid="portfolio-empty-state"
-          >
+        {layoutItems.length === 0 && (
+          <div className="text-center py-20" data-testid="portfolio-empty-state">
             <p className="text-foreground-muted text-lg">
               No projects found in this category.
             </p>
-          </AnimatedSection>
+          </div>
         )}
       </div>
     </section>
@@ -228,32 +325,28 @@ export function BentoPortfolioGrid({ projects }: BentoPortfolioGridProps) {
           data-testid="bento-portfolio-grid-section"
         >
           <div className="container mx-auto px-6">
-            {/* Filter skeleton */}
-            <div className="flex justify-center gap-2 mb-12">
+            <div className="flex justify-center gap-2 mb-16">
               {categories.map((cat) => (
                 <div
                   key={cat.value}
-                  className="px-4 py-2 rounded-full bg-white/5 animate-pulse w-20 h-9"
+                  className="px-5 py-2 rounded-full bg-white/5 animate-pulse w-20 h-9"
                 />
               ))}
             </div>
-            {/* Grid skeleton */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[200px] md:auto-rows-[280px]">
-              {/* Featured placeholder - 2x2 */}
-              <div className="lg:col-span-2 lg:row-span-2 rounded-2xl bg-white/5 animate-pulse" />
-              {/* Regular placeholders */}
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div
-                  key={i}
-                  className="rounded-2xl bg-white/5 animate-pulse"
-                />
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5">
+              <div className="lg:col-span-6 aspect-[21/9] rounded-2xl bg-white/5 animate-pulse" />
+              <div className="lg:col-span-3 aspect-[3/2] rounded-2xl bg-white/5 animate-pulse" />
+              <div className="lg:col-span-3 aspect-[3/2] rounded-2xl bg-white/5 animate-pulse" />
+              <div className="lg:col-span-6 aspect-[21/9] rounded-2xl bg-white/5 animate-pulse" />
+              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-white/5 animate-pulse" />
+              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-white/5 animate-pulse" />
+              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-white/5 animate-pulse" />
             </div>
           </div>
         </section>
       }
     >
-      <BentoPortfolioGridContent projects={projects} />
+      <EditorialPortfolioGridContent projects={projects} />
     </Suspense>
   );
 }

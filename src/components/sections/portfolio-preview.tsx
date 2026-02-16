@@ -11,26 +11,26 @@ const featuredProjects = [
   {
     title: "CoolTech International",
     categories: ["Web", "Corporate"],
-    image: "/portfolio/cooltech-international.png",
+    image: "/portfolio/cooltech-international-mockup.jpeg",
     href: "/portfolio/cooltech-international",
   },
   {
     title: "Ginger Designs",
     categories: ["Web", "Creative"],
-    image: "/portfolio/ginger-designs.png",
+    image: "/portfolio/ginger-designs-mockup.png",
     href: "/portfolio/ginger-designs",
   },
   {
-    title: "La Mirage",
-    categories: ["Web", "Hospitality"],
-    image: "/portfolio/la-mirage.png",
-    href: "/portfolio/la-mirage",
+    title: "GrabToGo",
+    categories: ["Platform", "Deals"],
+    image: "/portfolio/grabtogo-mockup.png",
+    href: "/portfolio/grabtogo",
   },
   {
-    title: "OnMyWay AI",
-    categories: ["Platform", "AI"],
-    image: "/portfolio/onmyway-ai.png",
-    href: "/portfolio/onmyway-ai",
+    title: "Ziera Inc",
+    categories: ["E-Commerce", "LED"],
+    image: "/portfolio/ziera-mockup.png",
+    href: "/portfolio/ziera-inc",
   },
 ];
 
