@@ -55,7 +55,7 @@ function StepCard({
         )}
         style={{
           background:
-            "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+            "linear-gradient(135deg, rgba(18,18,18,1) 0%, rgba(14,14,14,1) 100%)",
         }}
       >
         {/* Top accent bar — visible on hover */}
@@ -71,7 +71,7 @@ function StepCard({
         <span
           className="block font-mono leading-none mb-6 select-none"
           style={{
-            fontSize: "clamp(3rem, 8vw, 7rem)",
+            fontSize: "clamp(2.5rem, 6vw, 5rem)",
             fontWeight: 200,
             WebkitTextStroke: "1px var(--color-coral-500)",
             WebkitTextFillColor: "transparent",
