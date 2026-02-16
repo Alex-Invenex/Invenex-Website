@@ -122,7 +122,7 @@ html.lenis body {
   /* ----------------------------------------
      Animations
      ---------------------------------------- */
-  --animate-page-enter: page-enter 0.3s var(--ease-out) forwards;
+  --animate-page-enter: page-enter 0.3s var(--ease-out);
 }
 
 /* Page transition animation */
