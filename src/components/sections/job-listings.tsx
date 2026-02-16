@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ClipboardList } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { JobCard } from "@/components/ui/job-card";
 import { getJobListings, type JobListing } from "@/lib/jobs";
@@ -81,7 +82,7 @@ export function JobListings() {
               className="col-span-full text-center py-12"
               data-testid="job-listings-empty"
             >
-              <div className="text-4xl mb-4">📋</div>
+              <ClipboardList className="w-10 h-10 text-foreground-muted mx-auto mb-4" aria-hidden="true" />
               <p className="text-foreground-muted">
                 No open positions in {activeDepartment} at the moment.
               </p>

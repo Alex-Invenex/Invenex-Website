@@ -1,4 +1,5 @@
 import { AnimatedSection } from "@/components/ui/animated-section";
+import { HeroHeading } from "@/components/ui/hero-heading";
 import { TeamGrid } from "@/components/sections/team-grid";
 import { generatePageMetadata } from "@/lib/metadata";
 import { Target, Handshake, Lightbulb, Zap, Rocket } from "lucide-react";
@@ -44,13 +45,9 @@ export default function AboutPage() {
         </div>
 
         <div className="container mx-auto px-6 text-center relative z-10">
-          <AnimatedSection>
-            <h1 id="about-hero-title" className="text-5xl md:text-6xl font-bold">
-              Building the Future,
-              <br />
-              <span className="text-foreground-muted">One Project at a Time</span>
-            </h1>
-          </AnimatedSection>
+          <HeroHeading id="about-hero-title">
+            Building the Future, One Project at a Time
+          </HeroHeading>
           <AnimatedSection delay={0.1}>
             <p className="mt-6 text-xl text-foreground-muted max-w-2xl mx-auto">
               Your trusted partner in digital transformation
@@ -84,13 +81,32 @@ export default function AboutPage() {
               </div>
             </AnimatedSection>
             <AnimatedSection delay={0.1} variant="slideRight">
-              {/* Placeholder for image/illustration */}
-              <div className="aspect-video bg-background-secondary rounded-2xl flex items-center justify-center border border-white/5">
-                <div className="text-center text-foreground-muted">
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-coral-500/20 to-coral-600/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
-                    <Rocket className="w-10 h-10 text-coral-500" aria-hidden="true" />
+              <div className="aspect-video rounded-2xl overflow-hidden relative bg-gradient-to-br from-coral-500/10 via-background-secondary to-coral-400/5 border border-white/5">
+                {/* Decorative mesh gradient */}
+                <div className="absolute inset-0" aria-hidden="true">
+                  <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-coral-500/15 rounded-full blur-[80px]" />
+                  <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-coral-400/10 rounded-full blur-[60px]" />
+                </div>
+                <div className="relative z-10 h-full flex flex-col items-center justify-center p-8">
+                  <div className="w-16 h-16 rounded-2xl bg-coral-500/20 border border-coral-500/30 flex items-center justify-center mb-6">
+                    <Rocket className="w-8 h-8 text-coral-400" aria-hidden="true" />
                   </div>
-                  <p className="text-sm">Innovation at work</p>
+                  <div className="flex flex-wrap justify-center gap-6 text-center">
+                    <div>
+                      <p className="text-3xl font-bold text-foreground">2024</p>
+                      <p className="text-sm text-foreground-muted">Founded</p>
+                    </div>
+                    <div className="w-px bg-white/10 hidden sm:block" aria-hidden="true" />
+                    <div>
+                      <p className="text-3xl font-bold text-foreground">50+</p>
+                      <p className="text-sm text-foreground-muted">Projects</p>
+                    </div>
+                    <div className="w-px bg-white/10 hidden sm:block" aria-hidden="true" />
+                    <div>
+                      <p className="text-3xl font-bold text-foreground">4</p>
+                      <p className="text-sm text-foreground-muted">Founders</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </AnimatedSection>

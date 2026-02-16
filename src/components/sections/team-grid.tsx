@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { AnimatedSection } from "@/components/ui/animated-section";
-import { Linkedin } from "lucide-react";
+import { Linkedin, User } from "lucide-react";
 
 interface TeamMember {
   name: string;
@@ -75,7 +75,7 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
         {/* Error fallback with gradient placeholder */}
         {hasError ? (
           <div className="w-full h-full bg-gradient-to-br from-coral-500/10 via-background-secondary to-coral-400/10 flex items-center justify-center">
-            <span className="text-5xl text-foreground-muted/50">👤</span>
+            <User className="w-12 h-12 text-foreground-muted/50" aria-hidden="true" />
           </div>
         ) : (
           <Image

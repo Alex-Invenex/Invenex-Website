@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { MapPin, Briefcase, BarChart3, Check } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -90,9 +91,9 @@ export default async function JobDetailPage({ params }: PageProps) {
               className="flex flex-wrap gap-4 mt-4 text-foreground-muted"
               data-testid="job-meta"
             >
-              <span>📍 {job.location}</span>
-              <span>💼 {job.type}</span>
-              <span>📊 {job.experience}</span>
+              <span className="inline-flex items-center gap-1.5"><MapPin className="w-4 h-4 text-coral-400" aria-hidden="true" />{job.location}</span>
+              <span className="inline-flex items-center gap-1.5"><Briefcase className="w-4 h-4 text-coral-400" aria-hidden="true" />{job.type}</span>
+              <span className="inline-flex items-center gap-1.5"><BarChart3 className="w-4 h-4 text-coral-400" aria-hidden="true" />{job.experience}</span>
             </div>
           </AnimatedSection>
         </div>
@@ -127,7 +128,7 @@ export default async function JobDetailPage({ params }: PageProps) {
                 <ul className="space-y-2">
                   {job.requirements.map((requirement, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <span className="text-success mt-0.5">✓</span>
+                      <Check className="w-4 h-4 text-coral-400 mt-1 flex-shrink-0" aria-hidden="true" />
                       <span className="text-foreground-muted">{requirement}</span>
                     </li>
                   ))}
@@ -181,7 +182,7 @@ export default async function JobDetailPage({ params }: PageProps) {
                     <ul className="space-y-2 text-sm text-foreground-muted">
                       {benefits.map((benefit) => (
                         <li key={benefit} className="flex items-center gap-2">
-                          <span className="text-success">✓</span>
+                          <Check className="w-3.5 h-3.5 text-coral-400 flex-shrink-0" aria-hidden="true" />
                           {benefit}
                         </li>
                       ))}

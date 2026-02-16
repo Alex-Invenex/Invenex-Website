@@ -12,6 +12,7 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
+import { AnimatedText } from "@/components/ui/animated-text";
 import { Button } from "@/components/ui/button";
 
 const services = [
@@ -30,8 +31,8 @@ const services = [
       "Native iOS and Android applications that deliver exceptional user experiences across all devices.",
     icon: Smartphone,
     href: "/services/mobile-development",
-    gradient: "from-green-500/20 via-emerald-500/10 to-transparent",
-    iconColor: "text-green-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
   {
     title: "Platform Development",
@@ -48,8 +49,8 @@ const services = [
       "Online stores and marketplaces that convert visitors into customers and drive revenue growth.",
     icon: ShoppingCart,
     href: "/services/ecommerce",
-    gradient: "from-orange-500/20 via-amber-500/10 to-transparent",
-    iconColor: "text-orange-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
   {
     title: "Social Media Marketing",
@@ -57,8 +58,8 @@ const services = [
       "Strategic social media campaigns that grow your brand presence and engage your audience effectively.",
     icon: Share2,
     href: "/services/social-media",
-    gradient: "from-pink-500/20 via-rose-500/10 to-transparent",
-    iconColor: "text-pink-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
   {
     title: "Digital Strategy",
@@ -66,8 +67,8 @@ const services = [
       "Technology consulting and roadmapping for digital transformation that drives measurable results.",
     icon: Lightbulb,
     href: "/services/digital-strategy",
-    gradient: "from-yellow-500/20 via-amber-500/10 to-transparent",
-    iconColor: "text-yellow-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
 ];
 
@@ -132,12 +133,15 @@ export function ServicesClient() {
             <span className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-foreground-muted mb-6">
               What We Offer
             </span>
-            <h1
-              id="services-hero-heading"
-              className="text-5xl md:text-6xl font-bold"
-            >
-              Our <span className="text-gradient">Services</span>
-            </h1>
+            <div id="services-hero-heading">
+              <AnimatedText
+                as="h1"
+                splitBy="words"
+                className="text-5xl md:text-6xl font-bold"
+              >
+                Our Services
+              </AnimatedText>
+            </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <p className="mt-6 text-xl text-foreground-muted max-w-2xl mx-auto">

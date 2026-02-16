@@ -1,4 +1,5 @@
 import { AnimatedSection } from '@/components/ui/animated-section';
+import { HeroHeading } from '@/components/ui/hero-heading';
 import { QuoteForm } from '@/components/forms/quote-form';
 import { contactInfo } from '@/lib/constants';
 import { generatePageMetadata } from '@/lib/metadata';
@@ -15,21 +16,26 @@ export default function ContactPage() {
     <>
       {/* Hero Section */}
       <section
-        className="pt-32 pb-16"
+        className="relative pt-32 pb-16 overflow-hidden"
         aria-labelledby="contact-hero-heading"
       >
-        <div className="container mx-auto px-6">
-          <AnimatedSection className="text-center">
-            <h1
-              id="contact-hero-heading"
-              className="text-heading-1 font-bold"
-            >
-              Let&apos;s Build Something Great
-            </h1>
-            <p className="mt-6 text-body-lg text-foreground-muted max-w-2xl mx-auto">
-              Tell us about your project and we&apos;ll get back to you within 24 hours.
-            </p>
-          </AnimatedSection>
+        {/* Animated gradient background */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-coral-500/20 rounded-full blur-[120px] animate-pulse-glow" />
+          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-coral-500/15 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: "1s" }} />
+        </div>
+
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="text-center">
+            <HeroHeading id="contact-hero-heading" className="text-heading-1 font-bold">
+              {"Let's Build Something Great"}
+            </HeroHeading>
+            <AnimatedSection delay={0.1}>
+              <p className="mt-6 text-body-lg text-foreground-muted max-w-2xl mx-auto">
+                Tell us about your project and we&apos;ll get back to you within 24 hours.
+              </p>
+            </AnimatedSection>
+          </div>
         </div>
       </section>
 

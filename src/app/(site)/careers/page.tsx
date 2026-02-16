@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Monitor, Home, BookOpen, Wallet, Building } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
+import { HeroHeading } from "@/components/ui/hero-heading";
 import { StaggerContainer, StaggerItem } from "@/components/ui/stagger-container";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -70,12 +71,11 @@ export default function CareersPage() {
         <div className="container mx-auto px-6 text-center relative z-10">
           <AnimatedSection>
             <Badge className="mb-6">We&apos;re Hiring</Badge>
-            <h1
-              id="careers-hero-title"
-              className="text-5xl md:text-6xl font-bold"
-            >
-              Join Our Team
-            </h1>
+          </AnimatedSection>
+          <HeroHeading id="careers-hero-title">
+            Join Our Team
+          </HeroHeading>
+          <AnimatedSection delay={0.1}>
             <p className="mt-6 text-xl text-foreground-muted max-w-2xl mx-auto">
               Build amazing products with a team that values innovation, growth,
               and work-life balance.
@@ -116,12 +116,23 @@ export default function CareersPage() {
               </div>
             </AnimatedSection>
             <AnimatedSection delay={0.1} variant="slideRight">
-              <div className="aspect-video bg-background rounded-2xl flex items-center justify-center border border-border">
-                <div className="text-center text-foreground-muted">
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-coral-500/20 to-coral-600/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
-                    <Building className="w-10 h-10 text-coral-500" aria-hidden="true" />
+              <div className="aspect-video rounded-2xl overflow-hidden relative bg-gradient-to-br from-coral-500/10 via-background to-coral-400/5 border border-white/5">
+                {/* Decorative mesh gradient */}
+                <div className="absolute inset-0" aria-hidden="true">
+                  <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-coral-500/15 rounded-full blur-[80px]" />
+                  <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-coral-400/10 rounded-full blur-[60px]" />
+                </div>
+                <div className="relative z-10 h-full flex flex-col items-center justify-center p-8 gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-coral-500/20 border border-coral-500/30 flex items-center justify-center">
+                    <Building className="w-8 h-8 text-coral-400" aria-hidden="true" />
                   </div>
-                  <p className="text-sm">Our workspace</p>
+                  <div className="flex flex-wrap justify-center gap-3">
+                    {["Remote-Friendly", "Modern Stack", "Growth Culture"].map((tag) => (
+                      <span key={tag} className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-foreground-muted">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </AnimatedSection>

@@ -72,8 +72,8 @@ const services: Record<string, ServiceData> = {
     ],
     technologies: ["React Native", "Swift", "Kotlin", "Firebase", "Expo"],
     iconName: "smartphone",
-    gradient: "from-green-500/20 via-emerald-500/10 to-transparent",
-    iconColor: "text-green-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
   "platform-development": {
     title: "Platform Development",
@@ -114,8 +114,8 @@ const services: Record<string, ServiceData> = {
     ],
     technologies: ["Shopify", "WooCommerce", "Next.js", "Stripe", "PayPal"],
     iconName: "shopping-cart",
-    gradient: "from-orange-500/20 via-amber-500/10 to-transparent",
-    iconColor: "text-orange-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
   "social-media": {
     title: "Social Media Marketing",
@@ -140,8 +140,8 @@ const services: Record<string, ServiceData> = {
       "Hootsuite",
     ],
     iconName: "share2",
-    gradient: "from-pink-500/20 via-rose-500/10 to-transparent",
-    iconColor: "text-pink-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
   "digital-strategy": {
     title: "Digital Strategy",
@@ -161,8 +161,8 @@ const services: Record<string, ServiceData> = {
     ],
     technologies: ["Project Management", "Business Analysis", "Data Analytics"],
     iconName: "lightbulb",
-    gradient: "from-yellow-500/20 via-amber-500/10 to-transparent",
-    iconColor: "text-yellow-400",
+    gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
+    iconColor: "text-coral-400",
   },
 };
 

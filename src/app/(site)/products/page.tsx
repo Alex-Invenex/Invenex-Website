@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { UtensilsCrossed, Building2 } from 'lucide-react'
 import { AnimatedSection } from '@/components/ui/animated-section'
-import { Card } from '@/components/ui/card'
+import { HeroHeading } from '@/components/ui/hero-heading'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { generatePageMetadata } from '@/lib/metadata'
@@ -16,15 +16,21 @@ export default function ProductsPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-32 pb-16" aria-labelledby="products-hero-title">
-        <div className="container mx-auto px-6 text-center">
+      <section className="relative pt-32 pb-16 overflow-hidden" aria-labelledby="products-hero-title">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-coral-500/20 rounded-full blur-[120px] animate-pulse-glow" />
+          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-coral-500/15 rounded-full blur-[100px] animate-pulse-glow" style={{ animationDelay: "1s" }} />
+        </div>
+
+        <div className="container mx-auto px-6 text-center relative z-10">
           <AnimatedSection>
             <Badge className="mb-6">Our Products</Badge>
-            <h1 id="products-hero-title" className="text-5xl md:text-6xl font-bold">
-              We Build Our Own
-              <br />
-              <span className="text-foreground-muted">Products Too</span>
-            </h1>
+          </AnimatedSection>
+          <HeroHeading id="products-hero-title">
+            We Build Our Own Products Too
+          </HeroHeading>
+          <AnimatedSection delay={0.1}>
             <p className="mt-6 text-xl text-foreground-muted max-w-2xl mx-auto">
               Beyond client work, we create products that solve real business problems.
               This proves our commitment to excellence and innovation.
@@ -74,15 +80,19 @@ export default function ProductsPage() {
             </AnimatedSection>
 
             <AnimatedSection delay={0.1}>
-              {/* TODO: Replace with actual CaterFlow screenshot/demo video */}
-              <Card className="aspect-video flex items-center justify-center">
-                <div className="text-center text-foreground-muted">
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-coral-500/20 to-coral-600/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
-                    <UtensilsCrossed className="w-10 h-10 text-coral-500" aria-hidden="true" />
-                  </div>
-                  <p>CaterFlow Dashboard Preview</p>
+              <div className="aspect-video rounded-2xl overflow-hidden relative bg-gradient-to-br from-coral-500/10 via-background-secondary to-coral-400/5 border border-white/5">
+                <div className="absolute inset-0" aria-hidden="true">
+                  <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-coral-500/15 rounded-full blur-[80px]" />
+                  <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-coral-400/10 rounded-full blur-[60px]" />
                 </div>
-              </Card>
+                <div className="relative z-10 h-full flex flex-col items-center justify-center p-8">
+                  <div className="w-20 h-20 rounded-2xl bg-coral-500/20 border border-coral-500/30 flex items-center justify-center mb-4">
+                    <UtensilsCrossed className="w-10 h-10 text-coral-400" aria-hidden="true" />
+                  </div>
+                  <p className="text-lg font-semibold text-foreground mb-1">CaterFlow</p>
+                  <p className="text-sm text-foreground-muted">Dashboard Preview</p>
+                </div>
+              </div>
             </AnimatedSection>
           </div>
         </div>
@@ -93,15 +103,19 @@ export default function ProductsPage() {
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <AnimatedSection className="order-2 lg:order-1">
-              {/* TODO: Replace with Invenex ERP teaser visual when available */}
-              <Card className="aspect-video flex items-center justify-center bg-gradient-to-br from-foreground/5 to-foreground/10">
-                <div className="text-center">
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-coral-500/20 to-coral-600/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
-                    <Building2 className="w-10 h-10 text-coral-500" aria-hidden="true" />
-                  </div>
-                  <p className="text-foreground-muted">Coming Soon</p>
+              <div className="aspect-video rounded-2xl overflow-hidden relative bg-gradient-to-br from-coral-500/10 via-background-secondary to-coral-400/5 border border-white/5">
+                <div className="absolute inset-0" aria-hidden="true">
+                  <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-coral-500/15 rounded-full blur-[80px]" />
+                  <div className="absolute bottom-0 right-0 w-[200px] h-[200px] bg-coral-400/10 rounded-full blur-[60px]" />
                 </div>
-              </Card>
+                <div className="relative z-10 h-full flex flex-col items-center justify-center p-8">
+                  <div className="w-20 h-20 rounded-2xl bg-coral-500/20 border border-coral-500/30 flex items-center justify-center mb-4">
+                    <Building2 className="w-10 h-10 text-coral-400" aria-hidden="true" />
+                  </div>
+                  <p className="text-lg font-semibold text-foreground mb-1">Invenex ERP</p>
+                  <p className="text-sm text-foreground-muted">Coming Soon</p>
+                </div>
+              </div>
             </AnimatedSection>
 
             <AnimatedSection delay={0.1} className="order-1 lg:order-2">
@@ -140,7 +154,6 @@ export default function ProductsPage() {
       </section>
 
       {/* CTA Section */}
-      {/* TODO: /contact page pending Epic 5-1 implementation */}
       <section className="py-24" aria-labelledby="products-cta-title" data-testid="products-cta-section">
         <div className="container mx-auto px-6 text-center">
           <AnimatedSection>

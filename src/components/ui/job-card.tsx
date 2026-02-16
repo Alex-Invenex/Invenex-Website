@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MapPin, Briefcase } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,8 +25,8 @@ export function JobCard({ job }: JobCardProps) {
         </div>
 
         <div className="space-y-2 mb-4 text-sm text-foreground-muted">
-          <p data-testid="job-location">📍 {job.location}</p>
-          <p data-testid="job-experience">💼 {job.experience} level</p>
+          <p data-testid="job-location" className="inline-flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-coral-400" aria-hidden="true" />{job.location}</p>
+          <p data-testid="job-experience" className="inline-flex items-center gap-1.5"><Briefcase className="w-3.5 h-3.5 text-coral-400" aria-hidden="true" />{job.experience} level</p>
         </div>
 
         {job.techStack && job.techStack.length > 0 && (
