@@ -17,19 +17,19 @@ const featuredProjects = [
   {
     title: "Ginger Designs",
     categories: ["Web", "Creative"],
-    image: "/portfolio/ginger-designs-mockup.png",
+    image: "/portfolio/ginger-designs-mockup.jpg",
     href: "/portfolio/ginger-designs",
   },
   {
     title: "GrabToGo",
     categories: ["Platform", "Deals"],
-    image: "/portfolio/grabtogo-mockup.png",
+    image: "/portfolio/grabtogo-mockup.jpg",
     href: "/portfolio/grabtogo",
   },
   {
     title: "Ziera Inc",
     categories: ["E-Commerce", "LED"],
-    image: "/portfolio/ziera-mockup.png",
+    image: "/portfolio/ziera-mockup.jpg",
     href: "/portfolio/ziera-inc",
   },
 ];
