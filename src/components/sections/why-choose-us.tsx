@@ -172,9 +172,9 @@ export function WhyChooseUs() {
               scrollTrigger: {
                 trigger: section,
                 start: "top top",
-                end: `+=${totalWidth * 1.5}`,
+                end: `+=${totalWidth * 1.1}`,
                 pin: true,
-                scrub: 1,
+                scrub: 0.8,
                 invalidateOnRefresh: true,
               },
             });
@@ -223,8 +223,8 @@ export function WhyChooseUs() {
                   scrollTrigger: {
                     trigger: section,
                     start: "top top",
-                    end: `+=${totalWidth * 1.5}`,
-                    scrub: 1,
+                    end: `+=${totalWidth * 1.1}`,
+                    scrub: 0.8,
                   },
                 }
               );
@@ -258,7 +258,7 @@ export function WhyChooseUs() {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-background overflow-hidden"
+      className="relative bg-background"
       aria-labelledby="how-we-work-title"
       data-testid="why-choose-us-section"
     >
@@ -292,7 +292,7 @@ export function WhyChooseUs() {
       </div>
 
       {/* DESKTOP: Split layout — sticky context + scrolling cards */}
-      <div className="hidden md:block pb-32 md:pb-44">
+      <div className="hidden md:block pb-16">
         <div className="flex">
           {/* Sticky left context panel */}
           <div

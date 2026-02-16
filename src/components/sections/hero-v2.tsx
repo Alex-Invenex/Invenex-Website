@@ -186,34 +186,44 @@ export function HeroV2() {
       })
 
       // ── Scroll-out parallax ──
-      // All hero content fades together as one group with extended range
+      // Use fromTo with explicit start values so scrub correctly reverses
       const initScrollOut = async () => {
         const { registerScrollTrigger } = await import('@/lib/gsap')
         await registerScrollTrigger()
 
         // Fade ALL hero content together — text stays visible until section is nearly off-screen
-        gsap.to('[data-a="word"], [data-a="tag"], [data-a="border"], [data-a="desc"], [data-a="cta"], [data-a="stat"], [data-a="bottom"]', {
-          y: -20,
-          opacity: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: '80% center',
-            end: 'bottom -30%',
-            scrub: 1,
-          },
-        })
+        gsap.fromTo(
+          '[data-a="word"], [data-a="tag"], [data-a="border"], [data-a="desc"], [data-a="cta"], [data-a="stat"], [data-a="bottom"]',
+          { y: 0, opacity: 1 },
+          {
+            y: -20,
+            opacity: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: '80% center',
+              end: 'bottom -30%',
+              scrub: 1,
+            },
+          }
+        )
 
-        // Sphere glow dims later, never fully disappears
-        gsap.to('[data-a="sphere-glow"]', {
-          opacity: 0.3,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: '85% center',
-            end: 'bottom -20%',
-            scrub: 1,
-          },
-        })
+        // Sphere + rings fade together, never fully disappear
+        gsap.fromTo(
+          '[data-a="sphere"], [data-a="ring"]',
+          { opacity: 1, y: 0 },
+          {
+            opacity: 0.15,
+            y: -10,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: '80% center',
+              end: 'bottom -30%',
+              scrub: 1,
+            },
+          }
+        )
       }
       initScrollOut()
     },
