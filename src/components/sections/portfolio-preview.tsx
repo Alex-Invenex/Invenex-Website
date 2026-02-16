@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
-import { cn } from "@/lib/utils";
 
 const featuredProjects = [
   {
@@ -37,11 +36,9 @@ const featuredProjects = [
 function ProjectCard({
   project,
   index,
-  isHero = false,
 }: {
   project: (typeof featuredProjects)[0];
   index: number;
-  isHero?: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -52,7 +49,6 @@ function ProjectCard({
     const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
     const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
 
-    // Subtle cursor-tracking parallax on image
     const img = cardRef.current.querySelector("[data-portfolio-img]");
     if (img) {
       gsap.to(img, {
@@ -67,7 +63,6 @@ function ProjectCard({
 
   const handleMouseEnter = () => {
     if (prefersReducedMotion() || !cardRef.current) return;
-    // clipPath reveal for project overlay
     if (overlayRef.current) {
       gsap.to(overlayRef.current, {
         clipPath: "inset(0 0% 0 0)",
@@ -75,9 +70,8 @@ function ProjectCard({
         ease: "power3.inOut",
       });
     }
-    // Subtle scale up
     gsap.to(cardRef.current, {
-      scale: 1.015,
+      scale: 1.02,
       duration: 0.5,
       ease: "power2.out",
     });
@@ -96,7 +90,6 @@ function ProjectCard({
     if (img) {
       gsap.to(img, { x: 0, y: 0, duration: 0.5, ease: "power2" });
     }
-    // Scale back
     gsap.to(cardRef.current, {
       scale: 1,
       duration: 0.4,
@@ -104,33 +97,25 @@ function ProjectCard({
     });
   };
 
-  // Extract first word for watermark
-  const watermarkText = project.title.split(" ")[0].toUpperCase();
-
   return (
     <div data-portfolio-card data-animate>
       <Link href={project.href} className="group block relative">
         <div
           ref={cardRef}
-          className={cn(
-            "relative overflow-hidden rounded-2xl will-change-transform",
-            "border border-white/[0.05] hover:border-coral-500/30",
-            "transition-all duration-500",
-            isHero ? "aspect-[21/9]" : "aspect-[4/3]"
-          )}
+          className="relative overflow-hidden rounded-2xl will-change-transform border border-white/[0.06] hover:border-coral-500/30 transition-all duration-500 bg-[#111]"
           style={{
+            aspectRatio: "16 / 10",
             boxShadow: "0 0 0 rgba(255,106,55,0)",
           }}
           onMouseMove={handleMouseMove}
-          onMouseEnter={(e) => {
+          onMouseEnter={() => {
             handleMouseEnter();
-            // Add coral glow shadow
             if (cardRef.current) {
               cardRef.current.style.boxShadow =
                 "0 0 40px rgba(255,106,55,0.08)";
             }
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={() => {
             handleMouseLeave();
             if (cardRef.current) {
               cardRef.current.style.boxShadow = "0 0 0 rgba(255,106,55,0)";
@@ -144,40 +129,22 @@ function ProjectCard({
               alt={`${project.title} — ${project.categories.join(", ")}`}
               fill
               className="object-cover"
-              sizes={isHero ? "100vw" : "(max-width: 768px) 100vw, 50vw"}
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
 
-          {/* Gradient overlay from bottom */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
 
-          {/* Watermark text overlay */}
-          <div
-            className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
-            aria-hidden="true"
-          >
-            <span
-              className="font-black tracking-tighter text-white/[0.06]"
-              style={{
-                fontSize: isHero
-                  ? "clamp(4rem, 12vw, 10rem)"
-                  : "clamp(3rem, 8vw, 6rem)",
-              }}
-            >
-              {watermarkText}
-            </span>
-          </div>
-
-          {/* ClipPath overlay for hover reveal */}
+          {/* ClipPath hover overlay */}
           <div
             ref={overlayRef}
             className="absolute inset-0 bg-coral-500/10 backdrop-blur-[2px]"
             style={{ clipPath: "inset(0 100% 0 0)" }}
           />
 
-          {/* Counter — coral accent, just number */}
+          {/* Counter */}
           <span
-            data-portfolio-counter
             className="absolute top-4 left-4 md:top-6 md:left-6 font-mono text-xs tracking-wider"
             style={{ color: "rgba(255,106,55,0.6)" }}
             aria-hidden="true"
@@ -190,16 +157,9 @@ function ProjectCard({
             <ArrowRight className="w-4 h-4 text-white" />
           </div>
 
-          {/* Content overlay — bottom */}
+          {/* Content */}
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-            <h3
-              className={cn(
-                "font-semibold text-white tracking-tight mb-2",
-                isHero
-                  ? "text-2xl md:text-3xl lg:text-4xl"
-                  : "text-xl md:text-2xl"
-              )}
-            >
+            <h3 className="font-semibold text-white tracking-tight text-xl md:text-2xl mb-2">
               {project.title}
             </h3>
             <div className="flex items-center gap-2">
@@ -221,10 +181,7 @@ function ProjectCard({
 
 export function PortfolioPreview() {
   const sectionRef = useRef<HTMLElement>(null);
-  const heroProject = featuredProjects[0];
-  const gridProjects = featuredProjects.slice(1);
 
-  // GSAP ScrollTrigger — per-card entrance
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
@@ -232,7 +189,6 @@ export function PortfolioPreview() {
       const init = async () => {
         await registerScrollTrigger();
 
-        // Header entrance
         gsap.fromTo(
           "[data-portfolio-header]",
           { opacity: 0, y: 30 },
@@ -248,9 +204,8 @@ export function PortfolioPreview() {
           }
         );
 
-        // Per-card individual scroll triggers
         const cards = sectionRef.current?.querySelectorAll("[data-portfolio-card]");
-        cards?.forEach((card) => {
+        cards?.forEach((card, i) => {
           gsap.fromTo(
             card,
             { opacity: 0, y: 50 },
@@ -258,10 +213,11 @@ export function PortfolioPreview() {
               opacity: 1,
               y: 0,
               duration: 0.7,
+              delay: i * 0.1,
               ease: "power3.out",
               scrollTrigger: {
                 trigger: card,
-                start: "top 85%",
+                start: "top 88%",
               },
             }
           );
@@ -312,21 +268,10 @@ export function PortfolioPreview() {
           </Link>
         </div>
 
-        {/* Hero card — full width */}
-        <ProjectCard project={heroProject} index={0} isHero />
-
-        {/* 2-column staggered grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          {gridProjects.map((project, i) => (
-            <div
-              key={project.title}
-              className={cn(
-                i === 1 && "md:mt-20",
-                i === 2 && "md:-mt-14"
-              )}
-            >
-              <ProjectCard project={project} index={i + 1} />
-            </div>
+        {/* 2x2 Even Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {featuredProjects.map((project, i) => (
+            <ProjectCard key={project.title} project={project} index={i} />
           ))}
         </div>
       </div>
