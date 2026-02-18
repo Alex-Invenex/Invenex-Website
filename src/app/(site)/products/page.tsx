@@ -1,5 +1,6 @@
+import Image from 'next/image'
 import Link from 'next/link'
-import { UtensilsCrossed, Building2 } from 'lucide-react'
+import { Building2 } from 'lucide-react'
 import { AnimatedSection } from '@/components/ui/animated-section'
 import { HeroHeading } from '@/components/ui/hero-heading'
 import { Badge } from '@/components/ui/badge'
@@ -80,18 +81,14 @@ export default function ProductsPage() {
             </AnimatedSection>
 
             <AnimatedSection delay={0.1}>
-              <div className="aspect-video rounded-2xl overflow-hidden relative bg-gradient-to-br from-coral-500/10 via-background-secondary to-coral-400/5 border border-white/5">
-                <div className="absolute inset-0" aria-hidden="true">
-                  <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-coral-500/15 rounded-full blur-[80px]" />
-                  <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-coral-400/10 rounded-full blur-[60px]" />
-                </div>
-                <div className="relative z-10 h-full flex flex-col items-center justify-center p-8">
-                  <div className="w-20 h-20 rounded-2xl bg-coral-500/20 border border-coral-500/30 flex items-center justify-center mb-4">
-                    <UtensilsCrossed className="w-10 h-10 text-coral-400" aria-hidden="true" />
-                  </div>
-                  <p className="text-lg font-semibold text-foreground mb-1">CaterFlow</p>
-                  <p className="text-sm text-foreground-muted">Dashboard Preview</p>
-                </div>
+              <div className="aspect-video rounded-2xl overflow-hidden relative border border-white/5">
+                <Image
+                  src="/products/caterflow-cover.png"
+                  alt="CaterFlow — Catering management platform"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
               </div>
             </AnimatedSection>
           </div>

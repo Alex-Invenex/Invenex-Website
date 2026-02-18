@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { ExternalLink, ArrowRight, Utensils, Building2, Check } from "lucide-react";
@@ -210,12 +211,13 @@ export function ProductsPreview() {
                 onMouseEnter={() => setTiltHovered(true)}
                 onMouseLeave={() => setTiltHovered(false)}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-background-tertiary to-background-secondary flex items-center justify-center">
-                  <div className="text-center">
-                    <Utensils className="w-16 h-16 text-coral-500/30 mx-auto mb-3" />
-                    <span className="text-foreground-muted text-sm">CaterFlow Dashboard</span>
-                  </div>
-                </div>
+                <Image
+                  src="/products/caterflow-cover.png"
+                  alt="CaterFlow — Catering management platform"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 400px"
+                />
               </div>
 
               {/* Floating metric cards */}
