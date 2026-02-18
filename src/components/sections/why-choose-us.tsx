@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 
@@ -112,10 +112,19 @@ export function WhyChooseUs() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const rmRef = useRef(false);
+
+  useEffect(() => {
+    rmRef.current = prefersReducedMotion();
+    setMounted(true);
+  }, []);
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) {
+      if (!mounted) return;
+
+      if (rmRef.current) {
         gsap.set("[data-step]", { opacity: 1, y: 0 });
         gsap.set("[data-hw-header]", { opacity: 1, y: 0 });
         gsap.set("[data-hw-context]", { opacity: 1, y: 0 });
@@ -161,104 +170,112 @@ export function WhyChooseUs() {
         );
 
         // Desktop: horizontal scroll with sticky left context
-        ScrollTrigger.matchMedia({
-          "(min-width: 768px)": () => {
-            const cards = track.querySelectorAll("[data-step]");
-            const totalWidth = track.scrollWidth - window.innerWidth * 0.65;
+        const mm = gsap.matchMedia();
 
-            const scrollTween = gsap.to(track, {
-              x: -totalWidth,
-              ease: "none",
-              scrollTrigger: {
-                trigger: section,
-                start: "top top",
-                end: `+=${totalWidth * 1.1}`,
-                pin: true,
-                scrub: 0.8,
-                invalidateOnRefresh: true,
-              },
-            });
+        mm.add("(min-width: 768px)", () => {
+          const cards = track.querySelectorAll("[data-step]");
+          const totalWidth = track.scrollWidth - window.innerWidth * 0.65;
 
-            // Per-card entrance + step counter update
-            cards.forEach((card, i) => {
-              gsap.fromTo(
-                card,
-                { opacity: 0.3, scale: 0.92 },
-                {
-                  opacity: 1,
-                  scale: 1,
-                  scrollTrigger: {
-                    trigger: card,
-                    containerAnimation: scrollTween,
-                    start: "left 80%",
-                    end: "left 40%",
-                    scrub: 1,
-                  },
-                  ease: "power2.out",
-                }
-              );
+          const scrollTween = gsap.to(track, {
+            x: -totalWidth,
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: `+=${totalWidth * 1.1}`,
+              pin: true,
+              scrub: 0.8,
+              invalidateOnRefresh: true,
+            },
+          });
 
-              // Update active step counter when card enters center
-              ScrollTrigger.create({
-                trigger: card,
-                containerAnimation: scrollTween,
-                start: "left 60%",
-                end: "left 30%",
-                onEnter: () => setActiveStep(i),
-                onEnterBack: () => setActiveStep(i),
-              });
-            });
-
-            // Animate progress bar via scaleX
-            const progressEl = section.querySelector(
-              "[data-hw-progress]"
-            ) as HTMLElement;
-            if (progressEl) {
-              gsap.fromTo(
-                progressEl,
-                { scaleX: 0 },
-                {
-                  scaleX: 1,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: section,
-                    start: "top top",
-                    end: `+=${totalWidth * 1.1}`,
-                    scrub: 0.8,
-                  },
-                }
-              );
-            }
-          },
-          "(max-width: 767px)": () => {
-            // Mobile: simple stagger entrance with new card design
+          // Per-card entrance + step counter update
+          cards.forEach((card, i) => {
             gsap.fromTo(
-              "[data-mobile-step]",
-              { opacity: 0, y: 30 },
+              card,
+              { opacity: 0.3, scale: 0.92 },
               {
                 opacity: 1,
-                y: 0,
-                stagger: 0.1,
-                duration: 0.6,
-                ease: "power3.out",
+                scale: 1,
+                scrollTrigger: {
+                  trigger: card,
+                  containerAnimation: scrollTween,
+                  start: "left 80%",
+                  end: "left 40%",
+                  scrub: 1,
+                },
+                ease: "power2.out",
+              }
+            );
+
+            // Update active step counter when card enters center
+            ScrollTrigger.create({
+              trigger: card,
+              containerAnimation: scrollTween,
+              start: "left 60%",
+              end: "left 30%",
+              onEnter: () => setActiveStep(i),
+              onEnterBack: () => setActiveStep(i),
+            });
+          });
+
+          // Animate progress bar via scaleX
+          const progressEl = section.querySelector(
+            "[data-hw-progress]"
+          ) as HTMLElement;
+          if (progressEl) {
+            gsap.fromTo(
+              progressEl,
+              { scaleX: 0 },
+              {
+                scaleX: 1,
+                ease: "none",
                 scrollTrigger: {
                   trigger: section,
-                  start: "top 70%",
+                  start: "top top",
+                  end: `+=${totalWidth * 1.1}`,
+                  scrub: 0.8,
                 },
               }
             );
-          },
+          }
+        });
+
+        mm.add("(max-width: 767px)", () => {
+          // Mobile: simple stagger entrance with new card design
+          gsap.fromTo(
+            "[data-mobile-step]",
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              stagger: 0.1,
+              duration: 0.6,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: section,
+                start: "top 70%",
+              },
+            }
+          );
+        });
+
+        // Recalculate all trigger positions after Services' pin-spacer exists
+        requestAnimationFrame(() => {
+          ScrollTrigger.sort();
+          ScrollTrigger.refresh();
         });
       };
       init();
     },
-    { scope: sectionRef }
+    { scope: sectionRef, dependencies: [mounted] }
   );
 
   return (
     <section
       ref={sectionRef}
       className="relative bg-background"
+      style={{ zIndex: 5 }}
       aria-labelledby="how-we-work-title"
       data-testid="why-choose-us-section"
     >
@@ -296,7 +313,7 @@ export function WhyChooseUs() {
         <div className="flex">
           {/* Sticky left context panel */}
           <div
-            className="w-[35%] shrink-0 pl-6 lg:pl-[calc((100vw-1280px)/2+1.5rem)] relative z-0"
+            className="w-[35%] shrink-0 pl-6 lg:pl-[calc((100vw-1280px)/2+1.5rem)] relative z-20"
           >
             <div
               data-hw-context
