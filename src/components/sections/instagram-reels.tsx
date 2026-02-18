@@ -210,9 +210,10 @@ function ReelModal({
             allow="autoplay; fullscreen"
             allowFullScreen
             style={{
-              width: "100%",
-              height: "calc(100% + 80px)",
-              top: "-40px",
+              width: "160%",
+              height: "calc(100% + 120px)",
+              top: "-60px",
+              left: "-30%",
               position: "absolute",
             }}
           />

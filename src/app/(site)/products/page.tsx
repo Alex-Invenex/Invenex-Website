@@ -92,6 +92,20 @@ export default function ProductsPage() {
               </div>
             </AnimatedSection>
           </div>
+
+          {/* Website preview */}
+          <AnimatedSection delay={0.2} className="mt-16">
+            <div className="rounded-2xl overflow-hidden border border-white/5 shadow-2xl shadow-black/20">
+              <Image
+                src="/products/caterflow-website.png"
+                alt="CaterFlow website — Take control of your food business"
+                width={1920}
+                height={900}
+                className="w-full h-auto"
+                sizes="(max-width: 1024px) 100vw, 1200px"
+              />
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
