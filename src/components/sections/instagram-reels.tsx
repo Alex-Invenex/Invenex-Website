@@ -9,31 +9,31 @@ const socialCards = [
   {
     id: "DEofbAcSLyL",
     url: "https://www.instagram.com/reel/DEofbAcSLyL/",
-    title: "Building CoolTech's new website",
+    title: "Build your brand online",
     gradient: "from-orange-500 via-pink-500 to-purple-600",
   },
   {
     id: "DFDGYdUIhku",
     url: "https://www.instagram.com/reel/DFDGYdUIhku/",
-    title: "Behind the scenes at Invenex",
+    title: "Why you need an online store",
     gradient: "from-cyan-500 via-blue-500 to-purple-600",
   },
   {
     id: "C--W-KWhMkq",
     url: "https://www.instagram.com/reel/C--W-KWhMkq/",
-    title: "Mobile app development process",
+    title: "Online clinic management",
     gradient: "from-pink-500 via-red-500 to-orange-500",
   },
   {
     id: "C-u0w2OBBCF",
     url: "https://www.instagram.com/reel/C-u0w2OBBCF/",
-    title: "Our design philosophy",
+    title: "Client Q&A",
     gradient: "from-green-400 via-teal-500 to-blue-500",
   },
   {
     id: "C32ciCRvp91",
     url: "https://www.instagram.com/reel/C32ciCRvp91/",
-    title: "Client success stories",
+    title: "Online growth simplified",
     gradient: "from-yellow-400 via-orange-500 to-red-500",
   },
 ];
