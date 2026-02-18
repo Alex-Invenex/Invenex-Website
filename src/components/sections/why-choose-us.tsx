@@ -191,7 +191,8 @@ export function WhyChooseUs() {
           });
 
           // Match pin-spacer background to section so there's no visible seam
-          const spacer = scrollTween.scrollTrigger?.spacer as HTMLElement | undefined;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const spacer = (scrollTween.scrollTrigger as any)?.spacer as HTMLElement | undefined;
           if (spacer) {
             spacer.style.backgroundColor = getComputedStyle(section).backgroundColor;
           }
