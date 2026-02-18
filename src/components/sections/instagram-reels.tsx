@@ -111,12 +111,12 @@ function SocialCard({
           loading="lazy"
         />
 
-        {/* Darkening overlay for text readability */}
-        <div className="absolute inset-0 bg-black/20" />
+        {/* Dark tint — fades away on hover */}
+        <div className="absolute inset-0 bg-black/50 group-hover:bg-black/0 transition-all duration-500" />
 
-        {/* Content */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-          <div className="w-16 h-16 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-black/50 transition-all duration-300">
+        {/* Content — fades out on hover */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center group-hover:opacity-0 transition-opacity duration-500">
+          <div className="w-16 h-16 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 flex items-center justify-center mb-4">
             <Play className="w-7 h-7 text-white fill-white ml-1" />
           </div>
           <p className="text-white text-sm font-medium leading-tight opacity-90">
@@ -124,8 +124,8 @@ function SocialCard({
           </p>
         </div>
 
-        {/* Bottom gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
+        {/* Bottom gradient — fades on hover */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/60 to-transparent group-hover:opacity-0 transition-opacity duration-500" />
 
         {/* Badge */}
         <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
