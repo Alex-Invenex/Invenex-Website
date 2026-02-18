@@ -90,6 +90,8 @@ export const footerNav = {
     { title: "Mobile Apps", href: "/services/mobile-development" },
     { title: "Platform Development", href: "/services/platform-development" },
     { title: "E-Commerce", href: "/services/ecommerce" },
+    { title: "Social Media", href: "/services/social-media" },
+    { title: "Digital Strategy", href: "/services/digital-strategy" },
   ],
   company: [
     { title: "About Us", href: "/about" },
