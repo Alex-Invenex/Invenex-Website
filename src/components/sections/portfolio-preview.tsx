@@ -22,7 +22,7 @@ const featuredProjects = [
   {
     title: "GrabToGo",
     categories: ["Platform", "Deals"],
-    image: "/portfolio/grabtogo-mockup.jpg",
+    image: "/portfolio/grabtogo-mockup.png",
     href: "/portfolio/grabtogo",
   },
   {

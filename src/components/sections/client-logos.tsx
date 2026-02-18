@@ -5,14 +5,16 @@ import { AnimatedSection } from "@/components/ui/animated-section";
 
 // Real Invenex clients
 const clients = [
-  { name: "CoolTech International" },
-  { name: "Ginger Designs" },
-  { name: "La Mirage" },
-  { name: "OnMyWay AI" },
-  { name: "EaseMyFly" },
+  { name: "Ahazz Designs" },
+  { name: "OnMyWay" },
+  { name: "Ziera Inc" },
   { name: "GrabToGo" },
+  { name: "CoolTech International" },
+  { name: "La Mirage" },
   { name: "Q by Rayeesa" },
-  { name: "AA Rent A Car" },
+  { name: "Ginger Designs" },
+  { name: "EaseMyFly" },
+  { name: "Al Shahama Marine" },
 ];
 
 function ClientName({ name }: { name: string }) {

@@ -8,23 +8,23 @@ const testimonials = [
   {
     quote:
       "Invenex transformed our digital presence. The new website perfectly captures our brand identity and has significantly improved our lead generation.",
-    author: "Michael Chen",
-    role: "CEO",
+    author: "Mathews Jacob",
+    role: "Founder",
     company: "CoolTech International",
     rating: 5,
   },
   {
     quote:
       "The website Invenex built for us is a work of art. It perfectly showcases our design aesthetic and has helped us attract premium clients.",
-    author: "Sara Al-Rashid",
-    role: "Creative Director",
+    author: "Gayannas Merlaz",
+    role: "Founder",
     company: "Ginger Designs",
     rating: 5,
   },
   {
     quote:
       "Invenex delivered a platform that handles our scale beautifully. The user experience is top-notch and our customers love it.",
-    author: "Rajesh Kumar",
+    author: "Favas",
     role: "Founder",
     company: "EaseMyFly",
     rating: 4.9,
@@ -32,15 +32,15 @@ const testimonials = [
   {
     quote:
       "The platform Invenex built has become the go-to app for deals in our city. Their technical expertise and understanding of our market was exceptional.",
-    author: "Priya Sharma",
-    role: "Co-founder",
+    author: "Sebin Mathew",
+    role: "Founder",
     company: "GrabToGo",
     rating: 5,
   },
   {
     quote:
       "Invenex understood our brand vision perfectly. The online store they created is as luxurious as our physical boutique.",
-    author: "Rayeesa Khan",
+    author: "Rayeesa Absal",
     role: "Founder",
     company: "Q by Rayeesa",
     rating: 4.8,
@@ -48,31 +48,33 @@ const testimonials = [
   {
     quote:
       "Our online bookings have skyrocketed since launching the new website. Invenex delivered exactly what we needed.",
-    author: "Ahmed Al-Farsi",
-    role: "General Manager",
-    company: "AA Rent A Car",
+    author: "Lijo Varghese",
+    role: "Founder",
+    company: "La Mirage",
     rating: 5,
   },
   {
     quote:
       "The AI platform Invenex built has revolutionized our logistics operations. The ROI we've seen is incredible.",
-    author: "David Wong",
-    role: "CTO",
-    company: "OnMyWay AI",
+    author: "Ahmed Zabi",
+    role: "Founder",
+    company: "OnMyWay",
     rating: 4.9,
   },
 ];
 
 // Client companies (merged from former client-logos section)
 const clients = [
-  "CoolTech International",
-  "Ginger Designs",
-  "La Mirage",
-  "OnMyWay AI",
-  "EaseMyFly",
+  "Ahazz Designs",
+  "OnMyWay",
+  "Ziera Inc",
   "GrabToGo",
+  "CoolTech International",
+  "La Mirage",
   "Q by Rayeesa",
-  "AA Rent A Car",
+  "Ginger Designs",
+  "EaseMyFly",
+  "Al Shahama Marine",
 ];
 
 function TestimonialCard({

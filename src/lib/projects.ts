@@ -57,8 +57,8 @@ export const projects: CaseStudyProject[] = [
     testimonial: {
       quote:
         "Invenex transformed our digital presence. The new website perfectly captures our brand identity and has significantly improved our lead generation.",
-      author: "Michael Chen",
-      role: "CEO, CoolTech International",
+      author: "Mathews Jacob",
+      role: "Founder, CoolTech International",
     },
   },
   {
@@ -89,8 +89,8 @@ export const projects: CaseStudyProject[] = [
     testimonial: {
       quote:
         "The website Invenex built for us is a work of art. It perfectly showcases our design aesthetic and has helped us attract premium clients.",
-      author: "Sara Al-Rashid",
-      role: "Creative Director, Ginger Designs",
+      author: "Gayannas Merlaz",
+      role: "Founder, Ginger Designs",
     },
   },
   {
@@ -146,7 +146,7 @@ export const projects: CaseStudyProject[] = [
     testimonial: {
       quote:
         "Invenex delivered a platform that handles our scale beautifully. The user experience is top-notch and our customers love it.",
-      author: "Rajesh Kumar",
+      author: "Favas",
       role: "Founder, EaseMyFly",
     },
   },
@@ -183,7 +183,7 @@ export const projects: CaseStudyProject[] = [
     category: "Platform",
     excerpt:
       "Deals and offers aggregation platform helping users discover the best local promotions and discounts.",
-    image: "/portfolio/grabtogo-mockup.jpg",
+    image: "/portfolio/grabtogo-mockup.png",
     slug: "grabtogo",
     url: "https://www.grabtogo.in",
     featured: true,
@@ -198,15 +198,15 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["React Native", "Node.js", "PostgreSQL", "Firebase", "AWS"],
     gallery: [
-      "/portfolio/grabtogo-mockup.jpg",
+      "/portfolio/grabtogo-mockup.png",
       "/portfolio/grabtogo.png",
       "/portfolio/grabtogo-2.png",
     ],
     testimonial: {
       quote:
         "The platform Invenex built has become the go-to app for deals in our city. Their technical expertise and understanding of our market was exceptional.",
-      author: "Priya Sharma",
-      role: "Co-founder, GrabToGo",
+      author: "Sebin Mathew",
+      role: "Founder, GrabToGo",
     },
   },
   {
@@ -288,8 +288,8 @@ export const projects: CaseStudyProject[] = [
   },
   {
     id: "10",
-    title: "OnMyWay AI",
-    client: "OnMyWay AI",
+    title: "OnMyWay",
+    client: "OnMyWay",
     category: "Platform",
     excerpt:
       "AI-powered travel and logistics platform with intelligent route optimization and real-time tracking.",
@@ -298,7 +298,7 @@ export const projects: CaseStudyProject[] = [
     url: "https://onmyway.ai",
     featured: true,
     challenge:
-      "OnMyWay AI needed a sophisticated logistics platform that could leverage machine learning for route optimization, provide real-time tracking, and handle complex multi-stop deliveries. The platform needed to scale for enterprise clients.",
+      "OnMyWay needed a sophisticated logistics platform that could leverage machine learning for route optimization, provide real-time tracking, and handle complex multi-stop deliveries. The platform needed to scale for enterprise clients.",
     solution:
       "We developed an AI-powered logistics platform with custom route optimization algorithms, real-time GPS tracking, and a driver mobile app. The admin dashboard provides comprehensive analytics and the system integrates with major shipping carriers.",
     results: [
@@ -314,8 +314,8 @@ export const projects: CaseStudyProject[] = [
     testimonial: {
       quote:
         "The AI platform Invenex built has revolutionized our logistics operations. The ROI we've seen is incredible.",
-      author: "David Wong",
-      role: "CTO, OnMyWay AI",
+      author: "Ahmed Zabi",
+      role: "Founder, OnMyWay",
     },
   },
   // E-Commerce Websites
@@ -371,7 +371,7 @@ export const projects: CaseStudyProject[] = [
     testimonial: {
       quote:
         "Invenex understood our brand vision perfectly. The online store they created is as luxurious as our physical boutique.",
-      author: "Rayeesa Khan",
+      author: "Rayeesa Absal",
       role: "Founder, Q by Rayeesa",
     },
   },
