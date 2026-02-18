@@ -3,38 +3,38 @@
 import { useState, useRef, useEffect } from "react";
 import { Instagram, X, ExternalLink, Play } from "lucide-react";
 import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
-import { cn } from "@/lib/utils";
+
 
 const socialCards = [
   {
     id: "DEofbAcSLyL",
     url: "https://www.instagram.com/reel/DEofbAcSLyL/",
     title: "Build your brand online",
-    gradient: "from-orange-500 via-pink-500 to-purple-600",
+    cover: "/instagram/reel-DEofbAcSLyL.gif",
   },
   {
     id: "DFDGYdUIhku",
     url: "https://www.instagram.com/reel/DFDGYdUIhku/",
     title: "Why you need an online store",
-    gradient: "from-cyan-500 via-blue-500 to-purple-600",
+    cover: "/instagram/reel-DFDGYdUIhku.gif",
   },
   {
     id: "C--W-KWhMkq",
     url: "https://www.instagram.com/reel/C--W-KWhMkq/",
     title: "Online clinic management",
-    gradient: "from-pink-500 via-red-500 to-orange-500",
+    cover: "/instagram/reel-C--W-KWhMkq.gif",
   },
   {
     id: "C-u0w2OBBCF",
     url: "https://www.instagram.com/reel/C-u0w2OBBCF/",
     title: "Client Q&A",
-    gradient: "from-green-400 via-teal-500 to-blue-500",
+    cover: "/instagram/reel-C-u0w2OBBCF.gif",
   },
   {
     id: "C32ciCRvp91",
     url: "https://www.instagram.com/reel/C32ciCRvp91/",
     title: "Online growth simplified",
-    gradient: "from-yellow-400 via-orange-500 to-red-500",
+    cover: "/instagram/reel-C32ciCRvp91.gif",
   },
 ];
 
@@ -103,17 +103,16 @@ function SocialCard({
         className="rounded-2xl overflow-hidden relative shadow-2xl shadow-black/40"
         style={{ width: "clamp(200px, 18vw, 260px)", aspectRatio: "9/16" }}
       >
-        {/* Gradient background */}
-        <div className={cn("absolute inset-0 bg-gradient-to-br", card.gradient)} />
-
-        {/* Pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: "radial-gradient(circle at center, white 1px, transparent 1px)",
-            backgroundSize: "16px 16px",
-          }}
+        {/* GIF cover */}
+        <img
+          src={card.cover}
+          alt={card.title}
+          className="absolute inset-0 w-full h-full object-cover"
+          loading="lazy"
         />
+
+        {/* Darkening overlay for text readability */}
+        <div className="absolute inset-0 bg-black/20" />
 
         {/* Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
