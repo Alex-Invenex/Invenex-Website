@@ -184,10 +184,17 @@ export function WhyChooseUs() {
               start: "top top",
               end: `+=${totalWidth * 1.1}`,
               pin: true,
+              pinSpacing: true,
               scrub: 0.8,
               invalidateOnRefresh: true,
             },
           });
+
+          // Match pin-spacer background to section so there's no visible seam
+          const spacer = scrollTween.scrollTrigger?.spacer as HTMLElement | undefined;
+          if (spacer) {
+            spacer.style.backgroundColor = getComputedStyle(section).backgroundColor;
+          }
 
           // Per-card entrance + step counter update
           cards.forEach((card, i) => {
