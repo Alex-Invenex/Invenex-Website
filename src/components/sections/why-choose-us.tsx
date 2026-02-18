@@ -313,7 +313,7 @@ export function WhyChooseUs() {
         <div className="flex">
           {/* Sticky left context panel */}
           <div
-            className="w-[35%] shrink-0 pl-6 lg:pl-[calc((100vw-1280px)/2+1.5rem)] relative z-20 bg-background"
+            className="w-[35%] shrink-0 pl-6 lg:pl-[calc((100vw-1280px)/2+1.5rem)] relative z-20"
           >
             <div
               data-hw-context
@@ -362,19 +362,21 @@ export function WhyChooseUs() {
             </div>
           </div>
 
-          {/* Scrolling right card track */}
-          <div
-            ref={trackRef}
-            className="flex gap-8 pr-[20vw] relative z-10"
-            style={{ width: "fit-content" }}
-          >
-            {steps.map((step) => (
-              <StepCard
-                key={step.number}
-                step={step}
-                className="w-[480px] lg:w-[520px]"
-              />
-            ))}
+          {/* Scrolling right card track — wrapper clips cards from bleeding into left panel */}
+          <div className="flex-1 min-w-0 overflow-hidden">
+            <div
+              ref={trackRef}
+              className="flex gap-8 pr-[20vw] relative z-10"
+              style={{ width: "fit-content" }}
+            >
+              {steps.map((step) => (
+                <StepCard
+                  key={step.number}
+                  step={step}
+                  className="w-[480px] lg:w-[520px]"
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
