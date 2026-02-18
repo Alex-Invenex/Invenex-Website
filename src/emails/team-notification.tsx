@@ -124,7 +124,7 @@ export default function TeamNotification({
           <Section style={styles.footer}>
             <Text style={styles.timestamp}>Received on {submittedAt}</Text>
             <Text style={styles.footerText}>
-              Invenex Solutions · Kochi, Kerala, India
+              Invenex Solutions · Kerala, India
             </Text>
           </Section>
         </Container>

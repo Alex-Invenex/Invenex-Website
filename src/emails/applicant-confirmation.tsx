@@ -128,7 +128,7 @@ export default function ApplicantConfirmation({
             </Text>
             <Hr style={styles.footerDivider} />
             <Text style={styles.footerText}>
-              Invenex Solutions · Kochi, Kerala, India
+              Invenex Solutions · Kerala, India
             </Text>
             <Text style={styles.footerLinks}>
               <Link href="https://invenex.in" style={styles.footerLinkSmall}>

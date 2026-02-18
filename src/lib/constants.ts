@@ -13,7 +13,7 @@ export const siteConfig = {
     "mobile apps",
     "digital solutions",
     "software development",
-    "Kochi",
+    "Thrissur",
     "Kerala",
     "India",
   ],
@@ -144,11 +144,11 @@ export const contactInfo = {
   phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+91 88484 14848",
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || "+918848414848",
   address: {
-    street: process.env.NEXT_PUBLIC_ADDRESS_STREET || "Kochi",
-    city: "Kochi",
+    street: process.env.NEXT_PUBLIC_ADDRESS_STREET || "Koratty",
+    city: "Thrissur",
     state: "Kerala",
     country: "India",
-    zip: "682001",
+    zip: "680308",
   },
   businessHours: "Mon - Fri: 9:00 AM - 6:00 PM IST",
 };

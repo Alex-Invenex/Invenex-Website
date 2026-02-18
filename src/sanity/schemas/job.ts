@@ -39,7 +39,7 @@ export const job = defineType({
       name: 'location',
       title: 'Location',
       type: 'string',
-      description: 'e.g., "Kochi", "Remote", "Hybrid"',
+      description: 'e.g., "Thrissur", "Remote", "Hybrid"',
       validation: (Rule) => Rule.required(),
     }),
     defineField({

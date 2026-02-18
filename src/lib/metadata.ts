@@ -14,13 +14,13 @@ export const defaultMetadata: Metadata = {
     template: "%s | Invenex Solutions",
   },
   description:
-    "Invenex Solutions delivers premium web development, mobile apps, and digital transformation services. Based in Kochi, India, serving clients worldwide.",
+    "Invenex Solutions delivers premium web development, mobile apps, and digital transformation services. Based in India, serving clients worldwide.",
   keywords: [
     "software development",
     "web development",
     "mobile app development",
     "digital solutions",
-    "Kochi",
+    "Thrissur",
     "Kerala",
     "India",
     "Next.js",

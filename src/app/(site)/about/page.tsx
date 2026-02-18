@@ -7,7 +7,7 @@ import { Target, Handshake, Lightbulb, Zap, Rocket } from "lucide-react";
 export const metadata = generatePageMetadata({
   title: "About Us",
   description:
-    "Learn about Invenex Solutions - our story, mission, values, and the passionate team behind our innovative digital solutions. Based in Kochi, Kerala.",
+    "Learn about Invenex Solutions - our story, mission, values, and the passionate team behind our innovative digital solutions. Based in Kerala, India.",
   path: "/about",
 });
 
@@ -64,7 +64,7 @@ export default function AboutPage() {
               <h2 id="about-story-title" className="text-3xl font-bold mb-6">Our Story</h2>
               <div className="space-y-4 text-foreground-muted">
                 <p>
-                  Founded in Kochi, Kerala, Invenex Solutions started with a
+                  Invenex Solutions started with a
                   simple mission: deliver world-class digital solutions that help
                   businesses thrive in the digital age.
                 </p>

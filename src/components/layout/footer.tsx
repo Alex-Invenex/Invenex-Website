@@ -9,7 +9,6 @@ import {
   Github,
   Mail,
   Phone,
-  MapPin,
   ArrowUpRight,
   Heart,
 } from "lucide-react";
@@ -210,16 +209,6 @@ export function Footer() {
                     {contactInfo.phone}
                   </span>
                 </motion.a>
-              </li>
-              <li>
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-                  <div className="w-10 h-10 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-[#FF6B35]" />
-                  </div>
-                  <span className="text-foreground-muted">
-                    {contactInfo.address.city}, {contactInfo.address.state}
-                  </span>
-                </div>
               </li>
             </ul>
           </div>

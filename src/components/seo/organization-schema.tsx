@@ -18,7 +18,7 @@ export function OrganizationSchema() {
     url: siteUrl,
     logo: `${siteUrl}/og-image.png`,
     description:
-      "Premium software development and digital solutions company based in Kochi, Kerala. We deliver world-class web development, mobile apps, and digital transformation services.",
+      "Premium software development and digital solutions company based in Kerala, India. We deliver world-class web development, mobile apps, and digital transformation services.",
     address: {
       "@type": "PostalAddress",
       streetAddress: contactInfo.address.street,

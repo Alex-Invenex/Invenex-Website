@@ -12,7 +12,7 @@ import { generatePageMetadata } from "@/lib/metadata";
 export const metadata = generatePageMetadata({
   title: "Careers",
   description:
-    "Join Invenex Solutions - Work with modern tech stack, grow your career, and build amazing products. Remote-friendly culture based in Kochi, Kerala.",
+    "Join Invenex Solutions - Work with modern tech stack, grow your career, and build amazing products. Remote-friendly culture based in Kerala, India.",
   path: "/careers",
 });
 
@@ -104,9 +104,9 @@ export default function CareersPage() {
               <div className="space-y-4 text-foreground-muted">
                 <p>
                   We&apos;re a small, focused team that believes in doing
-                  meaningful work. Based in Kochi with remote team members, we
-                  combine the best of in-person collaboration with the
-                  flexibility of remote work.
+                  meaningful work. With remote team members, we combine the
+                  best of in-person collaboration with the flexibility of
+                  remote work.
                 </p>
                 <p>
                   Our culture is built on trust, ownership, and continuous

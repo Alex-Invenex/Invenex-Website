@@ -371,7 +371,7 @@ export function HeroV2() {
               data-animate
               className="text-foreground-muted text-xs md:text-sm tracking-[0.2em] uppercase mb-8 font-mono"
             >
-              // Creative Agency — Kochi, India
+              // Creative Agency — India
             </p>
 
             {/* Monumental headline */}

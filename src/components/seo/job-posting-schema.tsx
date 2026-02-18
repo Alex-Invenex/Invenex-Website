@@ -66,7 +66,7 @@ export function JobPostingSchema({
       "@type": "Place",
       address: {
         "@type": "PostalAddress",
-        addressLocality: isRemote ? "Remote" : "Kochi",
+        addressLocality: isRemote ? "Remote" : "Thrissur",
         addressRegion: "Kerala",
         addressCountry: "IN",
       },

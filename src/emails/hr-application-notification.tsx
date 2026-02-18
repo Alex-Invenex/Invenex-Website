@@ -153,7 +153,7 @@ export default function HRApplicationNotification({
               Received on {submittedAt}
             </Text>
             <Text style={styles.footerText}>
-              Invenex Solutions · Kochi, Kerala, India
+              Invenex Solutions · Kerala, India
             </Text>
             <Text style={styles.footerLink}>
               <Link href="https://invenex.in" style={styles.footerLinkText}>
