@@ -313,7 +313,7 @@ export function WhyChooseUs() {
         <div className="flex">
           {/* Sticky left context panel */}
           <div
-            className="w-[35%] shrink-0 pl-6 lg:pl-[calc((100vw-1280px)/2+1.5rem)] relative z-20"
+            className="w-[35%] shrink-0 pl-6 lg:pl-[calc((100vw-1280px)/2+1.5rem)] relative z-20 bg-background"
           >
             <div
               data-hw-context
