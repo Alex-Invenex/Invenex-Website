@@ -58,14 +58,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
           {/* Company Info - Takes 4 columns */}
           <div className="lg:col-span-4">
-            <Link href="/" className="flex items-center gap-2 group">
-              <motion.div
-                className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF6B35] to-[#CC4A1A] flex items-center justify-center shadow-lg shadow-[#FF6B35]/20"
-                whileHover={{ scale: 1.05, rotate: 5 }}
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <motion.img
+                src="/invenex-logo.png"
+                alt="Invenex"
+                className="w-9 h-9"
+                whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
-              >
-                <span className="text-sm font-black text-white tracking-tight leading-none">IX</span>
-              </motion.div>
+              />
               <span className="text-xl font-bold text-gradient">
                 {siteConfig.name}
               </span>

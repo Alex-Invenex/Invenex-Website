@@ -145,13 +145,13 @@ export function InitialLoader({
             aria-hidden="true"
           />
 
-          {/* Center "I" logo */}
-          <span
-            className="absolute inset-0 flex items-center justify-center text-3xl sm:text-4xl font-bold text-foreground"
+          {/* Center logo */}
+          <img
+            src="/invenex-logo.png"
+            alt=""
+            className="absolute inset-0 m-auto w-10 h-10 sm:w-12 sm:h-12"
             aria-hidden="true"
-          >
-            I
-          </span>
+          />
         </div>
 
         {/* Brand Name */}

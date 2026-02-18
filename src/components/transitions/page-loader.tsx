@@ -64,13 +64,13 @@ export function PageLoader({
             aria-hidden="true"
           />
 
-          {/* Center logo text */}
-          <span
-            className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-foreground"
+          {/* Center logo */}
+          <img
+            src="/invenex-logo.png"
+            alt=""
+            className="absolute inset-0 m-auto w-10 h-10"
             aria-hidden="true"
-          >
-            I
-          </span>
+          />
         </div>
 
         {/* Loading text */}
