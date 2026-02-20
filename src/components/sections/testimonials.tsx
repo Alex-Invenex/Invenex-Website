@@ -158,7 +158,7 @@ function TestimonialCard({
   const hasHalf = rating % 1 >= 0.5;
 
   return (
-    <div className="flex-shrink-0 w-[350px] md:w-[400px] mx-3">
+    <div className="flex-shrink-0 w-[300px] sm:w-[350px] md:w-[400px] mx-2 sm:mx-3">
       <div className="h-full p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-sm hover:bg-white/[0.04] hover:border-coral-500/20 transition-all duration-300">
         {/* Stars with varied ratings for realism */}
         <div className="flex items-center gap-1 mb-4">
@@ -399,7 +399,7 @@ export function Testimonials() {
   return (
     <section
       ref={sectionRef}
-      className="py-32 md:py-44 bg-background relative overflow-hidden"
+      className="py-20 md:py-32 lg:py-44 bg-background relative overflow-hidden"
       aria-labelledby="testimonials-title"
       data-testid="testimonials-section"
     >

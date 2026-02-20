@@ -231,7 +231,7 @@ export function PortfolioPreview() {
   return (
     <section
       ref={sectionRef}
-      className="py-32 md:py-44 bg-background relative overflow-hidden"
+      className="py-20 md:py-32 lg:py-44 bg-background relative overflow-hidden"
       aria-labelledby="portfolio-preview-title"
       data-testid="portfolio-preview-section"
     >

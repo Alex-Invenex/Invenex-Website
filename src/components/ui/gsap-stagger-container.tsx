@@ -74,17 +74,26 @@ export function GSAPStaggerContainer({
         }
 
         ctx = gsap.context(() => {
-          gsap.from(items, {
-            ...fromVars,
-            stagger: staggerDelay,
-            duration: 0.6,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: `top ${threshold * 100}%`,
-              once: true,
-            },
-          })
+          // Use fromTo to avoid race condition where opacity-0 CSS class
+          // gets applied before GSAP records current values (making target = 0)
+          gsap.fromTo(
+            items,
+            fromVars,
+            {
+              opacity: 1,
+              y: 0,
+              x: 0,
+              scale: 1,
+              stagger: staggerDelay,
+              duration: 0.6,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: containerRef.current,
+                start: `top ${threshold * 100}%`,
+                once: true,
+              },
+            }
+          )
         }, containerRef)
       } catch (error) {
         console.error('Failed to initialize GSAP stagger:', error)

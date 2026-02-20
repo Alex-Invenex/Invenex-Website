@@ -15,19 +15,27 @@ function CharRevealText({
   className?: string;
   gradient?: boolean;
 }) {
+  // Group characters by word with nowrap wrappers to prevent mid-word breaks.
+  // Individual character spans allow break opportunities between ANY two spans,
+  // so we must explicitly prevent breaks within words.
+  const words = text.split(" ");
   return (
     <span className={className}>
-      {text.split("").map((char, i) => (
-        <span
-          key={i}
-          data-char
-          className={gradient ? "text-gradient-orange" : undefined}
-          style={{
-            display: "inline-block",
-            opacity: 0.1,
-          }}
-        >
-          {char === " " ? "\u00A0" : char}
+      {words.map((word, wi) => (
+        <span key={wi}>
+          {wi > 0 && <span data-char style={{ opacity: 0.1 }}>{" "}</span>}
+          <span style={{ whiteSpace: "nowrap" }}>
+            {word.split("").map((char, ci) => (
+              <span
+                key={ci}
+                data-char
+                className={gradient ? "text-gradient-orange" : undefined}
+                style={{ opacity: 0.1 }}
+              >
+                {char}
+              </span>
+            ))}
+          </span>
         </span>
       ))}
     </span>
@@ -132,7 +140,7 @@ export function CTASection() {
   return (
     <section
       ref={sectionRef}
-      className="py-32 md:py-44 bg-background relative overflow-hidden"
+      className="py-20 md:py-32 lg:py-44 bg-background relative overflow-hidden"
       aria-labelledby="cta-section-title"
       data-testid="cta-section"
     >
@@ -178,7 +186,7 @@ export function CTASection() {
             id="cta-section-title"
             className="leading-[0.9] text-center md:text-left mb-12"
             style={{
-              fontSize: "clamp(2.5rem, 8vw, 7rem)",
+              fontSize: "clamp(1.75rem, 7vw, 7rem)",
               letterSpacing: "-0.04em",
             }}
           >
@@ -186,8 +194,7 @@ export function CTASection() {
               <CharRevealText text="LET'S BUILD" />
             </span>
             <span className="block" style={{ fontWeight: 900 }}>
-              <CharRevealText text="SOMETHING EPIC" gradient />
-              <span data-char style={{ color: "var(--color-coral-500)", display: "inline-block", opacity: 0.1 }}>.</span>
+              <CharRevealText text="SOMETHING EPIC." gradient />
             </span>
           </h2>
 
