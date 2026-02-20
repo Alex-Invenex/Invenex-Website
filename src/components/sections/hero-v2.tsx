@@ -27,11 +27,15 @@ export function HeroV2() {
   const sectionRef = useRef<HTMLElement>(null)
   const statValueRefs = useRef<(HTMLSpanElement | null)[]>([])
   const reducedMotion = useRef(false)
+  const isTouchDevice = useRef(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     reducedMotion.current = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
+    ).matches
+    isTouchDevice.current = window.matchMedia(
+      '(hover: none) and (pointer: coarse)'
     ).matches
     setMounted(true)
   }, [])
@@ -42,8 +46,8 @@ export function HeroV2() {
       if (!mounted) return
       const rm = reducedMotion.current
 
-      // Reduced motion: show everything instantly
-      if (rm) {
+      // Reduced motion or touch device: show everything instantly, skip animations
+      if (rm || isTouchDevice.current) {
         gsap.set('[data-a]', {
           opacity: 1,
           y: 0,
@@ -57,6 +61,8 @@ export function HeroV2() {
         return
       }
 
+      // Defer GSAP one frame so browser can paint visible content first (LCP)
+      requestAnimationFrame(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
       // Background orbs fade + scale
@@ -89,19 +95,14 @@ export function HeroV2() {
         0.25
       )
 
-      // Subtitle border grows top→down, then text slides in
+      // Subtitle border grows top→down
       tl.fromTo(
         '[data-a="border"]',
         { scaleY: 0 },
         { scaleY: 1, duration: 0.6, transformOrigin: 'top' },
         0.85
       )
-      tl.fromTo(
-        '[data-a="desc"]',
-        { opacity: 0, x: -20 },
-        { opacity: 1, x: 0, duration: 0.7 },
-        0.95
-      )
+      // Note: subtitle ([data-a="desc"]) is NOT animated — it's the LCP element
 
       // CTA buttons
       tl.fromTo(
@@ -186,14 +187,13 @@ export function HeroV2() {
       })
 
       // ── Scroll-out parallax ──
-      // Use fromTo with explicit start values so scrub correctly reverses
       const initScrollOut = async () => {
         const { registerScrollTrigger } = await import('@/lib/gsap')
         await registerScrollTrigger()
 
-        // Fade ALL hero content together — text stays visible until section is nearly off-screen
+        // Fade hero content (except subtitle — LCP element)
         gsap.fromTo(
-          '[data-a="word"], [data-a="tag"], [data-a="border"], [data-a="desc"], [data-a="cta"], [data-a="stat"], [data-a="bottom"]',
+          '[data-a="word"], [data-a="tag"], [data-a="border"], [data-a="cta"], [data-a="stat"], [data-a="bottom"]',
           { y: 0, opacity: 1 },
           {
             y: -20,
@@ -208,7 +208,7 @@ export function HeroV2() {
           }
         )
 
-        // Sphere + rings fade together, never fully disappear
+        // Sphere + rings fade together
         gsap.fromTo(
           '[data-a="sphere"], [data-a="ring"]',
           { opacity: 1, y: 0 },
@@ -226,17 +226,17 @@ export function HeroV2() {
         )
       }
       initScrollOut()
+      }) // end requestAnimationFrame
     },
     { scope: sectionRef, dependencies: [mounted] }
   )
 
-  /* ── Mouse parallax ────────────────────────────────────── */
+  /* ── Mouse parallax (desktop only) ────────────────────── */
   useEffect(() => {
-    if (!mounted || reducedMotion.current) return
+    if (!mounted || reducedMotion.current || isTouchDevice.current) return
     const section = sectionRef.current
     if (!section) return
 
-    // quickTo for 60fps interpolation on the main sphere group
     const sX = gsap.quickTo(
       section.querySelector('[data-p="sphere"]')!,
       'x',
@@ -252,47 +252,23 @@ export function HeroV2() {
       const nx = (e.clientX / window.innerWidth - 0.5) * 2
       const ny = (e.clientY / window.innerHeight - 0.5) * 2
 
-      // Sphere group
       sX(nx * 20)
       sY(ny * 15)
 
-      // Background orbs — inverse parallax for depth
       gsap.to(section.querySelector('[data-p="orb-1"]'), {
-        x: nx * -10,
-        y: ny * -8,
-        duration: 1.5,
-        ease: 'power2',
-        overwrite: 'auto',
+        x: nx * -10, y: ny * -8, duration: 1.5, ease: 'power2', overwrite: 'auto',
       })
       gsap.to(section.querySelector('[data-p="orb-2"]'), {
-        x: nx * -6,
-        y: ny * -5,
-        duration: 1.8,
-        ease: 'power2',
-        overwrite: 'auto',
+        x: nx * -6, y: ny * -5, duration: 1.8, ease: 'power2', overwrite: 'auto',
       })
-
-      // Stat cards at different depths
       gsap.to(section.querySelector('[data-p="s0"]'), {
-        x: nx * 10,
-        y: ny * 8,
-        duration: 1,
-        ease: 'power2',
-        overwrite: 'auto',
+        x: nx * 10, y: ny * 8, duration: 1, ease: 'power2', overwrite: 'auto',
       })
       gsap.to(section.querySelector('[data-p="s1"]'), {
-        x: nx * -12,
-        y: ny * 10,
-        duration: 1.2,
-        ease: 'power2',
-        overwrite: 'auto',
+        x: nx * -12, y: ny * 10, duration: 1.2, ease: 'power2', overwrite: 'auto',
       })
       gsap.to(section.querySelector('[data-p="s2"]'), {
-        x: nx * 14,
-        y: ny * -7,
-        duration: 1,
-        ease: 'power2',
-        overwrite: 'auto',
+        x: nx * 14, y: ny * -7, duration: 1, ease: 'power2', overwrite: 'auto',
       })
     }
 
@@ -369,7 +345,6 @@ export function HeroV2() {
             {/* Monospace agency tag */}
             <p
               data-a="tag"
-              data-animate
               className="text-foreground-muted text-xs md:text-sm tracking-[0.2em] uppercase mb-8 font-mono"
             >
               // Creative Agency — India
@@ -383,7 +358,7 @@ export function HeroV2() {
               {/* WE — thin weight for dramatic contrast */}
               <span
                 data-a="word"
-                className="block text-foreground/50 will-change-transform" data-animate
+                className="block text-foreground/50"
                 style={{
                   fontSize: 'clamp(1.8rem, 4vw, 3.5rem)',
                   fontWeight: 200,
@@ -395,7 +370,7 @@ export function HeroV2() {
               {/* CRAFT — maximum impact */}
               <span
                 data-a="word"
-                className="block text-foreground will-change-transform" data-animate
+                className="block text-foreground"
                 style={{
                   fontSize: 'clamp(3rem, 6.5vw, 6.5rem)',
                   fontWeight: 900,
@@ -407,7 +382,7 @@ export function HeroV2() {
               {/* DIGITAL — orange gradient */}
               <span
                 data-a="word"
-                className="block will-change-transform" data-animate
+                className="block"
                 style={{
                   fontSize: 'clamp(3rem, 6.5vw, 6.5rem)',
                   fontWeight: 900,
@@ -424,7 +399,7 @@ export function HeroV2() {
               {/* FUTURES. — with orange period */}
               <span
                 data-a="word"
-                className="block text-foreground will-change-transform" data-animate
+                className="block text-foreground"
                 style={{
                   fontSize: 'clamp(3rem, 6.5vw, 6.5rem)',
                   fontWeight: 900,
@@ -443,7 +418,7 @@ export function HeroV2() {
               />
               <p
                 data-a="desc"
-                className="pl-4 md:pl-5 text-base md:text-lg lg:text-xl text-foreground-muted max-w-lg leading-relaxed" data-animate
+                className="pl-4 md:pl-5 text-base md:text-lg lg:text-xl text-foreground-muted max-w-lg leading-relaxed"
               >
                 Premium web experiences, mobile apps &amp; platforms for
                 businesses that demand excellence and innovation.
@@ -452,7 +427,7 @@ export function HeroV2() {
 
             {/* CTA row */}
             <div className="mt-10 md:mt-12 flex flex-col sm:flex-row items-start gap-4">
-              <div data-a="cta" data-animate>
+              <div data-a="cta">
                 <Button
                   asChild
                   variant="coral"
@@ -465,7 +440,7 @@ export function HeroV2() {
                   </Link>
                 </Button>
               </div>
-              <div data-a="cta" data-animate>
+              <div data-a="cta">
                 <Button
                   asChild
                   variant="ghost"
@@ -485,7 +460,7 @@ export function HeroV2() {
           {/* ── RIGHT: 3D Sphere + Stat Cards (38%) ── */}
           <div className="lg:w-[38%] relative flex items-center justify-center min-h-[300px] md:min-h-[400px] lg:min-h-[500px]">
             {/* Sphere group — parallax target */}
-            <div data-p="sphere" className="will-change-transform">
+            <div data-p="sphere">
               {/* Orbit ring 1 — clockwise */}
               <div
                 data-a="ring"
@@ -572,8 +547,7 @@ export function HeroV2() {
                 key={stat.label}
                 data-a="stat"
                 data-p={`s${i}`}
-                data-animate
-                className={`absolute will-change-transform backdrop-blur-xl bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 md:px-5 md:py-4 transition-all duration-300 hover:bg-white/[0.1] hover:border-white/[0.15] hover:shadow-[0_0_30px_rgba(255,106,55,0.1)] ${STAT_POSITIONS[i]}`}
+                className={`absolute backdrop-blur-xl bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 md:px-5 md:py-4 transition-all duration-300 hover:bg-white/[0.1] hover:border-white/[0.15] hover:shadow-[0_0_30px_rgba(255,106,55,0.1)] ${STAT_POSITIONS[i]}`}
               >
                 {/* Status indicator dot */}
                 <div className="flex items-center gap-1.5 mb-1">
@@ -603,7 +577,6 @@ export function HeroV2() {
         {/* ── Bottom bar ── */}
         <div
           data-a="bottom"
-          data-animate
           className="mt-16 md:mt-20 flex items-center justify-between"
         >
           {/* Scroll indicator */}

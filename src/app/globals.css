@@ -184,6 +184,12 @@ body.mobile-menu-open [data-testid="whatsapp-button"] {
   .shimmer {
     animation: none !important;
   }
+
+  /* Show all GSAP-animated content immediately on mobile —
+     ScrollTrigger animations are too expensive on touch devices */
+  html.js-ready [data-animate] {
+    opacity: 1 !important;
+  }
 }
 
 /* ============================================
@@ -191,6 +197,7 @@ body.mobile-menu-open [data-testid="whatsapp-button"] {
    Content is visible by default (no JS / slow JS).
    Once JS loads, elements with [data-animate] hide
    so GSAP can reveal them via ScrollTrigger.
+   Desktop only — mobile override above.
    ============================================ */
 html.js-ready [data-animate] {
   opacity: 0;
