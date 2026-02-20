@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Instagram, X, ExternalLink, Play } from "lucide-react";
-import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
 
 
 const socialCards = [
@@ -60,7 +60,7 @@ function SocialCard({
   const transform = CARD_TRANSFORMS[index];
 
   const handleMouseEnter = () => {
-    if (prefersReducedMotion() || !cardRef.current) return;
+    if (shouldSkipAnimations() || !cardRef.current) return;
     gsap.to(cardRef.current, {
       rotate: 0,
       y: transform.y - 30,
@@ -72,7 +72,7 @@ function SocialCard({
   };
 
   const handleMouseLeave = () => {
-    if (prefersReducedMotion() || !cardRef.current) return;
+    if (shouldSkipAnimations() || !cardRef.current) return;
     gsap.to(cardRef.current, {
       rotate: transform.rotate,
       y: transform.y,
@@ -152,7 +152,7 @@ function ReelModal({
   useEffect(() => {
     if (!card) return;
 
-    if (!prefersReducedMotion()) {
+    if (!shouldSkipAnimations()) {
       gsap.fromTo(
         overlayRef.current,
         { opacity: 0 },
@@ -169,7 +169,7 @@ function ReelModal({
   if (!card) return null;
 
   const handleClose = () => {
-    if (!prefersReducedMotion() && overlayRef.current && contentRef.current) {
+    if (!shouldSkipAnimations() && overlayRef.current && contentRef.current) {
       gsap.to(contentRef.current, { scale: 0.9, opacity: 0, duration: 0.2 });
       gsap.to(overlayRef.current, {
         opacity: 0,
@@ -241,7 +241,7 @@ export function InstagramReels() {
   // GSAP entrance animation — fanned cards stagger in
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
+      if (shouldSkipAnimations()) return;
 
       const init = async () => {
         await registerScrollTrigger();

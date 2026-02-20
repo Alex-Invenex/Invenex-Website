@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
 
 /* ─── Service data ─────────────────────────────────────── */
 const SERVICES = [
@@ -412,7 +412,7 @@ export function ServicesPreview() {
   const rmRef = useRef(false);
 
   useEffect(() => {
-    rmRef.current = prefersReducedMotion();
+    rmRef.current = shouldSkipAnimations();
     setMounted(true);
   }, []);
 

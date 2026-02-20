@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
-import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
 
 const featuredProjects = [
   {
@@ -44,7 +44,7 @@ function ProjectCard({
   const overlayRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (prefersReducedMotion() || !cardRef.current) return;
+    if (shouldSkipAnimations() || !cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
     const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
@@ -62,7 +62,7 @@ function ProjectCard({
   };
 
   const handleMouseEnter = () => {
-    if (prefersReducedMotion() || !cardRef.current) return;
+    if (shouldSkipAnimations() || !cardRef.current) return;
     if (overlayRef.current) {
       gsap.to(overlayRef.current, {
         clipPath: "inset(0 0% 0 0)",
@@ -78,7 +78,7 @@ function ProjectCard({
   };
 
   const handleMouseLeave = () => {
-    if (prefersReducedMotion() || !cardRef.current) return;
+    if (shouldSkipAnimations() || !cardRef.current) return;
     if (overlayRef.current) {
       gsap.to(overlayRef.current, {
         clipPath: "inset(0 100% 0 0)",
@@ -184,7 +184,7 @@ export function PortfolioPreview() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
+      if (shouldSkipAnimations()) return;
 
       const init = async () => {
         await registerScrollTrigger();

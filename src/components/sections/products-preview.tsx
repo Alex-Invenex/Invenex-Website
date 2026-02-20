@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { ExternalLink, ArrowRight, Utensils, Building2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
 
 const CATERFLOW_METRICS = [
   { value: "12K+", label: "Orders Managed" },
@@ -28,7 +28,7 @@ export function ProductsPreview() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion()) {
+      if (shouldSkipAnimations()) {
         gsap.set("[data-prod]", { opacity: 1, y: 0, x: 0, scale: 1 });
         return;
       }

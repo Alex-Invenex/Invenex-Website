@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRef, useEffect } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from '@/lib/gsap'
+import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from '@/lib/gsap'
 
 function CharRevealText({
   text,
@@ -67,7 +67,7 @@ export function SubpageCTA({
   // Character reveal on scroll
   useGSAP(
     () => {
-      if (prefersReducedMotion()) {
+      if (shouldSkipAnimations()) {
         gsap.set('[data-schar]', { opacity: 1 })
         gsap.set('[data-scta-content]', { opacity: 1, y: 0 })
         return
@@ -131,7 +131,7 @@ export function SubpageCTA({
 
   // Mouse-tracking coral spotlight
   useEffect(() => {
-    if (prefersReducedMotion()) return
+    if (shouldSkipAnimations()) return
     const section = sectionRef.current
     const spotlight = spotlightRef.current
     if (!section || !spotlight) return

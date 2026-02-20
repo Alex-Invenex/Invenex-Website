@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { Star } from "lucide-react";
-import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
 
 interface Testimonial {
   quote: string;
@@ -206,7 +206,7 @@ function GSAPMarquee({
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (!mounted || prefersReducedMotion() || !trackRef.current) return;
+    if (!mounted || shouldSkipAnimations() || !trackRef.current) return;
 
     const track = trackRef.current;
     let tl: gsap.core.Timeline;
@@ -307,7 +307,7 @@ function ClientTicker() {
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (!mounted || prefersReducedMotion() || !tickerRef.current) return;
+    if (!mounted || shouldSkipAnimations() || !tickerRef.current) return;
 
     const track = tickerRef.current;
     const width = track.scrollWidth / 3;
@@ -348,7 +348,7 @@ export function Testimonials() {
   // Header + spotlight entrance animation
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
+      if (shouldSkipAnimations()) return;
 
       const init = async () => {
         await registerScrollTrigger();

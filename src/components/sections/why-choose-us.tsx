@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 
 const steps = [
@@ -116,7 +116,7 @@ export function WhyChooseUs() {
   const rmRef = useRef(false);
 
   useEffect(() => {
-    rmRef.current = prefersReducedMotion();
+    rmRef.current = shouldSkipAnimations();
     setMounted(true);
   }, []);
 

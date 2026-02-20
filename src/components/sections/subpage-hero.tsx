@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
+import { isTouchDevice } from '@/lib/gsap'
 
 gsap.registerPlugin(useGSAP)
 
@@ -47,7 +48,7 @@ export function SubpageHero({
       if (!mounted) return
       const rm = reducedMotion.current
 
-      if (rm) {
+      if (rm || isTouchDevice()) {
         gsap.set('[data-sh]', {
           opacity: 1,
           y: 0,
