@@ -4,6 +4,7 @@
    Base scroll — ensure iOS Safari can scroll
    ============================================ */
 html, body {
+  overflow-x: clip;
   overflow-y: auto;
 }
 

@@ -102,6 +102,14 @@ export function EpicPreloader() {
       return
     }
 
+    // Skip preloader on mobile — don't add loading delay on slower connections
+    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches
+    if (isTouchDevice) {
+      markVisited()
+      setPhase('done')
+      return
+    }
+
     const tl = gsap.timeline({
       onComplete: () => {
         // Reset scroll position in case page scrolled behind the opaque preloader
