@@ -183,14 +183,6 @@ body.mobile-menu-open [data-testid="whatsapp-button"] {
   .shimmer {
     animation: none !important;
   }
-
-  /* Stat cards: replace blur with opaque bg (same visual intent) */
-  .backdrop-blur-xl,
-  .backdrop-blur-sm,
-  .backdrop-blur-md,
-  [class*="backdrop-blur"] {
-    background-color: rgba(20, 20, 20, 0.85) !important;
-  }
 }
 
 /* ============================================
