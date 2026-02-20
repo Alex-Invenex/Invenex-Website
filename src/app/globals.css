@@ -1,7 +1,14 @@
 @import "tailwindcss";
 
 /* ============================================
-   Lenis Smooth Scroll
+   Base scroll — ensure iOS Safari can scroll
+   ============================================ */
+html, body {
+  overflow-y: auto;
+}
+
+/* ============================================
+   Lenis Smooth Scroll (desktop only)
    ============================================ */
 html.lenis,
 html.lenis body {

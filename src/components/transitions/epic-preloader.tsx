@@ -102,12 +102,10 @@ export function EpicPreloader() {
       return
     }
 
-    // Lock scroll during animation (body.overflow, NOT touch-action which breaks iOS Safari)
-    document.body.style.overflow = 'hidden'
-
     const tl = gsap.timeline({
       onComplete: () => {
-        document.body.style.overflow = ''
+        // Reset scroll position in case page scrolled behind the opaque preloader
+        window.scrollTo(0, 0)
         markVisited()
         setPhase('done')
       },
@@ -177,7 +175,6 @@ export function EpicPreloader() {
 
     return () => {
       tl.kill()
-      document.body.style.overflow = ''
       if (scrambleIntervalRef.current) {
         clearInterval(scrambleIntervalRef.current)
       }

@@ -46,7 +46,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-background text-foreground font-sans min-h-screen">
+      <body className="bg-background text-foreground font-sans min-h-dvh">
         <OrganizationSchema />
         <WebSiteSchema />
         {children}
