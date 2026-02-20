@@ -10,10 +10,14 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     // Respect prefers-reduced-motion
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
+    // Skip Lenis on touch devices (iOS/Android have native smooth momentum scroll)
+    // Lenis conflicts with iOS Safari's touch event handling and breaks scrolling
+    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches
+    if (isTouchDevice) return
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 2,
       infinite: false,
     })
 
