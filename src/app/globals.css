@@ -157,6 +157,43 @@ body.mobile-menu-open [data-testid="whatsapp-button"] {
 }
 
 /* ============================================
+   Mobile Performance — iOS Safari GPU Relief
+   backdrop-filter is extremely expensive on iOS
+   (each instance composites a separate GPU layer).
+   Disable on touch devices to fix laggy scroll.
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  *,
+  *::before,
+  *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Remove excessive will-change (each creates a GPU layer) */
+  .will-change-transform {
+    will-change: auto !important;
+  }
+
+  /* Pause infinite CSS animations that drain battery */
+  .animate-float,
+  .animate-float-delayed,
+  .animate-float-slow,
+  .animate-pulse-glow,
+  .shimmer {
+    animation: none !important;
+  }
+
+  /* Stat cards: replace blur with opaque bg (same visual intent) */
+  .backdrop-blur-xl,
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  [class*="backdrop-blur"] {
+    background-color: rgba(20, 20, 20, 0.85) !important;
+  }
+}
+
+/* ============================================
    GSAP Animation Fallback (A3)
    Content is visible by default (no JS / slow JS).
    Once JS loads, elements with [data-animate] hide
@@ -316,13 +353,20 @@ html.js-ready [data-animate] {
   }
 }
 
-/* Slow spin for outer ring */
+/* Slow spin for outer ring (paused on mobile via touch media query) */
 @keyframes spin-slow {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Pause spin-slow on mobile — catches inline style animations too */
+@media (hover: none) and (pointer: coarse) {
+  @keyframes spin-slow {
+    from, to { transform: rotate(0deg); }
   }
 }
 
