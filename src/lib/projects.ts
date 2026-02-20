@@ -175,6 +175,12 @@ export const projects: CaseStudyProject[] = [
       "/portfolio/la-mirage.png",
       "/portfolio/la-mirage-2.png",
     ],
+    testimonial: {
+      quote:
+        "Our online bookings have skyrocketed since launching the new website. Invenex delivered exactly what we needed.",
+      author: "Lijo Varghese",
+      role: "Founder, La Mirage",
+    },
   },
   {
     id: "6",
@@ -425,12 +431,7 @@ export const projects: CaseStudyProject[] = [
       "/portfolio/aa-rentacar.png",
       "/portfolio/aa-rentacar-2.png",
     ],
-    testimonial: {
-      quote:
-        "Our online bookings have skyrocketed since launching the new website. Invenex delivered exactly what we needed.",
-      author: "Ahmed Al-Farsi",
-      role: "General Manager, AA Rent A Car",
-    },
+    // No testimonial - previously had misattributed La Mirage quote
   },
 ];
 

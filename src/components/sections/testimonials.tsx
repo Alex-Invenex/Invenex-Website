@@ -1,10 +1,25 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 import { Star } from "lucide-react";
 import { gsap, useGSAP, registerScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 
-const testimonials = [
+interface Testimonial {
+  quote: string;
+  author: string;
+  role: string;
+  company: string;
+  rating: number;
+  image?: string;
+}
+
+interface ClientInfo {
+  name: string;
+  logo?: string;
+}
+
+const testimonials: Testimonial[] = [
   {
     quote:
       "Invenex transformed our digital presence. The new website perfectly captures our brand identity and has significantly improved our lead generation.",
@@ -12,6 +27,7 @@ const testimonials = [
     role: "Founder",
     company: "CoolTech International",
     rating: 5,
+    image: "/testimonials/mathews-jacob.jpg",
   },
   {
     quote:
@@ -20,6 +36,7 @@ const testimonials = [
     role: "Founder",
     company: "Ginger Designs",
     rating: 5,
+    image: "/testimonials/gayannas-merlaz.jpg",
   },
   {
     quote:
@@ -28,6 +45,7 @@ const testimonials = [
     role: "Founder",
     company: "EaseMyFly",
     rating: 4.9,
+    image: "/testimonials/favas.jpg",
   },
   {
     quote:
@@ -36,6 +54,7 @@ const testimonials = [
     role: "Founder",
     company: "GrabToGo",
     rating: 5,
+    image: "/testimonials/sebin-mathew.jpg",
   },
   {
     quote:
@@ -44,6 +63,7 @@ const testimonials = [
     role: "Founder",
     company: "Q by Rayeesa",
     rating: 4.8,
+    image: "/testimonials/rayeesa-absal.jpg",
   },
   {
     quote:
@@ -52,6 +72,7 @@ const testimonials = [
     role: "Founder",
     company: "La Mirage",
     rating: 5,
+    image: "/testimonials/lijo-varghese.jpg",
   },
   {
     quote:
@@ -60,22 +81,70 @@ const testimonials = [
     role: "Founder",
     company: "OnMyWay",
     rating: 4.9,
+    image: "/testimonials/ahmed-zabi.jpg",
   },
 ];
 
-// Client companies (merged from former client-logos section)
-const clients = [
-  "Ahazz Designs",
-  "OnMyWay",
-  "Ziera Inc",
-  "GrabToGo",
-  "CoolTech International",
-  "La Mirage",
-  "Q by Rayeesa",
-  "Ginger Designs",
-  "EaseMyFly",
-  "Al Shahama Marine",
+// Client companies with optional logos
+const clients: ClientInfo[] = [
+  { name: "Ahazz Designs", logo: "/clients/ahazz-designs.png" },
+  { name: "OnMyWay", logo: "/clients/onmyway.png" },
+  { name: "Ziera Inc", logo: "/clients/ziera-inc.png" },
+  { name: "GrabToGo", logo: "/clients/grabtogo.png" },
+  { name: "CoolTech International", logo: "/clients/cooltech-international.png" },
+  { name: "La Mirage", logo: "/clients/la-mirage.png" },
+  { name: "Q by Rayeesa", logo: "/clients/q-by-rayeesa.png" },
+  { name: "Ginger Designs", logo: "/clients/ginger-designs.png" },
+  { name: "EaseMyFly", logo: "/clients/easemyfly.png" },
+  { name: "Al Shahama Marine", logo: "/clients/al-shahama-marine.png" },
 ];
+
+function ClientAvatar({
+  author,
+  role,
+  company,
+  image,
+  size = 48,
+}: {
+  author: string;
+  role: string;
+  company: string;
+  image?: string;
+  size?: number;
+}) {
+  const [imgError, setImgError] = useState(false);
+
+  if (image && !imgError) {
+    return (
+      <div
+        className="relative rounded-full overflow-hidden border border-coral-500/20 flex-shrink-0"
+        style={{ width: size, height: size }}
+      >
+        <Image
+          src={image}
+          alt={`${author}, ${role} at ${company}`}
+          fill
+          className="object-cover"
+          sizes={`${size}px`}
+          onError={() => setImgError(true)}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="rounded-full bg-coral-500/10 border border-coral-500/20 flex items-center justify-center flex-shrink-0"
+      style={{ width: size, height: size }}
+    >
+      <span
+        className={`font-semibold text-coral-500 ${size >= 48 ? "text-lg" : "text-sm"}`}
+      >
+        {author.charAt(0)}
+      </span>
+    </div>
+  );
+}
 
 function TestimonialCard({
   quote,
@@ -83,13 +152,8 @@ function TestimonialCard({
   role,
   company,
   rating,
-}: {
-  quote: string;
-  author: string;
-  role: string;
-  company: string;
-  rating: number;
-}) {
+  image,
+}: Testimonial) {
   const fullStars = Math.floor(rating);
   const hasHalf = rating % 1 >= 0.5;
 
@@ -118,13 +182,9 @@ function TestimonialCard({
           &ldquo;{quote}&rdquo;
         </blockquote>
 
-        {/* Author with company badge */}
+        {/* Author with photo or initial fallback */}
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-coral-500/10 border border-coral-500/20 flex items-center justify-center">
-            <span className="text-lg font-semibold text-coral-500">
-              {author.charAt(0)}
-            </span>
-          </div>
+          <ClientAvatar author={author} role={role} company={company} image={image} size={48} />
           <div>
             <p className="font-semibold text-foreground">{author}</p>
             <p className="text-sm text-foreground-muted">
@@ -143,7 +203,7 @@ function GSAPMarquee({
   direction = "left",
   speed = 50,
 }: {
-  items: typeof testimonials;
+  items: Testimonial[];
   direction?: "left" | "right";
   speed?: number;
 }) {
@@ -221,6 +281,32 @@ function GSAPMarquee({
   );
 }
 
+function ClientLogoItem({ client }: { client: ClientInfo }) {
+  const [imgError, setImgError] = useState(false);
+
+  if (client.logo && !imgError) {
+    return (
+      <span className="flex-shrink-0 mx-6 md:mx-10 flex items-center gap-2 whitespace-nowrap">
+        <Image
+          src={client.logo}
+          alt={client.name}
+          width={0}
+          height={36}
+          className="opacity-40 hover:opacity-70 transition-opacity duration-300"
+          style={{ width: "auto", height: "36px" }}
+          onError={() => setImgError(true)}
+        />
+      </span>
+    );
+  }
+
+  return (
+    <span className="flex-shrink-0 mx-6 md:mx-10 text-base md:text-lg font-medium text-foreground-muted/40 hover:text-foreground-muted/70 transition-colors duration-300 whitespace-nowrap">
+      {client.name}
+    </span>
+  );
+}
+
 function ClientTicker() {
   const tickerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
@@ -251,14 +337,9 @@ function ClientTicker() {
       <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-      <div ref={tickerRef} className="flex will-change-transform">
-        {tripled.map((name, i) => (
-          <span
-            key={i}
-            className="flex-shrink-0 mx-6 md:mx-10 text-base md:text-lg font-medium text-foreground-muted/40 hover:text-foreground-muted/70 transition-colors duration-300 whitespace-nowrap"
-          >
-            {name}
-          </span>
+      <div ref={tickerRef} className="flex items-center will-change-transform">
+        {tripled.map((client, i) => (
+          <ClientLogoItem key={i} client={client} />
         ))}
       </div>
     </div>
@@ -365,11 +446,13 @@ export function Testimonials() {
               &rdquo;
             </span>
             <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-coral-500/10 border border-coral-500/20 flex items-center justify-center">
-                <span className="text-sm font-semibold text-coral-500">
-                  {spotlight.author.charAt(0)}
-                </span>
-              </div>
+              <ClientAvatar
+                author={spotlight.author}
+                role={spotlight.role}
+                company={spotlight.company}
+                image={spotlight.image}
+                size={40}
+              />
               <div className="text-left">
                 <p className="font-semibold text-foreground text-sm">
                   {spotlight.author}

@@ -172,7 +172,7 @@ development_status:
   epic-11: in-progress
   11-1-portfolio-screenshots: blocked  # AC1 (CaterFlow) awaits PO; AC3 PASS (images compressed); AC4 partial (generic alt ok)
   11-2-team-founder-photos: done  # Code review 2026-02-03: All issues fixed, 17 tests added
-  11-3-client-testimonials: backlog
+  11-3-client-testimonials: review
   11-4-office-culture-photos: backlog
   11-5-caterflow-product-showcase: backlog
   epic-11-retrospective: optional
