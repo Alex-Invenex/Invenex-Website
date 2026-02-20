@@ -102,8 +102,12 @@ export function EpicPreloader() {
       return
     }
 
+    // Lock scroll during animation (body.overflow, NOT touch-action which breaks iOS Safari)
+    document.body.style.overflow = 'hidden'
+
     const tl = gsap.timeline({
       onComplete: () => {
+        document.body.style.overflow = ''
         markVisited()
         setPhase('done')
       },
@@ -173,6 +177,7 @@ export function EpicPreloader() {
 
     return () => {
       tl.kill()
+      document.body.style.overflow = ''
       if (scrambleIntervalRef.current) {
         clearInterval(scrambleIntervalRef.current)
       }
@@ -185,7 +190,7 @@ export function EpicPreloader() {
     <div
       ref={containerRef}
       className="fixed inset-0 flex flex-col items-center justify-center bg-[#0A0A0A]"
-      style={{ zIndex: 99999, touchAction: 'none', overscrollBehavior: 'none' }}
+      style={{ zIndex: 99999 }}
       aria-hidden="true"
     >
       {/* Coral horizontal line */}

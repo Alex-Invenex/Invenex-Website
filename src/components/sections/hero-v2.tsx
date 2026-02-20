@@ -304,7 +304,8 @@ export function HeroV2() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-background"
+      className="relative min-h-dvh flex flex-col justify-center bg-background"
+      style={{ overflow: 'clip' }}
       aria-labelledby="hero-title"
       data-testid="hero-section"
     >

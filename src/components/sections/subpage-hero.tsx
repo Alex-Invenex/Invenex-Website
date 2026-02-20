@@ -142,7 +142,8 @@ export function SubpageHero({
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[60vh] md:min-h-[70vh] flex flex-col justify-center overflow-hidden bg-background pt-24 pb-12 md:pb-16"
+      className="relative min-h-[60dvh] md:min-h-[70dvh] flex flex-col justify-center bg-background pt-24 pb-12 md:pb-16"
+      style={{ overflow: 'clip' }}
       aria-labelledby={id}
     >
       {/* ─ Grain texture overlay ─ */}
