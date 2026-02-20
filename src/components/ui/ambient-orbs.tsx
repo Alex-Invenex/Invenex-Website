@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { shouldSkipAnimations } from '@/lib/gsap'
 
 interface OrbConfig {
   id: string
@@ -41,34 +42,25 @@ interface AmbientOrbsProps {
  * Creates visual continuity by positioning large, blurred gradient orbs
  * at the page level, crossing section boundaries.
  *
- * Features:
- * - Parallax scroll effect on each orb
- * - GPU-accelerated transforms
- * - Respects prefers-reduced-motion
- * - Pointer-events: none for click-through
+ * Hidden on mobile/touch devices — the large blur filters (150-200px) are
+ * extremely expensive for mobile GPU compositing and the subtle effect
+ * (opacity 0.04-0.05) is barely visible on small screens.
  */
 export function AmbientOrbs({ orbs = defaultOrbs, className }: AmbientOrbsProps) {
-  // Initialize with SSR-safe default, then sync with actual preference
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  })
+  const [hidden, setHidden] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const orbRefs = useRef<(HTMLDivElement | null)[]>([])
 
-  // Subscribe to preference changes only
+  // Check if we should skip on mount
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    const mql = window.matchMedia('(prefers-reduced-motion: reduce)')
-
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches)
-    mql.addEventListener('change', handler)
-    return () => mql.removeEventListener('change', handler)
+    if (shouldSkipAnimations()) {
+      setHidden(true)
+    }
   }, [])
 
-  // Initialize parallax for each orb
+  // Initialize parallax for each orb (desktop only)
   useEffect(() => {
-    if (prefersReducedMotion || typeof window === 'undefined') return
+    if (hidden || typeof window === 'undefined') return
 
     let ctx: { revert: () => void } | null = null
 
@@ -92,7 +84,7 @@ export function AmbientOrbs({ orbs = defaultOrbs, className }: AmbientOrbsProps)
                 trigger: document.body,
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: 1.5, // Smooth scrubbing
+                scrub: 1.5,
               },
             })
           })
@@ -109,7 +101,10 @@ export function AmbientOrbs({ orbs = defaultOrbs, className }: AmbientOrbsProps)
     return () => {
       if (ctx) ctx.revert()
     }
-  }, [orbs, prefersReducedMotion])
+  }, [orbs, hidden])
+
+  // Don't render on mobile — saves GPU compositing of 5 large blur elements
+  if (hidden) return null
 
   const getColorClass = (color: OrbConfig['color']) => {
     switch (color) {
