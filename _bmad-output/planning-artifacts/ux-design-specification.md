@@ -13,6 +13,7 @@ techStack:
   animations: ['GSAP 3.14 + ScrollTrigger', 'Framer Motion', 'Lenis Smooth Scroll']
   cms: 'Sanity.io'
   email: 'Resend'
+  automation: 'Make.com (RSS.app TechCrunch feed → Sanity blog posts)'
 designSystem:
   theme: 'Premium dark with coral brand accent'
   primaryBg: '#0A0A0A'
@@ -22,16 +23,16 @@ designSystem:
   brandAccentMuted: '#CC4A1A'
 status: complete
 completedAt: '2026-01-18'
-revisedAt: '2026-02-14'
-revisionNotes: 'v2.0 — Coral brand palette, Awwwards-grade section redesigns, Lenis smooth scroll, GSAP ScrollTrigger animations'
+revisedAt: '2026-02-20'
+revisionNotes: 'v2.1 — About page cinematic redesign, Contact progressive form, Blog page (Make.com + RSS.app automated weekly tech digest)'
 ---
 
 # UX Design Specification: Invenex Solutions Website
 
 **Author:** Vmj
 **Date:** 2026-01-18
-**Revised:** 2026-02-14
-**Version:** 2.0
+**Revised:** 2026-02-20
+**Version:** 2.1
 
 ---
 
@@ -68,6 +69,8 @@ The v2.0 redesign draws inspiration from these award-winning sites:
 3. **Admins (Vmj archetype)** — Team members managing portfolio projects, job listings, and content via Sanity CMS without developer intervention. Success = content published in seconds.
 
 4. **Referred Visitors (Rahul archetype)** — Professionals who received site link from network, forming impression in under 2 minutes. Success = bookmark + future referral chain.
+
+5. **Tech Readers (Maya archetype)** — (v2.1) Tech-savvy professionals and founders who discover Invenex through weekly blog content. They follow TechCrunch, consume tech news daily, and value curated analysis over raw feeds. Initially visiting for blog content, they gradually build trust in Invenex's technical expertise. Success = newsletter subscription → returning reader → eventual quote request when project need arises.
 
 ### Key Design Challenges
 
@@ -608,11 +611,43 @@ flowchart TD
 - Copy link functionality
 - Fast load on mobile (CDN optimized)
 
+### Journey 4: Blog Reader → Client Pipeline (Maya) (v2.1)
+
+```mermaid
+flowchart TD
+    A[Discover Blog Post via LinkedIn/Search] --> B[Read Weekly Tech Digest]
+    B --> C{Value Perceived?}
+    C -->|Yes| D[Subscribe to Newsletter]
+    C -->|No| X[Leave]
+    D --> E[Receive Weekly Email Digest]
+    E --> F[Return to Read New Posts]
+    F --> G[Explore Category Filters]
+    G --> H[Discover Services/Portfolio via Nav]
+    H --> I{Project Need Arises?}
+    I -->|Yes| J[Navigate to Contact]
+    I -->|Not Yet| F
+    J --> K[Submit Quote via Progressive Form]
+    K --> L[Journey Complete — Warm Lead]
+```
+
+**Key Touchpoints:**
+- Blog post shared on LinkedIn (Make.com automation dual-publishes)
+- "The Invenex Weekly" branded header builds recognition
+- Newsletter CTA at bottom of every blog post
+- Subtle cross-promotion: blog sidebar links to Services, Portfolio
+- Category filtering reveals breadth of Invenex expertise (AI, Security, Cloud, etc.)
+- Blog → Services navigation path designed as natural progression
+
+**Conversion Psychology:**
+- Repeated exposure through weekly content builds trust before any sales conversation
+- Technical commentary positions Invenex as thought leaders, not just implementers
+- By the time a reader submits a quote, they already believe in the team's expertise
+
 ### Journey Patterns
 
 **Common Navigation Patterns:**
 - Logo always returns to homepage
-- Primary nav: Services, Portfolio, Products, Careers, Contact
+- Primary nav: Services, Portfolio, Products, Blog, Careers, Contact
 - Mobile: Hamburger menu with full-screen overlay
 - Sticky header appears on scroll up
 
@@ -689,6 +724,47 @@ flowchart TD
 - **Content:** Icon, title, description, CTA
 - **Interaction:** Hover effect, click navigates to service detail
 - **Variants:** Large (spans 2 columns), standard, mini
+
+**7. Blog Article Card** (v2.1)
+- **Purpose:** Display blog post in grid layout
+- **Content:** Category pill, title (2 lines max), excerpt (2 lines), author, date, reading time, gradient abstract hero image
+- **Interaction:** Hover reveals coral border glow, slight y-translate lift, click navigates to post
+- **Variants:** Featured (full-width with side-by-side image/text), Standard (vertical card in 3-col grid), Compact (numbered list item for "Top Stories" sidebar)
+- **States:** Default, hover, loading skeleton
+
+**8. Category Filter Bar** (v2.1)
+- **Purpose:** Filter blog posts by topic
+- **Content:** Horizontal scrollable row of pill buttons: All, AI & ML, Cybersecurity, Startups, Hardware, Cloud, Enterprise
+- **Interaction:** Click selects category, active pill fills coral, others remain ghost/outline, smooth content transition below
+- **States:** Default, active (coral fill), hover (coral border)
+- **Mobile:** Horizontal scroll with fade-out edge indicators
+
+**9. Newsletter Subscribe Form** (v2.1)
+- **Purpose:** Capture email subscribers for weekly tech digest
+- **Content:** Glassmorphic banner with headline, description, email input + coral submit button
+- **Interaction:** Inline validation, success state replaces form with confirmation message
+- **States:** Default, focused, submitting, success ("You're in!"), error
+- **Placement:** Bottom of blog page, bottom of each blog post, optional footer integration
+
+**10. Company Timeline** (v2.1)
+- **Purpose:** Cinematic storytelling of Invenex journey on About page
+- **Content:** Vertical timeline with coral dot markers, year labels, milestone title + description, optional glassmorphic detail card per milestone
+- **Interaction:** GSAP ScrollTrigger entrance — each milestone fades in and slides up as user scrolls, connecting line draws progressively
+- **States:** Default (hidden), revealed (scrolled into view)
+- **Mobile:** Full-width vertical layout, timeline line on left edge
+
+**11. Progressive Form Stepper** (v2.1)
+- **Purpose:** Multi-step conversational contact form on Contact page
+- **Content:** 3-step flow: (1) Service selection via clickable cards, (2) Project details (description, budget, timeline), (3) Personal info (name, email, phone)
+- **Interaction:** Step indicator with 3 coral dots showing progress, smooth slide transition between steps, back button available, final submit with coral glow
+- **States:** Step active, step completed (coral checkmark), step upcoming (muted dot)
+- **Accessibility:** ARIA step indicators, keyboard nav between steps, focus management on step change
+
+**12. Service Selection Cards** (v2.1)
+- **Purpose:** Step 1 of progressive contact form — user picks what they need
+- **Content:** 2x2 grid of glassmorphic cards: Web Development, Mobile Apps, ERP Solutions, AI & Automation. Each has coral icon + service name
+- **Interaction:** Click selects (coral border glow + checkmark), multi-select allowed, at least one required to proceed
+- **States:** Default, hover (coral border), selected (coral glow + check), disabled
 
 ### Implementation Roadmap
 
@@ -974,6 +1050,35 @@ flowchart TD
 | Project Grid | Showcase | Portfolio cards with hover effects |
 | CTA | Conversion | Start your project |
 
+### About Page (v2.1 — Cinematic Redesign)
+
+**Design Philosophy:** The About page transforms from a static information dump into a *cinematic narrative experience*. Every scroll reveals the next chapter of the Invenex story, building emotional connection through progressive disclosure and editorial design.
+
+| # | Section | Component | Interaction Model | Key Elements |
+|---|---------|-----------|-------------------|--------------|
+| 1 | **Hero** | `SubpageHero` (left-aligned) | GSAP entrance choreography: orbs → tag → headline → subtitle | Tag pill "ABOUT INVENEX", headline "OUR" (weight 200) + "STORY" (weight 900, coral gradient), subtitle "Building digital experiences that move businesses forward" |
+| 2 | **Timeline Journey** | `company-timeline.tsx` | GSAP ScrollTrigger progressive reveal — line draws + milestones fade in | Vertical timeline with coral dot markers at each year. Left: animated connecting line that draws as you scroll. Right: milestone cards (2024: "Founded with a vision to bridge the gap between premium design and accessible development", 2025: "50+ projects delivered across 4 continents", 2026: "Expanding globally, launching own products"). Each milestone is a glassmorphic card with year in large coral text, title bold white, description muted. Line draws progressively using GSAP `drawSVG` or path animation |
+| 3 | **Values** | `values-section.tsx` | GSAP stagger entrance from bottom, hover reveals expanded description | Section header "WHAT DRIVES US" (monospace label) + "Our Principles" (weight contrast). 2x2 grid of large glassmorphic cards. Each card: coral icon (diamond/handshake/lightbulb/lightning), value name in bold, one-line description, hover expands card slightly with coral top-border reveal. Cards enter with `stagger: 0.15` on ScrollTrigger |
+| 4 | **Team** | `team-section.tsx` | Editorial magazine layout, hover reveals personal quote + social | Section header "THE FOUNDERS" (monospace label). 4 team members in horizontal layout (single row desktop, 2x2 tablet, vertical stack mobile). Each member: large portrait area (dark gray placeholder with subtle gradient, 3:4 aspect ratio), name in bold white below, role in coral, personal quote in italic `foreground-muted` on hover. LinkedIn icon slides in from right on hover. Generous spacing between members. Magazine/editorial feel — not a corporate grid |
+| 5 | **Stats Band** | `stats-band.tsx` | Animated counter on scroll into view | Full-width dark band with 4 stats in a row: "50+" Projects Delivered, "4" Continents Served, "2024" Founded, "100%" Client Satisfaction. Numbers animate from 0 to value using `AnimatedCounter` component with GSAP. Coral accent on the number, muted label below |
+| 6 | **CTA** | `SubpageCTA` | Character-by-character scroll scrub + mouse-tracking spotlight | "READY TO BUILD SOMETHING GREAT?" scrub reveal, coral "Start a Project" button + ghost "View Our Work" button |
+
+**About Page Mobile Adaptations:**
+- Timeline: Line shifts to left edge, content full-width right. Milestones stack vertically
+- Team: Single column stack with portrait areas at 1:1 aspect ratio
+- Values: 1-column stack, cards full-width
+- Stats: 2x2 grid instead of 4-column row
+
+**About Page Animation Sequence:**
+1. Hero entrance: Orbs fade → tag slides → headline words stagger → subtitle fades
+2. Timeline: As user scrolls, line draws progressively with `scrub: 1`, milestones fade in at each marker
+3. Values: Cards stagger in from bottom (`opacity: 0, y: 40` → `opacity: 1, y: 0`)
+4. Team: Members stagger in from bottom with slight rotation (`rotate: 2deg → 0deg`)
+5. Stats: Numbers count up when band enters viewport
+6. CTA: Character scrub reveal (existing pattern)
+
+---
+
 ### Careers Page
 
 | Section | Purpose | Key Elements |
@@ -983,14 +1088,162 @@ flowchart TD
 | Open Positions | Job discovery | Department filter, job listing cards |
 | CTA | Application | General application prompt |
 
-### Contact Page
+---
 
-| Section | Purpose | Key Elements |
-|---------|---------|--------------|
-| Hero | Context setting | Headline, promise |
-| Quote Form | Lead capture | Full quote request form |
-| Alternative Contact | Options | Email, phone, WhatsApp, address |
-| Map | Location | Office location (if applicable) |
+### Contact Page (v2.1 — Progressive Conversational Form)
+
+**Design Philosophy:** The contact experience should feel like a *conversation*, not a bureaucratic form. Progressive disclosure reduces cognitive load — start with "what do you need?", then naturally flow to details and personal info. The page maintains premium dark aesthetic while feeling warm and approachable.
+
+| # | Section | Component | Interaction Model | Key Elements |
+|---|---------|-----------|-------------------|--------------|
+| 1 | **Hero** | `SubpageHero` (centered) | GSAP entrance choreography | Tag pill "GET IN TOUCH", headline "LET'S BUILD" (weight 200) + "SOMETHING GREAT" (weight 900, coral gradient), subtitle "Tell us about your project and we'll get back within 24 hours" |
+| 2 | **Progressive Form + Info** | `contact-form-progressive.tsx` | Multi-step form with slide transitions | Two-column layout on desktop (60/40 split), full-width stacked on mobile. **Left (60%):** Progressive 3-step form inside glassmorphic panel. **Right (40%):** Contact info card stack |
+| 3 | **Social Proof Strip** | `social-proof-strip.tsx` | Subtle auto-scroll | Thin horizontal band: "Trusted by 50+ businesses" with client logo placeholders in muted white opacity. Auto-scrolling marquee (CSS or GSAP) |
+| 4 | **Alternative CTA** | Inline section | Hover transitions | "PREFER TO TALK?" large text. Two buttons: "Schedule a Call" (coral) + "WhatsApp Us" (green-accented ghost button) |
+
+**Progressive Form — Step Detail:**
+
+**Step 1: "What do you need?"**
+- 2x2 grid of Service Selection Cards (glassmorphic, coral icon each)
+  - Web Development (Globe icon)
+  - Mobile Apps (Smartphone icon)
+  - ERP Solutions (Database icon)
+  - AI & Automation (Brain icon)
+- Multi-select allowed, at least one required
+- Selected state: coral border glow + subtle checkmark
+- "Next" button appears after selection (coral, slides in from bottom)
+
+**Step 2: "Tell us more"**
+- Project description textarea (glassmorphic input, 4 rows)
+- Budget range dropdown: "Under $5K", "$5K–$15K", "$15K–$50K", "$50K+", "Let's discuss"
+- Timeline dropdown: "ASAP", "1–3 months", "3–6 months", "6+ months", "Flexible"
+- All fields optional except description
+- "Back" (ghost) + "Next" (coral) buttons
+
+**Step 3: "How do we reach you?"**
+- Name input (required)
+- Email input (required, validated)
+- Phone input (optional, with country code selector)
+- "How did you hear about us?" dropdown (optional): Google, LinkedIn, Referral, Blog, Other
+- "Back" (ghost) + "Send Message" (coral with glow, full-width on mobile)
+
+**Form UX Details:**
+- Progress indicator: 3 dots at top of form panel, coral fill for active/completed, muted for upcoming
+- Step transitions: Smooth horizontal slide (GSAP `x` tween, 400ms, `power3.out`)
+- Validation: On blur for individual fields, on step advance for required fields
+- Success state: Form panel morphs into confirmation — checkmark animation, "We'll be in touch within 24 hours", subtle confetti or coral particle burst
+- Error state: Inline red messages below fields, shake animation on submit attempt with errors
+
+**Contact Info Cards (Right Column):**
+- 5 glassmorphic cards stacked vertically with `gap: 16px`
+- Each card: coral icon left, info text right
+  - Email: hello@invenexsolutions.com (clickable `mailto:`)
+  - Phone: +61 number (clickable `tel:`)
+  - WhatsApp: Direct message link (green accent icon)
+  - Location: Melbourne, Australia
+  - Hours: Mon–Fri 9am–6pm AEST
+- Hover: card border transitions to coral (`duration-300`)
+- GSAP: Cards stagger in from right (`opacity: 0, x: 30` → visible)
+
+**Contact Page Mobile Adaptations:**
+- Form takes full width, contact info cards stack below the form
+- Service selection cards: 2x2 grid maintained (smaller cards)
+- Progress dots: Centered above form
+- Contact info: Horizontal scroll of cards or accordion
+
+**Contact Page Animation Sequence:**
+1. Hero entrance (existing SubpageHero pattern)
+2. Form panel fades in from left (`opacity: 0, y: 30` → visible, 0.8s)
+3. Contact info cards stagger in from right (0.12s stagger)
+4. Social proof strip fades in
+5. Alternative CTA fades in last
+
+---
+
+### Blog Page (v2.1 — "The Invenex Weekly" — NEW)
+
+**Design Philosophy:** The blog is a *magazine-style editorial experience* that positions Invenex as tech thought leaders. Content is auto-generated weekly via Make.com (RSS.app TechCrunch feed → AI processing → Sanity CMS), then displayed with the same premium dark/coral aesthetic as the rest of the site. The blog should feel curated and authoritative — like The Verge meets a premium agency blog.
+
+**Content Pipeline:**
+```
+RSS.app (TechCrunch feed) → Make.com Scenario → AI Processing (summary + commentary) → Sanity CMS (blog document) → Next.js /blog page
+```
+
+- Make.com automation runs weekly (or per-article, TBD)
+- Same scenario that publishes to LinkedIn also creates Sanity blog documents
+- Sanity schema: `blogPost` with fields: title, slug, excerpt, body (Portable Text), category, author, publishedAt, readingTime, featuredImage, sourceUrl, sourceName
+- Categories auto-assigned based on content analysis: AI & ML, Cybersecurity, Startups, Hardware, Cloud, Enterprise
+
+| # | Section | Component | Interaction Model | Key Elements |
+|---|---------|-----------|-------------------|--------------|
+| 1 | **Hero** | `blog-hero.tsx` | GSAP entrance, editorial feel | Tag pill "TECH INSIGHTS", headline "THE INVENEX" (weight 200) + "WEEKLY" (weight 900, coral gradient), subtitle "Our weekly take on the stories shaping tech." Minimal, magazine masthead feel. No background orbs — clean typographic focus |
+| 2 | **Featured Post** | `blog-featured.tsx` | Hover scale + coral glow | Full-width glassmorphic card, two-column layout: Left — large gradient abstract image (coral-to-purple, generated or category-based), Right — category pill (coral), title in large bold white, author "Invenex Team", date, reading time, 2-line excerpt. Click navigates to full post. Hover: subtle scale(1.01) + coral border glow |
+| 3 | **Category Filter** | `blog-category-filter.tsx` | Click to filter, smooth content transition | Horizontal scrollable row of pill buttons. "All" (default active, coral fill), then: "AI & ML", "Cybersecurity", "Startups", "Hardware", "Cloud", "Enterprise". Active = coral bg + white text. Inactive = ghost (border-white/10 bg, muted text). Hover = coral border. Filter triggers smooth opacity transition on grid below. Mobile: horizontal scroll with gradient fade-out at edges |
+| 4 | **Blog Grid** | `blog-grid.tsx` | GSAP stagger entrance, hover lift | 3-column grid (desktop), 2-column (tablet), 1-column (mobile). Each card: glassmorphic rectangle with gradient abstract image top (each slightly different hue — coral, purple, blue tints based on category), category pill top-left overlay, title in bold white (2 lines, truncated), excerpt in muted gray (2 lines), bottom row: "Invenex Team" + date + "X min read". Hover: `translateY(-4px)` + coral border glow. Enter animation: `stagger: 0.1, opacity: 0, y: 30` → visible. 6 cards per page (2 rows) |
+| 5 | **Weekly Digest Sidebar** | `blog-weekly-digest.tsx` | Numbered list, quick-scan | Full-width band or right sidebar (desktop): "THIS WEEK'S TOP STORIES" header (monospace label). 5 numbered items — number in large coral text (40px), title in white, "via TechCrunch" source tag in muted. Quick-scannable format for readers who want headlines not full articles. Each item clickable → navigates to full post or original TechCrunch article |
+| 6 | **Newsletter CTA** | `blog-newsletter.tsx` | Form interaction + success state | Glassmorphic banner full-width: "STAY IN THE LOOP" (weight contrast headline), "Get our weekly tech digest straight to your inbox." Email input (glassmorphic, placeholder "your@email.com") + coral "Subscribe" button. Success state: input + button morph into "You're in! Check your inbox." with checkmark. Positioned before footer |
+| 7 | **Pagination** | `blog-pagination.tsx` | Click to load | Centered "Load More" button, ghost style with coral hover. Shows "Showing X of Y posts". Alternative: infinite scroll with intersection observer (test performance first) |
+
+**Blog Post Detail Page (`/blog/[slug]`):**
+
+| # | Section | Component | Key Elements |
+|---|---------|-----------|--------------|
+| 1 | **Post Header** | `blog-post-header.tsx` | Category pill, title (h1, large bold), author + date + reading time, featured gradient image (full-width) |
+| 2 | **Post Body** | `blog-post-body.tsx` | Sanity Portable Text rendered with custom serializers. Typography optimized for reading: max-width 720px, `body-lg` (18px), generous line-height (1.8). Code blocks with syntax highlighting. Pull quotes in coral accent. Source attribution link to original TechCrunch article |
+| 3 | **Source Attribution** | Inline banner | "Originally reported by TechCrunch" with link to source. Transparent about curation model |
+| 4 | **Related Posts** | `blog-related.tsx` | 3 related posts (same category) in horizontal card row. Standard blog card format |
+| 5 | **Newsletter CTA** | Reused component | Same newsletter subscribe banner as blog index page |
+| 6 | **Share Bar** | `blog-share.tsx` | Fixed left sidebar (desktop) or bottom bar (mobile): Copy link, LinkedIn share, Twitter/X share. Coral icons, hover scale |
+
+**Blog Mobile Adaptations:**
+- Featured post: Stack vertically (image top, content below)
+- Category filter: Horizontal scroll, single row
+- Blog grid: Single column, cards full-width
+- Weekly digest: Full-width band (no sidebar option)
+- Post detail: Full-width body, share bar at bottom
+- Newsletter: Full-width, input + button stack vertically
+
+**Blog Animation Sequence:**
+1. Hero entrance: Tag → headline words → subtitle (standard SubpageHero-like pattern)
+2. Featured post: Fades in with slight scale (`scale: 0.98 → 1, opacity: 0 → 1`)
+3. Category filter: Slides in from left
+4. Blog grid: Cards stagger in (`stagger: 0.1, opacity: 0, y: 30`)
+5. Weekly digest: Numbers count/slide in from left, titles fade in right
+6. Newsletter: Fades in on scroll
+
+**Blog Sanity CMS Schema:**
+```
+// Sanity document type: blogPost
+{
+  name: 'blogPost',
+  title: 'Blog Post',
+  type: 'document',
+  fields: [
+    { name: 'title', type: 'string' },
+    { name: 'slug', type: 'slug', options: { source: 'title' } },
+    { name: 'excerpt', type: 'text', rows: 3 },
+    { name: 'body', type: 'blockContent' },  // Portable Text
+    { name: 'category', type: 'string',
+      options: { list: ['AI & ML', 'Cybersecurity', 'Startups', 'Hardware', 'Cloud', 'Enterprise'] } },
+    { name: 'author', type: 'string', initialValue: 'Invenex Team' },
+    { name: 'publishedAt', type: 'datetime' },
+    { name: 'readingTime', type: 'number' },  // minutes
+    { name: 'featuredImage', type: 'image' },  // optional, can use category gradient fallback
+    { name: 'sourceUrl', type: 'url' },  // original TechCrunch article
+    { name: 'sourceName', type: 'string', initialValue: 'TechCrunch' },
+    { name: 'isWeeklyDigest', type: 'boolean', initialValue: false },
+    { name: 'weekNumber', type: 'number' },  // for weekly digest grouping
+  ]
+}
+```
+
+**Make.com Integration Points:**
+- Make scenario adds Sanity HTTP module as parallel output alongside LinkedIn post
+- Blog post created via Sanity API (`POST /v1/data/mutate/{dataset}`)
+- AI processing step generates: title, excerpt, body (with commentary), category, reading time estimate
+- Featured image: Either AI-generated abstract gradient or category-based default
+- `sourceUrl` links back to original TechCrunch article for attribution
+- `isWeeklyDigest: true` for the main weekly roundup post vs. individual article posts
 
 ---
 
@@ -1007,9 +1260,14 @@ flowchart TD
 | Lighthouse Performance | 90+ | Lighthouse |
 | Lighthouse Accessibility | 90+ | Lighthouse |
 | Quote form completion rate | > 60% | Analytics |
+| Progressive form step-through rate | > 70% (step 1→3) | Analytics (v2.1) |
 | Job application completion rate | > 50% | Analytics |
 | Mobile bounce rate | < 40% | Analytics |
 | Page depth (pages/session) | > 3 | Analytics |
+| Blog post avg. reading time | > 2 min | Analytics (v2.1) |
+| Newsletter subscribe rate | > 5% of blog visitors | Analytics (v2.1) |
+| Blog → Services navigation rate | > 8% | Analytics (v2.1) |
+| Blog returning visitor rate | > 30% within 30 days | Analytics (v2.1) |
 
 ### Design Quality Gates
 
@@ -1026,17 +1284,29 @@ flowchart TD
 
 ## Next Steps
 
-1. **Visual Verification** — Screenshot all 8 homepage sections and verify against design intent
-2. **Build Verification** — `npm run build` to catch TypeScript errors
-3. **Accessibility Audit** — Verify WCAG AA compliance, `prefers-reduced-motion` fallbacks
-4. **Performance Optimization** — Achieve Lighthouse 90+ targets with GSAP + Lenis overhead
-5. **Inner Page Redesigns** — Apply coral brand + new animation patterns to Services, Portfolio, Careers, Contact pages
-6. **Content Finalization** — Replace placeholder images with real CaterFlow screenshots, team photos
-7. **User Testing** — Validate scroll interactions on mobile devices (pinned scroll, fanned cards)
+### Completed (v2.0)
+1. ~~Visual Verification~~ — Homepage 8 sections verified
+2. ~~Build Verification~~ — TypeScript clean
+3. ~~Homepage Implementation~~ — All 8 sections live with GSAP + Lenis
+
+### In Progress (v2.1)
+4. **About Page Cinematic Redesign** — Implement timeline journey, editorial team section, animated values, stats band
+5. **Contact Page Progressive Form** — Build 3-step conversational form with service selection, progressive disclosure
+6. **Blog Page "The Invenex Weekly"** — New page: Sanity schema, Make.com integration, magazine-style layout, category filtering, newsletter subscribe
+7. **Make.com → Sanity Integration** — Add Sanity HTTP module to existing Make scenario for dual-publish (LinkedIn + Blog)
+8. **Blog Content Pipeline Testing** — Verify RSS.app → Make → AI processing → Sanity → Next.js renders correctly
+9. **Newsletter System** — Implement email subscribe (Resend or similar), weekly digest email template
+
+### Upcoming
+10. **Accessibility Audit** — Verify WCAG AA compliance across all new pages
+11. **Performance Optimization** — Lighthouse 90+ including new blog page with dynamic content
+12. **Mobile Testing** — Validate progressive form, timeline scroll, blog grid on mobile devices
+13. **SEO for Blog** — OG meta tags, structured data (Article schema), sitemap integration for blog posts
+14. **Content Finalization** — Replace placeholder images with real team photos, CaterFlow screenshots
 
 ---
 
-*UX Design Specification v2.0 Complete*
+*UX Design Specification v2.1 Complete*
 *Originally generated: 2026-01-18*
-*Revised: 2026-02-14 — Coral brand palette, Awwwards-grade section redesigns*
+*Revised: 2026-02-20 — About cinematic redesign, Contact progressive form, Blog page (Make.com + RSS.app)*
 *Author: Sally (UX Designer) with Seb*

@@ -1,0 +1,432 @@
+# Story 7.2: Content Schemas - Projects & Services
+
+Status: ready-for-dev
+
+## Story
+
+As an **admin**,
+I want **schemas for portfolio projects and services**,
+So that **I can manage these content types**.
+
+## Acceptance Criteria
+
+### AC1: Project Schema
+**Given** I need a Project schema
+**When** it's defined in Sanity
+**Then** it includes fields for:
+- Title (string, required)
+- Slug (auto-generated from title)
+- Client name (string)
+- Category (web, mobile, platform, ecommerce)
+- Featured image (image with hotspot)
+- Gallery images (array of images)
+- Challenge (block content)
+- Solution (block content)
+- Results (block content)
+- Technologies (array of strings)
+- Testimonial (reference to testimonial)
+- Featured flag (boolean)
+- Published date
+
+### AC2: Service Schema
+**Given** I need a Service schema
+**When** it's defined in Sanity
+**Then** it includes fields for:
+- Title (string, required)
+- Slug (auto-generated)
+- Icon (string for icon name)
+- Short description (text)
+- Full description (block content)
+- Features (array of strings)
+- Technologies (array of strings)
+- Order (number for sorting)
+
+## Tasks / Subtasks
+
+- [ ] Task 1: Create Project Schema (AC: 1)
+  - [ ] Create `src/sanity/schemas/project.ts`
+  - [ ] Define all fields
+  - [ ] Add to schema index
+
+- [ ] Task 2: Create Service Schema (AC: 2)
+  - [ ] Create `src/sanity/schemas/service.ts`
+  - [ ] Define all fields
+  - [ ] Add to schema index
+
+- [ ] Task 3: Create Schema Index (AC: 1, 2)
+  - [ ] Create `src/sanity/schemas/index.ts`
+  - [ ] Export all schemas
+
+## Dev Notes
+
+### Project Schema
+
+```tsx
+// src/sanity/schemas/project.ts
+import { defineField, defineType } from 'sanity'
+
+export const project = defineType({
+  name: 'project',
+  title: 'Project',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'client',
+      title: 'Client Name',
+      type: 'string',
+    }),
+    defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Web Development', value: 'web' },
+          { title: 'Mobile App', value: 'mobile' },
+          { title: 'Platform', value: 'platform' },
+          { title: 'E-Commerce', value: 'ecommerce' },
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'featuredImage',
+      title: 'Featured Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'gallery',
+      title: 'Gallery Images',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+        },
+      ],
+    }),
+    defineField({
+      name: 'excerpt',
+      title: 'Excerpt',
+      type: 'text',
+      rows: 3,
+      description: 'Brief description for cards',
+    }),
+    defineField({
+      name: 'challenge',
+      title: 'Challenge',
+      type: 'blockContent',
+      description: 'What problem did the client face?',
+    }),
+    defineField({
+      name: 'solution',
+      title: 'Solution',
+      type: 'blockContent',
+      description: 'How did Invenex approach it?',
+    }),
+    defineField({
+      name: 'results',
+      title: 'Results',
+      type: 'blockContent',
+      description: 'What outcomes were achieved?',
+    }),
+    defineField({
+      name: 'technologies',
+      title: 'Technologies',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'tags',
+      },
+    }),
+    defineField({
+      name: 'testimonial',
+      title: 'Testimonial',
+      type: 'reference',
+      to: [{ type: 'testimonial' }],
+    }),
+    defineField({
+      name: 'featured',
+      title: 'Featured',
+      type: 'boolean',
+      description: 'Show on homepage?',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'publishedAt',
+      title: 'Published Date',
+      type: 'datetime',
+    }),
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      client: 'client',
+      media: 'featuredImage',
+    },
+    prepare({ title, client, media }) {
+      return {
+        title,
+        subtitle: client,
+        media,
+      }
+    },
+  },
+})
+```
+
+### Service Schema
+
+```tsx
+// src/sanity/schemas/service.ts
+import { defineField, defineType } from 'sanity'
+
+export const service = defineType({
+  name: 'service',
+  title: 'Service',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'icon',
+      title: 'Icon',
+      type: 'string',
+      description: 'Icon name (e.g., "code", "mobile", "shopping-cart")',
+    }),
+    defineField({
+      name: 'shortDescription',
+      title: 'Short Description',
+      type: 'text',
+      rows: 3,
+      description: 'Brief description for cards',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'fullDescription',
+      title: 'Full Description',
+      type: 'blockContent',
+      description: 'Detailed service description',
+    }),
+    defineField({
+      name: 'features',
+      title: 'Features',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Key features/benefits of this service',
+    }),
+    defineField({
+      name: 'technologies',
+      title: 'Technologies',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'tags',
+      },
+    }),
+    defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      description: 'Display order (lower = first)',
+    }),
+  ],
+  orderings: [
+    {
+      title: 'Display Order',
+      name: 'orderAsc',
+      by: [{ field: 'order', direction: 'asc' }],
+    },
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'shortDescription',
+    },
+  },
+})
+```
+
+### Block Content Schema
+
+```tsx
+// src/sanity/schemas/blockContent.ts
+import { defineType, defineArrayMember } from 'sanity'
+
+export const blockContent = defineType({
+  title: 'Block Content',
+  name: 'blockContent',
+  type: 'array',
+  of: [
+    defineArrayMember({
+      title: 'Block',
+      type: 'block',
+      styles: [
+        { title: 'Normal', value: 'normal' },
+        { title: 'H2', value: 'h2' },
+        { title: 'H3', value: 'h3' },
+        { title: 'H4', value: 'h4' },
+        { title: 'Quote', value: 'blockquote' },
+      ],
+      lists: [
+        { title: 'Bullet', value: 'bullet' },
+        { title: 'Numbered', value: 'number' },
+      ],
+      marks: {
+        decorators: [
+          { title: 'Strong', value: 'strong' },
+          { title: 'Emphasis', value: 'em' },
+          { title: 'Code', value: 'code' },
+        ],
+        annotations: [
+          {
+            title: 'URL',
+            name: 'link',
+            type: 'object',
+            fields: [
+              {
+                title: 'URL',
+                name: 'href',
+                type: 'url',
+              },
+            ],
+          },
+        ],
+      },
+    }),
+    defineArrayMember({
+      type: 'image',
+      options: { hotspot: true },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative text',
+        },
+        {
+          name: 'caption',
+          type: 'string',
+          title: 'Caption',
+        },
+      ],
+    }),
+  ],
+})
+```
+
+### Schema Index
+
+```tsx
+// src/sanity/schemas/index.ts
+import { project } from './project'
+import { service } from './service'
+import { blockContent } from './blockContent'
+
+export const schemaTypes = [
+  project,
+  service,
+  blockContent,
+]
+```
+
+### TypeScript Types
+
+```tsx
+// src/types/sanity.ts
+import type { Image, Slug, PortableTextBlock } from 'sanity'
+
+export interface Project {
+  _id: string
+  _type: 'project'
+  title: string
+  slug: Slug
+  client: string
+  category: 'web' | 'mobile' | 'platform' | 'ecommerce'
+  featuredImage: Image
+  gallery?: Image[]
+  excerpt?: string
+  challenge?: PortableTextBlock[]
+  solution?: PortableTextBlock[]
+  results?: PortableTextBlock[]
+  technologies?: string[]
+  testimonial?: Testimonial
+  featured?: boolean
+  publishedAt?: string
+}
+
+export interface Service {
+  _id: string
+  _type: 'service'
+  title: string
+  slug: Slug
+  icon?: string
+  shortDescription: string
+  fullDescription?: PortableTextBlock[]
+  features?: string[]
+  technologies?: string[]
+  order?: number
+}
+```
+
+### Architecture Compliance
+
+| Decision | Implementation |
+|----------|----------------|
+| Block content | Sanity's portable text for rich content |
+| Image hotspot | Enabled for focal point selection |
+| Type safety | TypeScript interfaces for all schemas |
+| Slug generation | Auto-generated from title |
+
+### Testing Checklist
+
+- [ ] Project schema visible in Studio
+- [ ] Service schema visible in Studio
+- [ ] Block content renders correctly
+- [ ] Image uploads work with hotspot
+- [ ] Slugs auto-generate
+- [ ] Required field validation works
+
+## Dev Agent Record
+
+### Agent Model Used
+{{agent_model_name_version}}
+
+### Completion Notes List
+
+### File List

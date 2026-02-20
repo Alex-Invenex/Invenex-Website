@@ -40,3 +40,66 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# claude / agent tooling
+.agent/
+.claude/
+.playwright-mcp/
+stitch-ai-mcp/
+
+# debug & audit screenshots (generated during development)
+audit-*.jpeg
+audit-*.png
+debug-*.jpeg
+debug-*.png
+deploy-verify-*.jpeg
+fix-*.png
+fix-verify-*.jpeg
+hero-*.png
+homepage-*.png
+hww-*.jpeg
+hww-*.png
+invenex-*.png
+lighthouse-*.json
+live-*.jpeg
+live-*.png
+logo-verify-*.jpeg
+logo-verify-*.png
+mobile-*.jpeg
+mobile-*.png
+plan-mobile-*.png
+portfolio-*.png
+redesign-*.png
+redesign-*.jpeg
+ref-*.png
+section-*.png
+services-*.png
+services-*.jpeg
+site-*.png
+stitch-*.png
+test-*.jpeg
+test-*.png
+transition-*.png
+verify-*.jpeg
+verify-*.png
+mobile-audit/
+test-screenshots/
+playwright-report/
+
+# misc test/debug files
+final-portfolio-check.png
+test-resume.pdf
+01-homepage-top.md
+02-homepage-how-we-work.md
+FINAL-hero-fullres.png
+current-invenex-*.png
+docs/
+
+# test specs (ad-hoc verification tests)
+tests/comprehensive-image-check.spec.ts
+tests/final-image-verification.spec.ts
+tests/verify-live-portfolio.spec.ts
+tests/verify-portfolio-images.spec.ts
+
+# nested build artifacts
+public/instagram/.next/
