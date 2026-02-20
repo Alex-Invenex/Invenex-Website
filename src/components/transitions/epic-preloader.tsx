@@ -21,7 +21,7 @@ const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*'
 /**
  * EpicPreloader - Cinematic first-visit loading experience
  *
- * GSAP-powered intro (~3.5s) that plays once per session:
+ * GSAP-powered intro (~2.5s) that plays once per session:
  * 1. Coral line grows from center
  * 2. Logo scales up with glow pulse
  * 3. "INVENEX" appears via character scramble/decode
@@ -49,10 +49,9 @@ export function EpicPreloader() {
 
   const scrambleText = useCallback((element: HTMLDivElement, target: string, duration: number) => {
     const chars = target.split('')
-    const totalSteps = Math.ceil(duration / 50) // ~50ms per step
+    const totalSteps = Math.ceil(duration / 50)
     let step = 0
 
-    // Create span for each character
     element.innerHTML = chars
       .map((_, i) => `<span data-idx="${i}" style="display:inline-block;min-width:0.6em;text-align:center">&nbsp;</span>`)
       .join('')
@@ -66,11 +65,9 @@ export function EpicPreloader() {
       spans.forEach((span, i) => {
         const charProgress = (progress - i / chars.length) * chars.length
         if (charProgress >= 1) {
-          // Locked in
           span.textContent = chars[i]
           span.style.color = ''
         } else if (charProgress > 0) {
-          // Scrambling
           span.textContent = SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
           span.style.color = '#FF6B35'
         } else {
@@ -83,7 +80,6 @@ export function EpicPreloader() {
           clearInterval(scrambleIntervalRef.current)
           scrambleIntervalRef.current = null
         }
-        // Ensure final state
         element.textContent = target
       }
     }, 50)
@@ -92,94 +88,96 @@ export function EpicPreloader() {
   useEffect(() => {
     if (phase === 'done' || !containerRef.current) return
 
-    // Skip animation for reduced motion
+    // Handle SSR hydration mismatch: useSyncExternalStore returns false
+    // on server, so useState initializes as 'active'. On client after
+    // hydration, isReturningVisitor may be true but phase stays 'active'.
+    if (isReturningVisitor) {
+      setPhase('done')
+      return
+    }
+
     if (prefersReducedMotion()) {
       markVisited()
       setPhase('done')
       return
     }
 
-    // Lock scroll
-    document.body.style.overflow = 'hidden'
-
     const tl = gsap.timeline({
       onComplete: () => {
         markVisited()
-        document.body.style.overflow = ''
         setPhase('done')
       },
     })
 
-    // Phase 1: Coral line grows from center (0 - 0.5s)
+    // Phase 1: Coral line grows from center (0 - 0.4s)
     tl.fromTo(
       lineRef.current,
       { scaleX: 0, opacity: 1 },
-      { scaleX: 1, duration: 0.5, ease: 'power2.out' }
+      { scaleX: 1, duration: 0.4, ease: 'power2.out' }
     )
 
-    // Phase 2: Logo scales up (0.5 - 1.2s)
+    // Phase 2: Logo scales up (0.3 - 0.8s)
     tl.fromTo(
       logoRef.current,
       { scale: 0, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' },
-      0.4
+      { scale: 1, opacity: 1, duration: 0.4, ease: 'back.out(1.7)' },
+      0.3
     )
 
     // Glow pulse behind logo
     tl.fromTo(
       glowRef.current,
       { scale: 0.5, opacity: 0 },
-      { scale: 1.5, opacity: 0.6, duration: 0.6, ease: 'power2.out' },
-      0.5
+      { scale: 1.5, opacity: 0.6, duration: 0.5, ease: 'power2.out' },
+      0.4
     )
-    tl.to(glowRef.current, { scale: 1, opacity: 0.3, duration: 0.4, ease: 'power2.inOut' }, 1.1)
+    tl.to(glowRef.current, { scale: 1, opacity: 0.3, duration: 0.3, ease: 'power2.inOut' }, 0.9)
 
-    // Phase 2b: Text scramble "INVENEX" (0.8 - 1.6s)
+    // Text scramble "INVENEX" (0.6 - 1.1s)
     tl.add(() => {
       if (textRef.current) {
-        scrambleText(textRef.current, 'INVENEX', 600)
+        scrambleText(textRef.current, 'INVENEX', 500)
       }
-    }, 0.8)
+    }, 0.6)
     tl.fromTo(
       textRef.current,
       { opacity: 0 },
-      { opacity: 1, duration: 0.2, ease: 'power2.out' },
-      0.8
+      { opacity: 1, duration: 0.15, ease: 'power2.out' },
+      0.6
     )
 
     // Fade out coral line
-    tl.to(lineRef.current, { opacity: 0, duration: 0.3, ease: 'power2.out' }, 1.0)
+    tl.to(lineRef.current, { opacity: 0, duration: 0.25, ease: 'power2.out' }, 0.8)
 
-    // Phase 3: Tagline fades in (1.5 - 2.2s)
+    // Tagline fades in (1.2 - 1.6s)
     tl.fromTo(
       taglineRef.current,
-      { opacity: 0, y: 10 },
-      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
-      1.6
+      { opacity: 0, y: 8 },
+      { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },
+      1.2
     )
 
-    // Brief hold (2.2 - 2.6s)
-    tl.to({}, { duration: 0.4 })
+    // Brief hold (1.6 - 1.8s)
+    tl.to({}, { duration: 0.2 })
 
-    // Phase 4: Curtain reveal (2.6 - 3.4s)
+    // Curtain reveal (1.8 - 2.5s)
     tl.to(
       containerRef.current,
       {
         yPercent: -100,
-        duration: 0.8,
+        duration: 0.7,
         ease: 'power3.inOut',
       },
-      2.6
+      1.8
     )
 
     return () => {
       tl.kill()
-      document.body.style.overflow = ''
       if (scrambleIntervalRef.current) {
         clearInterval(scrambleIntervalRef.current)
       }
     }
-  }, [phase, scrambleText])
+  }, [phase, isReturningVisitor, scrambleText])
 
   if (phase === 'done') return null
 
@@ -187,7 +185,7 @@ export function EpicPreloader() {
     <div
       ref={containerRef}
       className="fixed inset-0 flex flex-col items-center justify-center bg-[#0A0A0A]"
-      style={{ zIndex: 99999 }}
+      style={{ zIndex: 99999, touchAction: 'none', overscrollBehavior: 'none' }}
       aria-hidden="true"
     >
       {/* Coral horizontal line */}
