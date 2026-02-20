@@ -27,7 +27,6 @@ const testimonials: Testimonial[] = [
     role: "Founder",
     company: "CoolTech International",
     rating: 5,
-    image: "/testimonials/mathews-jacob.jpg",
   },
   {
     quote:
@@ -36,7 +35,6 @@ const testimonials: Testimonial[] = [
     role: "Founder",
     company: "Ginger Designs",
     rating: 5,
-    image: "/testimonials/gayannas-merlaz.jpg",
   },
   {
     quote:
@@ -45,7 +43,6 @@ const testimonials: Testimonial[] = [
     role: "Founder",
     company: "EaseMyFly",
     rating: 4.9,
-    image: "/testimonials/favas.jpg",
   },
   {
     quote:
@@ -54,7 +51,6 @@ const testimonials: Testimonial[] = [
     role: "Founder",
     company: "GrabToGo",
     rating: 5,
-    image: "/testimonials/sebin-mathew.jpg",
   },
   {
     quote:
@@ -63,7 +59,6 @@ const testimonials: Testimonial[] = [
     role: "Founder",
     company: "Q by Rayeesa",
     rating: 4.8,
-    image: "/testimonials/rayeesa-absal.jpg",
   },
   {
     quote:
@@ -72,7 +67,6 @@ const testimonials: Testimonial[] = [
     role: "Founder",
     company: "La Mirage",
     rating: 5,
-    image: "/testimonials/lijo-varghese.jpg",
   },
   {
     quote:
@@ -81,22 +75,21 @@ const testimonials: Testimonial[] = [
     role: "Founder",
     company: "OnMyWay",
     rating: 4.9,
-    image: "/testimonials/ahmed-zabi.jpg",
   },
 ];
 
-// Client companies with optional logos
+// Client companies — logos can be added later under /public/clients/
 const clients: ClientInfo[] = [
-  { name: "Ahazz Designs", logo: "/clients/ahazz-designs.png" },
-  { name: "OnMyWay", logo: "/clients/onmyway.png" },
-  { name: "Ziera Inc", logo: "/clients/ziera-inc.png" },
-  { name: "GrabToGo", logo: "/clients/grabtogo.png" },
-  { name: "CoolTech International", logo: "/clients/cooltech-international.png" },
-  { name: "La Mirage", logo: "/clients/la-mirage.png" },
-  { name: "Q by Rayeesa", logo: "/clients/q-by-rayeesa.png" },
-  { name: "Ginger Designs", logo: "/clients/ginger-designs.png" },
-  { name: "EaseMyFly", logo: "/clients/easemyfly.png" },
-  { name: "Al Shahama Marine", logo: "/clients/al-shahama-marine.png" },
+  { name: "Ahazz Designs" },
+  { name: "OnMyWay" },
+  { name: "Ziera Inc" },
+  { name: "GrabToGo" },
+  { name: "CoolTech International" },
+  { name: "La Mirage" },
+  { name: "Q by Rayeesa" },
+  { name: "Ginger Designs" },
+  { name: "EaseMyFly" },
+  { name: "Al Shahama Marine" },
 ];
 
 function ClientAvatar({
