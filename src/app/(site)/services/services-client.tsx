@@ -212,7 +212,7 @@ function ProcessSection() {
   )
 
   return (
-    <section ref={sectionRef} aria-labelledby="process-heading" className="py-24 bg-background-secondary relative overflow-hidden">
+    <section ref={sectionRef} aria-labelledby="process-heading" className="py-16 md:py-24 bg-background-secondary relative overflow-hidden">
       {/* Grain */}
       <div
         className="absolute inset-0 pointer-events-none z-[1]"
@@ -224,14 +224,14 @@ function ProcessSection() {
       />
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 md:mb-16">
           <p className="text-sm text-foreground-muted tracking-[0.2em] uppercase mb-4 font-mono" data-proc="head">// How We Work</p>
           <h2 id="process-heading" className="text-3xl md:text-4xl font-bold" data-proc="head">Our Process</h2>
           <p className="mt-4 text-foreground-muted max-w-2xl mx-auto" data-proc="head">A proven methodology that brings your vision to life</p>
         </div>
 
-        <div className="relative flex flex-col md:flex-row justify-between gap-8">
-          {/* Coral connector line */}
+        <div className="relative flex flex-col md:flex-row justify-between gap-4 md:gap-8">
+          {/* Coral connector line — desktop only */}
           <div
             ref={connectorRef}
             className="hidden md:block absolute top-7 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-coral-500/50 via-coral-400/50 to-coral-500/50 origin-left"
@@ -241,13 +241,15 @@ function ProcessSection() {
 
           {process.map((step) => (
             <div key={step.step} className="flex-1 relative" data-proc="step">
-              <div className="text-center">
-                {/* Glassmorphic step number */}
-                <div className="relative z-10 w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-white text-lg backdrop-blur-xl border border-coral-500/30 shadow-[0_0_20px_rgba(255,106,55,0.3)]" style={{ background: 'linear-gradient(135deg, var(--color-coral-500), var(--color-coral-600))' }}>
+              {/* Mobile: horizontal compact | Desktop: centered vertical */}
+              <div className="flex items-start gap-4 md:block md:text-center">
+                <div className="relative z-10 w-10 h-10 md:w-14 md:h-14 rounded-full flex-shrink-0 flex items-center justify-center md:mx-auto md:mb-4 font-bold text-white text-sm md:text-lg backdrop-blur-xl border border-coral-500/30 shadow-[0_0_20px_rgba(255,106,55,0.3)]" style={{ background: 'linear-gradient(135deg, var(--color-coral-500), var(--color-coral-600))' }}>
                   {step.step}
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-                <p className="text-sm text-foreground-muted">{step.description}</p>
+                <div>
+                  <h3 className="text-base md:text-lg font-semibold mb-1">{step.title}</h3>
+                  <p className="text-xs md:text-sm text-foreground-muted">{step.description}</p>
+                </div>
               </div>
             </div>
           ))}

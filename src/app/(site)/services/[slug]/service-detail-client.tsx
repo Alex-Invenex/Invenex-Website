@@ -253,22 +253,24 @@ function ProcessSection({ title }: { title: string }) {
   return (
     <section ref={sectionRef} aria-labelledby="process-heading" data-testid="service-process" className="py-16 bg-background-secondary relative overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           <h2 id="process-heading" className="text-3xl font-bold">Our Process</h2>
           <p className="mt-4 text-foreground-muted max-w-2xl mx-auto">How we deliver exceptional {title.toLowerCase()} solutions</p>
         </div>
 
-        <div className="relative flex flex-col md:flex-row justify-between gap-8">
+        <div className="relative flex flex-col md:flex-row justify-between gap-4 md:gap-8">
           <div ref={connectorRef} className="hidden md:block absolute top-7 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-coral-500/50 via-coral-400/50 to-coral-500/50 origin-left" aria-hidden="true" style={{ transform: 'scaleX(0)' }} />
 
           {processSteps.map((step) => (
             <div key={step.step} className="flex-1 relative" data-sp="step">
-              <div className="text-center">
-                <div className="relative z-10 w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-white text-lg shadow-[0_0_20px_rgba(255,106,55,0.3)]" style={{ background: 'linear-gradient(135deg, var(--color-coral-500), var(--color-coral-600))' }}>
+              <div className="flex items-start gap-4 md:block md:text-center">
+                <div className="relative z-10 w-10 h-10 md:w-14 md:h-14 rounded-full flex-shrink-0 flex items-center justify-center md:mx-auto md:mb-4 font-bold text-white text-sm md:text-lg shadow-[0_0_20px_rgba(255,106,55,0.3)]" style={{ background: 'linear-gradient(135deg, var(--color-coral-500), var(--color-coral-600))' }}>
                   {step.step}
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-                <p className="text-sm text-foreground-muted">{step.description}</p>
+                <div>
+                  <h3 className="text-base md:text-lg font-semibold mb-1">{step.title}</h3>
+                  <p className="text-xs md:text-sm text-foreground-muted">{step.description}</p>
+                </div>
               </div>
             </div>
           ))}
