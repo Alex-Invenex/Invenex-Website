@@ -6,9 +6,8 @@ import { SkipLink } from "@/components/accessibility";
 import {
   PageTransitionProvider,
   TransitionOverlay,
-  PageLoader,
-  InitialLoader,
 } from "@/components/transitions";
+import { EpicPreloader } from "@/components/transitions/epic-preloader";
 import { ToastProvider } from "@/components/ui/toast";
 import { LenisProvider } from "@/components/providers/lenis-provider";
 
@@ -19,14 +18,10 @@ export default function SiteLayout({
 }) {
   return (
     <ToastProvider>
-      {/* Initial Loader - First-visit branded experience (Story 9.9) */}
-      {/* TEMPORARILY DISABLED FOR DEVELOPMENT - uncomment before production */}
-      {/* <InitialLoader minDisplayTime={500} /> */}
+      <EpicPreloader />
 
       <PageTransitionProvider exitDuration={300} enterDuration={400}>
-        {/* Transition Overlay - Cinematic page transitions (Story 9.3) */}
         <TransitionOverlay blur />
-        <PageLoader />
 
         {/* Custom Cursor - Premium UI enhancement (Story 9.2) */}
         <CustomCursor />

@@ -144,6 +144,11 @@ html.lenis body {
   }
 }
 
+/* Hide WhatsApp button when mobile menu is open */
+body.mobile-menu-open [data-testid="whatsapp-button"] {
+  display: none !important;
+}
+
 /* ============================================
    GSAP Animation Fallback (A3)
    Content is visible by default (no JS / slow JS).

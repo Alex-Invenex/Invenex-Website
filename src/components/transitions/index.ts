@@ -13,9 +13,6 @@ export {
   useTransitionNavigation,
 } from './transition-link'
 
-export {
-  PageLoader,
-  InlineLoader,
-} from './page-loader'
+export { InlineLoader } from './page-loader'
 
-export { InitialLoader } from './initial-loader'
+export { EpicPreloader } from './epic-preloader'
