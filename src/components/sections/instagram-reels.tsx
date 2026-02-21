@@ -11,30 +11,35 @@ const socialCards = [
     url: "https://www.instagram.com/reel/DEofbAcSLyL/",
     title: "Build your brand online",
     cover: "/instagram/reel-DEofbAcSLyL.gif",
+    poster: "/instagram/reel-DEofbAcSLyL-poster.webp",
   },
   {
     id: "DFDGYdUIhku",
     url: "https://www.instagram.com/reel/DFDGYdUIhku/",
     title: "Why you need an online store",
     cover: "/instagram/reel-DFDGYdUIhku.gif",
+    poster: "/instagram/reel-DFDGYdUIhku-poster.webp",
   },
   {
     id: "C--W-KWhMkq",
     url: "https://www.instagram.com/reel/C--W-KWhMkq/",
     title: "Online clinic management",
     cover: "/instagram/reel-C--W-KWhMkq.gif",
+    poster: "/instagram/reel-C--W-KWhMkq-poster.webp",
   },
   {
     id: "C-u0w2OBBCF",
     url: "https://www.instagram.com/reel/C-u0w2OBBCF/",
     title: "Client Q&A",
     cover: "/instagram/reel-C-u0w2OBBCF.gif",
+    poster: "/instagram/reel-C-u0w2OBBCF-poster.webp",
   },
   {
     id: "C32ciCRvp91",
     url: "https://www.instagram.com/reel/C32ciCRvp91/",
     title: "Online growth simplified",
     cover: "/instagram/reel-C32ciCRvp91.gif",
+    poster: "/instagram/reel-C32ciCRvp91-poster.webp",
   },
 ];
 
@@ -47,6 +52,7 @@ const CARD_TRANSFORMS = [
   { rotate: 12, y: 20, x: 10 },
 ];
 
+/* ── Desktop fanned card ─────────────────────────────── */
 function SocialCard({
   card,
   index,
@@ -98,42 +104,72 @@ function SocialCard({
       onMouseLeave={handleMouseLeave}
       onClick={onOpen}
     >
-      {/* Card body */}
-      <div
-        className="rounded-2xl overflow-hidden relative shadow-2xl shadow-black/40"
-        style={{ width: "clamp(200px, 18vw, 260px)", aspectRatio: "9/16" }}
-      >
-        {/* GIF cover */}
+      <div style={{ width: "clamp(200px, 18vw, 260px)" }}>
+        <CardBody card={card} />
+      </div>
+    </div>
+  );
+}
+
+/* ── Mobile horizontal-scroll card ──────────────────── */
+function MobileSocialCard({
+  card,
+  onOpen,
+}: {
+  card: (typeof socialCards)[0];
+  onOpen: () => void;
+}) {
+  return (
+    <div
+      className="relative cursor-pointer group shrink-0"
+      style={{ width: "160px" }}
+      onClick={onOpen}
+    >
+      <CardBody card={card} />
+    </div>
+  );
+}
+
+/* ── Shared card inner (reused by desktop + mobile) ─── */
+function CardBody({ card }: { card: (typeof socialCards)[0] }) {
+  return (
+    <div
+      className="rounded-2xl overflow-hidden relative shadow-2xl shadow-black/40"
+      style={{ width: "100%", aspectRatio: "9/16" }}
+    >
+      {/* Cover: WebP poster on mobile (saves ~4.5 MB), GIF on desktop */}
+      <picture>
+        <source media="(max-width: 767px)" srcSet={card.poster} type="image/webp" />
         <img
           src={card.cover}
           alt={card.title}
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
         />
+      </picture>
 
-        {/* Dark tint — fades away on hover */}
-        <div className="absolute inset-0 bg-black/50 group-hover:bg-black/0 transition-all duration-500" />
+      {/* Dark tint — fades away on hover */}
+      <div className="absolute inset-0 bg-black/50 group-hover:bg-black/0 transition-all duration-500" />
 
-        {/* Content — fades out on hover */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center group-hover:opacity-0 transition-opacity duration-500">
-          <div className="w-16 h-16 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 flex items-center justify-center mb-4">
-            <Play className="w-7 h-7 text-white fill-white ml-1" />
-          </div>
-          <p className="text-white text-sm font-medium leading-tight opacity-90">
-            {card.title}
-          </p>
+      {/* Content — fades out on hover */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-6 text-center group-hover:opacity-0 transition-opacity duration-500">
+        <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 flex items-center justify-center mb-3 md:mb-4">
+          <Play className="w-5 h-5 md:w-7 md:h-7 text-white fill-white ml-0.5" />
         </div>
+        <p className="text-white text-xs md:text-sm font-medium leading-tight opacity-90">
+          {card.title}
+        </p>
+      </div>
 
-        {/* Bottom gradient — fades on hover */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/60 to-transparent group-hover:opacity-0 transition-opacity duration-500" />
+      {/* Bottom gradient — fades on hover */}
+      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/60 to-transparent group-hover:opacity-0 transition-opacity duration-500" />
 
-        {/* Badge */}
-        <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
-          <div className="w-5 h-5 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-            <Instagram className="w-2.5 h-2.5 text-white" />
-          </div>
-          <span className="text-white text-[10px] font-medium">Reel</span>
+      {/* Badge */}
+      <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
+        <div className="w-5 h-5 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+          <Instagram className="w-2.5 h-2.5 text-white" />
         </div>
+        <span className="text-white text-[10px] font-medium">Reel</span>
       </div>
     </div>
   );
@@ -342,8 +378,26 @@ export function InstagramReels() {
           </a>
         </div>
 
-        {/* Fanned cards layout */}
-        <div className="flex items-center justify-center relative min-h-[400px] md:min-h-[500px] lg:min-h-[600px]">
+        {/* ── Mobile: horizontal scroll ────────────────── */}
+        <div className="md:hidden -mx-6">
+          <div
+            className="flex gap-4 px-6 pb-4 overflow-x-auto scrollbar-hide"
+            style={{ scrollSnapType: "x mandatory" }}
+          >
+            {socialCards.map((card) => (
+              <MobileSocialCard
+                key={card.id}
+                card={card}
+                onOpen={() => setActiveCard(card)}
+              />
+            ))}
+            {/* End spacer for last card snap */}
+            <div className="shrink-0" style={{ width: "1px" }} />
+          </div>
+        </div>
+
+        {/* ── Desktop: fanned cards layout ──────────────── */}
+        <div className="hidden md:flex items-center justify-center relative min-h-[500px] lg:min-h-[600px]">
           <div className="flex items-center justify-center">
             {socialCards.map((card, index) => (
               <SocialCard

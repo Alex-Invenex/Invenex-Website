@@ -621,7 +621,7 @@ export function ServicesPreview() {
       <div
         data-svc-desktop
         className="hidden lg:flex flex-col relative z-10"
-        style={{ height: "100vh" }}
+        style={{ height: "100dvh" }}
       >
         {/* Header — centered, fades out on scroll */}
         <div
