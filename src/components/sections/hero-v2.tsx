@@ -301,6 +301,7 @@ export function HeroV2() {
         <div
           data-a="orb"
           data-p="orb-1"
+          data-animate
           className="absolute top-[15%] right-[5%] w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full opacity-0 will-change-transform"
           style={{
             background:
@@ -311,6 +312,7 @@ export function HeroV2() {
         <div
           data-a="orb"
           data-p="orb-2"
+          data-animate
           className="absolute top-[25%] right-[12%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full opacity-0 will-change-transform"
           style={{
             background:
@@ -320,6 +322,7 @@ export function HeroV2() {
         {/* Subtle purple accent — top left */}
         <div
           data-a="orb"
+          data-animate
           className="absolute -top-20 left-[20%] w-[400px] h-[400px] rounded-full opacity-0"
           style={{
             background:
@@ -464,6 +467,7 @@ export function HeroV2() {
               {/* Orbit ring 1 — clockwise */}
               <div
                 data-a="ring"
+                data-animate
                 className="absolute inset-0 flex items-center justify-center opacity-0"
               >
                 <div
@@ -475,6 +479,7 @@ export function HeroV2() {
               {/* Orbit ring 2 — counter-clockwise, larger */}
               <div
                 data-a="ring"
+                data-animate
                 className="absolute inset-0 flex items-center justify-center opacity-0"
               >
                 <div
@@ -488,6 +493,7 @@ export function HeroV2() {
               {/* The sphere */}
               <div
                 data-a="sphere"
+                data-animate
                 className="opacity-0 relative w-[220px] h-[220px] md:w-[300px] md:h-[300px] lg:w-[360px] lg:h-[360px]"
               >
                 {/* Outer glow halo */}

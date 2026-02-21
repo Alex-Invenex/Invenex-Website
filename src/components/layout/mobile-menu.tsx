@@ -32,29 +32,48 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [servicesExpanded, setServicesExpanded] = useState(false);
 
-  // Lock body scroll, hide WhatsApp, add aria-hidden
+  // Lock body scroll (iOS-safe), hide WhatsApp, add aria-hidden
   useEffect(() => {
     const mainContent = document.getElementById("main-content");
     const header = document.querySelector("header");
 
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      // iOS Safari: overflow:hidden on body doesn't prevent background scroll.
+      // Fix: pin body with position:fixed, preserving current scroll offset.
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
       document.body.classList.add("mobile-menu-open");
       mainContent?.setAttribute("aria-hidden", "true");
       header?.setAttribute("aria-hidden", "true");
       closeButtonRef.current?.focus();
     } else {
-      document.body.style.overflow = "";
+      // Restore scroll position after un-pinning body
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
       document.body.classList.remove("mobile-menu-open");
       mainContent?.removeAttribute("aria-hidden");
       header?.removeAttribute("aria-hidden");
+      window.scrollTo(0, parseInt(scrollY || "0") * -1);
       setServicesExpanded(false);
     }
     return () => {
-      document.body.style.overflow = "";
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
       document.body.classList.remove("mobile-menu-open");
       mainContent?.removeAttribute("aria-hidden");
       header?.removeAttribute("aria-hidden");
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY) * -1);
+      }
     };
   }, [isOpen]);
 

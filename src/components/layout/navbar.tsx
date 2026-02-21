@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { TransitionLink } from "@/components/transitions";
 import { motion, AnimatePresence } from "framer-motion";
@@ -47,7 +47,7 @@ const serviceColors: Record<string, string> = {
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -64,24 +64,28 @@ export function Navbar() {
   }, [handleKeyDown]);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+      if (ticking) return;
+      ticking = true;
 
-      // Show/hide based on scroll direction
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setVisible(false);
-      } else {
-        setVisible(true);
-      }
+      requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        const lastY = lastScrollYRef.current;
 
-      // Add backdrop after 100px
-      setScrolled(currentScrollY > 100);
-      setLastScrollY(currentScrollY);
+        // Show/hide based on scroll direction
+        setVisible(!(currentScrollY > lastY && currentScrollY > 100));
+        setScrolled(currentScrollY > 100);
+
+        lastScrollYRef.current = currentScrollY;
+        ticking = false;
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   // Toggle services menu with keyboard
   const handleServicesKeyDown = (e: React.KeyboardEvent) => {

@@ -202,11 +202,12 @@ function GSAPMarquee({
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const skipAnimations = mounted && shouldSkipAnimations();
 
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (!mounted || shouldSkipAnimations() || !trackRef.current) return;
+    if (!mounted || skipAnimations || !trackRef.current) return;
 
     const track = trackRef.current;
     let tl: gsap.core.Timeline;
@@ -248,10 +249,10 @@ function GSAPMarquee({
       tl?.kill();
       window.removeEventListener("resize", onResize);
     };
-  }, [mounted, direction, items.length, speed]);
+  }, [mounted, skipAnimations, direction, items.length, speed]);
 
-  // Triple items for seamless loop
-  const tripled = [...items, ...items, ...items];
+  // Only triple items when animation will play (desktop)
+  const displayItems = skipAnimations ? items : [...items, ...items, ...items];
 
   if (!mounted) {
     return (
@@ -266,7 +267,7 @@ function GSAPMarquee({
   return (
     <div className="flex overflow-hidden py-4">
       <div ref={trackRef} className="flex will-change-transform">
-        {tripled.map((testimonial, index) => (
+        {displayItems.map((testimonial, index) => (
           <TestimonialCard key={index} {...testimonial} />
         ))}
       </div>
@@ -303,11 +304,12 @@ function ClientLogoItem({ client }: { client: ClientInfo }) {
 function ClientTicker() {
   const tickerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const skipAnimations = mounted && shouldSkipAnimations();
 
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (!mounted || shouldSkipAnimations() || !tickerRef.current) return;
+    if (!mounted || skipAnimations || !tickerRef.current) return;
 
     const track = tickerRef.current;
     const width = track.scrollWidth / 3;
@@ -320,9 +322,10 @@ function ClientTicker() {
     });
 
     return () => { tl.kill(); };
-  }, [mounted]);
+  }, [mounted, skipAnimations]);
 
-  const tripled = [...clients, ...clients, ...clients];
+  // Only triple items when animation will play (desktop)
+  const displayClients = skipAnimations ? clients : [...clients, ...clients, ...clients];
 
   return (
     <div className="overflow-hidden py-6 relative">
@@ -331,7 +334,7 @@ function ClientTicker() {
       <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
       <div ref={tickerRef} className="flex items-center will-change-transform">
-        {tripled.map((client, i) => (
+        {displayClients.map((client, i) => (
           <ClientLogoItem key={i} client={client} />
         ))}
       </div>
