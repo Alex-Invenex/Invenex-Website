@@ -35,8 +35,8 @@ export function EpicPreloader() {
     () => false
   )
 
-  const [phase, setPhase] = useState<'active' | 'done'>(
-    isReturningVisitor ? 'done' : 'active'
+  const [phase, setPhase] = useState<'pending' | 'active' | 'done'>(
+    isReturningVisitor ? 'done' : 'pending'
   )
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -85,12 +85,10 @@ export function EpicPreloader() {
     }, 50)
   }, [])
 
+  // Resolve 'pending' phase: decide whether to show preloader or skip
   useEffect(() => {
-    if (phase === 'done' || !containerRef.current) return
+    if (phase !== 'pending') return
 
-    // Handle SSR hydration mismatch: useSyncExternalStore returns false
-    // on server, so useState initializes as 'active'. On client after
-    // hydration, isReturningVisitor may be true but phase stays 'active'.
     if (isReturningVisitor) {
       setPhase('done')
       return
@@ -102,13 +100,20 @@ export function EpicPreloader() {
       return
     }
 
-    // Skip preloader on mobile — don't add loading delay on slower connections
     const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches
     if (isTouchDevice) {
       markVisited()
       setPhase('done')
       return
     }
+
+    // Desktop first-time visitor — show the preloader animation
+    setPhase('active')
+  }, [phase, isReturningVisitor])
+
+  // Run GSAP animation when phase becomes 'active'
+  useEffect(() => {
+    if (phase !== 'active' || !containerRef.current) return
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -187,9 +192,9 @@ export function EpicPreloader() {
         clearInterval(scrambleIntervalRef.current)
       }
     }
-  }, [phase, isReturningVisitor, scrambleText])
+  }, [phase, scrambleText])
 
-  if (phase === 'done') return null
+  if (phase !== 'active') return null
 
   return (
     <div

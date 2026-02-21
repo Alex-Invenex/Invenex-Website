@@ -7,8 +7,6 @@ import { ArrowRight } from 'lucide-react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
-gsap.registerPlugin(useGSAP)
-
 /* ─── Data ────────────────────────────────────────────────── */
 const STATS = [
   { value: 50, suffix: '+', label: 'Enterprise Projects', detail: 'Delivered' },
@@ -43,6 +41,7 @@ export function HeroV2() {
   /* ── Entrance choreography ─────────────────────────────── */
   useGSAP(
     () => {
+      gsap.registerPlugin(useGSAP)
       if (!mounted) return
       const rm = reducedMotion.current
 
