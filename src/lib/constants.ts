@@ -122,7 +122,7 @@ export interface SocialLink {
 export const socialLinks: SocialLink[] = [
   {
     name: "LinkedIn",
-    href: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/company/invenex/",
+    href: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/company/invenexsolutions",
     icon: "linkedin",
   },
   {

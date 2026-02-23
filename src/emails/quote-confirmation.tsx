@@ -151,7 +151,7 @@ export default function QuoteConfirmation({
               </Link>
               {' · '}
               <Link
-                href="https://linkedin.com/company/invenex"
+                href="https://www.linkedin.com/company/invenexsolutions"
                 style={styles.footerLinkSmall}
               >
                 LinkedIn
