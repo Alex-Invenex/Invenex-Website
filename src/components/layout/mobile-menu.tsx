@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { mainNav, socialLinks, siteConfig } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
-import { TransitionLink } from "@/components/transitions";
+import Link from "next/link";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   linkedin: Linkedin,
@@ -159,7 +159,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 pt-6 pb-4">
-              <TransitionLink
+              <Link
                 href="/"
                 onClick={handleLinkClick}
                 className="flex items-center gap-2.5"
@@ -172,7 +172,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 <span className="text-xl font-bold text-gradient">
                   {siteConfig.name}
                 </span>
-              </TransitionLink>
+              </Link>
               <button
                 ref={closeButtonRef}
                 onClick={onClose}
@@ -229,25 +229,25 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                               <ul className="ml-2 pl-4 border-l border-white/10 space-y-0.5 pb-2">
                                 {item.children.map((child) => (
                                   <li key={child.href}>
-                                    <TransitionLink
+                                    <Link
                                       href={child.href}
                                       onClick={handleLinkClick}
                                       className="block py-3 px-3 text-foreground-muted hover:text-foreground hover:bg-white/5 rounded-lg transition-colors text-[15px]"
                                     >
                                       {child.title}
-                                    </TransitionLink>
+                                    </Link>
                                   </li>
                                 ))}
                                 {/* View All Services link */}
                                 <li>
-                                  <TransitionLink
+                                  <Link
                                     href="/services"
                                     onClick={handleLinkClick}
                                     className="flex items-center gap-2 py-3 px-3 text-[#FF6B35] hover:bg-[#FF6B35]/10 rounded-lg transition-colors text-[15px] font-medium"
                                   >
                                     View All Services
                                     <ArrowRight className="w-4 h-4" />
-                                  </TransitionLink>
+                                  </Link>
                                 </li>
                               </ul>
                             </motion.div>
@@ -256,7 +256,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       </div>
                     ) : (
                       // Regular nav link
-                      <TransitionLink
+                      <Link
                         href={item.href}
                         onClick={handleLinkClick}
                         className="block py-4 px-4 text-lg font-medium text-foreground hover:bg-white/5 rounded-xl transition-colors relative group"
@@ -266,7 +266,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                           {/* Coral accent underline on hover */}
                           <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#FF6B35] group-hover:w-full transition-all duration-300" />
                         </span>
-                      </TransitionLink>
+                      </Link>
                     )}
                   </motion.li>
                 ))}
@@ -286,14 +286,14 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 className="mb-6"
               >
                 <Button asChild size="lg" className="w-full">
-                  <TransitionLink
+                  <Link
                     href="/contact"
                     onClick={handleLinkClick}
                     className="flex items-center justify-center gap-2"
                   >
                     Get a Quote
                     <ArrowRight className="w-4 h-4" />
-                  </TransitionLink>
+                  </Link>
                 </Button>
               </motion.div>
 
