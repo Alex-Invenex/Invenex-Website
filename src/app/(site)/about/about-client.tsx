@@ -309,7 +309,7 @@ function TeamSection() {
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="text-center mb-16">
           <h2 id="about-team-title" className="text-3xl font-bold" data-tm="head">Meet the Team</h2>
-          <p className="mt-4 text-foreground-muted" data-tm="head">The people behind the magic</p>
+          <p className="mt-4 text-coral-400/70" data-tm="head">The people behind the magic</p>
         </div>
 
         <GSAPStaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" data-testid="team-grid">
@@ -331,46 +331,65 @@ function TeamMemberCard({ member }: { member: typeof team[number] }) {
 
   return (
     <div className="group relative" data-testid="team-member-card">
-      <div className="aspect-square rounded-2xl overflow-hidden mb-4 relative backdrop-blur-xl border border-white/[0.08] transition-all duration-300 group-hover:border-coral-500/20" style={{ background: 'rgba(255,255,255,0.04)' }}>
-        {isLoading && !hasError && (
-          <div className="absolute inset-0 bg-gradient-to-br from-coral-500/10 via-background-secondary to-coral-400/10 animate-pulse" />
-        )}
+      {/* Card with warm border glow */}
+      <div
+        className="relative rounded-2xl overflow-hidden mb-4 transition-all duration-300"
+        style={{ aspectRatio: '3/4' }}
+      >
+        {/* Subtle warm border */}
+        <div
+          className="absolute inset-0 rounded-2xl transition-opacity duration-300"
+          style={{
+            padding: 1,
+            background: 'linear-gradient(135deg, rgba(255,107,53,0.3), rgba(255,107,53,0.08) 50%, rgba(255,107,53,0.2))',
+          }}
+          aria-hidden="true"
+        >
+          <div className="w-full h-full rounded-2xl bg-[#141414]" />
+        </div>
 
-        {hasError ? (
-          <div className="w-full h-full bg-gradient-to-br from-coral-500/10 via-background-secondary to-coral-400/10 flex items-center justify-center">
-            <User className="w-12 h-12 text-foreground-muted/50" aria-hidden="true" />
-          </div>
-        ) : (
-          <Image
-            src={member.image}
-            alt={`${member.name}, ${member.role} at Invenex Solutions`}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className={`object-cover transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-            onLoad={() => setIsLoading(false)}
-            onError={() => { setIsLoading(false); setHasError(true) }}
-          />
-        )}
-
-        {/* Glassmorphic hover overlay */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-end justify-start p-4">
-          {member.linkedin && (
-            <a
-              href={member.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${member.name} LinkedIn profile`}
-              className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 backdrop-blur-xl rounded-full p-2.5 border border-white/[0.15]"
-              style={{ background: 'rgba(255,255,255,0.1)' }}
-            >
-              <Linkedin className="w-5 h-5" />
-            </a>
+        {/* Image container */}
+        <div className="absolute inset-[1px] rounded-2xl overflow-hidden">
+          {isLoading && !hasError && (
+            <div className="absolute inset-0 bg-gradient-to-br from-coral-500/10 via-[#141414] to-coral-400/10 animate-pulse" />
           )}
+
+          {hasError ? (
+            <div className="w-full h-full bg-gradient-to-br from-coral-500/10 via-[#141414] to-coral-400/10 flex items-center justify-center">
+              <User className="w-12 h-12 text-foreground-muted/50" aria-hidden="true" />
+            </div>
+          ) : (
+            <Image
+              src={member.image}
+              alt={`${member.name}, ${member.role} at Invenex Solutions`}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className={`object-cover transition-all duration-300 group-hover:scale-105 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+              onLoad={() => setIsLoading(false)}
+              onError={() => { setIsLoading(false); setHasError(true) }}
+            />
+          )}
+
+          {/* Hover overlay with LinkedIn */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-end justify-start p-4">
+            {member.linkedin && (
+              <a
+                href={member.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${member.name} LinkedIn profile`}
+                className="opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 rounded-full p-2.5 border border-white/[0.15]"
+                style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(12px)' }}
+              >
+                <Linkedin className="w-5 h-5" />
+              </a>
+            )}
+          </div>
         </div>
       </div>
 
       <h3 className="font-semibold">{member.name}</h3>
-      <p className="text-sm text-foreground-muted">{member.role}</p>
+      <p className="text-sm text-coral-400/80">{member.role}</p>
     </div>
   )
 }
