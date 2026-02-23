@@ -60,8 +60,10 @@ export function CustomCursor({
     // Skip if running on server
     if (typeof window === 'undefined') return
 
-    // Check for touch device - hide custom cursor
-    const isTouchDevice = window.matchMedia('(hover: none)').matches
+    // Check for touch / non-pointer device - hide custom cursor
+    const isTouchDevice =
+      window.matchMedia('(hover: none)').matches ||
+      window.matchMedia('(pointer: coarse)').matches
     if (isTouchDevice) return
 
     // Check reduced motion preference

@@ -700,25 +700,27 @@ html.js-ready [data-animate] {
     display: none;
   }
 
-  /* Custom Cursor - Story 9.2 */
-  .cursor-none {
-    cursor: none;
-  }
+  /* Custom Cursor - Story 9.2 (desktop with pointer device only) */
+  @media (hover: hover) and (pointer: fine) {
+    .cursor-none {
+      cursor: none;
+    }
 
-  /* Preserve native cursor on inputs for text selection */
-  .cursor-none input,
-  .cursor-none textarea,
-  .cursor-none select,
-  .cursor-none [contenteditable],
-  .cursor-none [contenteditable="true"] {
-    cursor: text;
-  }
+    /* Preserve native cursor on inputs for text selection */
+    .cursor-none input,
+    .cursor-none textarea,
+    .cursor-none select,
+    .cursor-none [contenteditable],
+    .cursor-none [contenteditable="true"] {
+      cursor: text;
+    }
 
-  /* Preserve pointer cursor on interactive elements (fallback) */
-  .cursor-none button,
-  .cursor-none a,
-  .cursor-none [role="button"] {
-    cursor: pointer;
+    /* Preserve pointer cursor on interactive elements (fallback) */
+    .cursor-none button,
+    .cursor-none a,
+    .cursor-none [role="button"] {
+      cursor: pointer;
+    }
   }
 
   /* ----------------------------------------
