@@ -10,25 +10,25 @@ const featuredProjects = [
   {
     title: "CoolTech International",
     categories: ["Web", "Corporate"],
-    image: "/portfolio/cooltech-international-mockup.jpeg",
+    image: "/portfolio/cooltech-international-mockup.webp",
     href: "/portfolio/cooltech-international",
   },
   {
     title: "Ginger Designs",
     categories: ["Web", "Creative"],
-    image: "/portfolio/ginger-designs-mockup.jpg",
+    image: "/portfolio/ginger-designs-mockup.webp",
     href: "/portfolio/ginger-designs",
   },
   {
     title: "GrabToGo",
     categories: ["Platform", "Deals"],
-    image: "/portfolio/grabtogo-mockup.png",
+    image: "/portfolio/grabtogo-mockup.webp",
     href: "/portfolio/grabtogo",
   },
   {
     title: "Ziera Inc",
     categories: ["E-Commerce", "LED"],
-    image: "/portfolio/ziera-mockup.jpg",
+    image: "/portfolio/ziera-mockup.webp",
     href: "/portfolio/ziera-inc",
   },
 ];

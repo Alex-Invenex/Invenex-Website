@@ -35,7 +35,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Corporate website for an international technology solutions company with modern design and seamless user experience.",
-    image: "/portfolio/cooltech-international-mockup.jpeg",
+    image: "/portfolio/cooltech-international-mockup.webp",
     slug: "cooltech-international",
     url: "https://cooltechintl.com",
     featured: true,
@@ -50,9 +50,9 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
     gallery: [
-      "/portfolio/cooltech-international-mockup.jpeg",
-      "/portfolio/cooltech-international.png",
-      "/portfolio/cooltech-international-2.png",
+      "/portfolio/cooltech-international-mockup.webp",
+      "/portfolio/cooltech-international.webp",
+      "/portfolio/cooltech-international-2.webp",
     ],
     testimonial: {
       quote:
@@ -68,7 +68,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Creative agency website showcasing interior design and branding services in the UAE market.",
-    image: "/portfolio/ginger-designs-mockup.jpg",
+    image: "/portfolio/ginger-designs-mockup.webp",
     slug: "ginger-designs",
     url: "https://gingerdesigns.ae",
     challenge:
@@ -82,9 +82,9 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Tailwind CSS", "Sanity CMS", "GSAP"],
     gallery: [
-      "/portfolio/ginger-designs-mockup.jpg",
-      "/portfolio/ginger-designs.png",
-      "/portfolio/ginger-designs-2.png",
+      "/portfolio/ginger-designs-mockup.webp",
+      "/portfolio/ginger-designs.webp",
+      "/portfolio/ginger-designs-2.webp",
     ],
     testimonial: {
       quote:
@@ -100,7 +100,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Portfolio website for a UAE-based design studio featuring elegant layouts and project showcases.",
-    image: "/portfolio/ahazz-designs-mockup.jpg",
+    image: "/portfolio/ahazz-designs-mockup.webp",
     slug: "ahazz-designs",
     url: "https://ahazzdesigns.com",
     challenge:
@@ -114,9 +114,9 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "Contentful"],
     gallery: [
-      "/portfolio/ahazz-designs-mockup.jpg",
-      "/portfolio/ahazz-designs.png",
-      "/portfolio/ahazz-designs-2.png",
+      "/portfolio/ahazz-designs-mockup.webp",
+      "/portfolio/ahazz-designs.webp",
+      "/portfolio/ahazz-designs-2.webp",
     ],
   },
   {
@@ -126,7 +126,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Travel booking platform with flight search, comparison tools, and seamless reservation management.",
-    image: "/portfolio/easemyfly.png",
+    image: "/portfolio/easemyfly.webp",
     slug: "easemyfly",
     url: "https://easemyfly.com",
     challenge:
@@ -140,8 +140,8 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Node.js", "PostgreSQL", "Redis", "AWS"],
     gallery: [
-      "/portfolio/easemyfly.png",
-      "/portfolio/easemyfly-2.png",
+      "/portfolio/easemyfly.webp",
+      "/portfolio/easemyfly-2.webp",
     ],
     testimonial: {
       quote:
@@ -157,7 +157,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Elegant restaurant website with online reservations, menu showcase, and event booking capabilities.",
-    image: "/portfolio/la-mirage-mockup.jpg",
+    image: "/portfolio/la-mirage-mockup.webp",
     slug: "la-mirage",
     url: "https://la-mirage.in",
     challenge:
@@ -171,9 +171,9 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "OpenTable API"],
     gallery: [
-      "/portfolio/la-mirage-mockup.jpg",
-      "/portfolio/la-mirage.png",
-      "/portfolio/la-mirage-2.png",
+      "/portfolio/la-mirage-mockup.webp",
+      "/portfolio/la-mirage.webp",
+      "/portfolio/la-mirage-2.webp",
     ],
     testimonial: {
       quote:
@@ -189,7 +189,7 @@ export const projects: CaseStudyProject[] = [
     category: "Platform",
     excerpt:
       "Deals and offers aggregation platform helping users discover the best local promotions and discounts.",
-    image: "/portfolio/grabtogo-mockup.png",
+    image: "/portfolio/grabtogo-mockup.webp",
     slug: "grabtogo",
     url: "https://www.grabtogo.in",
     featured: true,
@@ -204,9 +204,9 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["React Native", "Node.js", "PostgreSQL", "Firebase", "AWS"],
     gallery: [
-      "/portfolio/grabtogo-mockup.png",
-      "/portfolio/grabtogo.png",
-      "/portfolio/grabtogo-2.png",
+      "/portfolio/grabtogo-mockup.webp",
+      "/portfolio/grabtogo.webp",
+      "/portfolio/grabtogo-2.webp",
     ],
     testimonial: {
       quote:
@@ -222,7 +222,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Technology consulting firm website with service showcases, case studies, and client testimonials.",
-    image: "/portfolio/babbage-solutions-mockup.jpg",
+    image: "/portfolio/babbage-solutions-mockup.webp",
     slug: "babbage-solutions",
     url: "https://babbagesolutions.in",
     challenge:
@@ -236,9 +236,9 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "Sanity CMS"],
     gallery: [
-      "/portfolio/babbage-solutions-mockup.jpg",
-      "/portfolio/babbage-solutions.png",
-      "/portfolio/babbagesolutions-2.png",
+      "/portfolio/babbage-solutions-mockup.webp",
+      "/portfolio/babbage-solutions.webp",
+      "/portfolio/babbagesolutions-2.webp",
     ],
   },
   {
@@ -248,7 +248,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Modern corporate website with clean aesthetics and comprehensive business information architecture.",
-    image: "/portfolio/molvexa-mockup.jpg",
+    image: "/portfolio/molvexa-mockup.webp",
     slug: "molvexa",
     url: "https://molvexa.com",
     challenge:
@@ -262,9 +262,9 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Strapi"],
     gallery: [
-      "/portfolio/molvexa-mockup.jpg",
-      "/portfolio/molvexa.png",
-      "/portfolio/molvexa-2.png",
+      "/portfolio/molvexa-mockup.webp",
+      "/portfolio/molvexa.webp",
+      "/portfolio/molvexa-2.webp",
     ],
   },
   {
@@ -274,7 +274,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Professional services website for a UAE-based company with multilingual support and regional focus.",
-    image: "/portfolio/emergence.png",
+    image: "/portfolio/emergence.webp",
     slug: "emergence",
     url: "https://emergence.ae",
     challenge:
@@ -288,8 +288,8 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "React", "Tailwind CSS", "i18next", "Sanity CMS"],
     gallery: [
-      "/portfolio/emergence.png",
-      "/portfolio/emergence-2.png",
+      "/portfolio/emergence.webp",
+      "/portfolio/emergence-2.webp",
     ],
   },
   {
@@ -299,7 +299,7 @@ export const projects: CaseStudyProject[] = [
     category: "Platform",
     excerpt:
       "AI-powered travel and logistics platform with intelligent route optimization and real-time tracking.",
-    image: "/portfolio/onmyway-ai.png",
+    image: "/portfolio/onmyway-ai.webp",
     slug: "onmyway-ai",
     url: "https://onmyway.ai",
     featured: true,
@@ -314,8 +314,8 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Python", "TensorFlow", "PostgreSQL", "AWS", "React Native"],
     gallery: [
-      "/portfolio/onmyway-ai.png",
-      "/portfolio/onmyway-2.png",
+      "/portfolio/onmyway-ai.webp",
+      "/portfolio/onmyway-2.webp",
     ],
     testimonial: {
       quote:
@@ -332,7 +332,7 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Marine equipment and supplies e-commerce store with product catalog, inventory management, and secure checkout.",
-    image: "/portfolio/alshahama-marine.png",
+    image: "/portfolio/alshahama-marine.webp",
     slug: "alshahama-marine",
     url: "https://alshahamamarine.com",
     challenge:
@@ -346,7 +346,7 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["WooCommerce", "WordPress", "PHP", "MySQL", "Stripe"],
     gallery: [
-      "/portfolio/alshahama-marine.png",
+      "/portfolio/alshahama-marine.webp",
     ],
   },
   {
@@ -356,7 +356,7 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Fashion and lifestyle e-commerce boutique with elegant product displays and seamless shopping experience.",
-    image: "/portfolio/qbyrayeesa.png",
+    image: "/portfolio/qbyrayeesa.webp",
     slug: "q-by-rayeesa",
     url: "https://qbyrayeesa.com",
     featured: true,
@@ -371,8 +371,8 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Shopify", "Liquid", "JavaScript", "Klaviyo"],
     gallery: [
-      "/portfolio/qbyrayeesa.png",
-      "/portfolio/qbyrayeesa-2.png",
+      "/portfolio/qbyrayeesa.webp",
+      "/portfolio/qbyrayeesa-2.webp",
     ],
     testimonial: {
       quote:
@@ -388,7 +388,7 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Online retail platform with advanced product filtering, customer reviews, and integrated payment solutions.",
-    image: "/portfolio/ziera-mockup.jpg",
+    image: "/portfolio/ziera-mockup.webp",
     slug: "ziera-inc",
     url: "https://zierainc.com",
     challenge:
@@ -402,9 +402,9 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Stripe", "PostgreSQL", "Redis", "AWS"],
     gallery: [
-      "/portfolio/ziera-mockup.jpg",
-      "/portfolio/zierainc.png",
-      "/portfolio/zierainc-2.png",
+      "/portfolio/ziera-mockup.webp",
+      "/portfolio/zierainc.webp",
+      "/portfolio/zierainc-2.webp",
     ],
   },
   {
@@ -414,7 +414,7 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Car rental booking platform with vehicle catalog, availability calendar, and online reservation system.",
-    image: "/portfolio/aa-rentacar.png",
+    image: "/portfolio/aa-rentacar.webp",
     slug: "aa-rentacar",
     url: "https://aa-rentacar.com",
     challenge:
@@ -428,8 +428,8 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["Next.js", "Node.js", "PostgreSQL", "Stripe", "Google Maps API"],
     gallery: [
-      "/portfolio/aa-rentacar.png",
-      "/portfolio/aa-rentacar-2.png",
+      "/portfolio/aa-rentacar.webp",
+      "/portfolio/aa-rentacar-2.webp",
     ],
     // No testimonial - previously had misattributed La Mirage quote
   },
