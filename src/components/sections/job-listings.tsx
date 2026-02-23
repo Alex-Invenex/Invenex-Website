@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ClipboardList } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { JobCard } from "@/components/ui/job-card";
@@ -17,6 +17,7 @@ const jobs: JobListing[] = getJobListings();
 
 export function JobListings() {
   const [activeDepartment, setActiveDepartment] = useState("All");
+  const prefersReducedMotion = useReducedMotion();
 
   const filteredJobs =
     activeDepartment === "All"
@@ -69,10 +70,10 @@ export function JobListings() {
       <AnimatePresence mode="wait">
         <motion.div
           key={activeDepartment}
-          initial={{ opacity: 0, y: 20 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
+          exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.3 }}
           className="grid md:grid-cols-2 gap-6"
         >
           {filteredJobs.length > 0 ? (

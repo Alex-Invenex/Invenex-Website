@@ -9,10 +9,10 @@ const siteUrl =
 const servicesSlugs = [
   "web-development",
   "mobile-development",
-  "custom-platforms",
-  "ecommerce-solutions",
-  "digital-marketing",
-  "technology-consulting",
+  "platform-development",
+  "ecommerce",
+  "social-media",
+  "digital-strategy",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

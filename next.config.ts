@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
 
   // Enable experimental optimizations (AC2: Bundle Size)
   experimental: {
-    optimizePackageImports: ["framer-motion", "@sanity/image-url", "lucide-react"],
+    optimizePackageImports: ["framer-motion", "@sanity/image-url", "lucide-react", "@/components/ui", "@/components/transitions"],
   },
 
   // Compiler optimizations (AC2: Core Web Vitals)

@@ -1,12 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { ArrowRight, Zap } from "lucide-react";
 
 export function Hero() {
+  const prefersReducedMotion = useReducedMotion();
+
+  const floatingAnimation = prefersReducedMotion
+    ? {}
+    : { y: [0, -20, 0], rotate: [0, 5, 0] };
+  const floatingTransition = prefersReducedMotion
+    ? {}
+    : { duration: 6, repeat: Infinity, ease: "easeInOut" as const };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden" aria-labelledby="hero-title" data-testid="hero-section">
       {/* Animated gradient background */}
@@ -25,41 +34,18 @@ export function Hero() {
       {/* Floating elements */}
       <motion.div
         className="absolute top-20 right-20 w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 backdrop-blur-sm border border-white/10"
-        animate={{
-          y: [0, -20, 0],
-          rotate: [0, 5, 0],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+        animate={floatingAnimation}
+        transition={floatingTransition}
       />
       <motion.div
         className="absolute bottom-32 left-20 w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-white/10"
-        animate={{
-          y: [0, 15, 0],
-          rotate: [0, -5, 0],
-        }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
+        animate={prefersReducedMotion ? {} : { y: [0, 15, 0], rotate: [0, -5, 0] }}
+        transition={prefersReducedMotion ? {} : { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
       />
       <motion.div
         className="absolute top-40 left-1/4 w-12 h-12 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 backdrop-blur-sm border border-white/10"
-        animate={{
-          y: [0, -15, 0],
-          x: [0, 10, 0],
-        }}
-        transition={{
-          duration: 7,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2,
-        }}
+        animate={prefersReducedMotion ? {} : { y: [0, -15, 0], x: [0, 10, 0] }}
+        transition={prefersReducedMotion ? {} : { duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       />
 
       <div className="container mx-auto px-6 text-center relative z-10">
@@ -137,14 +123,14 @@ export function Hero() {
       {/* Scroll indicator */}
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
+        animate={prefersReducedMotion ? {} : { y: [0, 10, 0] }}
+        transition={prefersReducedMotion ? {} : { duration: 2, repeat: Infinity }}
       >
         <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
           <motion.div
             className="w-1 h-2 bg-white/50 rounded-full"
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            animate={prefersReducedMotion ? {} : { y: [0, 12, 0] }}
+            transition={prefersReducedMotion ? {} : { duration: 2, repeat: Infinity }}
           />
         </div>
       </motion.div>

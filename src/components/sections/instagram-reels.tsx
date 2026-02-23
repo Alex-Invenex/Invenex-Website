@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { Instagram, X, ExternalLink, Play } from "lucide-react";
 import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
 
@@ -138,15 +139,22 @@ function CardBody({ card }: { card: (typeof socialCards)[0] }) {
       style={{ width: "100%", aspectRatio: "9/16" }}
     >
       {/* Cover: WebP poster on mobile (saves ~4.5 MB), GIF on desktop */}
-      <picture>
-        <source media="(max-width: 767px)" srcSet={card.poster} type="image/webp" />
-        <img
-          src={card.cover}
-          alt={card.title}
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-        />
-      </picture>
+      <Image
+        src={card.poster}
+        alt={card.title}
+        fill
+        className="absolute inset-0 object-cover md:hidden"
+        sizes="160px"
+        unoptimized
+      />
+      <Image
+        src={card.cover}
+        alt=""
+        fill
+        className="absolute inset-0 object-cover hidden md:block"
+        sizes="(max-width: 1024px) 18vw, 260px"
+        unoptimized
+      />
 
       {/* Dark tint — fades away on hover */}
       <div className="absolute inset-0 bg-black/50 group-hover:bg-black/0 transition-all duration-500" />
