@@ -74,9 +74,6 @@ export const defaultMetadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
 };
 
 /**
