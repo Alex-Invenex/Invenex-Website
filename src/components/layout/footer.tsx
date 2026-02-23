@@ -11,6 +11,7 @@ import {
   Phone,
   ArrowUpRight,
   Heart,
+  MessageCircle,
 } from "lucide-react";
 import {
   siteConfig,
@@ -36,6 +37,7 @@ const socialGradients: Record<string, string> = {
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const whatsappNumber = contactInfo.whatsapp.replace(/[^0-9]/g, "");
 
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
@@ -52,11 +54,11 @@ export function Footer() {
       {/* Top gradient border */}
       <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-      <div className="container mx-auto px-6 py-16 relative z-10">
+      <div className="container mx-auto px-5 sm:px-6 py-8 sm:py-16 relative z-10">
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
-          {/* Company Info - Takes 4 columns */}
-          <div className="lg:col-span-4">
+        <div className="grid grid-cols-2 lg:grid-cols-12 gap-x-4 gap-y-6 sm:gap-8 lg:gap-8">
+          {/* Company Info - Full width on mobile, 4 cols on desktop */}
+          <div className="col-span-2 lg:col-span-4">
             <Link href="/" className="flex items-center gap-2.5 group">
               <motion.img
                 src="/invenex-logo.png"
@@ -70,12 +72,12 @@ export function Footer() {
               </span>
             </Link>
 
-            <p className="mt-4 text-foreground-muted leading-relaxed max-w-sm">
+            <p className="mt-3 text-sm text-foreground-muted leading-relaxed max-w-sm">
               {siteConfig.description}
             </p>
 
             {/* Social Links */}
-            <div className="flex items-center gap-3 mt-6">
+            <div className="flex items-center gap-2.5 mt-4">
               {socialLinks.map((link) => {
                 const Icon = iconMap[link.icon];
                 const gradientClass =
@@ -86,13 +88,13 @@ export function Footer() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.03] border border-white/[0.08] text-foreground-muted transition-all duration-300 ${gradientClass}`}
+                    className={`w-9 h-9 flex items-center justify-center rounded-lg bg-white/[0.03] border border-white/[0.08] text-foreground-muted transition-all duration-300 ${gradientClass}`}
                     aria-label={link.name}
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     {Icon ? (
-                      <Icon className="w-5 h-5" />
+                      <Icon className="w-4 h-4" />
                     ) : (
                       <span className="text-sm">{link.name[0]}</span>
                     )}
@@ -102,53 +104,53 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Services Links - 2 columns */}
-          <div className="lg:col-span-2">
-            <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          {/* Services Links */}
+          <div className="col-span-1 lg:col-span-2">
+            <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
               Services
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-1.5 sm:space-y-2">
               {footerNav.services.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
+                    className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
                   >
                     {link.title}
-                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all hidden sm:block" />
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Company Links - 2 columns */}
-          <div className="lg:col-span-2">
-            <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          {/* Company + Resources Links */}
+          <div className="col-span-1 lg:col-span-2">
+            <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
               Company
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-1.5 sm:space-y-2">
               {footerNav.company.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
+                    className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
                   >
                     {link.title}
-                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all hidden sm:block" />
                   </Link>
                 </li>
               ))}
             </ul>
 
             {/* Resources Links */}
-            <h3 className="text-sm font-semibold text-foreground mb-4 mt-6 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-foreground mb-3 mt-4 sm:mt-5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
               Resources
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-1.5 sm:space-y-2">
               {footerNav.resources.map((link) => (
                 <li key={link.href}>
                   {"external" in link && link.external ? (
@@ -156,18 +158,18 @@ export function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
+                      className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
                     >
                       {link.title}
-                      <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                      <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all hidden sm:block" />
                     </a>
                   ) : (
                     <Link
                       href={link.href}
-                      className="text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
+                      className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
                     >
                       {link.title}
-                      <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                      <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all hidden sm:block" />
                     </Link>
                   )}
                 </li>
@@ -175,76 +177,121 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Contact Info - 4 columns */}
-          <div className="lg:col-span-4">
-            <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          {/* Contact Info - Full width on mobile, 4 cols on desktop */}
+          <div className="col-span-2 lg:col-span-4">
+            <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
               Get in Touch
             </h3>
-            <ul className="space-y-4">
-              <li>
-                <motion.a
-                  href={`mailto:${contactInfo.email}`}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 group"
-                  whileHover={{ x: 5 }}
-                >
-                  <div className="w-10 h-10 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-[#FF6B35]" />
-                  </div>
-                  <span className="text-foreground-muted group-hover:text-foreground transition-colors">
-                    {contactInfo.email}
-                  </span>
-                </motion.a>
-              </li>
-              <li>
-                <motion.a
-                  href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 group"
-                  whileHover={{ x: 5 }}
-                >
-                  <div className="w-10 h-10 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-[#FF6B35]" />
-                  </div>
-                  <span className="text-foreground-muted group-hover:text-foreground transition-colors">
-                    {contactInfo.phone}
-                  </span>
-                </motion.a>
-              </li>
-            </ul>
+            {/* Compact row on mobile, stacked cards on desktop */}
+            <div className="flex gap-2 sm:hidden">
+              <a
+                href={`mailto:${contactInfo.email}`}
+                className="flex-1 flex items-center gap-2 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.05] active:bg-white/[0.05] transition-colors"
+              >
+                <div className="w-8 h-8 shrink-0 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
+                  <Mail className="w-3.5 h-3.5 text-[#FF6B35]" />
+                </div>
+                <span className="text-xs text-foreground-muted truncate">
+                  {contactInfo.email}
+                </span>
+              </a>
+              <a
+                href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
+                className="flex items-center gap-2 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.05] active:bg-white/[0.05] transition-colors"
+              >
+                <div className="w-8 h-8 shrink-0 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
+                  <Phone className="w-3.5 h-3.5 text-[#FF6B35]" />
+                </div>
+              </a>
+              <a
+                href={`https://wa.me/${whatsappNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.05] active:bg-white/[0.05] transition-colors"
+              >
+                <div className="w-8 h-8 shrink-0 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                  <MessageCircle className="w-3.5 h-3.5 text-green-400" />
+                </div>
+              </a>
+            </div>
+            {/* Full cards on sm+ */}
+            <div className="hidden sm:grid sm:grid-cols-3 lg:grid-cols-1 gap-2.5">
+              <motion.a
+                href={`mailto:${contactInfo.email}`}
+                className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 group"
+                whileHover={{ x: 5 }}
+              >
+                <div className="w-9 h-9 shrink-0 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
+                  <Mail className="w-4 h-4 text-[#FF6B35]" />
+                </div>
+                <span className="text-sm text-foreground-muted group-hover:text-foreground transition-colors truncate">
+                  {contactInfo.email}
+                </span>
+              </motion.a>
+
+              <motion.a
+                href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
+                className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 group"
+                whileHover={{ x: 5 }}
+              >
+                <div className="w-9 h-9 shrink-0 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-[#FF6B35]" />
+                </div>
+                <span className="text-sm text-foreground-muted group-hover:text-foreground transition-colors">
+                  {contactInfo.phone}
+                </span>
+              </motion.a>
+
+              <motion.a
+                href={`https://wa.me/${whatsappNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-green-500/20 transition-all duration-300 group"
+                whileHover={{ x: 5 }}
+              >
+                <div className="w-9 h-9 shrink-0 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                  <MessageCircle className="w-4 h-4 text-green-400" />
+                </div>
+                <span className="text-sm text-foreground-muted group-hover:text-foreground transition-colors">
+                  WhatsApp
+                </span>
+              </motion.a>
+            </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-white/[0.05]">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-foreground-muted flex items-center gap-1">
+        <div className="mt-6 sm:mt-12 pt-5 sm:pt-8 border-t border-white/[0.05]">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+            <p className="text-xs sm:text-sm text-foreground-muted flex items-center gap-1">
               &copy; {currentYear} {siteConfig.name}. Made with
-              <Heart className="w-4 h-4 text-red-400 fill-red-400 animate-pulse" />
+              <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400 animate-pulse" />
               in India
             </p>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4 sm:gap-6">
               <Link
                 href="/privacy"
-                className="text-sm text-foreground-muted hover:text-foreground transition-colors"
+                className="text-xs sm:text-sm text-foreground-muted hover:text-foreground transition-colors"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms"
-                className="text-sm text-foreground-muted hover:text-foreground transition-colors"
+                className="text-xs sm:text-sm text-foreground-muted hover:text-foreground transition-colors"
               >
                 Terms of Service
               </Link>
               <motion.button
                 onClick={scrollToTop}
-                className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-foreground-muted hover:text-foreground hover:bg-white/[0.08] transition-all duration-300"
+                className="w-9 h-9 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-foreground-muted hover:text-foreground hover:bg-white/[0.08] transition-all duration-300"
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label="Back to top"
               >
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
