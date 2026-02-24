@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { ArrowLeft, ArrowRight, ExternalLink, Quote } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react'
 import { SubpageCTA } from '@/components/sections/subpage-cta'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { GSAPStaggerContainer, GSAPStaggerItem } from '@/components/ui/gsap-stagger-container'
@@ -59,16 +59,19 @@ const grainStyle: React.CSSProperties = {
   opacity: 0.03,
 }
 
-/* ─── Coral gradient number ──────────────────────────────── */
+/* ─── Decorative outlined section number ─────────────────── */
 function SectionNumber({ children }: { children: React.ReactNode }) {
   return (
     <span
-      className="block text-sm font-mono tracking-[0.2em] mb-6"
+      className="block font-mono mb-4"
+      aria-hidden="true"
       style={{
-        background: 'linear-gradient(135deg, var(--color-coral-500) 0%, var(--color-coral-400) 40%, var(--color-coral-600) 100%)',
-        WebkitBackgroundClip: 'text',
+        fontSize: 'clamp(3.5rem, 8vw, 6rem)',
+        fontWeight: 200,
+        WebkitTextStroke: '1px var(--color-coral-500)',
         WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
+        opacity: 0.4,
+        lineHeight: 1,
       }}
     >
       {children}
@@ -120,7 +123,7 @@ function CaseStudyHero({ project }: { project: CaseStudyProject }) {
   )
 
   return (
-    <section ref={sectionRef} data-testid="case-study-hero" aria-labelledby="case-study-hero-title" className="relative pt-24 pb-16 bg-background" style={{ overflow: 'clip' }}>
+    <section ref={sectionRef} data-testid="case-study-hero" aria-labelledby="case-study-hero-title" className="relative pt-28 md:pt-36 pb-16 md:pb-20 bg-background" style={{ overflow: 'clip' }}>
       {/* Grain */}
       <div className="absolute inset-0 pointer-events-none z-[2]" aria-hidden="true" style={grainStyle} />
 
@@ -187,15 +190,30 @@ function CaseStudyHero({ project }: { project: CaseStudyProject }) {
           {project.title}
         </h1>
 
-        <div data-csh="badge" className="mt-6">
-          <Badge data-testid="case-study-category">{project.category}</Badge>
-        </div>
-
-        {project.url && (
-          <a href={project.url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 text-foreground-muted hover:text-foreground transition-colors" data-csh="meta">
-            Visit Live Site <ExternalLink className="w-4 h-4" aria-hidden="true" />
-          </a>
+        {/* Excerpt with coral accent border */}
+        {project.excerpt && (
+          <div data-csh="meta" className="mt-8 md:mt-10 flex">
+            <div className="w-0.5 min-h-[3rem] bg-coral-500 shrink-0" />
+            <p className="pl-4 md:pl-5 text-base md:text-lg text-foreground-muted max-w-lg leading-relaxed">
+              {project.excerpt}
+            </p>
+          </div>
         )}
+
+        {/* Meta strip */}
+        <div data-csh="meta" className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-foreground-muted">
+          <Badge data-testid="case-study-category">{project.category}</Badge>
+          <span className="hidden sm:inline h-4 w-px bg-white/10" />
+          <span>{project.client}</span>
+          {project.url && (
+            <>
+              <span className="hidden sm:inline h-4 w-px bg-white/10" />
+              <a href={project.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
+                Visit Live Site <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+              </a>
+            </>
+          )}
+        </div>
 
         <div data-csh="share"><ShareButtons title={`${project.title} - Case Study`} className="mt-6" /></div>
       </div>
@@ -249,28 +267,34 @@ function ChallengeAndSolutionSection({ challenge, solution }: { challenge: strin
   )
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-28 bg-background relative overflow-hidden">
+    <section ref={sectionRef} className="py-24 md:py-36 bg-background relative overflow-hidden">
+      {/* Atmospheric orbs */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-[10%] right-[5%] rounded-full" style={{ width: 500, height: 500, background: 'radial-gradient(circle, rgba(255,106,55,0.04) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+        <div className="absolute bottom-[10%] left-[5%] rounded-full" style={{ width: 400, height: 400, background: 'radial-gradient(circle, rgba(139,92,246,0.03) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+      </div>
+
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="max-w-3xl mx-auto">
-          {/* 01 — THE CHALLENGE */}
-          <div data-testid="case-study-challenge" data-cs>
-            <SectionNumber>01</SectionNumber>
-            <h2 id="challenge-heading" className="text-xs md:text-sm tracking-[0.2em] uppercase text-foreground-muted font-mono mb-6">
-              The Challenge
-            </h2>
-            <p className="text-lg md:text-xl text-foreground/80 leading-relaxed">{challenge}</p>
+        {/* 01 — THE CHALLENGE */}
+        <div data-testid="case-study-challenge" data-cs className="grid md:grid-cols-[auto_1fr] gap-6 md:gap-12 items-start">
+          <SectionNumber>01</SectionNumber>
+          <div>
+            <p className="text-xs md:text-sm tracking-[0.2em] uppercase text-foreground-muted font-mono mb-3" aria-hidden="true">The Challenge</p>
+            <h2 id="challenge-heading" className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">The Challenge</h2>
+            <p className="text-lg md:text-xl text-foreground-muted leading-relaxed max-w-2xl">{challenge}</p>
           </div>
+        </div>
 
-          {/* Coral divider */}
-          <div data-cs className="h-px bg-coral-500/20 my-12 md:my-16" />
+        {/* Coral gradient divider */}
+        <div data-cs className="my-16 md:my-24" style={{ height: 1, background: 'linear-gradient(90deg, var(--color-coral-500), var(--color-coral-400) 30%, transparent 100%)', opacity: 0.3 }} />
 
-          {/* 02 — OUR SOLUTION */}
-          <div data-testid="case-study-solution" data-cs>
-            <SectionNumber>02</SectionNumber>
-            <h2 id="solution-heading" className="text-xs md:text-sm tracking-[0.2em] uppercase text-foreground-muted font-mono mb-6">
-              Our Solution
-            </h2>
-            <p className="text-lg md:text-xl text-foreground/80 leading-relaxed">{solution}</p>
+        {/* 02 — OUR SOLUTION */}
+        <div data-testid="case-study-solution" data-cs className="grid md:grid-cols-[auto_1fr] gap-6 md:gap-12 items-start">
+          <SectionNumber>02</SectionNumber>
+          <div>
+            <p className="text-xs md:text-sm tracking-[0.2em] uppercase text-foreground-muted font-mono mb-3" aria-hidden="true">Our Solution</p>
+            <h2 id="solution-heading" className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">Our Solution</h2>
+            <p className="text-lg md:text-xl text-foreground-muted leading-relaxed max-w-2xl">{solution}</p>
           </div>
         </div>
       </div>
@@ -281,10 +305,17 @@ function ChallengeAndSolutionSection({ challenge, solution }: { challenge: strin
 /* ─── Results Section ──────────────────────────────────── */
 function ResultsSection({ results }: { results: CaseStudyProject['results'] }) {
   return (
-    <section data-testid="case-study-results" aria-labelledby="results-heading" className="py-20 md:py-28 bg-background-secondary">
-      <div className="container mx-auto px-6 md:px-12">
-        <SectionNumber>03</SectionNumber>
-        <h2 id="results-heading" className="text-2xl md:text-3xl font-bold mb-12">The Results</h2>
+    <section data-testid="case-study-results" aria-labelledby="results-heading" className="py-24 md:py-36 bg-background-secondary relative overflow-hidden">
+      {/* Atmospheric orb */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ width: 700, height: 700, background: 'radial-gradient(circle, rgba(255,106,55,0.04) 0%, transparent 70%)', filter: 'blur(100px)' }} />
+      </div>
+
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
+        <div className="text-center mb-16">
+          <SectionNumber>03</SectionNumber>
+          <h2 id="results-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold">The Results</h2>
+        </div>
         <GSAPStaggerContainer className="grid md:grid-cols-3 gap-6">
           {results.map((result) => {
             const numMatch = result.metric.match(/(\d+)/)
@@ -296,19 +327,19 @@ function ResultsSection({ results }: { results: CaseStudyProject['results'] }) {
               <GSAPStaggerItem key={result.label}>
                 <div
                   data-testid="result-metric"
-                  className="group p-8 text-center rounded-xl backdrop-blur-xl border border-white/[0.08] transition-all duration-300 hover:border-coral-500/20 hover:scale-[1.02]"
-                  style={{ background: 'rgba(255,255,255,0.04)' }}
+                  className="group p-10 text-center rounded-2xl border border-white/[0.08] transition-all duration-300 hover:border-coral-500/20 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(255,106,55,0.1)] relative overflow-hidden"
+                  style={{ background: 'linear-gradient(135deg, rgba(18,18,18,1) 0%, rgba(14,14,14,1) 100%)' }}
                 >
-                  {/* Coral accent bar */}
-                  <div className="h-0.5 bg-coral-500 rounded-full -mt-4 mb-6 mx-4" />
-                  <div className="text-5xl md:text-6xl font-bold text-gradient">
+                  {/* Coral gradient accent bar */}
+                  <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, var(--color-coral-500) 0%, var(--color-coral-400) 50%, transparent 100%)' }} />
+                  <div className="text-5xl md:text-6xl font-bold text-gradient mb-4">
                     {num !== null ? (
                       <AnimatedCounter value={num} prefix={prefix} suffix={suffix} />
                     ) : (
                       result.metric
                     )}
                   </div>
-                  <div className="text-foreground-muted mt-3">{result.label}</div>
+                  <div className="text-foreground-muted text-sm tracking-wide uppercase">{result.label}</div>
                 </div>
               </GSAPStaggerItem>
             )
@@ -349,21 +380,19 @@ function GallerySection({ images, title }: { images: CaseStudyProject['gallery']
   )
 
   return (
-    <section ref={sectionRef} data-testid="case-study-gallery" aria-labelledby="gallery-heading" className="py-20 md:py-28 bg-background relative overflow-hidden">
+    <section ref={sectionRef} data-testid="case-study-gallery" aria-labelledby="gallery-heading" className="py-24 md:py-36 bg-background relative overflow-hidden">
       {/* Grain texture */}
       <div className="absolute inset-0 pointer-events-none z-[1]" aria-hidden="true" style={grainStyle} />
 
-      {/* Subtle coral orb top-right */}
+      {/* Atmospheric orbs */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div
-          className="absolute -top-20 right-[5%] rounded-full"
-          style={{ width: 400, height: 400, background: 'radial-gradient(circle, rgba(255,106,55,0.05) 0%, transparent 70%)' }}
-        />
+        <div className="absolute -top-20 right-[5%] rounded-full" style={{ width: 500, height: 500, background: 'radial-gradient(circle, rgba(255,106,55,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+        <div className="absolute bottom-[10%] left-[10%] rounded-full" style={{ width: 300, height: 300, background: 'radial-gradient(circle, rgba(139,92,246,0.03) 0%, transparent 70%)', filter: 'blur(60px)' }} />
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <SectionNumber>04</SectionNumber>
-        <h2 id="gallery-heading" className="text-2xl md:text-3xl font-bold mb-8">Project Gallery</h2>
+        <h2 id="gallery-heading" className="text-3xl md:text-4xl font-bold mb-12">Project Gallery</h2>
         <div data-gal>
           <ImageGallery images={images} projectTitle={title} />
         </div>
@@ -375,17 +404,22 @@ function GallerySection({ images, title }: { images: CaseStudyProject['gallery']
 /* ─── Technologies Section ─────────────────────────────── */
 function TechSection({ technologies }: { technologies: string[] }) {
   return (
-    <section data-testid="case-study-technologies" aria-labelledby="technologies-heading" className="py-20 md:py-28 bg-background-secondary">
-      <div className="container mx-auto px-6 md:px-12">
-        <h2 id="technologies-heading" className="text-2xl md:text-3xl font-bold mb-8">Technologies Used</h2>
+    <section data-testid="case-study-technologies" aria-labelledby="technologies-heading" className="py-24 md:py-36 bg-background-secondary relative overflow-hidden">
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
+        <div className="text-center mb-12">
+          <SectionNumber>05</SectionNumber>
+          <h2 id="technologies-heading" className="text-3xl md:text-4xl font-bold">Technologies Used</h2>
+        </div>
         <GSAPStaggerContainer className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {technologies.map((tech) => (
             <GSAPStaggerItem key={tech}>
               <div
                 data-testid="tech-badge"
-                className="p-4 rounded-xl backdrop-blur-xl border border-white/[0.08] text-center font-medium text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground hover:shadow-[0_0_15px_rgba(255,106,55,0.1)]"
-                style={{ background: 'rgba(255,255,255,0.04)' }}
+                className="group p-5 rounded-2xl border border-white/[0.08] text-center font-medium text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground hover:shadow-[0_0_25px_rgba(255,106,55,0.08)] relative overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, rgba(18,18,18,1) 0%, rgba(14,14,14,1) 100%)' }}
               >
+                {/* Subtle top accent on hover */}
+                <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(90deg, transparent, var(--color-coral-500), transparent)' }} />
                 {tech}
               </div>
             </GSAPStaggerItem>
@@ -443,23 +477,38 @@ function TestimonialSection({ testimonial }: { testimonial: NonNullable<CaseStud
   )
 
   return (
-    <section ref={sectionRef} data-testid="case-study-testimonial" aria-labelledby="testimonial-heading" className="py-20 md:py-28 bg-background relative overflow-hidden">
+    <section ref={sectionRef} data-testid="case-study-testimonial" aria-labelledby="testimonial-heading" className="py-24 md:py-36 bg-background relative overflow-hidden">
+      {/* Grain */}
+      <div className="absolute inset-0 pointer-events-none z-[1]" aria-hidden="true" style={grainStyle} />
+
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ width: 600, height: 600, background: 'radial-gradient(circle, rgba(255,106,55,0.04) 0%, transparent 70%)' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ width: 700, height: 700, background: 'radial-gradient(circle, rgba(255,106,55,0.05) 0%, transparent 70%)', filter: 'blur(100px)' }} />
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <h2 id="testimonial-heading" className="sr-only">Client Testimonial</h2>
-        <div className="max-w-3xl mx-auto text-center">
-          <Quote data-test="icon" className="w-14 h-14 text-coral-500/30 mx-auto mb-8" aria-hidden="true" />
-          <blockquote data-test="quote" className="text-2xl md:text-3xl italic text-foreground leading-relaxed">
-            &ldquo;{testimonial.quote}&rdquo;
-          </blockquote>
-          {/* Coral rule */}
-          <div data-test="rule" className="h-px w-16 bg-coral-500 mx-auto mt-8 mb-6" style={{ transformOrigin: 'center' }} />
-          <div data-test="author">
-            <div className="font-semibold text-lg">{testimonial.author}</div>
-            <div className="text-foreground-muted">{testimonial.role}</div>
+        <div className="max-w-4xl mx-auto">
+          {/* Glassmorphic card */}
+          <div className="rounded-2xl border border-white/[0.08] p-8 md:p-12 lg:p-16 text-center relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)' }}>
+            {/* Top accent */}
+            <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, var(--color-coral-500), transparent)', opacity: 0.4 }} />
+
+            {/* Large decorative quote mark */}
+            <div data-test="icon" className="mx-auto mb-6" aria-hidden="true" style={{ fontSize: 'clamp(4rem, 10vw, 7rem)', lineHeight: 0.8, color: 'rgba(255,106,55,0.15)', fontFamily: 'Georgia, serif' }}>
+              &ldquo;
+            </div>
+
+            <blockquote data-test="quote" className="text-2xl md:text-3xl lg:text-4xl italic text-foreground leading-relaxed font-light">
+              {testimonial.quote}
+            </blockquote>
+
+            {/* Coral rule */}
+            <div data-test="rule" className="h-px w-20 bg-coral-500 mx-auto mt-10 mb-8" style={{ transformOrigin: 'center' }} />
+
+            <div data-test="author">
+              <div className="font-semibold text-lg">{testimonial.author}</div>
+              <div className="text-foreground-muted text-sm mt-1">{testimonial.role}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -470,9 +519,10 @@ function TestimonialSection({ testimonial }: { testimonial: NonNullable<CaseStud
 /* ─── Related Projects ─────────────────────────────────── */
 function RelatedSection({ projects, category }: { projects: CaseStudyProject[]; category: string }) {
   return (
-    <section data-testid="case-study-related" aria-labelledby="related-heading" className="py-20 md:py-28 bg-background-secondary">
+    <section data-testid="case-study-related" aria-labelledby="related-heading" className="py-24 md:py-36 bg-background-secondary">
       <div className="container mx-auto px-6 md:px-12">
-        <h2 id="related-heading" className="text-2xl md:text-3xl font-bold mb-4">Related Projects</h2>
+        <SectionNumber>06</SectionNumber>
+        <h2 id="related-heading" className="text-3xl md:text-4xl font-bold mb-4">Related Projects</h2>
         <p className="text-foreground-muted mb-12">More {category.toLowerCase()} projects we&apos;ve delivered</p>
 
         <GSAPStaggerContainer className="grid md:grid-cols-3 gap-6">
