@@ -10,6 +10,7 @@ import {
 import { EpicPreloader } from "@/components/transitions/epic-preloader";
 import { ToastProvider } from "@/components/ui/toast";
 import { LenisProvider } from "@/components/providers/lenis-provider";
+import { RouteScrollCleanup } from "@/components/providers/route-scroll-cleanup";
 
 export default function SiteLayout({
   children,
@@ -33,7 +34,7 @@ export default function SiteLayout({
 
         <LenisProvider>
           <main id="main-content" tabIndex={-1} className="outline-none">
-            {children}
+            <RouteScrollCleanup>{children}</RouteScrollCleanup>
           </main>
         </LenisProvider>
 
