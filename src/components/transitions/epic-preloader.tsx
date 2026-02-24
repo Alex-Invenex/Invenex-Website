@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useSyncExternalStore, useCallback } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, useCallback } from 'react'
 import { gsap } from '@/lib/gsap'
 import { prefersReducedMotion } from '@/lib/gsap'
 import { hasVisitedBefore, markVisited } from '@/lib/loader-session'
@@ -86,7 +86,9 @@ export function EpicPreloader() {
   }, [])
 
   // Resolve 'pending' phase: decide whether to show preloader or skip
-  useEffect(() => {
+  // useLayoutEffect fires BEFORE browser paint, so returning visitors
+  // never see the black overlay flash — it's removed before first paint.
+  useLayoutEffect(() => {
     if (phase !== 'pending') return
 
     if (isReturningVisitor) {
@@ -194,8 +196,12 @@ export function EpicPreloader() {
     }
   }, [phase, scrambleText])
 
-  if (phase !== 'active') return null
+  // 'done' = preloader finished or skipped — render nothing
+  if (phase === 'done') return null
 
+  // 'pending' renders a static black screen (included in server HTML so
+  // the page content is never visible before the preloader).
+  // 'active' adds the animation children on top.
   return (
     <div
       ref={containerRef}
@@ -203,51 +209,55 @@ export function EpicPreloader() {
       style={{ zIndex: 99999 }}
       aria-hidden="true"
     >
-      {/* Coral horizontal line */}
-      <div
-        ref={lineRef}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[2px] bg-[#FF6B35]"
-        style={{ width: '120px', transformOrigin: 'center', opacity: 0 }}
-      />
+      {phase === 'active' && (
+        <>
+          {/* Coral horizontal line */}
+          <div
+            ref={lineRef}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[2px] bg-[#FF6B35]"
+            style={{ width: '120px', transformOrigin: 'center', opacity: 0 }}
+          />
 
-      {/* Glow behind logo */}
-      <div
-        ref={glowRef}
-        className="absolute rounded-full"
-        style={{
-          width: '160px',
-          height: '160px',
-          background: 'radial-gradient(circle, rgba(255,107,53,0.4) 0%, transparent 70%)',
-          opacity: 0,
-        }}
-      />
+          {/* Glow behind logo */}
+          <div
+            ref={glowRef}
+            className="absolute rounded-full"
+            style={{
+              width: '160px',
+              height: '160px',
+              background: 'radial-gradient(circle, rgba(255,107,53,0.4) 0%, transparent 70%)',
+              opacity: 0,
+            }}
+          />
 
-      {/* Logo */}
-      <img
-        ref={logoRef}
-        src="/invenex-logo.png"
-        alt=""
-        className="w-16 h-16 sm:w-20 sm:h-20"
-        style={{ opacity: 0 }}
-      />
+          {/* Logo */}
+          <img
+            ref={logoRef}
+            src="/invenex-logo.png"
+            alt=""
+            className="w-16 h-16 sm:w-20 sm:h-20"
+            style={{ opacity: 0 }}
+          />
 
-      {/* INVENEX text scramble */}
-      <div
-        ref={textRef}
-        className="mt-6 text-2xl sm:text-3xl font-bold tracking-[0.2em] text-white"
-        style={{ opacity: 0, fontFamily: 'var(--font-sans)' }}
-      >
-        INVENEX
-      </div>
+          {/* INVENEX text scramble */}
+          <div
+            ref={textRef}
+            className="mt-6 text-2xl sm:text-3xl font-bold tracking-[0.2em] text-white"
+            style={{ opacity: 0, fontFamily: 'var(--font-sans)' }}
+          >
+            INVENEX
+          </div>
 
-      {/* Tagline */}
-      <div
-        ref={taglineRef}
-        className="mt-3 text-sm sm:text-base text-[#A3A3A3] tracking-widest uppercase"
-        style={{ opacity: 0 }}
-      >
-        Premium Digital Solutions
-      </div>
+          {/* Tagline */}
+          <div
+            ref={taglineRef}
+            className="mt-3 text-sm sm:text-base text-[#A3A3A3] tracking-widest uppercase"
+            style={{ opacity: 0 }}
+          >
+            Premium Digital Solutions
+          </div>
+        </>
+      )}
     </div>
   )
 }
