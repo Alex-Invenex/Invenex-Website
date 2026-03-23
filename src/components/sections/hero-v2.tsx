@@ -7,23 +7,9 @@ import { ArrowRight } from 'lucide-react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
-/* ─── Data ────────────────────────────────────────────────── */
-const STATS = [
-  { value: 50, suffix: '+', label: 'Enterprise Projects', detail: 'Delivered' },
-  { value: 98, suffix: '%', label: 'Client Satisfaction', detail: 'Rating' },
-  { value: 5, suffix: '+', label: 'Years', detail: 'Of Innovation' },
-] as const
-
-const STAT_POSITIONS = [
-  'top-2 right-0 md:top-6 md:-right-4 lg:top-8 lg:-right-6',
-  '-left-2 top-1/2 -translate-y-1/2 md:-left-6 lg:-left-10',
-  'bottom-2 right-2 md:bottom-6 md:right-0 lg:bottom-8 lg:right-0',
-] as const
-
-/* ─── Component ───────────────────────────────────────────── */
+/* ─── Component ───────────────────────────────────────── */
 export function HeroV2() {
   const sectionRef = useRef<HTMLElement>(null)
-  const statValueRefs = useRef<(HTMLSpanElement | null)[]>([])
   const reducedMotion = useRef(false)
   const isTouchDevice = useRef(false)
   const [mounted, setMounted] = useState(false)
@@ -38,14 +24,14 @@ export function HeroV2() {
     setMounted(true)
   }, [])
 
-  /* ── Entrance choreography ─────────────────────────────── */
+  /* ── Entrance choreography ─────────────────────────── */
   useGSAP(
     () => {
       gsap.registerPlugin(useGSAP)
       if (!mounted) return
       const rm = reducedMotion.current
 
-      // Reduced motion or touch device: show everything instantly, skip animations
+      // Reduced motion or touch device: show everything instantly
       if (rm || isTouchDevice.current) {
         gsap.set('[data-a]', {
           opacity: 1,
@@ -54,228 +40,169 @@ export function HeroV2() {
           scale: 1,
           filter: 'none',
         })
-        statValueRefs.current.forEach((el, i) => {
-          if (el) el.textContent = String(STATS[i].value)
-        })
         return
       }
 
       // Defer GSAP one frame so browser can paint visible content first (LCP)
       requestAnimationFrame(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-      // Background orbs fade + scale
-      tl.fromTo(
-        '[data-a="orb"]',
-        { opacity: 0, scale: 0.5 },
-        { opacity: 1, scale: 1, duration: 1.5, stagger: 0.1 },
-        0
-      )
-
-      // Agency tag — blur-in from left
-      tl.fromTo(
-        '[data-a="tag"]',
-        { opacity: 0, x: -40, filter: 'blur(8px)' },
-        { opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.8 },
-        0.15
-      )
-
-      // Headline words — dramatic reveal from below
-      tl.fromTo(
-        '[data-a="word"]',
-        { y: 100, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          stagger: 0.1,
-          ease: 'power4.out',
-        },
-        0.25
-      )
-
-      // Subtitle border grows top→down
-      tl.fromTo(
-        '[data-a="border"]',
-        { scaleY: 0 },
-        { scaleY: 1, duration: 0.6, transformOrigin: 'top' },
-        0.85
-      )
-      // Note: subtitle ([data-a="desc"]) is NOT animated — it's the LCP element
-
-      // CTA buttons
-      tl.fromTo(
-        '[data-a="cta"]',
-        { opacity: 0, y: 25 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.12 },
-        1.05
-      )
-
-      // Sphere — elastic entrance
-      tl.fromTo(
-        '[data-a="sphere"]',
-        { opacity: 0, scale: 0.3 },
-        { opacity: 1, scale: 1, duration: 1.4, ease: 'elastic.out(1, 0.4)' },
-        0.4
-      )
-
-      // Orbit rings
-      tl.fromTo(
-        '[data-a="ring"]',
-        { opacity: 0, scale: 0.6 },
-        { opacity: 1, scale: 1, duration: 1, stagger: 0.15 },
-        0.6
-      )
-
-      // Stat cards — bounce in
-      tl.fromTo(
-        '[data-a="stat"]',
-        { opacity: 0, y: 40, scale: 0.85 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.7,
-          stagger: 0.15,
-          ease: 'back.out(1.7)',
-        },
-        0.95
-      )
-
-      // Number count-up
-      statValueRefs.current.forEach((el, i) => {
-        if (!el) return
-        const proxy = { v: 0 }
-        gsap.to(proxy, {
-          v: STATS[i].value,
-          duration: 2,
-          ease: 'power2.out',
-          delay: 1.3 + i * 0.2,
-          onUpdate: () => {
-            el.textContent = String(Math.round(proxy.v))
+        // Gradient orbs — fade in with scale
+        tl.fromTo(
+          '[data-a="tunnel-glow"]',
+          { opacity: 0, scale: 0.6 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 2,
+            stagger: 0.1,
+            ease: 'power2.out',
           },
+          0
+        )
+
+        // Atmospheric haze
+        tl.fromTo(
+          '[data-a="tunnel-haze"]',
+          { opacity: 0 },
+          { opacity: 1, duration: 2, ease: 'power1.out' },
+          0.2
+        )
+
+        // Badge pill — blur-in from left
+        tl.fromTo(
+          '[data-a="badge"]',
+          { opacity: 0, x: -40, filter: 'blur(8px)' },
+          { opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.8 },
+          0.15
+        )
+
+        // Headline words — dramatic reveal from below
+        tl.fromTo(
+          '[data-a="word"]',
+          { y: 100, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            stagger: 0.1,
+            ease: 'power4.out',
+          },
+          0.25
+        )
+
+        // Subtitle border grows top→down
+        tl.fromTo(
+          '[data-a="border"]',
+          { scaleY: 0 },
+          { scaleY: 1, duration: 0.6, transformOrigin: 'top' },
+          0.85
+        )
+        // Note: subtitle ([data-a="desc"]) is NOT animated — it's the LCP element
+
+        // CTA buttons
+        tl.fromTo(
+          '[data-a="cta"]',
+          { opacity: 0, y: 25 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.12 },
+          1.05
+        )
+
+        // Bottom bar
+        tl.fromTo(
+          '[data-a="bottom"]',
+          { opacity: 0, y: 15 },
+          { opacity: 1, y: 0, duration: 0.5 },
+          1.4
+        )
+
+        // ── Continuous loops ──
+        // Gradient orbs subtle breathing
+        gsap.to('[data-a="tunnel-glow"]', {
+          scale: 1.06,
+          duration: 5,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+          delay: 2.5,
+          stagger: 0.3,
         })
-      })
 
-      // Bottom bar
-      tl.fromTo(
-        '[data-a="bottom"]',
-        { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.5 },
-        1.4
-      )
+        // ── Scroll-out parallax ──
+        const initScrollOut = async () => {
+          const { registerScrollTrigger } = await import('@/lib/gsap')
+          await registerScrollTrigger()
 
-      // ── Continuous loops ──
-      gsap.to('[data-a="sphere-body"]', {
-        scale: 1.04,
-        duration: 4,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        delay: 2,
-      })
+          // Fade hero content
+          gsap.fromTo(
+            '[data-a="word"], [data-a="badge"], [data-a="border"], [data-a="cta"], [data-a="bottom"]',
+            { y: 0, opacity: 1 },
+            {
+              y: -20,
+              opacity: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: '80% center',
+                end: 'bottom -30%',
+                scrub: 1,
+              },
+            }
+          )
 
-      gsap.to('[data-a="sphere-glow"]', {
-        opacity: 0.7,
-        scale: 1.12,
-        duration: 3.5,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        delay: 2,
-      })
-
-      // ── Scroll-out parallax ──
-      const initScrollOut = async () => {
-        const { registerScrollTrigger } = await import('@/lib/gsap')
-        await registerScrollTrigger()
-
-        // Fade hero content (except subtitle — LCP element)
-        gsap.fromTo(
-          '[data-a="word"], [data-a="tag"], [data-a="border"], [data-a="cta"], [data-a="stat"], [data-a="bottom"]',
-          { y: 0, opacity: 1 },
-          {
-            y: -20,
-            opacity: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: '80% center',
-              end: 'bottom -30%',
-              scrub: 1,
-            },
-          }
-        )
-
-        // Sphere + rings fade together
-        gsap.fromTo(
-          '[data-a="sphere"], [data-a="ring"]',
-          { opacity: 1, y: 0 },
-          {
-            opacity: 0.15,
-            y: -10,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: '80% center',
-              end: 'bottom -30%',
-              scrub: 1,
-            },
-          }
-        )
-      }
-      initScrollOut()
+          // Tunnel fades on scroll
+          gsap.fromTo(
+            '[data-a="tunnel-glow"], [data-a="tunnel-haze"]',
+            { opacity: 1, y: 0 },
+            {
+              opacity: 0.15,
+              y: -10,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: '80% center',
+                end: 'bottom -30%',
+                scrub: 1,
+              },
+            }
+          )
+        }
+        initScrollOut()
       }) // end requestAnimationFrame
     },
     { scope: sectionRef, dependencies: [mounted] }
   )
 
-  /* ── Mouse parallax (desktop only) ────────────────────── */
+  /* ── Mouse parallax (desktop only) ──────────────────── */
   useEffect(() => {
     if (!mounted || reducedMotion.current || isTouchDevice.current) return
     const section = sectionRef.current
     if (!section) return
 
-    const sX = gsap.quickTo(
-      section.querySelector('[data-p="sphere"]')!,
-      'x',
-      { duration: 0.8, ease: 'power3' }
-    )
-    const sY = gsap.quickTo(
-      section.querySelector('[data-p="sphere"]')!,
-      'y',
-      { duration: 0.8, ease: 'power3' }
-    )
+    const tunnelEl = section.querySelector('[data-p="tunnel"]')
+    if (!tunnelEl) return
+
+    const tX = gsap.quickTo(tunnelEl, 'x', {
+      duration: 1.2,
+      ease: 'power3',
+    })
+    const tY = gsap.quickTo(tunnelEl, 'y', {
+      duration: 1.2,
+      ease: 'power3',
+    })
 
     const onMove = (e: MouseEvent) => {
       const nx = (e.clientX / window.innerWidth - 0.5) * 2
       const ny = (e.clientY / window.innerHeight - 0.5) * 2
-
-      sX(nx * 20)
-      sY(ny * 15)
-
-      gsap.to(section.querySelector('[data-p="orb-1"]'), {
-        x: nx * -10, y: ny * -8, duration: 1.5, ease: 'power2', overwrite: 'auto',
-      })
-      gsap.to(section.querySelector('[data-p="orb-2"]'), {
-        x: nx * -6, y: ny * -5, duration: 1.8, ease: 'power2', overwrite: 'auto',
-      })
-      gsap.to(section.querySelector('[data-p="s0"]'), {
-        x: nx * 10, y: ny * 8, duration: 1, ease: 'power2', overwrite: 'auto',
-      })
-      gsap.to(section.querySelector('[data-p="s1"]'), {
-        x: nx * -12, y: ny * 10, duration: 1.2, ease: 'power2', overwrite: 'auto',
-      })
-      gsap.to(section.querySelector('[data-p="s2"]'), {
-        x: nx * 14, y: ny * -7, duration: 1, ease: 'power2', overwrite: 'auto',
-      })
+      tX(nx * 15)
+      tY(ny * 10)
     }
 
     window.addEventListener('mousemove', onMove, { passive: true })
     return () => window.removeEventListener('mousemove', onMove)
   }, [mounted])
 
-  /* ── Render ────────────────────────────────────────────── */
+  /* ── Render ──────────────────────────────────────────── */
   return (
     <section
       ref={sectionRef}
@@ -294,288 +221,263 @@ export function HeroV2() {
         }}
       />
 
-      {/* ─ Background atmosphere ─ */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {/* Primary orange radiance */}
+      {/* ─ Abstract Gradient Composition ─ */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{ overflow: 'clip' }}
+      >
+        {/* Parallax target wraps all gradient orbs */}
+        <div data-p="tunnel">
+          {/* Layer 1: Atmospheric bleed — huge, very subtle, creates atmosphere */}
+          <div
+            data-a="tunnel-haze"
+            style={{
+              position: 'absolute',
+              top: '-10%',
+              right: '-15%',
+              width: '900px',
+              height: '900px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(255,106,55,0.1) 0%, rgba(255,60,30,0.04) 35%, transparent 65%)',
+              filter: 'blur(100px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 2: Primary orb — large warm coral, the main mass */}
+          <div
+            data-a="tunnel-glow"
+            style={{
+              position: 'absolute',
+              top: '18%',
+              right: '5%',
+              width: '550px',
+              height: '550px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(255,106,55,0.45) 0%, rgba(255,80,40,0.18) 40%, transparent 70%)',
+              filter: 'blur(80px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 3: Secondary orb — deeper orange, offset upward */}
+          <div
+            data-a="tunnel-glow"
+            style={{
+              position: 'absolute',
+              top: '8%',
+              right: '18%',
+              width: '400px',
+              height: '400px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(255,140,60,0.4) 0%, rgba(255,100,40,0.12) 50%, transparent 75%)',
+              filter: 'blur(60px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 4: Hot core — bright white-coral center, tight blur */}
+          <div
+            data-a="tunnel-glow"
+            style={{
+              position: 'absolute',
+              top: '28%',
+              right: '15%',
+              width: '220px',
+              height: '220px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(255,220,180,0.7) 0%, rgba(255,160,100,0.35) 30%, rgba(255,106,55,0.12) 60%, transparent 100%)',
+              filter: 'blur(35px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 5: Cool contrast — muted violet for depth & vibrancy */}
+          <div
+            data-a="tunnel-haze"
+            style={{
+              position: 'absolute',
+              top: '55%',
+              right: '25%',
+              width: '380px',
+              height: '380px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(120,80,180,0.12) 0%, rgba(80,50,140,0.04) 50%, transparent 75%)',
+              filter: 'blur(70px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 6: Conic sweep — directional light for cinematic feel */}
+          <div
+            data-a="tunnel-glow"
+            style={{
+              position: 'absolute',
+              top: '10%',
+              right: '0%',
+              width: '600px',
+              height: '600px',
+              borderRadius: '50%',
+              background:
+                'conic-gradient(from 220deg at 50% 50%, transparent 0deg, rgba(255,106,55,0.2) 60deg, rgba(255,160,100,0.1) 120deg, transparent 180deg, rgba(255,80,40,0.08) 270deg, transparent 360deg)',
+              filter: 'blur(80px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 7: Floor glow — warm light spilling downward */}
+          <div
+            data-a="tunnel-haze"
+            style={{
+              position: 'absolute',
+              bottom: '-5%',
+              right: '5%',
+              width: '600px',
+              height: '350px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(ellipse at 50% 20%, rgba(255,106,55,0.08) 0%, rgba(255,80,40,0.03) 40%, transparent 70%)',
+              filter: 'blur(60px)',
+              opacity: 0,
+            }}
+          />
+        </div>
+
+        {/* Noise texture over gradients for cinematic grain */}
         <div
-          data-a="orb"
-          data-p="orb-1"
-          data-animate
-          className="absolute top-[15%] right-[5%] w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full opacity-0 will-change-transform"
           style={{
-            background:
-              'radial-gradient(circle, rgba(255,106,55,0.08) 0%, transparent 70%)',
-          }}
-        />
-        {/* Secondary inner glow */}
-        <div
-          data-a="orb"
-          data-p="orb-2"
-          data-animate
-          className="absolute top-[25%] right-[12%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full opacity-0 will-change-transform"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(255,106,55,0.12) 0%, transparent 60%)',
-          }}
-        />
-        {/* Subtle purple accent — top left */}
-        <div
-          data-a="orb"
-          data-animate
-          className="absolute -top-20 left-[20%] w-[400px] h-[400px] rounded-full opacity-0"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(139,92,246,0.04) 0%, transparent 70%)',
-          }}
-        />
-        {/* Faint grid — showreel aesthetic */}
-        <div
-          className="absolute inset-0 opacity-[0.012]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '80px 80px',
+            position: 'absolute',
+            top: '0',
+            right: '0',
+            width: '65%',
+            height: '100%',
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            opacity: 0.06,
+            mixBlendMode: 'overlay',
           }}
         />
       </div>
 
       {/* ─ Main content ─ */}
       <div className="container mx-auto px-6 md:px-12 relative z-10 pt-24 pb-16">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12 lg:gap-8">
-          {/* ── LEFT: Typography + CTAs (58%) ── */}
-          <div className="lg:w-[58%]">
-            {/* Monospace agency tag */}
-            <p
-              data-a="tag"
-              className="text-foreground-muted text-xs md:text-sm tracking-[0.2em] uppercase mb-8 font-mono"
-            >
-              // Creative Agency — India
-            </p>
-
-            {/* Monumental headline */}
-            <h1
-              id="hero-title"
-              className="leading-[0.85] tracking-[-0.04em]"
-            >
-              {/* WE — thin weight for dramatic contrast */}
-              <span
-                data-a="word"
-                className="block text-foreground/50"
-                style={{
-                  fontSize: 'clamp(1.8rem, 4vw, 3.5rem)',
-                  fontWeight: 200,
-                }}
-              >
-                WE
-              </span>
-
-              {/* CRAFT — maximum impact */}
-              <span
-                data-a="word"
-                className="block text-foreground"
-                style={{
-                  fontSize: 'clamp(3rem, 6.5vw, 6.5rem)',
-                  fontWeight: 900,
-                }}
-              >
-                CRAFT
-              </span>
-
-              {/* DIGITAL — orange gradient */}
-              <span
-                data-a="word"
-                className="block"
-                style={{
-                  fontSize: 'clamp(3rem, 6.5vw, 6.5rem)',
-                  fontWeight: 900,
-                  background:
-                    'linear-gradient(135deg, var(--color-coral-500) 0%, var(--color-coral-400) 40%, var(--color-coral-600) 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                DIGITAL
-              </span>
-
-              {/* FUTURES. — with orange period */}
-              <span
-                data-a="word"
-                className="block text-foreground"
-                style={{
-                  fontSize: 'clamp(3rem, 6.5vw, 6.5rem)',
-                  fontWeight: 900,
-                }}
-              >
-                FUTURES<span className="text-coral-500">.</span>
-              </span>
-            </h1>
-
-            {/* Subtitle with orange accent border */}
-            <div className="mt-8 md:mt-10 flex">
-              <div
-                data-a="border"
-                className="w-0.5 min-h-[3rem] bg-coral-500 shrink-0"
-                style={{ transform: 'scaleY(0)' }}
-              />
-              <p
-                data-a="desc"
-                className="pl-4 md:pl-5 text-base md:text-lg lg:text-xl text-foreground-muted max-w-lg leading-relaxed"
-              >
-                Premium web experiences, mobile apps &amp; platforms for
-                businesses that demand excellence and innovation.
-              </p>
-            </div>
-
-            {/* CTA row */}
-            <div className="mt-10 md:mt-12 flex flex-col sm:flex-row items-start gap-4">
-              <div data-a="cta">
-                <Button
-                  asChild
-                  variant="coral"
-                  size="lg"
-                  data-testid="hero-cta-primary"
-                >
-                  <Link href="/contact" className="group">
-                    Start a Project
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
-                  </Link>
-                </Button>
-              </div>
-              <div data-a="cta">
-                <Button
-                  asChild
-                  variant="ghost"
-                  size="lg"
-                  data-testid="hero-cta-secondary"
-                  className="text-foreground-muted hover:text-foreground"
-                >
-                  <Link href="/portfolio" className="group">
-                    Our Work
-                    <ArrowRight className="ml-2 w-5 h-5 text-coral-500 group-hover:translate-x-1.5 transition-transform duration-300" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
+        <div className="max-w-2xl">
+          {/* Badge pill */}
+          <div
+            data-a="badge"
+            className="inline-flex items-center gap-2.5 mb-8 px-4 py-2 rounded-full border border-white/[0.08] bg-white/[0.03]"
+          >
+            <span
+              className="w-2 h-2 rounded-full bg-coral-500 animate-pulse-glow"
+              style={{
+                boxShadow: '0 0 8px rgba(255,106,55,0.6)',
+              }}
+            />
+            <span className="text-xs tracking-[0.2em] uppercase text-foreground-muted">
+              Digital Innovation Agency
+            </span>
           </div>
 
-          {/* ── RIGHT: 3D Sphere + Stat Cards (38%) ── */}
-          <div className="lg:w-[38%] relative flex items-center justify-center min-h-[300px] md:min-h-[400px] lg:min-h-[500px]">
-            {/* Sphere group — parallax target */}
-            <div data-p="sphere">
-              {/* Orbit ring 1 — clockwise */}
-              <div
-                data-a="ring"
-                data-animate
-                className="absolute inset-0 flex items-center justify-center opacity-0"
+          {/* Headline */}
+          <h1
+            id="hero-title"
+            className="leading-[0.9] tracking-[-0.04em]"
+          >
+            {/* We Craft — thinner weight */}
+            <span
+              data-a="word"
+              className="block text-foreground/60"
+              style={{
+                fontSize: 'clamp(1.6rem, 3.5vw, 3rem)',
+                fontWeight: 300,
+                marginBottom: '0.15em',
+              }}
+            >
+              We Craft
+            </span>
+
+            {/* Digital — coral gradient */}
+            <span
+              data-a="word"
+              className="block"
+              style={{
+                fontSize: 'clamp(3.2rem, 7vw, 7rem)',
+                fontWeight: 900,
+                lineHeight: 0.95,
+                background:
+                  'linear-gradient(135deg, var(--color-coral-400) 0%, var(--color-coral-500) 40%, var(--color-coral-600) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              Digital
+            </span>
+
+            {/* Futures. — bold with coral period */}
+            <span
+              data-a="word"
+              className="block text-foreground"
+              style={{
+                fontSize: 'clamp(3.2rem, 7vw, 7rem)',
+                fontWeight: 900,
+                lineHeight: 0.95,
+              }}
+            >
+              Futures<span className="text-coral-500">.</span>
+            </span>
+          </h1>
+
+          {/* Subtitle with coral accent border */}
+          <div className="mt-8 md:mt-10 flex">
+            <div
+              data-a="border"
+              className="w-0.5 min-h-[3rem] bg-coral-500 shrink-0"
+              style={{ transform: 'scaleY(0)' }}
+            />
+            <p
+              data-a="desc"
+              className="pl-4 md:pl-5 text-base md:text-lg lg:text-xl text-foreground-muted max-w-lg leading-relaxed"
+            >
+              Premium web experiences, mobile apps &amp; platforms for
+              businesses that demand excellence and innovation.
+            </p>
+          </div>
+
+          {/* CTA row */}
+          <div className="mt-10 md:mt-12 flex flex-col sm:flex-row items-start gap-4">
+            <div data-a="cta">
+              <Button
+                asChild
+                variant="coral"
+                size="lg"
+                data-testid="hero-cta-primary"
               >
-                <div
-                  className="w-[280px] h-[280px] md:w-[380px] md:h-[380px] lg:w-[420px] lg:h-[420px] rounded-full border border-white/[0.04]"
-                  style={{ animation: 'spin-slow 30s linear infinite' }}
-                />
-              </div>
-
-              {/* Orbit ring 2 — counter-clockwise, larger */}
-              <div
-                data-a="ring"
-                data-animate
-                className="absolute inset-0 flex items-center justify-center opacity-0"
-              >
-                <div
-                  className="w-[340px] h-[340px] md:w-[440px] md:h-[440px] lg:w-[500px] lg:h-[500px] rounded-full border border-white/[0.03]"
-                  style={{
-                    animation: 'spin-slow 40s linear infinite reverse',
-                  }}
-                />
-              </div>
-
-              {/* The sphere */}
-              <div
-                data-a="sphere"
-                data-animate
-                className="opacity-0 relative w-[220px] h-[220px] md:w-[300px] md:h-[300px] lg:w-[360px] lg:h-[360px]"
-              >
-                {/* Outer glow halo */}
-                <div
-                  data-a="sphere-glow"
-                  className="absolute -inset-10 rounded-full"
-                  style={{
-                    background:
-                      'radial-gradient(circle, rgba(255,106,55,0.2) 0%, transparent 70%)',
-                  }}
-                />
-
-                {/* Main body — 3D radial gradient */}
-                <div
-                  data-a="sphere-body"
-                  className="absolute inset-0 rounded-full"
-                  style={{
-                    background:
-                      `radial-gradient(circle at 30% 25%, #FFB088 0%, var(--color-coral-400) 15%, var(--color-coral-500) 35%, var(--color-coral-700) 60%, #7A2D10 80%, #2A0F05 100%)`,
-                    boxShadow:
-                      '0 0 80px rgba(255,106,55,0.5), 0 0 160px rgba(255,106,55,0.2), inset 0 0 80px rgba(0,0,0,0.3)',
-                  }}
-                />
-
-                {/* Primary specular highlight */}
-                <div
-                  className="absolute top-[10%] left-[16%] w-[32%] h-[26%] rounded-full"
-                  style={{
-                    background:
-                      'radial-gradient(ellipse, rgba(255,255,255,0.2) 0%, transparent 70%)',
-                  }}
-                />
-
-                {/* Tight specular — adds realism */}
-                <div
-                  className="absolute top-[8%] left-[22%] w-[14%] h-[10%] rounded-full"
-                  style={{
-                    background:
-                      'radial-gradient(ellipse, rgba(255,255,255,0.12) 0%, transparent 70%)',
-                  }}
-                />
-
-                {/* Edge rim light — bottom right */}
-                <div
-                  className="absolute bottom-[8%] right-[12%] w-[20%] h-[15%] rounded-full"
-                  style={{
-                    background:
-                      'radial-gradient(ellipse, rgba(255,140,90,0.08) 0%, transparent 70%)',
-                  }}
-                />
-              </div>
+                <Link href="/contact" className="group">
+                  Start a Project
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
+                </Link>
+              </Button>
             </div>
-
-            {/* ── Floating stat cards ── */}
-            {STATS.map((stat, i) => (
-              <div
-                key={stat.label}
-                data-a="stat"
-                data-p={`s${i}`}
-                className={`absolute backdrop-blur-xl bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 md:px-5 md:py-4 transition-all duration-300 hover:bg-white/[0.1] hover:border-white/[0.15] hover:shadow-[0_0_30px_rgba(255,106,55,0.1)] ${STAT_POSITIONS[i]}`}
+            <div data-a="cta">
+              <Button
+                asChild
+                variant="ghost"
+                size="lg"
+                data-testid="hero-cta-secondary"
+                className="text-foreground-muted hover:text-foreground"
               >
-                {/* Status indicator dot */}
-                <div className="flex items-center gap-1.5 mb-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
-                  <span className="text-[10px] md:text-xs uppercase tracking-wider text-foreground-muted">
-                    {stat.detail}
-                  </span>
-                </div>
-                <div className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground">
-                  <span
-                    ref={(el) => {
-                      statValueRefs.current[i] = el
-                    }}
-                  >
-                    0
-                  </span>
-                  {stat.suffix}
-                </div>
-                <div className="text-xs md:text-sm text-foreground-muted">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
+                <Link href="/portfolio" className="group">
+                  Our Work
+                  <ArrowRight className="ml-2 w-5 h-5 text-coral-500 group-hover:translate-x-1.5 transition-transform duration-300" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
 
