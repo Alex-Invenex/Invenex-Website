@@ -370,6 +370,50 @@ html.js-ready [data-animate] {
   }
 }
 
+/* ============================================
+   Mobile Preloader Animations (CSS-only, no GSAP)
+   ============================================ */
+
+@keyframes preloader-mobile-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes preloader-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes preloader-line-grow {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes preloader-tagline-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Skeleton shimmer animation - enhanced */
 @keyframes skeleton-shimmer {
   0% {

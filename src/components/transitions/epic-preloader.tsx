@@ -21,12 +21,8 @@ const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*'
 /**
  * EpicPreloader - Cinematic first-visit loading experience
  *
- * GSAP-powered intro (~2.5s) that plays once per session:
- * 1. Coral line grows from center
- * 2. Logo scales up with glow pulse
- * 3. "INVENEX" appears via character scramble/decode
- * 4. Tagline fades in
- * 5. Curtain slides up revealing page
+ * Desktop: GSAP-powered intro (~2.5s) that plays once per session
+ * Mobile: Lightweight CSS-only branded loader (~1.2s)
  */
 export function EpicPreloader() {
   const isReturningVisitor = useSyncExternalStore(
@@ -35,7 +31,7 @@ export function EpicPreloader() {
     () => false
   )
 
-  const [phase, setPhase] = useState<'pending' | 'active' | 'done'>(
+  const [phase, setPhase] = useState<'pending' | 'active' | 'mobile' | 'mobile-exit' | 'done'>(
     isReturningVisitor ? 'done' : 'pending'
   )
 
@@ -104,14 +100,39 @@ export function EpicPreloader() {
 
     const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches
     if (isTouchDevice) {
-      markVisited()
-      setPhase('done')
+      // Mobile: show lightweight CSS-only preloader instead of skipping
+      setPhase('mobile')
       return
     }
 
-    // Desktop first-time visitor — show the preloader animation
+    // Desktop first-time visitor — show the GSAP preloader animation
     setPhase('active')
   }, [phase, isReturningVisitor])
+
+  // Mobile: CSS-only preloader lifecycle
+  useEffect(() => {
+    if (phase !== 'mobile') return
+
+    // Show branded loader for 1.2s, then start exit animation
+    const showTimer = setTimeout(() => {
+      setPhase('mobile-exit')
+    }, 1200)
+
+    return () => clearTimeout(showTimer)
+  }, [phase])
+
+  useEffect(() => {
+    if (phase !== 'mobile-exit') return
+
+    // After fade-out animation (400ms), mark done
+    const exitTimer = setTimeout(() => {
+      window.scrollTo(0, 0)
+      markVisited()
+      setPhase('done')
+    }, 400)
+
+    return () => clearTimeout(exitTimer)
+  }, [phase])
 
   // Run GSAP animation when phase becomes 'active'
   useEffect(() => {
@@ -199,9 +220,85 @@ export function EpicPreloader() {
   // 'done' = preloader finished or skipped — render nothing
   if (phase === 'done') return null
 
+  // Mobile preloader: CSS-only, no GSAP
+  if (phase === 'mobile' || phase === 'mobile-exit') {
+    const isExiting = phase === 'mobile-exit'
+    return (
+      <div
+        className="fixed inset-0 flex flex-col items-center justify-center bg-[#0A0A0A]"
+        style={{
+          zIndex: 99999,
+          animation: isExiting ? 'preloader-fade-out 400ms ease-out forwards' : undefined,
+        }}
+        aria-hidden="true"
+      >
+        <div
+          style={{
+            animation: 'preloader-mobile-enter 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+          }}
+        >
+          {/* Logo */}
+          <img
+            src="/invenex-logo.png"
+            alt=""
+            style={{
+              width: '64px',
+              height: '64px',
+              display: 'block',
+              margin: '0 auto',
+            }}
+          />
+
+          {/* Brand name */}
+          <div
+            style={{
+              marginTop: '20px',
+              fontSize: '24px',
+              fontWeight: 700,
+              letterSpacing: '0.2em',
+              color: '#ffffff',
+              textAlign: 'center',
+              fontFamily: 'var(--font-sans)',
+            }}
+          >
+            INVENEX
+          </div>
+
+          {/* Accent line */}
+          <div
+            style={{
+              width: '40px',
+              height: '2px',
+              background: '#FF6B35',
+              margin: '12px auto 0',
+              animation: 'preloader-line-grow 800ms cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards',
+              transform: 'scaleX(0)',
+            }}
+          />
+
+          {/* Tagline */}
+          <div
+            style={{
+              marginTop: '12px',
+              fontSize: '11px',
+              color: '#A3A3A3',
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              textAlign: 'center',
+              opacity: 0,
+              animation: 'preloader-tagline-in 400ms ease-out 400ms forwards',
+            }}
+          >
+            Premium Digital Solutions
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // 'pending' renders a static black screen (included in server HTML so
   // the page content is never visible before the preloader).
-  // 'active' adds the animation children on top.
+  // 'active' adds the GSAP animation children on top.
   return (
     <div
       ref={containerRef}
