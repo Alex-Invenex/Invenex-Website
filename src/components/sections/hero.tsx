@@ -33,17 +33,17 @@ export function Hero() {
 
       {/* Floating elements */}
       <motion.div
-        className="absolute top-20 right-20 w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 backdrop-blur-sm border border-white/10"
+        className="absolute top-20 right-20 w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 backdrop-blur-sm border border-surface-border"
         animate={floatingAnimation}
         transition={floatingTransition}
       />
       <motion.div
-        className="absolute bottom-32 left-20 w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-white/10"
+        className="absolute bottom-32 left-20 w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-surface-border"
         animate={prefersReducedMotion ? {} : { y: [0, 15, 0], rotate: [0, -5, 0] }}
         transition={prefersReducedMotion ? {} : { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
       />
       <motion.div
-        className="absolute top-40 left-1/4 w-12 h-12 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 backdrop-blur-sm border border-white/10"
+        className="absolute top-40 left-1/4 w-12 h-12 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 backdrop-blur-sm border border-surface-border"
         animate={prefersReducedMotion ? {} : { y: [0, -15, 0], x: [0, 10, 0] }}
         transition={prefersReducedMotion ? {} : { duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       />
@@ -52,7 +52,7 @@ export function Hero() {
         {/* Badge */}
         <AnimatedSection>
           <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-overlay border border-surface-border backdrop-blur-sm mb-8"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
@@ -126,7 +126,7 @@ export function Hero() {
         animate={prefersReducedMotion ? {} : { y: [0, 10, 0] }}
         transition={prefersReducedMotion ? {} : { duration: 2, repeat: Infinity }}
       >
-        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
+        <div className="w-6 h-10 rounded-full border-2 border-surface-border-hover flex items-start justify-center p-2">
           <motion.div
             className="w-1 h-2 bg-white/50 rounded-full"
             animate={prefersReducedMotion ? {} : { y: [0, 12, 0] }}

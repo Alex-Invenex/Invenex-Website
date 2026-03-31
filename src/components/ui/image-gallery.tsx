@@ -97,7 +97,7 @@ export function ImageGallery({ images, projectTitle = "Project" }: ImageGalleryP
             {/* Close button */}
             <button
               data-testid="lightbox-close"
-              className="absolute top-4 right-4 text-white p-2 hover:bg-white/10 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white z-10"
+              className="absolute top-4 right-4 text-white p-2 hover:bg-surface-overlay-hover rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white z-10"
               onClick={(e) => {
                 e.stopPropagation();
                 closeLightbox();
@@ -110,7 +110,7 @@ export function ImageGallery({ images, projectTitle = "Project" }: ImageGalleryP
             {/* Previous button */}
             <button
               data-testid="lightbox-prev"
-              className="absolute left-4 text-white p-3 hover:bg-white/10 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:opacity-30 disabled:cursor-not-allowed"
+              className="absolute left-4 text-white p-3 hover:bg-surface-overlay-hover rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:opacity-30 disabled:cursor-not-allowed"
               onClick={(e) => {
                 e.stopPropagation();
                 goToPrevious();
@@ -124,7 +124,7 @@ export function ImageGallery({ images, projectTitle = "Project" }: ImageGalleryP
             {/* Next button */}
             <button
               data-testid="lightbox-next"
-              className="absolute right-4 text-white p-3 hover:bg-white/10 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:opacity-30 disabled:cursor-not-allowed"
+              className="absolute right-4 text-white p-3 hover:bg-surface-overlay-hover rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:opacity-30 disabled:cursor-not-allowed"
               onClick={(e) => {
                 e.stopPropagation();
                 goToNext();

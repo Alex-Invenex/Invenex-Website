@@ -64,7 +64,7 @@ export function ServiceDetailClient({ service }: ServiceDetailClientProps) {
         subtitle={service.description}
       >
         <div className="flex items-center gap-4 flex-wrap">
-          <div className="w-16 h-16 rounded-2xl backdrop-blur-xl border border-white/[0.1] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.05)' }}>
+          <div className="w-16 h-16 rounded-2xl backdrop-blur-xl border border-surface-border flex items-center justify-center" style={{ background: 'var(--color-surface-overlay)' }}>
             <Icon className="w-8 h-8 text-coral-400" aria-hidden="true" />
           </div>
           <ShareButtons title={`${service.title} - Invenex Solutions`} />
@@ -168,8 +168,8 @@ function FeaturesSection({ features }: { features: string[] }) {
             <GSAPStaggerItem key={feature}>
               <div
                 data-testid="feature-card"
-                className="p-6 rounded-xl backdrop-blur-xl border border-white/[0.08] transition-all duration-300 hover:border-coral-500/20"
-                style={{ background: 'rgba(255,255,255,0.04)' }}
+                className="p-6 rounded-xl backdrop-blur-xl border border-surface-border transition-all duration-300 hover:border-coral-500/20"
+                style={{ background: 'var(--color-surface-overlay)' }}
               >
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-6 h-6 rounded-full bg-success/20 flex items-center justify-center">
@@ -197,8 +197,8 @@ function TechSection({ technologies }: { technologies: string[] }) {
             <GSAPStaggerItem key={tech}>
               <span
                 data-testid="tech-badge"
-                className="inline-block px-4 py-2 rounded-full backdrop-blur-xl border border-white/[0.08] text-sm text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground hover:shadow-[0_0_15px_rgba(255,106,55,0.1)]"
-                style={{ background: 'rgba(255,255,255,0.04)' }}
+                className="inline-block px-4 py-2 rounded-full backdrop-blur-xl border border-surface-border text-sm text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground hover:shadow-[0_0_15px_rgba(255,106,55,0.1)]"
+                style={{ background: 'var(--color-surface-overlay)' }}
               >
                 {tech}
               </span>

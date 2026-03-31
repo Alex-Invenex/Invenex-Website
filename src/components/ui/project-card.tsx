@@ -17,7 +17,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Link href={`/portfolio/${project.slug}`} data-testid="project-card">
       <motion.article
-        className="group relative overflow-hidden rounded-2xl border border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300"
+        className="group relative overflow-hidden rounded-2xl border border-surface-border bg-surface-overlay hover:bg-surface-overlay-hover hover:border-surface-border-hover transition-all duration-300"
         whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.2 }}
       >
@@ -55,7 +55,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {project.category}
           </Badge>
           <h3
-            className="font-semibold text-lg group-hover:text-white transition-colors"
+            className="font-semibold text-lg group-hover:text-foreground transition-colors"
             data-testid="project-title"
           >
             {project.title}

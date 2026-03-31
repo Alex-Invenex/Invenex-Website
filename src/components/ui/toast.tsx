@@ -205,7 +205,7 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
       <p className="flex-1 text-sm font-medium">{message}</p>
       <button
         onClick={() => onRemove(id)}
-        className="shrink-0 p-1 rounded hover:bg-white/20 transition-colors"
+        className="shrink-0 p-1 rounded hover:bg-surface-overlay-hover transition-colors"
         aria-label="Dismiss notification"
       >
         <X className="w-4 h-4" />
@@ -263,7 +263,7 @@ export function StandaloneToast({
       {onClose && (
         <button
           onClick={onClose}
-          className="shrink-0 p-1 rounded hover:bg-white/20 transition-colors"
+          className="shrink-0 p-1 rounded hover:bg-surface-overlay-hover transition-colors"
           aria-label="Dismiss notification"
         >
           <X className="w-4 h-4" />

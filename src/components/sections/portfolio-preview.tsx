@@ -102,7 +102,7 @@ function ProjectCard({
       <Link href={project.href} className="group block relative">
         <div
           ref={cardRef}
-          className="relative overflow-hidden rounded-2xl will-change-transform border border-white/[0.06] hover:border-coral-500/30 transition-all duration-500 bg-[#111]"
+          className="relative overflow-hidden rounded-2xl will-change-transform border border-surface-border hover:border-coral-500/30 transition-all duration-500 bg-background-secondary"
           style={{
             aspectRatio: "16 / 10",
             boxShadow: "0 0 0 rgba(255,106,55,0)",
@@ -153,7 +153,7 @@ function ProjectCard({
           </span>
 
           {/* Arrow */}
-          <div className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full border border-white/20 bg-white/[0.05] backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-coral-500 group-hover:border-coral-500">
+          <div className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full border border-surface-border-hover bg-surface-overlay backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-coral-500 group-hover:border-coral-500">
             <ArrowRight className="w-4 h-4 text-white" />
           </div>
 
@@ -166,7 +166,7 @@ function ProjectCard({
               {project.categories.map((cat) => (
                 <span
                   key={cat}
-                  className="text-xs px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-sm text-white/80 border border-white/10"
+                  className="text-xs px-2.5 py-1 rounded-full bg-surface-overlay-hover backdrop-blur-sm text-white/80 border border-surface-border"
                 >
                   {cat}
                 </span>

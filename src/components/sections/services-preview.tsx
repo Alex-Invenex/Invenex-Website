@@ -352,7 +352,7 @@ export function ServicesPreview() {
                           key={tag}
                           className="text-xs px-3 py-1.5 rounded-full font-mono text-foreground-muted/70"
                           style={{
-                            background: "rgba(255,255,255,0.03)",
+                            background: "var(--color-surface-overlay)",
                             border: "1px solid rgba(255,255,255,0.08)",
                             backdropFilter: "blur(8px)",
                           }}
@@ -443,9 +443,9 @@ export function ServicesPreview() {
             {SERVICES.map((svc) => (
               <Link key={svc.title} href={svc.href} className="group" data-svc-tablet>
                 <div
-                  className="rounded-xl border border-white/[0.08] p-4 hover:border-coral-500/30 transition-all duration-300"
+                  className="rounded-xl border border-surface-border p-4 hover:border-coral-500/30 transition-all duration-300"
                   style={{
-                    background: "linear-gradient(135deg, rgba(18,18,18,1) 0%, rgba(14,14,14,1) 100%)",
+                    background: "linear-gradient(135deg, var(--color-card-gradient-from) 0%, var(--color-card-gradient-to) 100%)",
                   }}
                 >
                   <div className="text-xs font-mono text-coral-500/60 mb-2">{svc.number}</div>
@@ -497,7 +497,7 @@ export function ServicesPreview() {
                 key={svc.title}
                 href={svc.href}
                 data-svc-mobile
-                className="group flex items-center gap-4 py-5 border-b border-white/[0.06]"
+                className="group flex items-center gap-4 py-5 border-b border-surface-border"
               >
                 <span
                   className="text-sm font-mono text-coral-500/60 flex-shrink-0"
@@ -511,7 +511,7 @@ export function ServicesPreview() {
                   </h3>
                   <span className="text-xs text-foreground-muted">{svc.tagline}</span>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center flex-shrink-0 group-hover:bg-coral-500/10 group-hover:border-coral-500/20 transition-all duration-300">
+                <div className="w-8 h-8 rounded-full bg-surface-overlay border border-surface-border flex items-center justify-center flex-shrink-0 group-hover:bg-coral-500/10 group-hover:border-coral-500/20 transition-all duration-300">
                   <ArrowRight className="w-3.5 h-3.5 text-foreground-muted group-hover:text-coral-500 transition-colors duration-300" />
                 </div>
               </Link>

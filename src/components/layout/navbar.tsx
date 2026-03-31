@@ -16,6 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import { mainNav, siteConfig } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { MobileMenu } from "./mobile-menu";
 
 // Service icons mapped by href
@@ -103,7 +104,7 @@ export function Navbar() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
           scrolled
-            ? "bg-background/70 backdrop-blur-xl border-b border-white/[0.05] shadow-[0_4px_30px_rgba(0,0,0,0.3)]"
+            ? "bg-background/70 backdrop-blur-xl border-b border-surface-border shadow-[0_4px_30px_rgba(0,0,0,0.3)]"
             : "bg-transparent",
           !visible && "-translate-y-full"
         )}
@@ -145,7 +146,7 @@ export function Navbar() {
                     aria-haspopup="true"
                     className={cn(
                       "px-4 py-2 rounded-full text-foreground-muted hover:text-foreground transition-all duration-300 flex items-center gap-1",
-                      "hover:bg-white/5"
+                      "hover:bg-surface-overlay"
                     )}
                   >
                     {item.title}
@@ -162,7 +163,7 @@ export function Navbar() {
                     href={item.href}
                     className={cn(
                       "px-4 py-2 rounded-full text-foreground-muted hover:text-foreground transition-all duration-300 flex items-center gap-1",
-                      "hover:bg-white/5"
+                      "hover:bg-surface-overlay"
                     )}
                   >
                     {item.title}
@@ -179,7 +180,7 @@ export function Navbar() {
                       transition={{ duration: 0.2, ease: "easeOut" }}
                       className="absolute top-full left-1/2 -translate-x-1/2 pt-4"
                     >
-                      <div className="relative min-w-[650px] p-6 rounded-2xl bg-background-secondary/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+                      <div className="relative min-w-[650px] p-6 rounded-2xl bg-background-secondary/95 backdrop-blur-xl border border-surface-border shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
                         {/* Gradient border effect */}
                         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#FF6B35]/10 via-transparent to-[#FF6B35]/5 pointer-events-none" />
 
@@ -201,10 +202,10 @@ export function Navbar() {
                               >
                                 <Link
                                   href={child.href}
-                                  className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.05] transition-all duration-300 group/item"
+                                  className="flex items-start gap-4 p-4 rounded-xl hover:bg-surface-overlay-hover transition-all duration-300 group/item"
                                 >
                                   <div
-                                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colorClass.split(" ")[0]} ${colorClass.split(" ")[1]} flex items-center justify-center shrink-0 border border-white/10 group-hover/item:scale-110 transition-transform duration-300`}
+                                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colorClass.split(" ")[0]} ${colorClass.split(" ")[1]} flex items-center justify-center shrink-0 border border-surface-border group-hover/item:scale-110 transition-transform duration-300`}
                                   >
                                     {Icon ? (
                                       <Icon
@@ -230,7 +231,7 @@ export function Navbar() {
                         </div>
 
                         {/* CTA Banner */}
-                        <div className="relative mt-4 pt-4 border-t border-white/[0.05]">
+                        <div className="relative mt-4 pt-4 border-t border-surface-border">
                           <Link
                             href="/services"
                             className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#FF6B35]/10 to-[#FF6B35]/5 hover:from-[#FF6B35]/20 hover:to-[#FF6B35]/10 transition-all duration-300 group/cta"
@@ -243,7 +244,7 @@ export function Navbar() {
                                 Discover how we can help your business grow
                               </p>
                             </div>
-                            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover/cta:bg-white/20 transition-colors">
+                            <div className="w-10 h-10 rounded-full bg-surface-overlay-hover flex items-center justify-center group-hover/cta:bg-surface-overlay-hover transition-colors">
                               <ArrowRight className="w-5 h-5 text-foreground" />
                             </div>
                           </Link>
@@ -261,6 +262,7 @@ export function Navbar() {
             <Button asChild size="sm" variant="ghost">
               <Link href="/portfolio">Our Work</Link>
             </Button>
+            <ThemeToggle />
             <Button asChild>
               <Link href="/contact" className="group">
                 Get a Quote
@@ -271,7 +273,7 @@ export function Navbar() {
 
           {/* Mobile Menu Button */}
           <motion.button
-            className="lg:hidden p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+            className="lg:hidden p-2 rounded-xl bg-surface-overlay border border-surface-border hover:bg-surface-overlay-hover transition-colors"
             onClick={() => setMobileMenuOpen(true)}
             aria-label="Open menu"
             data-testid="mobile-menu-button"

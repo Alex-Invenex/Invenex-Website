@@ -370,7 +370,7 @@ export function HeroV2() {
           {/* Badge pill */}
           <div
             data-a="badge"
-            className="inline-flex items-center gap-2.5 mb-8 px-4 py-2 rounded-full border border-white/[0.08] bg-white/[0.03]"
+            className="inline-flex items-center gap-2.5 mb-8 px-4 py-2 rounded-full border border-surface-border bg-surface-overlay"
           >
             <span
               className="w-2 h-2 rounded-full bg-coral-500 animate-pulse-glow"

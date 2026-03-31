@@ -77,6 +77,18 @@ html.lenis body {
   --color-error: #EF4444;
   --color-info: #3B82F6;
 
+  /* Surface Overlay Tokens (theme-aware) */
+  --color-surface-overlay: rgba(255, 255, 255, 0.03);
+  --color-surface-overlay-hover: rgba(255, 255, 255, 0.06);
+  --color-surface-border: rgba(255, 255, 255, 0.08);
+  --color-surface-border-hover: rgba(255, 255, 255, 0.15);
+  --color-surface-glass: rgba(20, 20, 20, 0.7);
+  --color-surface-glass-border: rgba(255, 255, 255, 0.1);
+  --color-card-gradient-from: rgba(18, 18, 18, 1);
+  --color-card-gradient-to: rgba(14, 14, 14, 1);
+  --color-grid-line: rgba(255, 255, 255, 0.03);
+  --color-dot-pattern: rgba(255, 255, 255, 0.1);
+
   /* ----------------------------------------
      Typography Scale (AC2)
      ---------------------------------------- */
@@ -131,6 +143,41 @@ html.lenis body {
      Animations
      ---------------------------------------- */
   --animate-page-enter: page-enter 0.3s var(--ease-out);
+}
+
+/* ============================================
+   Light Theme Overrides
+   ============================================ */
+[data-theme="light"] {
+  --color-background: #FFFFFF;
+  --color-background-secondary: #F5F5F5;
+  --color-background-tertiary: #EBEBEB;
+  --color-foreground: #171717;
+  --color-foreground-muted: #525252;
+  --color-foreground-subtle: #737373;
+  --color-border: #E5E5E5;
+  --color-border-hover: #D4D4D4;
+  --color-accent: #171717;
+  --color-surface-overlay: rgba(0, 0, 0, 0.03);
+  --color-surface-overlay-hover: rgba(0, 0, 0, 0.06);
+  --color-surface-border: rgba(0, 0, 0, 0.08);
+  --color-surface-border-hover: rgba(0, 0, 0, 0.15);
+  --color-surface-glass: rgba(255, 255, 255, 0.7);
+  --color-surface-glass-border: rgba(0, 0, 0, 0.1);
+  --color-card-gradient-from: rgba(255, 255, 255, 1);
+  --color-card-gradient-to: rgba(248, 248, 248, 1);
+  --color-grid-line: rgba(0, 0, 0, 0.04);
+  --color-dot-pattern: rgba(0, 0, 0, 0.08);
+}
+
+/* Smooth theme transition */
+[data-theme] {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Light mode text gradient override */
+[data-theme="light"] .text-gradient {
+  background: linear-gradient(135deg, #171717 0%, #FF9B75 50%, #FF6B35 100%);
 }
 
 /* Page transition animation */
@@ -480,17 +527,17 @@ html.js-ready [data-animate] {
 
   /* Glassmorphism */
   .glass {
-    background: rgba(20, 20, 20, 0.7);
+    background: var(--color-surface-glass);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-surface-glass-border);
   }
 
   .glass-light {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-surface-overlay);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-surface-glass-border);
   }
 
   /* Gradient Border */
@@ -535,7 +582,7 @@ html.js-ready [data-animate] {
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.1) 50%,
+      var(--color-surface-overlay-hover) 50%,
       transparent 100%
     );
     background-size: 200% 100%;
@@ -614,7 +661,7 @@ html.js-ready [data-animate] {
 
   .card-lift:hover {
     transform: translateY(-8px);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 25px 50px -12px var(--color-surface-overlay-hover);
   }
 
   /* Input focus enhancement */
@@ -624,7 +671,7 @@ html.js-ready [data-animate] {
 
   .input-enhanced:focus {
     transform: scale(1.01);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px var(--color-surface-border-hover), 0 0 20px var(--color-surface-overlay-hover);
   }
 
   /* ----------------------------------------
@@ -708,14 +755,14 @@ html.js-ready [data-animate] {
   /* Grid pattern background */
   .bg-grid {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(var(--color-grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid-line) 1px, transparent 1px);
     background-size: 60px 60px;
   }
 
   /* Dot pattern background */
   .bg-dots {
-    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-image: radial-gradient(var(--color-dot-pattern) 1px, transparent 1px);
     background-size: 20px 20px;
   }
 

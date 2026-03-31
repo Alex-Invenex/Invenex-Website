@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { mainNav, socialLinks, siteConfig } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import Link from "next/link";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -141,7 +142,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         >
           {/* Backdrop */}
           <motion.div
-            className="absolute inset-0 bg-[#0A0A0A]/98 backdrop-blur-xl"
+            className="absolute inset-0 bg-background/98 backdrop-blur-xl"
             onClick={onClose}
             aria-hidden="true"
             initial={{ opacity: 0 }}
@@ -173,14 +174,17 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   {siteConfig.name}
                 </span>
               </Link>
-              <button
-                ref={closeButtonRef}
-                onClick={onClose}
-                className="w-11 h-11 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-                aria-label="Close menu"
-              >
-                <X className="w-5 h-5 text-foreground" />
-              </button>
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <button
+                  ref={closeButtonRef}
+                  onClick={onClose}
+                  className="w-11 h-11 flex items-center justify-center rounded-full bg-surface-overlay border border-surface-border hover:bg-surface-overlay-hover transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X className="w-5 h-5 text-foreground" />
+                </button>
+              </div>
             </div>
 
             {/* Decorative coral line */}
@@ -205,7 +209,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       <div>
                         <button
                           onClick={() => setServicesExpanded(!servicesExpanded)}
-                          className="flex items-center justify-between w-full py-4 px-4 text-lg font-medium text-foreground hover:bg-white/5 rounded-xl transition-colors"
+                          className="flex items-center justify-between w-full py-4 px-4 text-lg font-medium text-foreground hover:bg-surface-overlay rounded-xl transition-colors"
                           aria-expanded={servicesExpanded}
                         >
                           <span>{item.title}</span>
@@ -226,13 +230,13 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                               transition={{ duration: 0.25, ease: "easeInOut" }}
                               className="overflow-hidden"
                             >
-                              <ul className="ml-2 pl-4 border-l border-white/10 space-y-0.5 pb-2">
+                              <ul className="ml-2 pl-4 border-l border-surface-border space-y-0.5 pb-2">
                                 {item.children.map((child) => (
                                   <li key={child.href}>
                                     <Link
                                       href={child.href}
                                       onClick={handleLinkClick}
-                                      className="block py-3 px-3 text-foreground-muted hover:text-foreground hover:bg-white/5 rounded-lg transition-colors text-[15px]"
+                                      className="block py-3 px-3 text-foreground-muted hover:text-foreground hover:bg-surface-overlay rounded-lg transition-colors text-[15px]"
                                     >
                                       {child.title}
                                     </Link>
@@ -259,7 +263,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       <Link
                         href={item.href}
                         onClick={handleLinkClick}
-                        className="block py-4 px-4 text-lg font-medium text-foreground hover:bg-white/5 rounded-xl transition-colors relative group"
+                        className="block py-4 px-4 text-lg font-medium text-foreground hover:bg-surface-overlay rounded-xl transition-colors relative group"
                       >
                         <span className="relative">
                           {item.title}
@@ -276,7 +280,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             {/* Bottom section: CTA + Social */}
             <div className="px-6 pb-8 pt-4">
               {/* Separator */}
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-surface-border to-transparent mb-6" />
 
               {/* CTA Button */}
               <motion.div
@@ -312,7 +316,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-11 h-11 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#FF6B35]/30 transition-all"
+                      className="w-11 h-11 flex items-center justify-center rounded-full bg-surface-overlay border border-surface-border hover:bg-surface-overlay-hover hover:border-[#FF6B35]/30 transition-all"
                       aria-label={link.name}
                     >
                       {Icon ? (

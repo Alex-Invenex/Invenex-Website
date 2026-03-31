@@ -73,7 +73,7 @@ function ProjectGridContent({ projects }: ProjectGridProps) {
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                 activeFilter === cat.value
                   ? "bg-primary text-primary-foreground"
-                  : "bg-white/5 text-foreground-muted hover:bg-white/10 hover:text-foreground border border-white/10"
+                  : "bg-surface-overlay text-foreground-muted hover:bg-surface-overlay-hover hover:text-foreground border border-surface-border"
               )}
               aria-pressed={activeFilter === cat.value}
             >
@@ -131,7 +131,7 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
               {categories.map((cat) => (
                 <div
                   key={cat.value}
-                  className="px-4 py-2 rounded-full bg-white/5 animate-pulse w-20 h-9"
+                  className="px-4 py-2 rounded-full bg-surface-overlay animate-pulse w-20 h-9"
                 />
               ))}
             </div>
@@ -139,7 +139,7 @@ export function ProjectGrid({ projects }: ProjectGridProps) {
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="aspect-[4/3] rounded-2xl bg-white/5 animate-pulse"
+                  className="aspect-[4/3] rounded-2xl bg-surface-overlay animate-pulse"
                 />
               ))}
             </div>

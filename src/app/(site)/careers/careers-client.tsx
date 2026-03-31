@@ -118,7 +118,7 @@ function LifeSection() {
 
           {/* Glassmorphic culture card */}
           <div data-life>
-            <div className="rounded-2xl overflow-hidden relative backdrop-blur-xl border border-white/[0.08]" style={{ background: 'rgba(255,255,255,0.04)' }}>
+            <div className="rounded-2xl overflow-hidden relative backdrop-blur-xl border border-surface-border" style={{ background: 'var(--color-surface-overlay)' }}>
               <div className="absolute inset-0" aria-hidden="true">
                 <div className="absolute top-0 right-0 rounded-full blur-[80px]" style={{ width: 300, height: 300, background: 'rgba(255,106,55,0.08)' }} />
                 <div className="absolute bottom-0 left-0 rounded-full blur-[60px]" style={{ width: 200, height: 200, background: 'rgba(255,106,55,0.05)' }} />
@@ -129,7 +129,7 @@ function LifeSection() {
                 </div>
                 <div className="flex flex-wrap justify-center gap-3">
                   {['Remote-Friendly', 'Modern Stack', 'Growth Culture'].map((tag) => (
-                    <span key={tag} className="px-4 py-1.5 rounded-full backdrop-blur-xl border border-white/[0.08] text-sm text-foreground-muted" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                    <span key={tag} className="px-4 py-1.5 rounded-full backdrop-blur-xl border border-surface-border text-sm text-foreground-muted" style={{ background: 'var(--color-surface-overlay)' }}>
                       {tag}
                     </span>
                   ))}
@@ -187,8 +187,8 @@ function BenefitsSection() {
               <GSAPStaggerItem key={benefit.title}>
                 <div
                   data-testid="benefit-card"
-                  className="p-6 text-center h-full rounded-2xl backdrop-blur-xl border border-white/[0.08] transition-all duration-300 hover:border-coral-500/20 group relative overflow-hidden"
-                  style={{ background: 'rgba(255,255,255,0.04)' }}
+                  className="p-6 text-center h-full rounded-2xl backdrop-blur-xl border border-surface-border transition-all duration-300 hover:border-coral-500/20 group relative overflow-hidden"
+                  style={{ background: 'var(--color-surface-overlay)' }}
                 >
                   {/* Hover accent bar */}
                   <div className="absolute top-0 left-0 right-0 h-0.5 bg-coral-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
@@ -247,7 +247,7 @@ function TechStackSection() {
         <GSAPStaggerContainer className="flex flex-wrap justify-center gap-3">
           {techStack.map((tech) => (
             <GSAPStaggerItem key={tech}>
-              <span className="inline-block px-4 py-2 text-base rounded-full backdrop-blur-xl border border-white/[0.08] text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground hover:shadow-[0_0_15px_rgba(255,106,55,0.1)]" style={{ background: 'rgba(255,255,255,0.04)' }}>
+              <span className="inline-block px-4 py-2 text-base rounded-full backdrop-blur-xl border border-surface-border text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground hover:shadow-[0_0_15px_rgba(255,106,55,0.1)]" style={{ background: 'var(--color-surface-overlay)' }}>
                 {tech}
               </span>
             </GSAPStaggerItem>

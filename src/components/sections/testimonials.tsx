@@ -152,7 +152,7 @@ function TestimonialCard({
 
   return (
     <div className="flex-shrink-0 w-[300px] sm:w-[350px] md:w-[400px] mx-2 sm:mx-3">
-      <div className="h-full p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-sm hover:bg-white/[0.04] hover:border-coral-500/20 transition-all duration-300">
+      <div className="h-full p-6 rounded-2xl bg-surface-overlay border border-surface-border backdrop-blur-sm hover:bg-surface-overlay hover:border-coral-500/20 transition-all duration-300">
         {/* Stars with varied ratings for realism */}
         <div className="flex items-center gap-1 mb-4">
           {Array.from({ length: 5 }).map((_, i) => (

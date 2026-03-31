@@ -33,7 +33,7 @@ export function JobCard({ job }: JobCardProps) {
         {job.techStack && job.techStack.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
             {job.techStack.map((tech) => (
-              <Badge key={tech} size="sm" className="bg-white/[0.04] text-foreground-muted border-white/[0.08]" data-testid="job-tech-tag">
+              <Badge key={tech} size="sm" className="bg-surface-overlay text-foreground-muted border-surface-border" data-testid="job-tech-tag">
                 {tech}
               </Badge>
             ))}

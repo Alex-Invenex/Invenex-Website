@@ -114,9 +114,9 @@ function EditorialCard({
       <div
         className={cn(
           "relative overflow-hidden rounded-2xl",
-          "border border-white/[0.06] hover:border-coral-500/30",
+          "border border-surface-border hover:border-coral-500/30",
           "transition-all duration-500",
-          "bg-[#111]",
+          "bg-background-secondary",
           size === "hero" && "aspect-[16/9] lg:aspect-[21/9]",
           size === "medium" && "aspect-[3/2]",
           size === "small" && "aspect-[4/3]"
@@ -159,13 +159,13 @@ function EditorialCard({
         </span>
 
         {/* Arrow — appears on hover */}
-        <div className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full border border-white/20 bg-white/[0.05] backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-coral-500 group-hover:border-coral-500">
+        <div className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full border border-surface-border-hover bg-surface-overlay backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-coral-500 group-hover:border-coral-500">
           <ArrowRight className="w-4 h-4 text-white" />
         </div>
 
         {/* Content overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 lg:p-8">
-          <span className="text-xs px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-sm text-white/80 border border-white/10 mb-3 inline-block">
+          <span className="text-xs px-2.5 py-1 rounded-full bg-surface-overlay-hover backdrop-blur-sm text-white/80 border border-surface-border mb-3 inline-block">
             {project.category}
           </span>
           <h3
@@ -250,7 +250,7 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                 activeFilter === cat.value
                   ? "bg-coral-500 text-white shadow-lg shadow-coral-500/25"
-                  : "bg-white/[0.03] text-foreground-muted hover:bg-white/[0.08] hover:text-foreground border border-white/[0.08]"
+                  : "bg-surface-overlay text-foreground-muted hover:bg-surface-overlay-hover hover:text-foreground border border-surface-border"
               )}
               aria-pressed={activeFilter === cat.value}
             >
@@ -329,18 +329,18 @@ export function BentoPortfolioGrid({ projects }: BentoPortfolioGridProps) {
               {categories.map((cat) => (
                 <div
                   key={cat.value}
-                  className="px-5 py-2 rounded-full bg-white/5 animate-pulse w-20 h-9"
+                  className="px-5 py-2 rounded-full bg-surface-overlay animate-pulse w-20 h-9"
                 />
               ))}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5">
-              <div className="lg:col-span-6 aspect-[21/9] rounded-2xl bg-white/5 animate-pulse" />
-              <div className="lg:col-span-3 aspect-[3/2] rounded-2xl bg-white/5 animate-pulse" />
-              <div className="lg:col-span-3 aspect-[3/2] rounded-2xl bg-white/5 animate-pulse" />
-              <div className="lg:col-span-6 aspect-[21/9] rounded-2xl bg-white/5 animate-pulse" />
-              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-white/5 animate-pulse" />
-              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-white/5 animate-pulse" />
-              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-white/5 animate-pulse" />
+              <div className="lg:col-span-6 aspect-[21/9] rounded-2xl bg-surface-overlay animate-pulse" />
+              <div className="lg:col-span-3 aspect-[3/2] rounded-2xl bg-surface-overlay animate-pulse" />
+              <div className="lg:col-span-3 aspect-[3/2] rounded-2xl bg-surface-overlay animate-pulse" />
+              <div className="lg:col-span-6 aspect-[21/9] rounded-2xl bg-surface-overlay animate-pulse" />
+              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-surface-overlay animate-pulse" />
+              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-surface-overlay animate-pulse" />
+              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-surface-overlay animate-pulse" />
             </div>
           </div>
         </section>

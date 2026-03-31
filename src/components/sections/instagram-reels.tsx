@@ -161,7 +161,7 @@ function CardBody({ card }: { card: (typeof socialCards)[0] }) {
 
       {/* Content — fades out on hover */}
       <div className="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-6 text-center group-hover:opacity-0 transition-opacity duration-500">
-        <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 flex items-center justify-center mb-3 md:mb-4">
+        <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 backdrop-blur-sm border border-surface-border-hover flex items-center justify-center mb-3 md:mb-4">
           <Play className="w-5 h-5 md:w-7 md:h-7 text-white fill-white ml-0.5" />
         </div>
         <p className="text-white text-xs md:text-sm font-medium leading-tight opacity-90">
@@ -174,7 +174,7 @@ function CardBody({ card }: { card: (typeof socialCards)[0] }) {
 
       {/* Badge */}
       <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
-        <div className="w-5 h-5 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+        <div className="w-5 h-5 rounded-full bg-surface-overlay-hover backdrop-blur-sm flex items-center justify-center">
           <Instagram className="w-2.5 h-2.5 text-white" />
         </div>
         <span className="text-white text-[10px] font-medium">Reel</span>
@@ -232,7 +232,7 @@ function ReelModal({
       onClick={handleClose}
     >
       <button
-        className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-20"
+        className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 rounded-full bg-surface-overlay-hover backdrop-blur-md border border-surface-border-hover flex items-center justify-center text-white hover:bg-surface-overlay-hover transition-colors z-20"
         onClick={handleClose}
       >
         <X className="w-5 h-5" />
@@ -267,7 +267,7 @@ function ReelModal({
         href={card.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="absolute bottom-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-colors"
+        className="absolute bottom-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-surface-overlay-hover border border-surface-border-hover text-white text-sm hover:bg-surface-overlay-hover transition-colors"
         onClick={(e) => e.stopPropagation()}
       >
         <Instagram className="w-4 h-4" />
@@ -375,7 +375,7 @@ export function InstagramReels() {
             href="https://www.instagram.com/invenexsolutions/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm hover:bg-white/[0.08] hover:border-white/[0.15] transition-all duration-300 mt-4"
+            className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-surface-overlay border border-surface-border backdrop-blur-sm hover:bg-surface-overlay-hover hover:border-surface-border-hover transition-all duration-300 mt-4"
           >
             <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center">
               <Instagram className="w-3 h-3 text-white" />

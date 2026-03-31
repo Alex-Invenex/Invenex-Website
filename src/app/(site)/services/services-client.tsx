@@ -279,8 +279,8 @@ function ServicesShowcase() {
                     {service.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-xs px-3 py-1.5 rounded-full font-mono text-foreground-muted/70 border border-white/[0.08]"
-                        style={{ background: 'rgba(255,255,255,0.03)' }}
+                        className="text-xs px-3 py-1.5 rounded-full font-mono text-foreground-muted/70 border border-surface-border"
+                        style={{ background: 'var(--color-surface-overlay)' }}
                       >
                         {tag}
                       </span>
@@ -353,8 +353,8 @@ function ServicesShowcase() {
                   {service.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs px-2.5 py-1 rounded-full font-mono text-foreground-muted/70 border border-white/[0.08]"
-                      style={{ background: 'rgba(255,255,255,0.03)' }}
+                      className="text-xs px-2.5 py-1 rounded-full font-mono text-foreground-muted/70 border border-surface-border"
+                      style={{ background: 'var(--color-surface-overlay)' }}
                     >
                       {tag}
                     </span>
@@ -630,13 +630,13 @@ function ProcessSection() {
                   <div
                     className={cn(
                       'relative h-full p-8 md:p-10 rounded-2xl overflow-hidden',
-                      'border border-white/[0.08]',
+                      'border border-surface-border',
                       'hover:border-coral-500/30',
                       'transition-all duration-500',
                       'group'
                     )}
                     style={{
-                      background: 'linear-gradient(135deg, rgba(18,18,18,1) 0%, rgba(14,14,14,1) 100%)',
+                      background: 'linear-gradient(135deg, var(--color-card-gradient-from) 0%, var(--color-card-gradient-to) 100%)',
                     }}
                   >
                     {/* Top accent bar */}
@@ -694,10 +694,10 @@ function ProcessSection() {
               data-proc-mobile-step
               className={cn(
                 'relative p-6 rounded-2xl overflow-hidden',
-                'border border-white/[0.08]'
+                'border border-surface-border'
               )}
               style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)',
+                background: 'linear-gradient(135deg, var(--color-surface-overlay) 0%, transparent 100%)',
               }}
             >
               <div
@@ -831,8 +831,8 @@ function MarqueeRow({
         {repeated.map((tech, i) => (
           <div
             key={`${tech.name}-${i}`}
-            className="flex-shrink-0 flex items-center gap-3 px-5 py-3.5 rounded-xl border border-white/[0.08] transition-all duration-300 hover:border-coral-500/30 hover:shadow-[0_0_20px_rgba(255,107,53,0.08)]"
-            style={{ background: 'linear-gradient(135deg, rgba(18,18,18,1) 0%, rgba(14,14,14,1) 100%)' }}
+            className="flex-shrink-0 flex items-center gap-3 px-5 py-3.5 rounded-xl border border-surface-border transition-all duration-300 hover:border-coral-500/30 hover:shadow-[0_0_20px_rgba(255,107,53,0.08)]"
+            style={{ background: 'linear-gradient(135deg, var(--color-card-gradient-from) 0%, var(--color-card-gradient-to) 100%)' }}
           >
             <div
               className="w-10 h-10 rounded-lg bg-coral-500/10 border border-coral-500/20 flex items-center justify-center flex-shrink-0"

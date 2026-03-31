@@ -126,11 +126,11 @@ function CaterFlowSection() {
 
             {/* Stats */}
             <div className="flex gap-6 mb-8" data-cf="text">
-              <div className="p-4 rounded-xl backdrop-blur-xl border border-white/[0.08]" style={{ background: 'rgba(255,255,255,0.04)' }}>
+              <div className="p-4 rounded-xl backdrop-blur-xl border border-surface-border" style={{ background: 'var(--color-surface-overlay)' }}>
                 <div className="text-2xl font-bold"><AnimatedCounter value={500} suffix="+" /></div>
                 <div className="text-xs text-foreground-muted">Active Users</div>
               </div>
-              <div className="p-4 rounded-xl backdrop-blur-xl border border-white/[0.08]" style={{ background: 'rgba(255,255,255,0.04)' }}>
+              <div className="p-4 rounded-xl backdrop-blur-xl border border-surface-border" style={{ background: 'var(--color-surface-overlay)' }}>
                 <div className="text-2xl font-bold"><AnimatedCounter value={99} suffix="%" /></div>
                 <div className="text-xs text-foreground-muted">Uptime</div>
               </div>
@@ -158,7 +158,7 @@ function CaterFlowSection() {
 
           {/* Image — glassmorphic frame with parallax */}
           <div data-cf="img">
-            <div className="rounded-2xl overflow-hidden relative border border-white/[0.08] backdrop-blur-xl" style={{ background: 'rgba(255,255,255,0.04)' }}>
+            <div className="rounded-2xl overflow-hidden relative border border-surface-border backdrop-blur-xl" style={{ background: 'var(--color-surface-overlay)' }}>
               <div className="aspect-video relative">
                 <Image
                   src="/products/caterflow-cover.png"
@@ -174,7 +174,7 @@ function CaterFlowSection() {
 
         {/* Website preview */}
         <div data-cf="site" className="mt-16">
-          <div className="rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl shadow-black/20">
+          <div className="rounded-2xl overflow-hidden border border-surface-border shadow-2xl shadow-black/20">
             <Image
               src="/products/caterflow-website.png"
               alt="CaterFlow website — Take control of your food business"
@@ -230,7 +230,7 @@ function ERPSection() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Glassmorphic card with atmospheric orbs */}
           <div data-erp className="order-2 lg:order-1">
-            <div className="rounded-2xl overflow-hidden relative backdrop-blur-xl border border-white/[0.08]" style={{ background: 'rgba(255,255,255,0.04)' }}>
+            <div className="rounded-2xl overflow-hidden relative backdrop-blur-xl border border-surface-border" style={{ background: 'var(--color-surface-overlay)' }}>
               <div className="absolute inset-0" aria-hidden="true">
                 <div className="absolute top-0 left-0 rounded-full blur-[80px]" style={{ width: 300, height: 300, background: 'rgba(255,106,55,0.08)' }} />
                 <div className="absolute bottom-0 right-0 rounded-full blur-[60px]" style={{ width: 200, height: 200, background: 'rgba(255,106,55,0.05)' }} />

@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { defaultMetadata } from "@/lib/metadata";
 import { OrganizationSchema, WebSiteSchema } from "@/components/seo";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./globals.css";
 
 const inter = Inter({
@@ -34,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`}>
+    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
       <head>
         {/* Preconnect to external domains for performance */}
         <link rel="preconnect" href="https://cdn.sanity.io" />
@@ -47,12 +48,14 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-background text-foreground font-sans min-h-dvh">
-        <OrganizationSchema />
-        <WebSiteSchema />
-        {children}
-        {/* Vercel Analytics & Speed Insights (AC1: Lighthouse Scores) */}
-        <Analytics />
-        <SpeedInsights />
+        <ThemeProvider>
+          <OrganizationSchema />
+          <WebSiteSchema />
+          {children}
+          {/* Vercel Analytics & Speed Insights (AC1: Lighthouse Scores) */}
+          <Analytics />
+          <SpeedInsights />
+        </ThemeProvider>
       </body>
     </html>
   );

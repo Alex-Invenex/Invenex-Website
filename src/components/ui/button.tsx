@@ -33,7 +33,7 @@ export function Button({
     variant === "primary" &&
       "bg-gradient-to-r from-[var(--color-coral-500)] to-[var(--color-coral-700)] text-white font-semibold hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,107,53,0.5)] shadow-[0_0_20px_rgba(255,107,53,0.3)]",
     variant === "secondary" &&
-      "bg-white/5 border border-white/20 text-foreground hover:bg-white/10 hover:border-white/30 hover:scale-[1.02] backdrop-blur-sm",
+      "bg-surface-overlay border border-surface-border-hover text-foreground hover:bg-surface-overlay-hover hover:border-surface-border-hover hover:scale-[1.02] backdrop-blur-sm",
     variant === "ghost" &&
       "bg-transparent text-foreground hover:bg-background-secondary",
     variant === "link" &&

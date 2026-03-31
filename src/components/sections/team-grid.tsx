@@ -101,7 +101,7 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${member.name} LinkedIn profile`}
-            className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 backdrop-blur-sm rounded-full p-2.5 hover:bg-background border border-white/10"
+            className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-background/80 backdrop-blur-sm rounded-full p-2.5 hover:bg-background border border-surface-border"
           >
             <Linkedin className="w-5 h-5" />
           </a>

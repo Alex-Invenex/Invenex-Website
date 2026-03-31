@@ -48,11 +48,11 @@ export function Footer() {
   return (
     <footer className="relative bg-background overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#FF6B35]/5 rounded-full blur-[150px]" />
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#FF6B35]/[0.03] rounded-full blur-[120px]" />
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-coral-500/5 rounded-full blur-[150px]" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-coral-500/[0.03] rounded-full blur-[120px]" />
 
       {/* Top gradient border */}
-      <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="h-px bg-gradient-to-r from-transparent via-surface-border to-transparent" />
 
       <div className="container mx-auto px-5 sm:px-6 py-8 sm:py-16 relative z-10">
         {/* Main Footer Grid */}
@@ -81,14 +81,14 @@ export function Footer() {
               {socialLinks.map((link) => {
                 const Icon = iconMap[link.icon];
                 const gradientClass =
-                  socialGradients[link.icon] || "hover:bg-white/10";
+                  socialGradients[link.icon] || "hover:bg-surface-overlay-hover";
                 return (
                   <motion.a
                     key={link.name}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`w-9 h-9 flex items-center justify-center rounded-lg bg-white/[0.03] border border-white/[0.08] text-foreground-muted transition-all duration-300 ${gradientClass}`}
+                    className={`w-9 h-9 flex items-center justify-center rounded-lg bg-surface-overlay border border-surface-border text-foreground-muted transition-all duration-300 ${gradientClass}`}
                     aria-label={link.name}
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
@@ -107,7 +107,7 @@ export function Footer() {
           {/* Services Links */}
           <div className="col-span-1 lg:col-span-2">
             <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-coral-500" />
               Services
             </h3>
             <ul className="space-y-1.5 sm:space-y-2">
@@ -128,7 +128,7 @@ export function Footer() {
           {/* Company + Resources Links */}
           <div className="col-span-1 lg:col-span-2">
             <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-coral-500" />
               Company
             </h3>
             <ul className="space-y-1.5 sm:space-y-2">
@@ -147,7 +147,7 @@ export function Footer() {
 
             {/* Resources Links */}
             <h3 className="text-sm font-semibold text-foreground mb-3 mt-4 sm:mt-5 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-coral-500" />
               Resources
             </h3>
             <ul className="space-y-1.5 sm:space-y-2">
@@ -180,17 +180,17 @@ export function Footer() {
           {/* Contact Info - Full width on mobile, 4 cols on desktop */}
           <div className="col-span-2 lg:col-span-4">
             <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-coral-500" />
               Get in Touch
             </h3>
             {/* Compact row on mobile, stacked cards on desktop */}
             <div className="flex gap-2 sm:hidden">
               <a
                 href={`mailto:${contactInfo.email}`}
-                className="flex-1 flex items-center gap-2 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.05] active:bg-white/[0.05] transition-colors"
+                className="flex-1 flex items-center gap-2 p-2.5 rounded-xl bg-surface-overlay border border-surface-border active:bg-surface-overlay transition-colors"
               >
-                <div className="w-8 h-8 shrink-0 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
-                  <Mail className="w-3.5 h-3.5 text-[#FF6B35]" />
+                <div className="w-8 h-8 shrink-0 rounded-lg bg-coral-500/10 border border-coral-500/20 flex items-center justify-center">
+                  <Mail className="w-3.5 h-3.5 text-coral-500" />
                 </div>
                 <span className="text-xs text-foreground-muted truncate">
                   {contactInfo.email}
@@ -198,17 +198,17 @@ export function Footer() {
               </a>
               <a
                 href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.05] active:bg-white/[0.05] transition-colors"
+                className="flex items-center gap-2 p-2.5 rounded-xl bg-surface-overlay border border-surface-border active:bg-surface-overlay transition-colors"
               >
-                <div className="w-8 h-8 shrink-0 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
-                  <Phone className="w-3.5 h-3.5 text-[#FF6B35]" />
+                <div className="w-8 h-8 shrink-0 rounded-lg bg-coral-500/10 border border-coral-500/20 flex items-center justify-center">
+                  <Phone className="w-3.5 h-3.5 text-coral-500" />
                 </div>
               </a>
               <a
                 href={`https://wa.me/${whatsappNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.05] active:bg-white/[0.05] transition-colors"
+                className="flex items-center gap-2 p-2.5 rounded-xl bg-surface-overlay border border-surface-border active:bg-surface-overlay transition-colors"
               >
                 <div className="w-8 h-8 shrink-0 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center">
                   <MessageCircle className="w-3.5 h-3.5 text-green-400" />
@@ -219,11 +219,11 @@ export function Footer() {
             <div className="hidden sm:grid sm:grid-cols-3 lg:grid-cols-1 gap-2.5">
               <motion.a
                 href={`mailto:${contactInfo.email}`}
-                className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 group"
+                className="flex items-center gap-3 p-3 rounded-xl bg-surface-overlay border border-surface-border hover:bg-surface-overlay-hover hover:border-surface-border-hover transition-all duration-300 group"
                 whileHover={{ x: 5 }}
               >
-                <div className="w-9 h-9 shrink-0 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
-                  <Mail className="w-4 h-4 text-[#FF6B35]" />
+                <div className="w-9 h-9 shrink-0 rounded-lg bg-coral-500/10 border border-coral-500/20 flex items-center justify-center">
+                  <Mail className="w-4 h-4 text-coral-500" />
                 </div>
                 <span className="text-sm text-foreground-muted group-hover:text-foreground transition-colors truncate">
                   {contactInfo.email}
@@ -232,11 +232,11 @@ export function Footer() {
 
               <motion.a
                 href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
-                className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 group"
+                className="flex items-center gap-3 p-3 rounded-xl bg-surface-overlay border border-surface-border hover:bg-surface-overlay-hover hover:border-surface-border-hover transition-all duration-300 group"
                 whileHover={{ x: 5 }}
               >
-                <div className="w-9 h-9 shrink-0 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/20 flex items-center justify-center">
-                  <Phone className="w-4 h-4 text-[#FF6B35]" />
+                <div className="w-9 h-9 shrink-0 rounded-lg bg-coral-500/10 border border-coral-500/20 flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-coral-500" />
                 </div>
                 <span className="text-sm text-foreground-muted group-hover:text-foreground transition-colors">
                   {contactInfo.phone}
@@ -247,7 +247,7 @@ export function Footer() {
                 href={`https://wa.me/${whatsappNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-green-500/20 transition-all duration-300 group"
+                className="flex items-center gap-3 p-3 rounded-xl bg-surface-overlay border border-surface-border hover:bg-surface-overlay-hover hover:border-green-500/20 transition-all duration-300 group"
                 whileHover={{ x: 5 }}
               >
                 <div className="w-9 h-9 shrink-0 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center">
@@ -262,7 +262,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-6 sm:mt-12 pt-5 sm:pt-8 border-t border-white/[0.05]">
+        <div className="mt-6 sm:mt-12 pt-5 sm:pt-8 border-t border-surface-border">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
             <p className="text-xs sm:text-sm text-foreground-muted flex items-center gap-1">
               &copy; {currentYear} {siteConfig.name}. Made with
@@ -285,7 +285,7 @@ export function Footer() {
               </Link>
               <motion.button
                 onClick={scrollToTop}
-                className="w-9 h-9 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-foreground-muted hover:text-foreground hover:bg-white/[0.08] transition-all duration-300"
+                className="w-9 h-9 rounded-xl bg-surface-overlay border border-surface-border flex items-center justify-center text-foreground-muted hover:text-foreground hover:bg-surface-overlay-hover transition-all duration-300"
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label="Back to top"

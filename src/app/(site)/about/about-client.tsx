@@ -156,8 +156,8 @@ function StorySection() {
           {/* Stats card — glassmorphic */}
           <div
             data-story="stats"
-            className="rounded-2xl overflow-hidden relative backdrop-blur-xl border border-white/[0.08]"
-            style={{ background: 'rgba(255,255,255,0.04)' }}
+            className="rounded-2xl overflow-hidden relative backdrop-blur-xl border border-surface-border"
+            style={{ background: 'var(--color-surface-overlay)' }}
           >
             <div className="absolute inset-0" aria-hidden="true">
               <div className="absolute top-0 right-0 rounded-full blur-[80px]" style={{ width: 300, height: 300, background: 'rgba(255,106,55,0.08)' }} />
@@ -248,7 +248,7 @@ function ValuesSection() {
             const Icon = value.icon
             return (
               <GSAPStaggerItem key={value.title}>
-                <div className="text-center p-6 rounded-2xl backdrop-blur-xl border border-white/[0.08] transition-all duration-300 hover:border-coral-500/20 group relative overflow-hidden" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                <div className="text-center p-6 rounded-2xl backdrop-blur-xl border border-surface-border transition-all duration-300 hover:border-coral-500/20 group relative overflow-hidden" style={{ background: 'var(--color-surface-overlay)' }}>
                   {/* Hover accent bar */}
                   <div className="absolute top-0 left-0 right-0 h-0.5 bg-coral-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                   <div className="w-14 h-14 rounded-xl bg-coral-500/10 border border-coral-500/20 flex items-center justify-center mx-auto mb-4">
@@ -345,13 +345,13 @@ function TeamMemberCard({ member }: { member: typeof team[number] }) {
           }}
           aria-hidden="true"
         >
-          <div className="w-full h-full rounded-2xl bg-[#141414]" />
+          <div className="w-full h-full rounded-2xl bg-background-secondary" />
         </div>
 
         {/* Image container */}
         <div className="absolute inset-[1px] rounded-2xl overflow-hidden">
           {isLoading && !hasError && (
-            <div className="absolute inset-0 bg-gradient-to-br from-coral-500/10 via-[#141414] to-coral-400/10 animate-pulse" />
+            <div className="absolute inset-0 bg-gradient-to-br from-coral-500/10 via-background-secondary to-coral-400/10 animate-pulse" />
           )}
 
           {hasError ? (
@@ -378,8 +378,8 @@ function TeamMemberCard({ member }: { member: typeof team[number] }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${member.name} LinkedIn profile`}
-                className="opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 rounded-full p-2.5 border border-white/[0.15]"
-                style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(12px)' }}
+                className="opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 rounded-full p-2.5 border border-surface-border-hover"
+                style={{ background: 'var(--color-surface-overlay)', backdropFilter: 'blur(12px)' }}
               >
                 <Linkedin className="w-5 h-5" />
               </a>

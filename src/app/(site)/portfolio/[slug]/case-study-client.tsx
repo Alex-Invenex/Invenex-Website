@@ -203,11 +203,11 @@ function CaseStudyHero({ project }: { project: CaseStudyProject }) {
         {/* Meta strip */}
         <div data-csh="meta" className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-foreground-muted">
           <Badge data-testid="case-study-category">{project.category}</Badge>
-          <span className="hidden sm:inline h-4 w-px bg-white/10" />
+          <span className="hidden sm:inline h-4 w-px bg-surface-overlay-hover" />
           <span>{project.client}</span>
           {project.url && (
             <>
-              <span className="hidden sm:inline h-4 w-px bg-white/10" />
+              <span className="hidden sm:inline h-4 w-px bg-surface-overlay-hover" />
               <a href={project.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
                 Visit Live Site <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
               </a>
@@ -221,7 +221,7 @@ function CaseStudyHero({ project }: { project: CaseStudyProject }) {
       {/* Full-width hero image with clip-path reveal */}
       {project.image && (
         <div data-csh="img" className="container mx-auto px-6 md:px-12 mt-12 relative z-10" style={{ clipPath: 'inset(8%)' }}>
-          <div className="aspect-video rounded-2xl overflow-hidden relative border border-white/[0.08]">
+          <div className="aspect-video rounded-2xl overflow-hidden relative border border-surface-border">
             <Image
               src={project.image}
               alt={`${project.title} project screenshot`}
@@ -327,8 +327,8 @@ function ResultsSection({ results }: { results: CaseStudyProject['results'] }) {
               <GSAPStaggerItem key={result.label}>
                 <div
                   data-testid="result-metric"
-                  className="group p-10 text-center rounded-2xl border border-white/[0.08] transition-all duration-300 hover:border-coral-500/20 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(255,106,55,0.1)] relative overflow-hidden"
-                  style={{ background: 'linear-gradient(135deg, rgba(18,18,18,1) 0%, rgba(14,14,14,1) 100%)' }}
+                  className="group p-10 text-center rounded-2xl border border-surface-border transition-all duration-300 hover:border-coral-500/20 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(255,106,55,0.1)] relative overflow-hidden"
+                  style={{ background: 'linear-gradient(135deg, var(--color-card-gradient-from) 0%, var(--color-card-gradient-to) 100%)' }}
                 >
                   {/* Coral gradient accent bar */}
                   <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, var(--color-coral-500) 0%, var(--color-coral-400) 50%, transparent 100%)' }} />
@@ -415,8 +415,8 @@ function TechSection({ technologies }: { technologies: string[] }) {
             <GSAPStaggerItem key={tech}>
               <div
                 data-testid="tech-badge"
-                className="group p-5 rounded-2xl border border-white/[0.08] text-center font-medium text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground hover:shadow-[0_0_25px_rgba(255,106,55,0.08)] relative overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, rgba(18,18,18,1) 0%, rgba(14,14,14,1) 100%)' }}
+                className="group p-5 rounded-2xl border border-surface-border text-center font-medium text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground hover:shadow-[0_0_25px_rgba(255,106,55,0.08)] relative overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, var(--color-card-gradient-from) 0%, var(--color-card-gradient-to) 100%)' }}
               >
                 {/* Subtle top accent on hover */}
                 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(90deg, transparent, var(--color-coral-500), transparent)' }} />
@@ -489,7 +489,7 @@ function TestimonialSection({ testimonial }: { testimonial: NonNullable<CaseStud
         <h2 id="testimonial-heading" className="sr-only">Client Testimonial</h2>
         <div className="max-w-4xl mx-auto">
           {/* Glassmorphic card */}
-          <div className="rounded-2xl border border-white/[0.08] p-8 md:p-12 lg:p-16 text-center relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)' }}>
+          <div className="rounded-2xl border border-surface-border p-8 md:p-12 lg:p-16 text-center relative overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--color-surface-overlay) 0%, transparent 100%)' }}>
             {/* Top accent */}
             <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, var(--color-coral-500), transparent)', opacity: 0.4 }} />
 
@@ -529,7 +529,7 @@ function RelatedSection({ projects, category }: { projects: CaseStudyProject[]; 
           {projects.map((relatedProject) => (
             <GSAPStaggerItem key={relatedProject.id}>
               <Link href={`/portfolio/${relatedProject.slug}`}>
-                <div className="rounded-xl overflow-hidden backdrop-blur-xl border border-white/[0.08] transition-all duration-300 hover:border-coral-500/30 hover:shadow-[0_0_30px_rgba(255,106,55,0.08)] group" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                <div className="rounded-xl overflow-hidden backdrop-blur-xl border border-surface-border transition-all duration-300 hover:border-coral-500/30 hover:shadow-[0_0_30px_rgba(255,106,55,0.08)] group" style={{ background: 'var(--color-surface-overlay)' }}>
                   <div className="aspect-video bg-background-tertiary relative overflow-hidden">
                     <Image
                       src={relatedProject.image}

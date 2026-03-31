@@ -141,7 +141,7 @@ export function ProductsPreview() {
         {/* CaterFlow — Full-width showcase */}
         <div
           data-prod="showcase"
-          className="relative rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-coral-500/20 transition-all duration-500 mb-8" data-animate
+          className="relative rounded-2xl bg-surface-overlay border border-surface-border overflow-hidden hover:border-coral-500/20 transition-all duration-500 mb-8" data-animate
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Left: Content */}
@@ -225,7 +225,7 @@ export function ProductsPreview() {
                 <div
                   key={metric.label}
                   data-prod="metric"
-                  className={`absolute opacity-0 backdrop-blur-xl bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 shadow-xl ${
+                  className={`absolute opacity-0 backdrop-blur-xl bg-surface-overlay border border-surface-border rounded-xl px-4 py-3 shadow-xl ${
                     i === 0
                       ? "top-4 right-4 lg:top-8 lg:right-8"
                       : i === 1
@@ -246,7 +246,7 @@ export function ProductsPreview() {
         {/* ERP — Coming Soon teaser */}
         <div
           data-prod="erp"
-          className="relative rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden p-8 md:p-10 hover:border-amber-500/20 transition-all duration-500" data-animate
+          className="relative rounded-2xl bg-surface-overlay border border-surface-border overflow-hidden p-8 md:p-10 hover:border-amber-500/20 transition-all duration-500" data-animate
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="flex items-start gap-4">
@@ -282,7 +282,7 @@ export function ProductsPreview() {
         <div className="text-center mt-12">
           <Link
             href="/products"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-foreground hover:bg-white/10 hover:border-white/20 transition-all duration-300 group"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-surface-overlay border border-surface-border text-foreground hover:bg-surface-overlay-hover hover:border-surface-border-hover transition-all duration-300 group"
           >
             Explore all products
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

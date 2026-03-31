@@ -76,7 +76,7 @@ function PluginCard({
       transition={{ delay: index * 0.1 }}
       className="group"
     >
-      <div className="relative h-full rounded-2xl bg-white/[0.02] border border-white/[0.05] overflow-hidden hover:border-coral-500/20 hover:shadow-[0_0_30px_rgba(255,106,55,0.1)] transition-all duration-500">
+      <div className="relative h-full rounded-2xl bg-surface-overlay border border-surface-border overflow-hidden hover:border-coral-500/20 hover:shadow-[0_0_30px_rgba(255,106,55,0.1)] transition-all duration-500">
         {/* Content */}
         <div className="relative p-6">
           {/* Header */}
@@ -89,7 +89,7 @@ function PluginCard({
             </motion.div>
 
             {/* Version Badge */}
-            <span className="text-xs px-2 py-1 rounded-full bg-white/5 border border-white/10 text-foreground-muted">
+            <span className="text-xs px-2 py-1 rounded-full bg-surface-overlay border border-surface-border text-foreground-muted">
               v{plugin.version}
             </span>
           </div>
@@ -105,7 +105,7 @@ function PluginCard({
             {plugin.features.map((feature) => (
               <span
                 key={feature}
-                className="text-xs px-2 py-1 rounded-full bg-white/5 text-foreground-muted"
+                className="text-xs px-2 py-1 rounded-full bg-surface-overlay text-foreground-muted"
               >
                 {feature}
               </span>
@@ -181,7 +181,7 @@ export function WordPressPlugins() {
           </p>
           <a
             href="/plugins"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-foreground hover:bg-white/10 hover:border-white/20 transition-all duration-300 group"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-surface-overlay border border-surface-border text-foreground hover:bg-surface-overlay-hover hover:border-surface-border-hover transition-all duration-300 group"
           >
             View all plugins
             <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

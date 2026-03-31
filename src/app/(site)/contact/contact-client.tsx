@@ -136,8 +136,8 @@ function FormSection() {
           {/* Quote Form — glassmorphic wrapper */}
           <div
             data-cf="form"
-            className="rounded-2xl p-6 md:p-8 backdrop-blur-xl border border-white/[0.08]"
-            style={{ background: 'rgba(255,255,255,0.04)' }}
+            className="rounded-2xl p-6 md:p-8 backdrop-blur-xl border border-surface-border"
+            style={{ background: 'var(--color-surface-overlay)' }}
           >
             <QuoteForm />
           </div>
@@ -158,8 +158,8 @@ function FormSection() {
                 <GSAPStaggerItem key={item.label}>
                   <Wrapper
                     {...wrapperProps}
-                    className="flex items-start gap-4 p-5 rounded-xl backdrop-blur-xl border border-white/[0.08] transition-all duration-300 hover:border-coral-500/20 group"
-                    style={{ background: 'rgba(255,255,255,0.04)' }}
+                    className="flex items-start gap-4 p-5 rounded-xl backdrop-blur-xl border border-surface-border transition-all duration-300 hover:border-coral-500/20 group"
+                    style={{ background: 'var(--color-surface-overlay)' }}
                     data-testid="contact-info"
                   >
                     <div className="w-10 h-10 rounded-lg bg-coral-500/10 border border-coral-500/20 flex items-center justify-center shrink-0 group-hover:bg-coral-500/20 transition-colors duration-300">

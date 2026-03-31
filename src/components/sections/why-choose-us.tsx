@@ -47,7 +47,7 @@ function StepCard({
       <div
         className={cn(
           "relative h-full p-8 md:p-10 rounded-2xl overflow-hidden",
-          "border border-white/[0.08]",
+          "border border-surface-border",
           "backdrop-blur-sm",
           "hover:border-coral-500/30",
           "transition-all duration-500",
@@ -55,7 +55,7 @@ function StepCard({
         )}
         style={{
           background:
-            "linear-gradient(135deg, rgba(18,18,18,1) 0%, rgba(14,14,14,1) 100%)",
+            "linear-gradient(135deg, var(--color-card-gradient-from) 0%, var(--color-card-gradient-to) 100%)",
         }}
       >
         {/* Top accent bar — visible on hover */}
@@ -81,7 +81,7 @@ function StepCard({
           {step.number}
         </span>
 
-        <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight mb-3 md:mb-4 group-hover:text-white transition-colors duration-300">
+        <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight mb-3 md:mb-4 group-hover:text-foreground transition-colors duration-300">
           {step.title}
         </h3>
 
@@ -329,7 +329,7 @@ export function WhyChooseUs() {
             >
               {/* Active step title */}
               <h3
-                className="text-2xl lg:text-3xl font-semibold tracking-tight text-white mb-3 transition-all duration-300"
+                className="text-2xl lg:text-3xl font-semibold tracking-tight text-foreground mb-3 transition-all duration-300"
                 data-hw-step-title
               >
                 {steps[activeStep].title}
@@ -398,12 +398,12 @@ export function WhyChooseUs() {
               data-mobile-step
               className={cn(
                 "relative p-6 rounded-2xl overflow-hidden",
-                "border border-white/[0.08]",
+                "border border-surface-border",
                 "backdrop-blur-sm"
               )}
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+                  "linear-gradient(135deg, var(--color-surface-overlay) 0%, transparent 100%)",
               }}
             >
               {/* Top accent bar */}

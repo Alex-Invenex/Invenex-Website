@@ -31,7 +31,7 @@ export function BentoProjectCard({
       <article
         className={cn(
           "group relative h-full overflow-hidden rounded-2xl",
-          "border border-white/[0.05] bg-white/[0.02]",
+          "border border-surface-border bg-surface-overlay",
           "transition-all duration-300",
           // Hover effects with coral glow
           "hover:scale-[1.02] hover:border-coral-500/50",
@@ -104,7 +104,7 @@ export function BentoProjectCard({
           {size === "small" && (
             <>
               <h3
-                className="font-semibold text-sm group-hover:text-white transition-colors line-clamp-1"
+                className="font-semibold text-sm group-hover:text-foreground transition-colors line-clamp-1"
                 data-testid="bento-card-title"
               >
                 {project.title}
@@ -124,7 +124,7 @@ export function BentoProjectCard({
             <>
               <div className="flex items-start justify-between gap-2">
                 <h3
-                  className="font-semibold text-base group-hover:text-white transition-colors line-clamp-1"
+                  className="font-semibold text-base group-hover:text-foreground transition-colors line-clamp-1"
                   data-testid="bento-card-title"
                 >
                   {project.title}
@@ -150,7 +150,7 @@ export function BentoProjectCard({
                 {project.category}
               </Badge>
               <h3
-                className="font-semibold text-lg group-hover:text-white transition-colors"
+                className="font-semibold text-lg group-hover:text-foreground transition-colors"
                 data-testid="bento-card-title"
               >
                 {project.title}
@@ -172,7 +172,7 @@ export function BentoProjectCard({
                 {project.category}
               </Badge>
               <h3
-                className="font-semibold text-xl group-hover:text-white transition-colors"
+                className="font-semibold text-xl group-hover:text-foreground transition-colors"
                 data-testid="bento-card-title"
               >
                 {project.title}

@@ -86,7 +86,7 @@ function JobHero({ job, slug }: { job: JobDetail; slug: string }) {
             { icon: Briefcase, text: job.type },
             { icon: BarChart3, text: job.experience },
           ].map(({ icon: Icon, text }) => (
-            <span key={text} data-jh="meta" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-xl border border-white/[0.08] text-sm text-foreground-muted" style={{ background: 'rgba(255,255,255,0.04)' }}>
+            <span key={text} data-jh="meta" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-xl border border-surface-border text-sm text-foreground-muted" style={{ background: 'var(--color-surface-overlay)' }}>
               <Icon className="w-4 h-4 text-coral-400" aria-hidden="true" />{text}
             </span>
           ))}
@@ -183,8 +183,8 @@ function JobContent({ job, slug, benefits }: { job: JobDetail; slug: string; ben
                     <GSAPStaggerItem key={tech}>
                       <span
                         data-testid="tech-badge"
-                        className="inline-block px-3 py-1.5 rounded-full backdrop-blur-xl border border-white/[0.08] text-sm text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground"
-                        style={{ background: 'rgba(255,255,255,0.04)' }}
+                        className="inline-block px-3 py-1.5 rounded-full backdrop-blur-xl border border-surface-border text-sm text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground"
+                        style={{ background: 'var(--color-surface-overlay)' }}
                       >
                         {tech}
                       </span>
@@ -197,7 +197,7 @@ function JobContent({ job, slug, benefits }: { job: JobDetail; slug: string; ben
 
           {/* Sidebar — glassmorphic sticky card */}
           <div className="lg:col-span-1" data-jc>
-            <div className="sticky top-24 rounded-2xl p-6 backdrop-blur-xl border border-white/[0.08]" style={{ background: 'rgba(255,255,255,0.04)' }}>
+            <div className="sticky top-24 rounded-2xl p-6 backdrop-blur-xl border border-surface-border" style={{ background: 'var(--color-surface-overlay)' }}>
               <h3 className="font-semibold mb-4">Ready to Apply?</h3>
               <p className="text-sm text-foreground-muted mb-6">
                 Submit your application and we&apos;ll get back to you within a week.
@@ -206,7 +206,7 @@ function JobContent({ job, slug, benefits }: { job: JobDetail; slug: string; ben
                 <Link href={`/careers/${slug}/apply`}>Apply Now</Link>
               </Button>
 
-              <div className="border-t border-white/[0.08] pt-6">
+              <div className="border-t border-surface-border pt-6">
                 <h4 className="font-semibold mb-3">Why Join Invenex?</h4>
                 <ul className="space-y-2 text-sm text-foreground-muted">
                   {benefits.map((benefit) => (
