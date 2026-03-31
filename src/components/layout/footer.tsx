@@ -67,8 +67,9 @@ export function Footer() {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               />
-              <span className="text-xl font-bold text-gradient">
-                {siteConfig.name}
+              <span className="text-xl font-bold">
+                <span className="text-gradient">Invenex</span>{" "}
+                <span className="text-foreground">Solutions</span>
               </span>
             </Link>
 

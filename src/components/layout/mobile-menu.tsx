@@ -170,8 +170,9 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   alt="Invenex"
                   className="w-8 h-8 logo-themed"
                 />
-                <span className="text-xl font-bold text-gradient">
-                  {siteConfig.name}
+                <span className="text-xl font-bold">
+                  <span className="text-gradient">Invenex</span>{" "}
+                  <span className="text-foreground">Solutions</span>
                 </span>
               </Link>
               <div className="flex items-center gap-2">

@@ -116,7 +116,30 @@ export function HeroV2() {
           1.4
         )
 
+        // 3D Sphere — dramatic scale-in
+        tl.fromTo(
+          '[data-a="hero-sphere"]',
+          { opacity: 0, scale: 0.3 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 1.4,
+            ease: 'power2.out',
+          },
+          0.3
+        )
+
         // ── Continuous loops ──
+        // Sphere floating
+        gsap.to('[data-a="hero-sphere"]', {
+          y: -15,
+          duration: 4,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+          delay: 2,
+        })
+
         // Gradient orbs subtle breathing
         gsap.to('[data-a="tunnel-glow"]', {
           scale: 1.06,
@@ -150,9 +173,9 @@ export function HeroV2() {
             }
           )
 
-          // Tunnel fades on scroll
+          // Tunnel + sphere fades on scroll
           gsap.fromTo(
-            '[data-a="tunnel-glow"], [data-a="tunnel-haze"]',
+            '[data-a="tunnel-glow"], [data-a="tunnel-haze"], [data-a="hero-sphere"]',
             { opacity: 1, y: 0 },
             {
               opacity: 0.15,
@@ -344,6 +367,36 @@ export function HeroV2() {
               background:
                 'radial-gradient(ellipse at 50% 20%, rgba(255,106,55,0.08) 0%, rgba(255,80,40,0.03) 40%, transparent 70%)',
               filter: 'blur(60px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 8: 3D Coral Sphere — hero focal point */}
+          <div
+            data-a="hero-sphere"
+            style={{
+              position: 'absolute',
+              top: '20%',
+              right: '12%',
+              width: 'clamp(280px, 28vw, 420px)',
+              height: 'clamp(280px, 28vw, 420px)',
+              borderRadius: '50%',
+              background: `
+                radial-gradient(circle at 30% 30%,
+                  rgba(255, 220, 180, 0.95) 0%,
+                  rgba(255, 160, 100, 0.9) 15%,
+                  rgba(255, 106, 55, 1) 35%,
+                  rgba(220, 70, 25, 0.95) 60%,
+                  rgba(140, 40, 10, 0.9) 85%,
+                  rgba(80, 20, 5, 0.85) 100%
+                )
+              `,
+              boxShadow: `
+                0 0 120px rgba(255, 106, 55, 0.35),
+                0 0 60px rgba(255, 106, 55, 0.2),
+                inset -20px -20px 40px rgba(0, 0, 0, 0.3),
+                inset 10px 10px 30px rgba(255, 200, 160, 0.15)
+              `,
               opacity: 0,
             }}
           />
