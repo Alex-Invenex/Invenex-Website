@@ -174,15 +174,16 @@ export function WhyChooseUs() {
 
         mm.add("(min-width: 768px)", () => {
           const cards = track.querySelectorAll("[data-step]");
-          const totalWidth = track.scrollWidth - window.innerWidth * 0.65;
+
+          const getTotalWidth = () => track.scrollWidth - track.parentElement!.clientWidth;
 
           const scrollTween = gsap.to(track, {
-            x: -totalWidth,
+            x: () => -getTotalWidth(),
             ease: "none",
             scrollTrigger: {
               trigger: section,
               start: "top top",
-              end: `+=${totalWidth * 1.1}`,
+              end: () => `+=${getTotalWidth() * 1.1}`,
               pin: true,
               pinSpacing: true,
               scrub: 0.8,
@@ -190,11 +191,11 @@ export function WhyChooseUs() {
             },
           });
 
-          // Match pin-spacer background to section so there's no visible seam
+          // Match pin-spacer background to section — use CSS variable so it adapts to theme changes
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const spacer = (scrollTween.scrollTrigger as any)?.spacer as HTMLElement | undefined;
           if (spacer) {
-            spacer.style.backgroundColor = getComputedStyle(section).backgroundColor;
+            spacer.style.backgroundColor = 'var(--color-background)';
           }
 
           // Per-card entrance + step counter update
@@ -241,7 +242,7 @@ export function WhyChooseUs() {
                 scrollTrigger: {
                   trigger: section,
                   start: "top top",
-                  end: `+=${totalWidth * 1.1}`,
+                  end: () => `+=${getTotalWidth() * 1.1}`,
                   scrub: 0.8,
                 },
               }
@@ -268,11 +269,16 @@ export function WhyChooseUs() {
           );
         });
 
-        // Recalculate all trigger positions after Services' pin-spacer exists
-        requestAnimationFrame(() => {
+        // Recalculate all trigger positions after layout settles.
+        // A 500ms delay is needed because this component is dynamically imported
+        // (ssr: false) and other pinned sections (e.g. Services) may still be
+        // initialising their own pin-spacers.
+        const refreshTimer = setTimeout(() => {
           ScrollTrigger.sort();
           ScrollTrigger.refresh();
-        });
+        }, 500);
+
+        return () => clearTimeout(refreshTimer);
       };
       init();
     },
