@@ -181,7 +181,7 @@ export function ECommerceCard() {
         <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
         <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
         <div className="ml-4 flex-1 h-5 rounded-md bg-white/[0.04] flex items-center px-2">
-          <span className="text-[8px] text-foreground-muted/30 font-mono">shop.example.com</span>
+          <span className="text-[8px] text-foreground-muted/30 font-mono">store.yourbrand.com</span>
         </div>
       </div>
       {/* Product grid */}
