@@ -250,153 +250,169 @@ export function HeroV2() {
         aria-hidden="true"
         style={{ overflow: 'clip' }}
       >
-        {/* Parallax target wraps all gradient orbs */}
+        {/* Parallax target wraps all layers */}
         <div data-p="tunnel" data-hero-orbs>
-          {/* Layer 1: Atmospheric bleed — huge, very subtle, creates atmosphere */}
+
+          {/* === Massive ambient glow — sets the mood === */}
           <div
             data-a="tunnel-haze"
             style={{
               position: 'absolute',
-              top: '-10%',
-              right: '-15%',
-              width: '900px',
-              height: '900px',
+              top: '-20%',
+              right: '-20%',
+              width: '1100px',
+              height: '1100px',
               borderRadius: '50%',
               background:
-                'radial-gradient(circle, rgba(255,106,55,0.1) 0%, rgba(255,60,30,0.04) 35%, transparent 65%)',
-              filter: 'blur(100px)',
+                'radial-gradient(circle, rgba(255,106,55,0.18) 0%, rgba(255,60,30,0.06) 40%, transparent 70%)',
+              filter: 'blur(120px)',
               opacity: 0,
             }}
           />
 
-          {/* Layer 2: Primary orb — large warm coral, the main mass */}
-          <div
-            data-a="tunnel-glow"
-            style={{
-              position: 'absolute',
-              top: '18%',
-              right: '5%',
-              width: '550px',
-              height: '550px',
-              borderRadius: '50%',
-              background:
-                'radial-gradient(circle, rgba(255,106,55,0.45) 0%, rgba(255,80,40,0.18) 40%, transparent 70%)',
-              filter: 'blur(80px)',
-              opacity: 0,
-            }}
-          />
-
-          {/* Layer 3: Secondary orb — deeper orange, offset upward */}
-          <div
-            data-a="tunnel-glow"
-            style={{
-              position: 'absolute',
-              top: '8%',
-              right: '18%',
-              width: '400px',
-              height: '400px',
-              borderRadius: '50%',
-              background:
-                'radial-gradient(circle, rgba(255,140,60,0.4) 0%, rgba(255,100,40,0.12) 50%, transparent 75%)',
-              filter: 'blur(60px)',
-              opacity: 0,
-            }}
-          />
-
-          {/* Layer 4: Hot core — bright white-coral center, tight blur */}
-          <div
-            data-a="tunnel-glow"
-            style={{
-              position: 'absolute',
-              top: '28%',
-              right: '15%',
-              width: '220px',
-              height: '220px',
-              borderRadius: '50%',
-              background:
-                'radial-gradient(circle, rgba(255,220,180,0.7) 0%, rgba(255,160,100,0.35) 30%, rgba(255,106,55,0.12) 60%, transparent 100%)',
-              filter: 'blur(35px)',
-              opacity: 0,
-            }}
-          />
-
-          {/* Layer 5: Cool contrast — muted violet for depth & vibrancy */}
-          <div
-            data-a="tunnel-haze"
-            style={{
-              position: 'absolute',
-              top: '55%',
-              right: '25%',
-              width: '380px',
-              height: '380px',
-              borderRadius: '50%',
-              background:
-                'radial-gradient(circle, rgba(120,80,180,0.12) 0%, rgba(80,50,140,0.04) 50%, transparent 75%)',
-              filter: 'blur(70px)',
-              opacity: 0,
-            }}
-          />
-
-          {/* Layer 6: Conic sweep — directional light for cinematic feel */}
+          {/* === Warm ambient pool behind sphere === */}
           <div
             data-a="tunnel-glow"
             style={{
               position: 'absolute',
               top: '10%',
-              right: '0%',
-              width: '600px',
-              height: '600px',
+              right: '2%',
+              width: '700px',
+              height: '700px',
               borderRadius: '50%',
               background:
-                'conic-gradient(from 220deg at 50% 50%, transparent 0deg, rgba(255,106,55,0.2) 60deg, rgba(255,160,100,0.1) 120deg, transparent 180deg, rgba(255,80,40,0.08) 270deg, transparent 360deg)',
-              filter: 'blur(80px)',
+                'radial-gradient(circle, rgba(255,106,55,0.5) 0%, rgba(255,80,40,0.2) 35%, transparent 65%)',
+              filter: 'blur(100px)',
               opacity: 0,
             }}
           />
 
-          {/* Layer 7: Floor glow — warm light spilling downward */}
+          {/* === Horizontal light flare — cinematic streak === */}
+          <div
+            data-a="tunnel-glow"
+            style={{
+              position: 'absolute',
+              top: '38%',
+              right: '-10%',
+              width: '900px',
+              height: '6px',
+              background:
+                'linear-gradient(90deg, transparent 0%, rgba(255,160,100,0.6) 30%, rgba(255,220,180,0.9) 50%, rgba(255,160,100,0.6) 70%, transparent 100%)',
+              filter: 'blur(12px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* === Secondary flare — wider, softer === */}
           <div
             data-a="tunnel-haze"
             style={{
               position: 'absolute',
-              bottom: '-5%',
-              right: '5%',
-              width: '600px',
-              height: '350px',
+              top: '36%',
+              right: '-15%',
+              width: '1000px',
+              height: '40px',
+              background:
+                'linear-gradient(90deg, transparent 0%, rgba(255,106,55,0.25) 25%, rgba(255,140,80,0.35) 50%, rgba(255,106,55,0.25) 75%, transparent 100%)',
+              filter: 'blur(30px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* === Conic light sweep — directional rim light === */}
+          <div
+            data-a="tunnel-glow"
+            style={{
+              position: 'absolute',
+              top: '5%',
+              right: '0%',
+              width: '650px',
+              height: '650px',
               borderRadius: '50%',
               background:
-                'radial-gradient(ellipse at 50% 20%, rgba(255,106,55,0.08) 0%, rgba(255,80,40,0.03) 40%, transparent 70%)',
+                'conic-gradient(from 200deg at 50% 50%, transparent 0deg, rgba(255,106,55,0.25) 40deg, rgba(255,180,120,0.15) 90deg, transparent 160deg, rgba(255,80,40,0.1) 250deg, transparent 360deg)',
               filter: 'blur(60px)',
               opacity: 0,
             }}
           />
 
-          {/* Layer 8: 3D Coral Sphere — hero focal point */}
+          {/* === Floor reflection — light spilling down === */}
+          <div
+            data-a="tunnel-haze"
+            style={{
+              position: 'absolute',
+              bottom: '-10%',
+              right: '5%',
+              width: '600px',
+              height: '300px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(ellipse at 50% 0%, rgba(255,106,55,0.15) 0%, rgba(255,80,40,0.05) 50%, transparent 80%)',
+              filter: 'blur(50px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* === THE 3D SPHERE — hero focal point === */}
+          {/* Outer glow ring */}
           <div
             data-a="hero-sphere"
             style={{
               position: 'absolute',
-              top: '20%',
-              right: '12%',
-              width: 'clamp(280px, 28vw, 420px)',
-              height: 'clamp(280px, 28vw, 420px)',
+              top: '13%',
+              right: '7%',
+              width: 'clamp(320px, 32vw, 480px)',
+              height: 'clamp(320px, 32vw, 480px)',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(255,106,55,0.3) 30%, transparent 70%)',
+              filter: 'blur(40px)',
+              opacity: 0,
+            }}
+          />
+          {/* Sphere body */}
+          <div
+            data-a="hero-sphere"
+            style={{
+              position: 'absolute',
+              top: 'calc(13% + clamp(30px, 3vw, 45px))',
+              right: 'calc(7% + clamp(30px, 3vw, 45px))',
+              width: 'clamp(260px, 26vw, 390px)',
+              height: 'clamp(260px, 26vw, 390px)',
               borderRadius: '50%',
               background: `
-                radial-gradient(circle at 30% 30%,
-                  rgba(255, 220, 180, 0.95) 0%,
-                  rgba(255, 160, 100, 0.9) 15%,
-                  rgba(255, 106, 55, 1) 35%,
-                  rgba(220, 70, 25, 0.95) 60%,
-                  rgba(140, 40, 10, 0.9) 85%,
-                  rgba(80, 20, 5, 0.85) 100%
+                radial-gradient(circle at 35% 30%,
+                  rgba(255, 230, 200, 1) 0%,
+                  rgba(255, 180, 120, 0.95) 10%,
+                  rgba(255, 130, 70, 1) 25%,
+                  rgba(255, 106, 55, 1) 40%,
+                  rgba(200, 65, 20, 0.98) 60%,
+                  rgba(130, 40, 10, 0.95) 80%,
+                  rgba(60, 15, 0, 0.92) 100%
                 )
               `,
               boxShadow: `
-                0 0 120px rgba(255, 106, 55, 0.35),
-                0 0 60px rgba(255, 106, 55, 0.2),
-                inset -20px -20px 40px rgba(0, 0, 0, 0.3),
-                inset 10px 10px 30px rgba(255, 200, 160, 0.15)
+                0 0 200px rgba(255, 106, 55, 0.5),
+                0 0 80px rgba(255, 106, 55, 0.35),
+                0 0 30px rgba(255, 140, 80, 0.2),
+                inset -25px -30px 50px rgba(0, 0, 0, 0.4),
+                inset 15px 15px 40px rgba(255, 220, 180, 0.2),
+                inset 5px 5px 15px rgba(255, 240, 220, 0.15)
               `,
+              opacity: 0,
+            }}
+          />
+          {/* Specular highlight — bright hotspot on sphere */}
+          <div
+            data-a="hero-sphere"
+            style={{
+              position: 'absolute',
+              top: 'calc(13% + clamp(50px, 5vw, 75px))',
+              right: 'calc(7% + clamp(120px, 12vw, 180px))',
+              width: 'clamp(60px, 6vw, 90px)',
+              height: 'clamp(45px, 4.5vw, 68px)',
+              borderRadius: '50%',
+              background: 'radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, rgba(255,220,180,0.2) 50%, transparent 100%)',
+              filter: 'blur(8px)',
               opacity: 0,
             }}
           />
