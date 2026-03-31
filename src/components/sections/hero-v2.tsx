@@ -1,11 +1,17 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
+
+const HeroSphere = dynamic(
+  () => import('@/components/ui/hero-sphere').then((m) => m.HeroSphere),
+  { ssr: false }
+)
 
 /* ─── Component ───────────────────────────────────────── */
 export function HeroV2() {
@@ -47,26 +53,12 @@ export function HeroV2() {
       requestAnimationFrame(() => {
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-        // Gradient orbs — fade in with scale
+        // 3D Sphere container — fade in
         tl.fromTo(
-          '[data-a="tunnel-glow"]',
-          { opacity: 0, scale: 0.6 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 2,
-            stagger: 0.1,
-            ease: 'power2.out',
-          },
-          0
-        )
-
-        // Atmospheric haze
-        tl.fromTo(
-          '[data-a="tunnel-haze"]',
+          '[data-a="hero-sphere"]',
           { opacity: 0 },
-          { opacity: 1, duration: 2, ease: 'power1.out' },
-          0.2
+          { opacity: 1, duration: 1.5, ease: 'power2.out' },
+          0
         )
 
         // Badge pill — blur-in from left
@@ -116,41 +108,6 @@ export function HeroV2() {
           1.4
         )
 
-        // 3D Sphere — dramatic scale-in
-        tl.fromTo(
-          '[data-a="hero-sphere"]',
-          { opacity: 0, scale: 0.3 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 1.4,
-            ease: 'power2.out',
-          },
-          0.3
-        )
-
-        // ── Continuous loops ──
-        // Sphere floating
-        gsap.to('[data-a="hero-sphere"]', {
-          y: -15,
-          duration: 4,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-          delay: 2,
-        })
-
-        // Gradient orbs subtle breathing
-        gsap.to('[data-a="tunnel-glow"]', {
-          scale: 1.06,
-          duration: 5,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-          delay: 2.5,
-          stagger: 0.3,
-        })
-
         // ── Scroll-out parallax ──
         const initScrollOut = async () => {
           const { registerScrollTrigger } = await import('@/lib/gsap')
@@ -173,13 +130,12 @@ export function HeroV2() {
             }
           )
 
-          // Tunnel + sphere fades on scroll
+          // 3D Sphere fades on scroll
           gsap.fromTo(
-            '[data-a="tunnel-glow"], [data-a="tunnel-haze"], [data-a="hero-sphere"]',
-            { opacity: 1, y: 0 },
+            '[data-a="hero-sphere"]',
+            { opacity: 1 },
             {
-              opacity: 0.15,
-              y: -10,
+              opacity: 0,
               ease: 'none',
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -195,35 +151,6 @@ export function HeroV2() {
     },
     { scope: sectionRef, dependencies: [mounted] }
   )
-
-  /* ── Mouse parallax (desktop only) ──────────────────── */
-  useEffect(() => {
-    if (!mounted || reducedMotion.current || isTouchDevice.current) return
-    const section = sectionRef.current
-    if (!section) return
-
-    const tunnelEl = section.querySelector('[data-p="tunnel"]')
-    if (!tunnelEl) return
-
-    const tX = gsap.quickTo(tunnelEl, 'x', {
-      duration: 1.2,
-      ease: 'power3',
-    })
-    const tY = gsap.quickTo(tunnelEl, 'y', {
-      duration: 1.2,
-      ease: 'power3',
-    })
-
-    const onMove = (e: MouseEvent) => {
-      const nx = (e.clientX / window.innerWidth - 0.5) * 2
-      const ny = (e.clientY / window.innerHeight - 0.5) * 2
-      tX(nx * 15)
-      tY(ny * 10)
-    }
-
-    window.addEventListener('mousemove', onMove, { passive: true })
-    return () => window.removeEventListener('mousemove', onMove)
-  }, [mounted])
 
   /* ── Render ──────────────────────────────────────────── */
   return (
@@ -244,194 +171,8 @@ export function HeroV2() {
         }}
       />
 
-      {/* ─ Abstract Gradient Composition ─ */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        aria-hidden="true"
-        style={{ overflow: 'clip' }}
-      >
-        {/* Parallax target wraps all layers */}
-        <div data-p="tunnel" data-hero-orbs>
-
-          {/* === Massive ambient glow — sets the mood === */}
-          <div
-            data-a="tunnel-haze"
-            style={{
-              position: 'absolute',
-              top: '-20%',
-              right: '-20%',
-              width: '1100px',
-              height: '1100px',
-              borderRadius: '50%',
-              background:
-                'radial-gradient(circle, rgba(255,106,55,0.18) 0%, rgba(255,60,30,0.06) 40%, transparent 70%)',
-              filter: 'blur(120px)',
-              opacity: 0,
-            }}
-          />
-
-          {/* === Warm ambient pool behind sphere === */}
-          <div
-            data-a="tunnel-glow"
-            style={{
-              position: 'absolute',
-              top: '10%',
-              right: '2%',
-              width: '700px',
-              height: '700px',
-              borderRadius: '50%',
-              background:
-                'radial-gradient(circle, rgba(255,106,55,0.5) 0%, rgba(255,80,40,0.2) 35%, transparent 65%)',
-              filter: 'blur(100px)',
-              opacity: 0,
-            }}
-          />
-
-          {/* === Horizontal light flare — cinematic streak === */}
-          <div
-            data-a="tunnel-glow"
-            style={{
-              position: 'absolute',
-              top: '38%',
-              right: '-10%',
-              width: '900px',
-              height: '6px',
-              background:
-                'linear-gradient(90deg, transparent 0%, rgba(255,160,100,0.6) 30%, rgba(255,220,180,0.9) 50%, rgba(255,160,100,0.6) 70%, transparent 100%)',
-              filter: 'blur(12px)',
-              opacity: 0,
-            }}
-          />
-
-          {/* === Secondary flare — wider, softer === */}
-          <div
-            data-a="tunnel-haze"
-            style={{
-              position: 'absolute',
-              top: '36%',
-              right: '-15%',
-              width: '1000px',
-              height: '40px',
-              background:
-                'linear-gradient(90deg, transparent 0%, rgba(255,106,55,0.25) 25%, rgba(255,140,80,0.35) 50%, rgba(255,106,55,0.25) 75%, transparent 100%)',
-              filter: 'blur(30px)',
-              opacity: 0,
-            }}
-          />
-
-          {/* === Conic light sweep — directional rim light === */}
-          <div
-            data-a="tunnel-glow"
-            style={{
-              position: 'absolute',
-              top: '5%',
-              right: '0%',
-              width: '650px',
-              height: '650px',
-              borderRadius: '50%',
-              background:
-                'conic-gradient(from 200deg at 50% 50%, transparent 0deg, rgba(255,106,55,0.25) 40deg, rgba(255,180,120,0.15) 90deg, transparent 160deg, rgba(255,80,40,0.1) 250deg, transparent 360deg)',
-              filter: 'blur(60px)',
-              opacity: 0,
-            }}
-          />
-
-          {/* === Floor reflection — light spilling down === */}
-          <div
-            data-a="tunnel-haze"
-            style={{
-              position: 'absolute',
-              bottom: '-10%',
-              right: '5%',
-              width: '600px',
-              height: '300px',
-              borderRadius: '50%',
-              background:
-                'radial-gradient(ellipse at 50% 0%, rgba(255,106,55,0.15) 0%, rgba(255,80,40,0.05) 50%, transparent 80%)',
-              filter: 'blur(50px)',
-              opacity: 0,
-            }}
-          />
-
-          {/* === THE 3D SPHERE — hero focal point === */}
-          {/* Outer glow ring */}
-          <div
-            data-a="hero-sphere"
-            style={{
-              position: 'absolute',
-              top: '13%',
-              right: '7%',
-              width: 'clamp(320px, 32vw, 480px)',
-              height: 'clamp(320px, 32vw, 480px)',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(255,106,55,0.3) 30%, transparent 70%)',
-              filter: 'blur(40px)',
-              opacity: 0,
-            }}
-          />
-          {/* Sphere body */}
-          <div
-            data-a="hero-sphere"
-            style={{
-              position: 'absolute',
-              top: 'calc(13% + clamp(30px, 3vw, 45px))',
-              right: 'calc(7% + clamp(30px, 3vw, 45px))',
-              width: 'clamp(260px, 26vw, 390px)',
-              height: 'clamp(260px, 26vw, 390px)',
-              borderRadius: '50%',
-              background: `
-                radial-gradient(circle at 35% 30%,
-                  rgba(255, 230, 200, 1) 0%,
-                  rgba(255, 180, 120, 0.95) 10%,
-                  rgba(255, 130, 70, 1) 25%,
-                  rgba(255, 106, 55, 1) 40%,
-                  rgba(200, 65, 20, 0.98) 60%,
-                  rgba(130, 40, 10, 0.95) 80%,
-                  rgba(60, 15, 0, 0.92) 100%
-                )
-              `,
-              boxShadow: `
-                0 0 200px rgba(255, 106, 55, 0.5),
-                0 0 80px rgba(255, 106, 55, 0.35),
-                0 0 30px rgba(255, 140, 80, 0.2),
-                inset -25px -30px 50px rgba(0, 0, 0, 0.4),
-                inset 15px 15px 40px rgba(255, 220, 180, 0.2),
-                inset 5px 5px 15px rgba(255, 240, 220, 0.15)
-              `,
-              opacity: 0,
-            }}
-          />
-          {/* Specular highlight — bright hotspot on sphere */}
-          <div
-            data-a="hero-sphere"
-            style={{
-              position: 'absolute',
-              top: 'calc(13% + clamp(50px, 5vw, 75px))',
-              right: 'calc(7% + clamp(120px, 12vw, 180px))',
-              width: 'clamp(60px, 6vw, 90px)',
-              height: 'clamp(45px, 4.5vw, 68px)',
-              borderRadius: '50%',
-              background: 'radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, rgba(255,220,180,0.2) 50%, transparent 100%)',
-              filter: 'blur(8px)',
-              opacity: 0,
-            }}
-          />
-        </div>
-
-        {/* Noise texture over gradients for cinematic grain */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '0',
-            right: '0',
-            width: '65%',
-            height: '100%',
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-            opacity: 0.06,
-            mixBlendMode: 'overlay',
-          }}
-        />
-      </div>
+      {/* ─ 3D Sphere + ambient effects ─ */}
+      <HeroSphere />
 
       {/* ─ Main content ─ */}
       <div className="container mx-auto px-6 md:px-12 relative z-10 pt-24 pb-16">
