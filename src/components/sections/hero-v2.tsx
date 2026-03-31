@@ -228,7 +228,7 @@ export function HeroV2() {
         style={{ overflow: 'clip' }}
       >
         {/* Parallax target wraps all gradient orbs */}
-        <div data-p="tunnel">
+        <div data-p="tunnel" data-hero-orbs>
           {/* Layer 1: Atmospheric bleed — huge, very subtle, creates atmosphere */}
           <div
             data-a="tunnel-haze"

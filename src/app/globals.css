@@ -180,6 +180,23 @@ html.lenis body {
   background: linear-gradient(135deg, #171717 0%, #FF9B75 50%, #FF6B35 100%);
 }
 
+/* Light mode: invert white logo to dark */
+[data-theme="light"] .logo-themed {
+  filter: brightness(0);
+}
+
+/* Light mode: boost hero gradient orbs — they're too subtle on white */
+[data-theme="light"] [data-hero-orbs] {
+  filter: saturate(1.8) contrast(1.2);
+}
+
+/* Light mode: make GSAP scroll-reveal sections visible immediately —
+   the dark-mode reveal effect loses impact on a light background,
+   and theme initialization can race with ScrollTrigger setup */
+html.js-ready[data-theme="light"] [data-animate] {
+  opacity: 1 !important;
+}
+
 /* Page transition animation */
 @keyframes page-enter {
   from {

@@ -63,7 +63,7 @@ export function Footer() {
               <motion.img
                 src="/invenex-logo.png"
                 alt="Invenex"
-                className="w-9 h-9"
+                className="w-9 h-9 logo-themed"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               />

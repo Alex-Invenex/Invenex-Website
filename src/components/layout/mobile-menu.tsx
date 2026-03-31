@@ -168,7 +168,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 <img
                   src="/invenex-logo.png"
                   alt="Invenex"
-                  className="w-8 h-8"
+                  className="w-8 h-8 logo-themed"
                 />
                 <span className="text-xl font-bold text-gradient">
                   {siteConfig.name}
