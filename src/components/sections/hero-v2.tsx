@@ -375,7 +375,7 @@ export function HeroV2() {
             }}
           />
 
-          {/* Layer 8: 3D Coral Sphere — hero focal point */}
+          {/* Layer 8: 3D Coral Sphere + orbiting service pills */}
           <div
             data-a="hero-sphere"
             style={{
@@ -385,26 +385,96 @@ export function HeroV2() {
               marginTop: 'clamp(-240px, -16vw, -180px)',
               width: 'clamp(280px, 28vw, 420px)',
               height: 'clamp(280px, 28vw, 420px)',
-              borderRadius: '50%',
-              background: `
-                radial-gradient(circle at 30% 30%,
-                  rgba(255, 220, 180, 0.95) 0%,
-                  rgba(255, 160, 100, 0.9) 15%,
-                  rgba(255, 106, 55, 1) 35%,
-                  rgba(220, 70, 25, 0.95) 60%,
-                  rgba(140, 40, 10, 0.9) 85%,
-                  rgba(80, 20, 5, 0.85) 100%
-                )
-              `,
-              boxShadow: `
-                0 0 120px rgba(255, 106, 55, 0.35),
-                0 0 60px rgba(255, 106, 55, 0.2),
-                inset -20px -20px 40px rgba(0, 0, 0, 0.3),
-                inset 10px 10px 30px rgba(255, 200, 160, 0.15)
-              `,
               opacity: 0,
             }}
-          />
+          >
+            {/* Coral sphere */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                borderRadius: '50%',
+                background: `
+                  radial-gradient(circle at 30% 30%,
+                    rgba(255, 220, 180, 0.95) 0%,
+                    rgba(255, 160, 100, 0.9) 15%,
+                    rgba(255, 106, 55, 1) 35%,
+                    rgba(220, 70, 25, 0.95) 60%,
+                    rgba(140, 40, 10, 0.9) 85%,
+                    rgba(80, 20, 5, 0.85) 100%
+                  )
+                `,
+                boxShadow: `
+                  0 0 120px rgba(255, 106, 55, 0.35),
+                  0 0 60px rgba(255, 106, 55, 0.2),
+                  inset -20px -20px 40px rgba(0, 0, 0, 0.3),
+                  inset 10px 10px 30px rgba(255, 200, 160, 0.15)
+                `,
+              }}
+            />
+
+            {/* Orbit ring */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: '-18%',
+                borderRadius: '50%',
+                border: '1px solid rgba(255, 106, 55, 0.12)',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                inset: '-38%',
+                borderRadius: '50%',
+                border: '1px solid rgba(255, 106, 55, 0.06)',
+              }}
+            />
+
+            {/* Service pills — positioned around the sphere */}
+            {[
+              { label: 'Web Dev', x: '-35%', y: '8%' },
+              { label: 'Mobile', x: '85%', y: '2%' },
+              { label: 'Platforms', x: '95%', y: '55%' },
+              { label: 'E-Commerce', x: '60%', y: '100%' },
+              { label: 'Marketing', x: '-25%', y: '88%' },
+              { label: 'Strategy', x: '-42%', y: '48%' },
+            ].map((svc) => (
+              <div
+                key={svc.label}
+                style={{
+                  position: 'absolute',
+                  left: svc.x,
+                  top: svc.y,
+                  padding: '6px 14px',
+                  borderRadius: '9999px',
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(12px)',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  letterSpacing: '0.05em',
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  whiteSpace: 'nowrap',
+                  pointerEvents: 'none',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '5px',
+                    height: '5px',
+                    borderRadius: '50%',
+                    background: 'var(--color-coral-500)',
+                    marginRight: '8px',
+                    verticalAlign: 'middle',
+                    boxShadow: '0 0 6px rgba(255, 106, 55, 0.5)',
+                  }}
+                />
+                {svc.label}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Noise texture over gradients for cinematic grain */}
