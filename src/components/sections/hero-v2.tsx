@@ -1,17 +1,11 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-
-const HeroSphere = dynamic(
-  () => import('@/components/ui/hero-sphere').then((m) => m.HeroSphere),
-  { ssr: false }
-)
 
 /* ─── Component ───────────────────────────────────────── */
 export function HeroV2() {
@@ -53,12 +47,26 @@ export function HeroV2() {
       requestAnimationFrame(() => {
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-        // 3D Sphere container — fade in
+        // Gradient orbs — fade in with scale
         tl.fromTo(
-          '[data-a="hero-sphere"]',
-          { opacity: 0 },
-          { opacity: 1, duration: 1.5, ease: 'power2.out' },
+          '[data-a="tunnel-glow"]',
+          { opacity: 0, scale: 0.6 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 2,
+            stagger: 0.1,
+            ease: 'power2.out',
+          },
           0
+        )
+
+        // Atmospheric haze
+        tl.fromTo(
+          '[data-a="tunnel-haze"]',
+          { opacity: 0 },
+          { opacity: 1, duration: 2, ease: 'power1.out' },
+          0.2
         )
 
         // Badge pill — blur-in from left
@@ -108,6 +116,41 @@ export function HeroV2() {
           1.4
         )
 
+        // 3D Sphere — dramatic scale-in
+        tl.fromTo(
+          '[data-a="hero-sphere"]',
+          { opacity: 0, scale: 0.3 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 1.4,
+            ease: 'power2.out',
+          },
+          0.3
+        )
+
+        // ── Continuous loops ──
+        // Sphere floating
+        gsap.to('[data-a="hero-sphere"]', {
+          y: -15,
+          duration: 4,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+          delay: 2,
+        })
+
+        // Gradient orbs subtle breathing
+        gsap.to('[data-a="tunnel-glow"]', {
+          scale: 1.06,
+          duration: 5,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+          delay: 2.5,
+          stagger: 0.3,
+        })
+
         // ── Scroll-out parallax ──
         const initScrollOut = async () => {
           const { registerScrollTrigger } = await import('@/lib/gsap')
@@ -130,12 +173,13 @@ export function HeroV2() {
             }
           )
 
-          // 3D Sphere fades on scroll
+          // Tunnel + sphere fades on scroll
           gsap.fromTo(
-            '[data-a="hero-sphere"]',
-            { opacity: 1 },
+            '[data-a="tunnel-glow"], [data-a="tunnel-haze"], [data-a="hero-sphere"]',
+            { opacity: 1, y: 0 },
             {
-              opacity: 0,
+              opacity: 0.15,
+              y: -10,
               ease: 'none',
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -151,6 +195,35 @@ export function HeroV2() {
     },
     { scope: sectionRef, dependencies: [mounted] }
   )
+
+  /* ── Mouse parallax (desktop only) ──────────────────── */
+  useEffect(() => {
+    if (!mounted || reducedMotion.current || isTouchDevice.current) return
+    const section = sectionRef.current
+    if (!section) return
+
+    const tunnelEl = section.querySelector('[data-p="tunnel"]')
+    if (!tunnelEl) return
+
+    const tX = gsap.quickTo(tunnelEl, 'x', {
+      duration: 1.2,
+      ease: 'power3',
+    })
+    const tY = gsap.quickTo(tunnelEl, 'y', {
+      duration: 1.2,
+      ease: 'power3',
+    })
+
+    const onMove = (e: MouseEvent) => {
+      const nx = (e.clientX / window.innerWidth - 0.5) * 2
+      const ny = (e.clientY / window.innerHeight - 0.5) * 2
+      tX(nx * 15)
+      tY(ny * 10)
+    }
+
+    window.addEventListener('mousemove', onMove, { passive: true })
+    return () => window.removeEventListener('mousemove', onMove)
+  }, [mounted])
 
   /* ── Render ──────────────────────────────────────────── */
   return (
@@ -171,8 +244,178 @@ export function HeroV2() {
         }}
       />
 
-      {/* ─ 3D Sphere + ambient effects ─ */}
-      <HeroSphere />
+      {/* ─ Abstract Gradient Composition ─ */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{ overflow: 'clip' }}
+      >
+        {/* Parallax target wraps all gradient orbs */}
+        <div data-p="tunnel" data-hero-orbs>
+          {/* Layer 1: Atmospheric bleed — huge, very subtle, creates atmosphere */}
+          <div
+            data-a="tunnel-haze"
+            style={{
+              position: 'absolute',
+              top: '-10%',
+              right: '-15%',
+              width: '900px',
+              height: '900px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(255,106,55,0.1) 0%, rgba(255,60,30,0.04) 35%, transparent 65%)',
+              filter: 'blur(100px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 2: Primary orb — large warm coral, the main mass */}
+          <div
+            data-a="tunnel-glow"
+            style={{
+              position: 'absolute',
+              top: '18%',
+              right: '5%',
+              width: '550px',
+              height: '550px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(255,106,55,0.45) 0%, rgba(255,80,40,0.18) 40%, transparent 70%)',
+              filter: 'blur(80px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 3: Secondary orb — deeper orange, offset upward */}
+          <div
+            data-a="tunnel-glow"
+            style={{
+              position: 'absolute',
+              top: '8%',
+              right: '18%',
+              width: '400px',
+              height: '400px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(255,140,60,0.4) 0%, rgba(255,100,40,0.12) 50%, transparent 75%)',
+              filter: 'blur(60px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 4: Hot core — bright white-coral center, tight blur */}
+          <div
+            data-a="tunnel-glow"
+            style={{
+              position: 'absolute',
+              top: '28%',
+              right: '15%',
+              width: '220px',
+              height: '220px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(255,220,180,0.7) 0%, rgba(255,160,100,0.35) 30%, rgba(255,106,55,0.12) 60%, transparent 100%)',
+              filter: 'blur(35px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 5: Cool contrast — muted violet for depth & vibrancy */}
+          <div
+            data-a="tunnel-haze"
+            style={{
+              position: 'absolute',
+              top: '55%',
+              right: '25%',
+              width: '380px',
+              height: '380px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, rgba(120,80,180,0.12) 0%, rgba(80,50,140,0.04) 50%, transparent 75%)',
+              filter: 'blur(70px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 6: Conic sweep — directional light for cinematic feel */}
+          <div
+            data-a="tunnel-glow"
+            style={{
+              position: 'absolute',
+              top: '10%',
+              right: '0%',
+              width: '600px',
+              height: '600px',
+              borderRadius: '50%',
+              background:
+                'conic-gradient(from 220deg at 50% 50%, transparent 0deg, rgba(255,106,55,0.2) 60deg, rgba(255,160,100,0.1) 120deg, transparent 180deg, rgba(255,80,40,0.08) 270deg, transparent 360deg)',
+              filter: 'blur(80px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 7: Floor glow — warm light spilling downward */}
+          <div
+            data-a="tunnel-haze"
+            style={{
+              position: 'absolute',
+              bottom: '-5%',
+              right: '5%',
+              width: '600px',
+              height: '350px',
+              borderRadius: '50%',
+              background:
+                'radial-gradient(ellipse at 50% 20%, rgba(255,106,55,0.08) 0%, rgba(255,80,40,0.03) 40%, transparent 70%)',
+              filter: 'blur(60px)',
+              opacity: 0,
+            }}
+          />
+
+          {/* Layer 8: 3D Coral Sphere — hero focal point */}
+          <div
+            data-a="hero-sphere"
+            style={{
+              position: 'absolute',
+              top: '20%',
+              right: '12%',
+              width: 'clamp(280px, 28vw, 420px)',
+              height: 'clamp(280px, 28vw, 420px)',
+              borderRadius: '50%',
+              background: `
+                radial-gradient(circle at 30% 30%,
+                  rgba(255, 220, 180, 0.95) 0%,
+                  rgba(255, 160, 100, 0.9) 15%,
+                  rgba(255, 106, 55, 1) 35%,
+                  rgba(220, 70, 25, 0.95) 60%,
+                  rgba(140, 40, 10, 0.9) 85%,
+                  rgba(80, 20, 5, 0.85) 100%
+                )
+              `,
+              boxShadow: `
+                0 0 120px rgba(255, 106, 55, 0.35),
+                0 0 60px rgba(255, 106, 55, 0.2),
+                inset -20px -20px 40px rgba(0, 0, 0, 0.3),
+                inset 10px 10px 30px rgba(255, 200, 160, 0.15)
+              `,
+              opacity: 0,
+            }}
+          />
+        </div>
+
+        {/* Noise texture over gradients for cinematic grain */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '0',
+            right: '0',
+            width: '65%',
+            height: '100%',
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            opacity: 0.06,
+            mixBlendMode: 'overlay',
+          }}
+        />
+      </div>
 
       {/* ─ Main content ─ */}
       <div className="container mx-auto px-6 md:px-12 relative z-10 pt-24 pb-16">
