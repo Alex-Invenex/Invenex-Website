@@ -353,7 +353,7 @@ export function ServicesPreview() {
                           className="text-xs px-3 py-1.5 rounded-full font-mono text-foreground-muted/70"
                           style={{
                             background: "var(--color-surface-overlay)",
-                            border: "1px solid rgba(255,255,255,0.08)",
+                            border: "1px solid var(--color-surface-border)",
                             backdropFilter: "blur(8px)",
                           }}
                         >
@@ -399,7 +399,7 @@ export function ServicesPreview() {
             </div>
             <div
               className="flex-1 h-[2px] rounded-full overflow-hidden"
-              style={{ background: "rgba(255,255,255,0.06)" }}
+              style={{ background: "var(--color-surface-overlay)" }}
             >
               <div
                 data-svc-progress

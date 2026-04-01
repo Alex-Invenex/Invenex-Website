@@ -212,7 +212,10 @@ function ReelModal({
 
   if (!card) return null;
 
+  const closingRef = useRef(false);
   const handleClose = () => {
+    if (closingRef.current) return;
+    closingRef.current = true;
     if (!shouldSkipAnimations() && overlayRef.current && contentRef.current) {
       gsap.to(contentRef.current, { scale: 0.9, opacity: 0, duration: 0.2 });
       gsap.to(overlayRef.current, {

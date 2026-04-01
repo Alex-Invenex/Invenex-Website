@@ -1,13 +1,14 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const switching = useRef(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -28,7 +29,12 @@ export function ThemeToggle({ className }: { className?: string }) {
   return (
     <motion.button
       type="button"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={() => {
+        if (switching.current) return;
+        switching.current = true;
+        setTheme(isDark ? "light" : "dark");
+        setTimeout(() => { switching.current = false; }, 400);
+      }}
       className={cn(
         "relative w-9 h-9 rounded-full flex items-center justify-center",
         "border border-surface-border hover:border-surface-border-hover",

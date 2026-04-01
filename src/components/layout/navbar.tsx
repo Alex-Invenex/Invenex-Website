@@ -141,7 +141,7 @@ export function Navbar() {
                   // Services dropdown trigger - button for accessibility
                   <button
                     type="button"
-                    onClick={() => setServicesOpen(!servicesOpen)}
+                    onClick={() => setServicesOpen(prev => !prev)}
                     onKeyDown={handleServicesKeyDown}
                     aria-expanded={servicesOpen}
                     aria-haspopup="true"

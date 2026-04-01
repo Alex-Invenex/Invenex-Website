@@ -362,7 +362,7 @@ export function WhyChooseUs() {
               </div>
 
               {/* Progress bar */}
-              <div className="w-full max-w-[200px] h-[2px] bg-white/[0.06] rounded-full overflow-hidden">
+              <div className="w-full max-w-[200px] h-[2px] bg-foreground/[0.06] rounded-full overflow-hidden">
                 <div
                   data-hw-progress
                   className="h-full rounded-full origin-left"
