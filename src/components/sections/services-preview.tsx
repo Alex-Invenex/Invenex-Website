@@ -266,7 +266,7 @@ export function ServicesPreview() {
       </h2>
 
       {/* Background atmosphere — overflow-hidden here, NOT on section (breaks GSAP pin) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true" data-section-orbs>
         <div
           className="absolute rounded-full blur-[180px]"
           style={{ width: "700px", height: "700px", top: "10%", left: "30%", background: "rgba(255,107,53,0.04)" }}
