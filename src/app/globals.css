@@ -190,6 +190,15 @@ html.lenis body {
   filter: saturate(1.8) contrast(1.2);
 }
 
+/* Hero gradient orbs — scale down on mobile to prevent overflow */
+@media (max-width: 767px) {
+  [data-hero-orbs] {
+    transform: scale(0.42) translate(-25%, -8%);
+    transform-origin: 72% 32%;
+    opacity: 0.5;
+  }
+}
+
 /* Light mode: make GSAP scroll-reveal sections visible immediately —
    the dark-mode reveal effect loses impact on a light background,
    and theme initialization can race with ScrollTrigger setup */

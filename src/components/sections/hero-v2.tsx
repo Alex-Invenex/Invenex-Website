@@ -251,7 +251,11 @@ export function HeroV2() {
         style={{ overflow: 'clip' }}
       >
         {/* Parallax target wraps all gradient orbs */}
-        <div data-p="tunnel" data-hero-orbs>
+        <div
+          data-p="tunnel"
+          data-hero-orbs
+          style={{ position: 'relative', width: '100%', height: '100%' }}
+        >
           {/* Layer 1: Atmospheric bleed — huge, very subtle, creates atmosphere */}
           <div
             data-a="tunnel-haze"
@@ -274,7 +278,7 @@ export function HeroV2() {
             data-a="tunnel-glow"
             style={{
               position: 'absolute',
-              top: '18%',
+              top: '15%',
               right: '5%',
               width: '550px',
               height: '550px',
@@ -376,8 +380,9 @@ export function HeroV2() {
             data-a="hero-sphere"
             style={{
               position: 'absolute',
-              top: '20%',
+              top: '50%',
               right: '12%',
+              marginTop: 'clamp(-240px, -16vw, -180px)',
               width: 'clamp(280px, 28vw, 420px)',
               height: 'clamp(280px, 28vw, 420px)',
               borderRadius: '50%',
