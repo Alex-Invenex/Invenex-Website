@@ -113,10 +113,10 @@ export function EpicPreloader() {
   useEffect(() => {
     if (phase !== 'mobile') return
 
-    // Show branded loader for 1.2s, then start exit animation
+    // Show branded loader for 800ms, then start exit animation
     const showTimer = setTimeout(() => {
       setPhase('mobile-exit')
-    }, 1200)
+    }, 800)
 
     return () => clearTimeout(showTimer)
   }, [phase])
@@ -124,12 +124,12 @@ export function EpicPreloader() {
   useEffect(() => {
     if (phase !== 'mobile-exit') return
 
-    // After fade-out animation (400ms), mark done
+    // After fade-out animation (300ms), mark done
     const exitTimer = setTimeout(() => {
       window.scrollTo(0, 0)
       markVisited()
       setPhase('done')
-    }, 400)
+    }, 300)
 
     return () => clearTimeout(exitTimer)
   }, [phase])
@@ -228,7 +228,7 @@ export function EpicPreloader() {
         className="fixed inset-0 flex flex-col items-center justify-center bg-[#0A0A0A]"
         style={{
           zIndex: 99999,
-          animation: isExiting ? 'preloader-fade-out 400ms ease-out forwards' : undefined,
+          animation: isExiting ? 'preloader-fade-out 300ms ease-out forwards' : undefined,
         }}
         aria-hidden="true"
       >

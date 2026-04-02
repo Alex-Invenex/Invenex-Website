@@ -216,9 +216,9 @@ html.lenis body {
 /* Hero gradient orbs — scale down on mobile to prevent overflow */
 @media (max-width: 767px) {
   [data-hero-orbs] {
-    transform: scale(0.42) translate(-25%, -8%);
-    transform-origin: 72% 32%;
-    opacity: 0.5;
+    transform: scale(0.55) translate(-15%, -5%);
+    transform-origin: 60% 40%;
+    opacity: 0.6;
   }
 }
 

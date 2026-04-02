@@ -375,9 +375,10 @@ export function HeroV2() {
             }}
           />
 
-          {/* Layer 8: 3D Coral Sphere + orbiting service pills */}
+          {/* Layer 8: 3D Coral Sphere + orbiting service pills (hidden on mobile) */}
           <div
             data-a="hero-sphere"
+            className="hidden md:block"
             style={{
               position: 'absolute',
               top: '50%',
@@ -493,12 +494,12 @@ export function HeroV2() {
       </div>
 
       {/* ─ Main content ─ */}
-      <div className="container mx-auto px-6 md:px-12 relative z-10 pt-24 pb-16">
+      <div className="container mx-auto px-6 md:px-12 relative z-10 pt-16 md:pt-24 pb-12 md:pb-16">
         <div className="max-w-2xl">
           {/* Badge pill */}
           <div
             data-a="badge"
-            className="inline-flex items-center gap-2.5 mb-8 px-4 py-2 rounded-full border border-surface-border bg-surface-overlay"
+            className="inline-flex items-center gap-2.5 mb-6 md:mb-8 px-4 py-2 rounded-full border border-surface-border bg-surface-overlay"
           >
             <span
               className="w-2 h-2 rounded-full bg-coral-500 animate-pulse-glow"
@@ -521,7 +522,7 @@ export function HeroV2() {
               data-a="word"
               className="block text-foreground/60"
               style={{
-                fontSize: 'clamp(1.6rem, 3.5vw, 3rem)',
+                fontSize: 'clamp(1.4rem, 4vw, 3rem)',
                 fontWeight: 300,
                 marginBottom: '0.15em',
               }}
@@ -534,7 +535,7 @@ export function HeroV2() {
               data-a="word"
               className="block"
               style={{
-                fontSize: 'clamp(3.2rem, 7vw, 7rem)',
+                fontSize: 'clamp(3.5rem, 8vw, 7rem)',
                 fontWeight: 900,
                 lineHeight: 0.95,
                 background:
@@ -552,7 +553,7 @@ export function HeroV2() {
               data-a="word"
               className="block text-foreground"
               style={{
-                fontSize: 'clamp(3.2rem, 7vw, 7rem)',
+                fontSize: 'clamp(3.5rem, 8vw, 7rem)',
                 fontWeight: 900,
                 lineHeight: 0.95,
               }}
@@ -562,7 +563,7 @@ export function HeroV2() {
           </h1>
 
           {/* Subtitle with coral accent border */}
-          <div className="mt-8 md:mt-10 flex">
+          <div className="mt-6 md:mt-10 flex">
             <div
               data-a="border"
               className="w-0.5 min-h-[3rem] bg-coral-500 shrink-0"
@@ -578,7 +579,7 @@ export function HeroV2() {
           </div>
 
           {/* CTA row */}
-          <div className="mt-10 md:mt-12 flex flex-col sm:flex-row items-start gap-4">
+          <div className="mt-8 md:mt-12 flex flex-col sm:flex-row items-start gap-4">
             <div data-a="cta">
               <Button
                 asChild
@@ -612,7 +613,7 @@ export function HeroV2() {
         {/* ── Bottom bar ── */}
         <div
           data-a="bottom"
-          className="mt-16 md:mt-20 flex items-center justify-between"
+          className="mt-10 md:mt-20 flex items-center justify-between"
         >
           {/* Scroll indicator */}
           <div className="flex items-center gap-3">
