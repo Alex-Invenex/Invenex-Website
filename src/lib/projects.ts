@@ -334,7 +334,7 @@ export const projects: CaseStudyProject[] = [
       "Marine equipment and supplies e-commerce store with product catalog, inventory management, and secure checkout.",
     image: "/portfolio/alshahama-marine.webp",
     slug: "alshahama-marine",
-    url: "https://alshahamamarine.com",
+    url: "https://www.alshahamamarine.in",
     challenge:
       "Al Shahama Marine needed an e-commerce platform that could handle their extensive catalog of marine equipment, support B2B and B2C customers, and integrate with their existing inventory management system.",
     solution:
@@ -347,6 +347,7 @@ export const projects: CaseStudyProject[] = [
     technologies: ["WooCommerce", "WordPress", "PHP", "MySQL", "Stripe"],
     gallery: [
       "/portfolio/alshahama-marine.webp",
+      "/portfolio/alshahama-marine-2.webp",
     ],
   },
   {
