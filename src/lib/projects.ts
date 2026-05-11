@@ -332,9 +332,9 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Marine equipment and supplies e-commerce store with product catalog, inventory management, and secure checkout.",
-    image: "/portfolio/alshahama-marine.webp",
+    image: "/portfolio/alshahama-marine-new-1.png",
     slug: "alshahama-marine",
-    url: "https://www.alshahamamarine.in",
+    url: "https://www.alshahamamarine.in/",
     challenge:
       "Al Shahama Marine needed an e-commerce platform that could handle their extensive catalog of marine equipment, support B2B and B2C customers, and integrate with their existing inventory management system.",
     solution:
@@ -346,8 +346,9 @@ export const projects: CaseStudyProject[] = [
     ],
     technologies: ["WooCommerce", "WordPress", "PHP", "MySQL", "Stripe"],
     gallery: [
-      "/portfolio/alshahama-marine.webp",
-      "/portfolio/alshahama-marine-2.webp",
+      "/portfolio/alshahama-marine-new-1.png",
+      "/portfolio/alshahama-marine-new-2.png",
+      "/portfolio/alshahama-marine-new-3.png",
     ],
   },
   {
