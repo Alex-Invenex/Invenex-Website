@@ -30,41 +30,11 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
   });
 
   // AC1: Bento Grid Layout
-  test("renders bento grid with varied card sizes", async ({ page }) => {
+  test("renders a uniform grid of project cards", async ({ page }) => {
     const grid = page.locator('[data-testid="bento-portfolio-grid"]');
     await expect(grid).toBeVisible();
-
-    // Check for different card sizes
-    const featuredCards = page.locator(
-      '[data-testid="bento-project-card"][data-size="featured"]'
-    );
-    const smallCards = page.locator(
-      '[data-testid="bento-project-card"][data-size="small"]'
-    );
-    const mediumCards = page.locator(
-      '[data-testid="bento-project-card"][data-size="medium"]'
-    );
-
-    // Should have variety
-    expect(await featuredCards.count()).toBeGreaterThan(0);
-    expect(await smallCards.count()).toBeGreaterThan(0);
-    expect(await mediumCards.count()).toBeGreaterThanOrEqual(0);
-  });
-
-  test("featured projects get larger cards (2x2 or 2x1)", async ({ page }) => {
-    const featuredCards = page.locator(
-      '[data-testid="bento-project-card"][data-size="featured"]'
-    );
-    // We have 4 featured projects
-    expect(await featuredCards.count()).toBe(4);
-  });
-
-  test("featured badge appears on featured cards", async ({ page }) => {
-    const featuredBadges = page.locator(
-      '[data-testid="bento-card-featured-badge"]'
-    );
-    expect(await featuredBadges.count()).toBe(4);
-    await expect(featuredBadges.first()).toContainText("Featured");
+    const cards = page.locator('[data-testid="bento-project-card"]');
+    expect(await cards.count()).toBe(14);
   });
 
   test("grid uses CSS Grid with 4 columns on desktop", async ({ page }) => {
@@ -134,37 +104,16 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
     expect(webCount).toBeGreaterThan(platformCount);
   });
 
-  // AC2: Enhanced Hover Effects (desktop only - hover doesn't work on mobile)
-  test("card shows overlay on hover", async ({ page, isMobile }) => {
-    test.skip(isMobile, "Hover effects not applicable on mobile");
-
-    const card = page.locator('[data-testid="bento-project-card"]').first();
-    const overlay = card.locator('[data-testid="bento-card-overlay"]');
-
-    await expect(overlay).toHaveCSS("opacity", "0");
-
-    await card.hover();
-    await page.waitForTimeout(400);
-
-    await expect(overlay).toHaveCSS("opacity", "1");
-  });
-
-  test("image zooms on hover", async ({ page, isMobile }) => {
-    test.skip(isMobile, "Hover effects not applicable on mobile");
-
-    const card = page.locator('[data-testid="bento-project-card"]').first();
-    const image = card.locator('[data-testid="bento-card-image"] img');
-
-    // Check that image has hover transition class
-    await expect(image).toHaveClass(/group-hover:scale-105/);
-
-    // Verify the card has proper hover styling
-    await card.hover();
-    await page.waitForTimeout(400);
-
-    // The overlay should be visible after hover
-    const overlay = card.locator('[data-testid="bento-card-overlay"]');
-    await expect(overlay).toHaveCSS("opacity", "1");
+  // AC2: Editorial hover — desaturation via CSS class, no browser chrome
+  test("card image desaturates by default and has no browser chrome", async ({ page, isMobile }) => {
+    test.skip(isMobile, "hover-only check");
+    const img = page.locator('[data-testid="bento-card-image"] img').first();
+    await expect(img).toBeVisible();
+    await expect(img).toHaveClass(/pf-card-img/);
+    const chrome = await page
+      .locator('[data-testid="bento-project-card"]').first()
+      .locator('text=/^●/').count();
+    expect(chrome).toBe(0);
   });
 
   // AC3: FLIP Transitions on Filter
@@ -191,16 +140,6 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
       card.locator('[data-testid="bento-card-category"]')
     ).toBeVisible();
     await expect(card.locator('[data-testid="bento-card-image"]')).toBeVisible();
-  });
-
-  test("featured cards show client name", async ({ page }) => {
-    const featuredCard = page
-      .locator('[data-testid="bento-project-card"][data-size="featured"]')
-      .first();
-
-    await expect(
-      featuredCard.locator('[data-testid="bento-card-client"]')
-    ).toBeVisible();
   });
 
   test("cards are clickable links to case studies", async ({ page }) => {
