@@ -4,7 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { PortfolioCard, type PortfolioCardSize } from "@/components/ui/portfolio-card";
+import { PortfolioCard } from "@/components/ui/portfolio-card";
+import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
 import type { SimpleProject } from "@/lib/projects";
 
 interface BentoPortfolioGridProps {
@@ -18,24 +19,6 @@ const categories = [
   { value: "platform", label: "Platform" },
   { value: "e-commerce", label: "E-Commerce" },
 ];
-
-interface LayoutItem {
-  project: SimpleProject;
-  size: PortfolioCardSize;
-}
-
-// Uniform layout: featured projects span 2 columns, everything else 1.
-function buildLayout(projects: SimpleProject[]): LayoutItem[] {
-  return projects.map((project) => ({
-    project,
-    size: project.featured ? "featured" : "small",
-  }));
-}
-
-// Featured cards take 2 of the 4 desktop columns (full width on tablet).
-function getSpanClasses(size: PortfolioCardSize) {
-  return size === "featured" ? "md:col-span-2 lg:col-span-2" : "";
-}
 
 // Check for reduced motion preference
 function usePrefersReducedMotion(): boolean {
@@ -57,6 +40,7 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
   const categoryParam = searchParams.get("category");
   const activeFilter = categoryParam || "all";
   const prefersReduced = usePrefersReducedMotion();
+  const sectionRef = React.useRef<HTMLElement>(null);
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === "all") return projects;
@@ -65,10 +49,7 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
     );
   }, [projects, activeFilter]);
 
-  const layoutItems = useMemo(
-    () => buildLayout(filteredProjects),
-    [filteredProjects]
-  );
+  const layoutItems = useMemo(() => filteredProjects, [filteredProjects]);
 
   const handleFilterChange = (category: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -81,8 +62,33 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
     router.push(qs ? `/portfolio?${qs}` : "/portfolio", { scroll: false });
   };
 
+  useGSAP(
+    () => {
+      const els = sectionRef.current?.querySelectorAll<HTMLElement>("[data-reveal]");
+      if (!els || els.length === 0) return;
+      if (shouldSkipAnimations()) {
+        els.forEach((el) => el.classList.add("is-in"));
+        return;
+      }
+      const init = async () => {
+        await registerScrollTrigger();
+        els.forEach((el, i) => {
+          gsap.to(el, {
+            onStart: () => el.classList.add("is-in"),
+            duration: 0,
+            delay: (i % 2) * 0.08,
+            scrollTrigger: { trigger: el, start: "top 88%" },
+          });
+        });
+      };
+      init();
+    },
+    { scope: sectionRef, dependencies: [activeFilter] }
+  );
+
   return (
     <section
+      ref={sectionRef}
       className="py-16 pb-24"
       aria-labelledby="bento-portfolio-grid-title"
       data-testid="bento-portfolio-grid-section"
@@ -117,51 +123,36 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
           ))}
         </div>
 
-        {/* Uniform browser-framed grid */}
+        {/* Uniform editorial grid */}
         <motion.div
           layout={!prefersReduced}
           layoutDependency={activeFilter}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10"
+          className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-16 md:gap-x-14 md:gap-y-20 lg:grid-cols-2"
           data-testid="bento-portfolio-grid"
         >
           <AnimatePresence mode="popLayout">
-            {layoutItems.map((item, index) => (
+            {layoutItems.map((project, index) => (
               <motion.div
-                key={item.project.id}
-                layoutId={prefersReduced ? undefined : item.project.id}
+                key={project.id}
+                layout={!prefersReduced}
+                layoutId={prefersReduced ? undefined : project.id}
                 // Only run the FLIP reposition when the filter changes — not on
                 // image/font-load reflows (which otherwise drop CSS :hover mid-interaction).
                 layoutDependency={activeFilter}
-                initial={prefersReduced ? false : { opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={false}
                 exit={
                   prefersReduced
                     ? { opacity: 0, transition: { duration: 0 } }
-                    : { opacity: 0, scale: 0.97, transition: { duration: 0.22, delay: 0 } }
+                    : { opacity: 0, scale: 0.97, transition: { duration: 0.22 } }
                 }
-                transition={
-                  prefersReduced
-                    ? { duration: 0 }
-                    : {
-                        duration: 0.45,
-                        // Capped so late cards still finish entering quickly and the
-                        // grid stabilises well inside test/interaction windows.
-                        delay: Math.min(index, 8) * 0.04,
-                        layout: {
-                          type: "spring",
-                          damping: 30,
-                          stiffness: 260,
-                        },
-                      }
-                }
-                className={getSpanClasses(item.size)}
               >
-                <PortfolioCard
-                  project={item.project}
-                  size={item.size}
-                  index={index}
-                  priority={index < 3}
-                />
+                <div className="pf-reveal" data-reveal>
+                  <PortfolioCard
+                    project={project}
+                    index={index}
+                    priority={index < 4}
+                  />
+                </div>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -202,16 +193,9 @@ export function BentoPortfolioGrid({ projects }: BentoPortfolioGridProps) {
                 />
               ))}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    "rounded-xl border border-surface-border bg-surface-overlay animate-pulse",
-                    i < 2 && "md:col-span-2 lg:col-span-2"
-                  )}
-                  style={{ aspectRatio: "16 / 10" }}
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-14 gap-y-16">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="pf-card-media animate-pulse" />
               ))}
             </div>
           </div>

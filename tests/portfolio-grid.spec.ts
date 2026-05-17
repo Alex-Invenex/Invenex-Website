@@ -37,9 +37,9 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
     expect(await cards.count()).toBe(14);
   });
 
-  test("grid uses CSS Grid with 4 columns on desktop", async ({ page }) => {
+  test("grid uses 2 columns on desktop", async ({ page }) => {
     const grid = page.locator('[data-testid="bento-portfolio-grid"]');
-    await expect(grid).toHaveClass(/lg:grid-cols-4/);
+    await expect(grid).toHaveClass(/lg:grid-cols-2/);
   });
 
   // Filter Tabs

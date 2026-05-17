@@ -2,16 +2,11 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { SimpleProject } from '@/lib/projects'
 
-/** @deprecated Task 4 will remove this — kept only for grid import compatibility. */
-export type PortfolioCardSize = 'featured' | 'small' | 'uniform'
-
 interface PortfolioCardProps {
   project: SimpleProject
   index: number
   /** First cards above the fold load eagerly (LCP). */
   priority?: boolean
-  /** @deprecated Accepted but ignored — Task 4 will remove from the grid. */
-  size?: PortfolioCardSize
 }
 
 /**
