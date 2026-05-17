@@ -209,8 +209,6 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
   });
 
   test("cards use flat website screenshots (no device-mockup, no portrait png)", async ({ page }) => {
-    await page.goto("/portfolio");
-    await page.waitForSelector('[data-testid="bento-portfolio-grid"]');
     const srcs = await page.$$eval(
       '[data-testid="bento-card-image"] img',
       (imgs) => imgs.map((i) => (i as HTMLImageElement).getAttribute("src") || "")
@@ -219,7 +217,7 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
     for (const s of srcs) {
       const decoded = decodeURIComponent(s);
       expect(decoded).not.toContain("-mockup.webp");
-      expect(decoded).not.toContain("alshahama-marine-new-1.png");
+      expect(decoded).toMatch(/\.webp(\?|&|$)/);
     }
   });
 });
