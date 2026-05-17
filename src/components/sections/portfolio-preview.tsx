@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
+import { BrowserFrame } from "@/components/ui/browser-frame";
 
 const featuredProjects = [
   {
@@ -12,24 +13,28 @@ const featuredProjects = [
     categories: ["Web", "Corporate"],
     image: "/portfolio/cooltech-international-mockup.webp",
     href: "/portfolio/cooltech-international",
+    url: "https://cooltechintl.com",
   },
   {
     title: "Ginger Designs",
     categories: ["Web", "Creative"],
     image: "/portfolio/ginger-designs-mockup.webp",
     href: "/portfolio/ginger-designs",
+    url: "https://gingerdesigns.ae",
   },
   {
     title: "GrabToGo",
     categories: ["Platform", "Deals"],
     image: "/portfolio/grabtogo-mockup.webp",
     href: "/portfolio/grabtogo",
+    url: "https://www.grabtogo.in",
   },
   {
     title: "Ziera Inc",
     categories: ["E-Commerce", "LED"],
     image: "/portfolio/ziera-mockup.webp",
     href: "/portfolio/ziera-inc",
+    url: "https://zierainc.com",
   },
 ];
 
@@ -41,7 +46,6 @@ function ProjectCard({
   index: number;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (shouldSkipAnimations() || !cardRef.current) return;
@@ -63,13 +67,6 @@ function ProjectCard({
 
   const handleMouseEnter = () => {
     if (shouldSkipAnimations() || !cardRef.current) return;
-    if (overlayRef.current) {
-      gsap.to(overlayRef.current, {
-        clipPath: "inset(0 0% 0 0)",
-        duration: 0.5,
-        ease: "power3.inOut",
-      });
-    }
     gsap.to(cardRef.current, {
       scale: 1.02,
       duration: 0.5,
@@ -79,13 +76,6 @@ function ProjectCard({
 
   const handleMouseLeave = () => {
     if (shouldSkipAnimations() || !cardRef.current) return;
-    if (overlayRef.current) {
-      gsap.to(overlayRef.current, {
-        clipPath: "inset(0 100% 0 0)",
-        duration: 0.3,
-        ease: "power3.inOut",
-      });
-    }
     const img = cardRef.current.querySelector("[data-portfolio-img]");
     if (img) {
       gsap.to(img, { x: 0, y: 0, duration: 0.5, ease: "power2" });
@@ -99,79 +89,62 @@ function ProjectCard({
 
   return (
     <div data-portfolio-card data-animate>
-      <Link href={project.href} className="group block relative">
+      <Link href={project.href} className="group block">
         <div
           ref={cardRef}
-          className="relative overflow-hidden rounded-2xl will-change-transform border border-surface-border hover:border-coral-500/30 transition-all duration-500 bg-background-secondary"
-          style={{
-            aspectRatio: "16 / 10",
-            boxShadow: "0 0 0 rgba(255,106,55,0)",
-          }}
+          className="will-change-transform"
           onMouseMove={handleMouseMove}
-          onMouseEnter={() => {
-            handleMouseEnter();
-            if (cardRef.current) {
-              cardRef.current.style.boxShadow =
-                "0 0 40px rgba(255,106,55,0.08)";
-            }
-          }}
-          onMouseLeave={() => {
-            handleMouseLeave();
-            if (cardRef.current) {
-              cardRef.current.style.boxShadow = "0 0 0 rgba(255,106,55,0)";
-            }
-          }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          {/* Image with parallax */}
-          <div data-portfolio-img className="absolute inset-[-10px] will-change-transform">
-            <Image
-              src={project.image}
-              alt={`${project.title} — ${project.categories.join(", ")}`}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          </div>
-
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
-
-          {/* ClipPath hover overlay */}
-          <div
-            ref={overlayRef}
-            className="absolute inset-0 bg-coral-500/10 backdrop-blur-[2px]"
-            style={{ clipPath: "inset(0 100% 0 0)" }}
-          />
-
-          {/* Counter */}
-          <span
-            className="absolute top-4 left-4 md:top-6 md:left-6 font-mono text-xs tracking-wider"
-            style={{ color: "rgba(255,106,55,0.6)" }}
-            aria-hidden="true"
-          >
-            {String(index + 1).padStart(2, "0")}
-          </span>
-
-          {/* Arrow */}
-          <div className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full border border-surface-border-hover bg-surface-overlay backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-coral-500 group-hover:border-coral-500">
-            <ArrowRight className="w-4 h-4 text-white" />
-          </div>
-
-          {/* Content */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-            <h3 className="font-semibold text-white tracking-tight text-xl md:text-2xl mb-2">
-              {project.title}
-            </h3>
-            <div className="flex items-center gap-2">
-              {project.categories.map((cat) => (
-                <span
-                  key={cat}
-                  className="text-xs px-2.5 py-1 rounded-full bg-surface-overlay-hover backdrop-blur-sm text-white/80 border border-surface-border"
-                >
-                  {cat}
-                </span>
-              ))}
+          <BrowserFrame url={project.url} variant="card">
+            {/* Slightly oversized for the cursor parallax — clipped by the frame */}
+            <div
+              data-portfolio-img
+              className="absolute inset-[-10px] will-change-transform"
+            >
+              <Image
+                src={project.image}
+                alt={`${project.title} — ${project.categories.join(", ")}`}
+                fill
+                priority={index === 0}
+                className="object-cover object-top"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
             </div>
+
+            {/* Hover reveal */}
+            <div className="absolute inset-0 flex items-center justify-center bg-background/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
+              <span className="inline-flex items-center gap-2 rounded-full border border-coral-500/40 bg-coral-500/20 px-5 py-2.5 text-sm font-medium text-white">
+                View Case Study
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </span>
+            </div>
+          </BrowserFrame>
+
+          {/* Metadata — below the frame */}
+          <div className="mt-4 flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h3 className="font-semibold tracking-tight text-foreground text-xl md:text-2xl transition-colors duration-300 group-hover:text-coral-400">
+                {project.title}
+              </h3>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                {project.categories.map((cat) => (
+                  <span
+                    key={cat}
+                    className="text-xs px-2.5 py-1 rounded-full bg-surface-overlay border border-surface-border text-foreground-muted"
+                  >
+                    {cat}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <span
+              className="mt-1 shrink-0 font-mono text-xs tracking-wider text-coral-500/70"
+              aria-hidden="true"
+            >
+              {String(index + 1).padStart(2, "0")}
+            </span>
           </div>
         </div>
       </Link>
@@ -269,7 +242,7 @@ export function PortfolioPreview() {
         </div>
 
         {/* 2x2 Even Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {featuredProjects.map((project, i) => (
             <ProjectCard key={project.title} project={project} index={i} />
           ))}

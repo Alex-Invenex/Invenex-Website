@@ -15,6 +15,7 @@ export function PortfolioClient({ projects }: PortfolioClientProps) {
       {/* Hero */}
       <SubpageHero
         id="portfolio-hero-title"
+        testId="portfolio-hero"
         tag="// Selected Work"
         headline={
           <>

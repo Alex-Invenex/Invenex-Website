@@ -85,6 +85,13 @@ verify-*.png
 mobile-audit/
 test-screenshots/
 playwright-report/
+test-results/
+qa-*.png
+qa-*.jpeg
+pin-*.png
+pinterest-*.png
+starx-*.png
+[0-9][0-9]-*.png
 
 # misc test/debug files
 final-portfolio-check.png
