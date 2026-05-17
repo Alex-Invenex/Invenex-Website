@@ -72,15 +72,25 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
         return;
       }
       const init = async () => {
-        await registerScrollTrigger();
+        const ScrollTrigger = await registerScrollTrigger();
         els.forEach((el, i) => {
-          gsap.to(el, {
-            onStart: () => el.classList.add("is-in"),
-            duration: 0,
-            delay: (i % 2) * 0.08,
-            scrollTrigger: { trigger: el, start: "top 88%" },
-          });
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 28 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: "power3.out",
+              delay: (i % 2) * 0.08,
+              onStart: () => el.classList.add("is-in"),
+              scrollTrigger: { trigger: el, start: "top 88%" },
+            }
+          );
         });
+        // Recompute trigger positions once images/fonts settle so above-the-fold
+        // cards fire onEnter immediately and don't stay stuck at opacity 0.
+        ScrollTrigger.refresh();
       };
       init();
     },

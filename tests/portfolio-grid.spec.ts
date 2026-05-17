@@ -110,10 +110,13 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
     const img = page.locator('[data-testid="bento-card-image"] img').first();
     await expect(img).toBeVisible();
     await expect(img).toHaveClass(/pf-card-img/);
-    const chrome = await page
-      .locator('[data-testid="bento-project-card"]').first()
-      .locator('text=/^●/').count();
-    expect(chrome).toBe(0);
+    const firstCard = page
+      .locator('[data-testid="bento-project-card"]')
+      .first();
+    // Clean media wrapper exists (no browser-chrome frame).
+    expect(await firstCard.locator(".pf-card-media").count()).toBeGreaterThan(0);
+    expect(await firstCard.locator('[data-testid="browser-frame"]').count()).toBe(0);
+    expect(await firstCard.locator('[class*="browser"]').count()).toBe(0);
   });
 
   // AC3: FLIP Transitions on Filter
@@ -283,6 +286,13 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Reduced Motion (AC5)", () =
     const cards = page.locator('[data-testid="bento-project-card"]');
     await page.waitForTimeout(500); // Wait for filter to apply
     expect(await cards.count()).toBe(2); // 2 Platform projects
+  });
+
+  test("reveal cards are visible (not stuck at opacity 0)", async ({ page }) => {
+    const card = page.locator('.pf-reveal').first();
+    await expect(card).toBeVisible();
+    const opacity = await card.evaluate((el) => getComputedStyle(el).opacity);
+    expect(Number(opacity)).toBeGreaterThan(0.9);
   });
 });
 
