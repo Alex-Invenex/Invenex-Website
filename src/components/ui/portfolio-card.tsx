@@ -46,7 +46,7 @@ export function PortfolioCard({ project, index, priority }: PortfolioCardProps) 
           {project.title}
         </h3>
         <div className="flex shrink-0 items-baseline gap-4">
-          <span className="hidden sm:inline text-sm text-coral-400/0 transition-colors duration-300 group-hover:text-coral-400 whitespace-nowrap">
+          <span aria-hidden="true" className="hidden sm:inline text-sm text-coral-400/0 transition-colors duration-300 group-hover:text-coral-400 whitespace-nowrap">
             View case study →
           </span>
           <span

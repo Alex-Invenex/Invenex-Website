@@ -106,7 +106,7 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
 
   // AC2: Editorial hover — desaturation via CSS class, no browser chrome
   test("card image desaturates by default and has no browser chrome", async ({ page, isMobile }) => {
-    test.skip(isMobile, "hover-only check");
+    test.skip(isMobile, "desktop DOM check");
     const img = page.locator('[data-testid="bento-card-image"] img').first();
     await expect(img).toBeVisible();
     await expect(img).toHaveClass(/pf-card-img/);
