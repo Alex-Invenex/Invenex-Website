@@ -49,7 +49,7 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
     );
   }, [projects, activeFilter]);
 
-  const layoutItems = useMemo(() => filteredProjects, [filteredProjects]);
+  const layoutItems = filteredProjects;
 
   const handleFilterChange = (category: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -62,6 +62,7 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
     router.push(qs ? `/portfolio?${qs}` : "/portfolio", { scroll: false });
   };
 
+  // useGSAP scoped cleanup kills prior ScrollTriggers when this re-runs on activeFilter change; registerScrollTrigger() is sync after first load, so rapid filter changes don't leak triggers.
   useGSAP(
     () => {
       const els = sectionRef.current?.querySelectorAll<HTMLElement>("[data-reveal]");
@@ -127,7 +128,7 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
         <motion.div
           layout={!prefersReduced}
           layoutDependency={activeFilter}
-          className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-16 md:gap-x-14 md:gap-y-20 lg:grid-cols-2"
+          className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-16 md:gap-y-20 lg:grid-cols-2"
           data-testid="bento-portfolio-grid"
         >
           <AnimatePresence mode="popLayout">

@@ -1051,3 +1051,8 @@ html.js-ready [data-animate] {
   }
   .pf-card-img { filter: none; }
 }
+@media (hover: none) and (pointer: coarse) {
+  .pf-reveal, .pf-reveal.is-in {
+    opacity: 1; transform: none; clip-path: none; transition: none;
+  }
+}
