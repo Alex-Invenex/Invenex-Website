@@ -38,22 +38,10 @@ interface CaseStudyClientProps {
 }
 
 export function CaseStudyClient({ project, relatedProjects }: CaseStudyClientProps) {
-  // Most projects reuse the hero shot as gallery[0] — drop it so the gallery
-  // adds new context instead of repeating the hero. Also drop mockup variants.
-  const dedupedGallery = project.gallery.filter(
-    (g) => g !== project.image && !g.includes('-mockup.webp')
-  )
-  // Prefer clean (non-hero, non-mockup) screenshots when there are multiple.
-  // If only one clean image exists, relax the mockup exclusion so the gallery
-  // has enough images for lightbox navigation. Fall back to full gallery if
-  // hero-excluded is also exhausted.
-  const heroExcluded = project.gallery.filter((g) => g !== project.image)
-  const galleryImages =
-    dedupedGallery.length > 1
-      ? dedupedGallery
-      : heroExcluded.length > 0
-      ? heroExcluded
-      : project.gallery
+  const galleryImages = (() => {
+    const noMockups = project.gallery.filter((g) => !g.includes('-mockup.webp'))
+    return noMockups.length > 0 ? noMockups : project.gallery
+  })()
 
   return (
     <>
