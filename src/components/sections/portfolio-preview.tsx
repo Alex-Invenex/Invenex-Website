@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
-import { BrowserFrame } from "@/components/ui/browser-frame";
 
 const featuredProjects = [
   {
@@ -97,54 +96,27 @@ function ProjectCard({
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <BrowserFrame url={project.url} variant="card">
-            {/* Slightly oversized for the cursor parallax — clipped by the frame */}
-            <div
-              data-portfolio-img
-              className="absolute inset-[-10px] will-change-transform"
-            >
-              <Image
-                src={project.image}
-                alt={`${project.title} — ${project.categories.join(", ")}`}
-                fill
-                priority={index === 0}
-                className="object-cover object-top"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
+          <div className="pf-card-media" data-portfolio-img>
+            <Image
+              src={project.image}
+              alt={`${project.title} — ${project.categories.join(", ")}`}
+              fill
+              priority={index === 0}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="pf-card-img"
+            />
+          </div>
+          <div className="mt-5 flex items-baseline justify-between gap-5">
+            <h3 className="pf-card-rule text-xl md:text-2xl font-semibold tracking-tight text-foreground transition-colors duration-300 group-hover:text-coral-400">
+              {project.title}
+            </h3>
+            <div className="flex shrink-0 flex-wrap items-center gap-3">
+              {project.categories.map((cat) => (
+                <span key={cat} className="font-mono text-xs tracking-[0.18em] uppercase text-foreground-subtle">
+                  {cat}
+                </span>
+              ))}
             </div>
-
-            {/* Hover reveal */}
-            <div className="absolute inset-0 flex items-center justify-center bg-background/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
-              <span className="inline-flex items-center gap-2 rounded-full border border-coral-500/40 bg-coral-500/20 px-5 py-2.5 text-sm font-medium text-white">
-                View Case Study
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </span>
-            </div>
-          </BrowserFrame>
-
-          {/* Metadata — below the frame */}
-          <div className="mt-4 flex items-start justify-between gap-4">
-            <div className="min-w-0">
-              <h3 className="font-semibold tracking-tight text-foreground text-xl md:text-2xl transition-colors duration-300 group-hover:text-coral-400">
-                {project.title}
-              </h3>
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                {project.categories.map((cat) => (
-                  <span
-                    key={cat}
-                    className="text-xs px-2.5 py-1 rounded-full bg-surface-overlay border border-surface-border text-foreground-muted"
-                  >
-                    {cat}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <span
-              className="mt-1 shrink-0 font-mono text-xs tracking-wider text-coral-500/70"
-              aria-hidden="true"
-            >
-              {String(index + 1).padStart(2, "0")}
-            </span>
           </div>
         </div>
       </Link>
@@ -242,7 +214,7 @@ export function PortfolioPreview() {
         </div>
 
         {/* 2x2 Even Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-16">
           {featuredProjects.map((project, i) => (
             <ProjectCard key={project.title} project={project} index={i} />
           ))}
