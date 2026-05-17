@@ -86,6 +86,7 @@ mobile-audit/
 test-screenshots/
 playwright-report/
 test-results/
+.superpowers/
 qa-*.png
 qa-*.jpeg
 pin-*.png
