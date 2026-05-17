@@ -12,28 +12,24 @@ const featuredProjects = [
     categories: ["Web", "Corporate"],
     image: "/portfolio/cooltech-international.webp",
     href: "/portfolio/cooltech-international",
-    url: "https://cooltechintl.com",
   },
   {
     title: "Ginger Designs",
     categories: ["Web", "Creative"],
     image: "/portfolio/ginger-designs.webp",
     href: "/portfolio/ginger-designs",
-    url: "https://gingerdesigns.ae",
   },
   {
     title: "GrabToGo",
     categories: ["Platform", "Deals"],
     image: "/portfolio/grabtogo.webp",
     href: "/portfolio/grabtogo",
-    url: "https://www.grabtogo.in",
   },
   {
     title: "Ziera Inc",
     categories: ["E-Commerce", "LED"],
     image: "/portfolio/zierainc.webp",
     href: "/portfolio/ziera-inc",
-    url: "https://zierainc.com",
   },
 ];
 
@@ -64,26 +60,12 @@ function ProjectCard({
     }
   };
 
-  const handleMouseEnter = () => {
-    if (shouldSkipAnimations() || !cardRef.current) return;
-    gsap.to(cardRef.current, {
-      scale: 1.02,
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  };
-
   const handleMouseLeave = () => {
     if (shouldSkipAnimations() || !cardRef.current) return;
     const img = cardRef.current.querySelector("[data-portfolio-img]");
     if (img) {
       gsap.to(img, { x: 0, y: 0, duration: 0.5, ease: "power2" });
     }
-    gsap.to(cardRef.current, {
-      scale: 1,
-      duration: 0.4,
-      ease: "power2.out",
-    });
   };
 
   return (
@@ -93,7 +75,6 @@ function ProjectCard({
           ref={cardRef}
           className="will-change-transform"
           onMouseMove={handleMouseMove}
-          onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           <div className="pf-card-media" data-portfolio-img>
