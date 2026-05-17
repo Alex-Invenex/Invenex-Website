@@ -8,7 +8,6 @@ import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react'
 import { SubpageCTA } from '@/components/sections/subpage-cta'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { GSAPStaggerContainer, GSAPStaggerItem } from '@/components/ui/gsap-stagger-container'
-import { BrowserFrame } from '@/components/ui/browser-frame'
 import { ShareButtons } from '@/components/ui/share-buttons'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
@@ -40,16 +39,28 @@ interface CaseStudyClientProps {
 
 export function CaseStudyClient({ project, relatedProjects }: CaseStudyClientProps) {
   // Most projects reuse the hero shot as gallery[0] — drop it so the gallery
-  // adds new context instead of repeating the hero.
-  const dedupedGallery = project.gallery.filter((g) => g !== project.image)
-  const galleryImages = dedupedGallery.length > 0 ? dedupedGallery : project.gallery
+  // adds new context instead of repeating the hero. Also drop mockup variants.
+  const dedupedGallery = project.gallery.filter(
+    (g) => g !== project.image && !g.includes('-mockup.webp')
+  )
+  // Prefer clean (non-hero, non-mockup) screenshots when there are multiple.
+  // If only one clean image exists, relax the mockup exclusion so the gallery
+  // has enough images for lightbox navigation. Fall back to full gallery if
+  // hero-excluded is also exhausted.
+  const heroExcluded = project.gallery.filter((g) => g !== project.image)
+  const galleryImages =
+    dedupedGallery.length > 1
+      ? dedupedGallery
+      : heroExcluded.length > 0
+      ? heroExcluded
+      : project.gallery
 
   return (
     <>
       <CaseStudyHero project={project} />
       <ChallengeAndSolutionSection challenge={project.challenge} solution={project.solution} />
       <ResultsSection results={project.results} />
-      <GallerySection images={galleryImages} title={project.title} projectUrl={project.url} />
+      <GallerySection images={galleryImages} title={project.title} />
       <TechSection technologies={project.technologies} />
       {project.testimonial && <TestimonialSection testimonial={project.testimonial} />}
       {relatedProjects.length > 0 && <RelatedSection projects={relatedProjects} category={project.category} />}
@@ -246,14 +257,11 @@ function CaseStudyHero({ project }: { project: CaseStudyProject }) {
         </div>
       </div>
 
-      {/* Browser-framed hero showcase with clip-path reveal */}
+      {/* Hero showcase with clip-path reveal */}
       {project.image && (
-        <div
-          data-csh="img"
-          className="container mx-auto px-6 md:px-12 mt-14 md:mt-20 relative z-10"
-          style={{ clipPath: 'inset(8%)' }}
-        >
-          <BrowserFrame url={project.url} variant="showcase" tiltable aspectRatio="16 / 10">
+        <div data-csh="img" className="container mx-auto px-6 md:px-12 mt-14 md:mt-20 relative z-10"
+             style={{ clipPath: 'inset(8%)' }}>
+          <div className="pf-card-media" style={{ borderRadius: '20px' }}>
             <Image
               src={project.image}
               alt={`${project.title} — project by Invenex Solutions`}
@@ -262,7 +270,7 @@ function CaseStudyHero({ project }: { project: CaseStudyProject }) {
               sizes="(max-width: 1024px) 100vw, 1200px"
               priority
             />
-          </BrowserFrame>
+          </div>
         </div>
       )}
     </section>
@@ -404,7 +412,7 @@ function ResultsSection({ results }: { results: CaseStudyProject['results'] }) {
 }
 
 /* ─── Gallery Section ──────────────────────────────────── */
-function GallerySection({ images, title, projectUrl }: { images: string[]; title: string; projectUrl?: string }) {
+function GallerySection({ images, title }: { images: string[]; title: string }) {
   const sectionRef = useRef<HTMLElement>(null)
   const [mounted, setMounted] = useState(false)
 
@@ -444,7 +452,7 @@ function GallerySection({ images, title, projectUrl }: { images: string[]; title
         <SectionNumber>04</SectionNumber>
         <h2 id="gallery-heading" className="text-3xl md:text-4xl font-bold mb-12">Project Gallery</h2>
         <div data-gal>
-          <ImageGallery images={images} projectTitle={title} projectUrl={projectUrl} />
+          <ImageGallery images={images} projectTitle={title} />
         </div>
       </div>
     </section>
@@ -572,20 +580,15 @@ function RelatedSection({ projects, category }: { projects: CaseStudyProject[]; 
           {projects.map((relatedProject) => (
             <GSAPStaggerItem key={relatedProject.id}>
               <Link href={`/portfolio/${relatedProject.slug}`} className="group block">
-                <BrowserFrame url={relatedProject.url} variant="card">
+                <div className="pf-card-media">
                   <Image
                     src={relatedProject.image}
                     alt={`${relatedProject.title} — ${relatedProject.category} project by Invenex Solutions`}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    className="pf-card-img"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center bg-background/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-coral-500/40 bg-coral-500/20 px-5 py-2.5 text-sm font-medium text-white">
-                      View Case Study <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                    </span>
-                  </div>
-                </BrowserFrame>
+                </div>
                 <div className="mt-4">
                   <span className="inline-block rounded-full border border-surface-border bg-surface-overlay px-3 py-1 text-xs font-medium text-foreground-muted mb-3">
                     {relatedProject.category}
