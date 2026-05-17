@@ -4,13 +4,16 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { BrowserFrame } from "@/components/ui/browser-frame";
 
 interface ImageGalleryProps {
   images: string[];
   projectTitle?: string;
+  /** Project live URL — shown in each framed cell's chrome bar. */
+  projectUrl?: string;
 }
 
-export function ImageGallery({ images, projectTitle = "Project" }: ImageGalleryProps) {
+export function ImageGallery({ images, projectTitle = "Project", projectUrl }: ImageGalleryProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const openLightbox = (index: number) => {
@@ -59,22 +62,24 @@ export function ImageGallery({ images, projectTitle = "Project" }: ImageGalleryP
   return (
     <>
       {/* Gallery Grid */}
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-6">
         {images.map((image, i) => (
           <button
             key={i}
             onClick={() => openLightbox(i)}
             data-testid="gallery-image"
-            className="aspect-video bg-background-secondary rounded-lg overflow-hidden hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background cursor-pointer relative"
+            className="group block w-full cursor-pointer rounded-xl text-left transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label={`View image ${i + 1} of ${images.length} in fullscreen`}
           >
-            <Image
-              src={image}
-              alt={`${projectTitle} screenshot ${i + 1}`}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover hover:scale-105 transition-transform duration-300"
-            />
+            <BrowserFrame url={projectUrl} variant="card">
+              <Image
+                src={image}
+                alt={`${projectTitle} screenshot ${i + 1}`}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
+              />
+            </BrowserFrame>
           </button>
         ))}
       </div>

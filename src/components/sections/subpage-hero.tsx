@@ -14,6 +14,8 @@ interface SubpageHeroProps {
   children?: ReactNode
   variant?: 'centered' | 'left-aligned'
   id?: string
+  /** Optional test id applied to the hero section root. */
+  testId?: string
 }
 
 /**
@@ -30,6 +32,7 @@ export function SubpageHero({
   children,
   variant = 'left-aligned',
   id,
+  testId,
 }: SubpageHeroProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const [mounted, setMounted] = useState(false)
@@ -146,6 +149,7 @@ export function SubpageHero({
       className="relative min-h-[60dvh] md:min-h-[70dvh] flex flex-col justify-center bg-background pt-24 pb-12 md:pb-16"
       style={{ overflow: 'clip' }}
       aria-labelledby={id}
+      data-testid={testId}
     >
       {/* ─ Grain texture overlay ─ */}
       <div

@@ -2,11 +2,9 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useMemo } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { PortfolioCard, type PortfolioCardSize } from "@/components/ui/portfolio-card";
 import type { SimpleProject } from "@/lib/projects";
 
 interface BentoPortfolioGridProps {
@@ -21,68 +19,22 @@ const categories = [
   { value: "e-commerce", label: "E-Commerce" },
 ];
 
-type CardSize = "hero" | "medium" | "small";
-
 interface LayoutItem {
   project: SimpleProject;
-  size: CardSize;
+  size: PortfolioCardSize;
 }
 
-// Build editorial layout: featured hero cards interleaved with regular project rows
-function buildEditorialLayout(projects: SimpleProject[]): LayoutItem[] {
-  const featured = projects.filter((p) => p.featured);
-  const regular = projects.filter((p) => !p.featured);
-  const result: LayoutItem[] = [];
-
-  let fi = 0;
-  let ri = 0;
-  let regularRowType: "pair" | "trio" = "pair";
-
-  while (fi < featured.length || ri < regular.length) {
-    // Insert a featured hero card if available
-    if (fi < featured.length) {
-      result.push({ project: featured[fi++], size: "hero" });
-    }
-
-    // Insert a row of regular projects
-    if (ri < regular.length) {
-      if (regularRowType === "pair") {
-        const count = Math.min(2, regular.length - ri);
-        for (let i = 0; i < count; i++) {
-          result.push({ project: regular[ri++], size: "medium" });
-        }
-        regularRowType = "trio";
-      } else {
-        const count = Math.min(3, regular.length - ri);
-        for (let i = 0; i < count; i++) {
-          result.push({ project: regular[ri++], size: "small" });
-        }
-        regularRowType = "pair";
-      }
-    }
-  }
-
-  return result;
-}
-
-// Simpler layout for filtered views with fewer projects
-function buildFilteredLayout(projects: SimpleProject[]): LayoutItem[] {
-  return projects.map((project, index) => ({
+// Uniform layout: featured projects span 2 columns, everything else 1.
+function buildLayout(projects: SimpleProject[]): LayoutItem[] {
+  return projects.map((project) => ({
     project,
-    size: project.featured ? "hero" : (index % 3 === 0 ? "medium" : "small") as CardSize,
+    size: project.featured ? "featured" : "small",
   }));
 }
 
-// Grid span classes per card size
-function getGridClasses(size: CardSize) {
-  switch (size) {
-    case "hero":
-      return "col-span-1 md:col-span-2 lg:col-span-6";
-    case "medium":
-      return "col-span-1 md:col-span-1 lg:col-span-3";
-    case "small":
-      return "col-span-1 md:col-span-1 lg:col-span-2";
-  }
+// Featured cards take 2 of the 4 desktop columns (full width on tablet).
+function getSpanClasses(size: PortfolioCardSize) {
+  return size === "featured" ? "md:col-span-2 lg:col-span-2" : "";
 }
 
 // Check for reduced motion preference
@@ -99,98 +51,6 @@ function usePrefersReducedMotion(): boolean {
   return prefersReducedMotion;
 }
 
-// Editorial project card
-function EditorialCard({
-  project,
-  size,
-  index,
-}: {
-  project: SimpleProject;
-  size: CardSize;
-  index: number;
-}) {
-  return (
-    <Link href={`/portfolio/${project.slug}`} className="group block">
-      <div
-        className={cn(
-          "relative overflow-hidden rounded-2xl",
-          "border border-surface-border hover:border-coral-500/30",
-          "transition-all duration-500",
-          "bg-background-secondary",
-          size === "hero" && "aspect-[16/9] lg:aspect-[21/9]",
-          size === "medium" && "aspect-[3/2]",
-          size === "small" && "aspect-[4/3]"
-        )}
-        style={{
-          boxShadow: "0 0 0 rgba(255,107,53,0)",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.boxShadow = "0 0 40px rgba(255,107,53,0.08)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.boxShadow = "0 0 0 rgba(255,107,53,0)";
-        }}
-      >
-        {/* Image with hover scale */}
-        <Image
-          src={project.image}
-          alt={`${project.title} — ${project.category}`}
-          fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
-          sizes={
-            size === "hero"
-              ? "100vw"
-              : size === "medium"
-                ? "(max-width: 768px) 100vw, 50vw"
-                : "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          }
-        />
-
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
-
-        {/* Counter — coral accent */}
-        <span
-          className="absolute top-4 left-4 md:top-6 md:left-6 font-mono text-xs tracking-wider"
-          style={{ color: "rgba(255,107,53,0.6)" }}
-          aria-hidden="true"
-        >
-          {String(index + 1).padStart(2, "0")}
-        </span>
-
-        {/* Arrow — appears on hover */}
-        <div className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full border border-surface-border-hover bg-surface-overlay backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bg-coral-500 group-hover:border-coral-500">
-          <ArrowRight className="w-4 h-4 text-white" />
-        </div>
-
-        {/* Content overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 lg:p-8">
-          <span className="text-xs px-2.5 py-1 rounded-full bg-surface-overlay-hover backdrop-blur-sm text-white/80 border border-surface-border mb-3 inline-block">
-            {project.category}
-          </span>
-          <h3
-            className={cn(
-              "font-semibold text-white tracking-tight",
-              size === "hero"
-                ? "text-2xl md:text-3xl lg:text-4xl"
-                : size === "medium"
-                  ? "text-xl md:text-2xl"
-                  : "text-lg md:text-xl"
-            )}
-          >
-            {project.title}
-          </h3>
-          {size !== "small" && (
-            <p className="text-white/50 mt-2 text-sm md:text-base line-clamp-2 max-w-2xl">
-              {project.excerpt}
-            </p>
-          )}
-        </div>
-      </div>
-    </Link>
-  );
-}
-
 function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -205,12 +65,10 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
     );
   }, [projects, activeFilter]);
 
-  const layoutItems = useMemo(() => {
-    if (activeFilter === "all") {
-      return buildEditorialLayout(filteredProjects);
-    }
-    return buildFilteredLayout(filteredProjects);
-  }, [filteredProjects, activeFilter]);
+  const layoutItems = useMemo(
+    () => buildLayout(filteredProjects),
+    [filteredProjects]
+  );
 
   const handleFilterChange = (category: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -226,11 +84,11 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
   return (
     <section
       className="py-16 pb-24"
-      aria-labelledby="portfolio-grid-title"
+      aria-labelledby="bento-portfolio-grid-title"
       data-testid="bento-portfolio-grid-section"
     >
       <div className="container mx-auto px-6">
-        <h2 id="portfolio-grid-title" className="sr-only">
+        <h2 id="bento-portfolio-grid-title" className="sr-only">
           Project Portfolio
         </h2>
 
@@ -259,10 +117,11 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
           ))}
         </div>
 
-        {/* Editorial Grid */}
+        {/* Uniform browser-framed grid */}
         <motion.div
           layout={!prefersReduced}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5"
+          layoutDependency={activeFilter}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10"
           data-testid="bento-portfolio-grid"
         >
           <AnimatePresence mode="popLayout">
@@ -270,32 +129,38 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
               <motion.div
                 key={item.project.id}
                 layoutId={prefersReduced ? undefined : item.project.id}
+                // Only run the FLIP reposition when the filter changes — not on
+                // image/font-load reflows (which otherwise drop CSS :hover mid-interaction).
+                layoutDependency={activeFilter}
                 initial={prefersReduced ? false : { opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={
                   prefersReduced
-                    ? { opacity: 0 }
-                    : { opacity: 0, scale: 0.97 }
+                    ? { opacity: 0, transition: { duration: 0 } }
+                    : { opacity: 0, scale: 0.97, transition: { duration: 0.22, delay: 0 } }
                 }
                 transition={
                   prefersReduced
                     ? { duration: 0 }
                     : {
-                        duration: 0.5,
-                        delay: index * 0.06,
+                        duration: 0.45,
+                        // Capped so late cards still finish entering quickly and the
+                        // grid stabilises well inside test/interaction windows.
+                        delay: Math.min(index, 8) * 0.04,
                         layout: {
                           type: "spring",
-                          damping: 28,
-                          stiffness: 180,
+                          damping: 30,
+                          stiffness: 260,
                         },
                       }
                 }
-                className={getGridClasses(item.size)}
+                className={getSpanClasses(item.size)}
               >
-                <EditorialCard
+                <PortfolioCard
                   project={item.project}
                   size={item.size}
                   index={index}
+                  priority={index < 3}
                 />
               </motion.div>
             ))}
@@ -322,10 +187,14 @@ export function BentoPortfolioGrid({ projects }: BentoPortfolioGridProps) {
       fallback={
         <section
           className="py-16 pb-24"
+          aria-labelledby="bento-portfolio-grid-title"
           data-testid="bento-portfolio-grid-section"
         >
           <div className="container mx-auto px-6">
-            <div className="flex justify-center gap-2 mb-16">
+            <h2 id="bento-portfolio-grid-title" className="sr-only">
+              Project Portfolio
+            </h2>
+            <div className="flex flex-wrap justify-center gap-2 mb-16">
               {categories.map((cat) => (
                 <div
                   key={cat.value}
@@ -333,14 +202,17 @@ export function BentoPortfolioGrid({ projects }: BentoPortfolioGridProps) {
                 />
               ))}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5">
-              <div className="lg:col-span-6 aspect-[21/9] rounded-2xl bg-surface-overlay animate-pulse" />
-              <div className="lg:col-span-3 aspect-[3/2] rounded-2xl bg-surface-overlay animate-pulse" />
-              <div className="lg:col-span-3 aspect-[3/2] rounded-2xl bg-surface-overlay animate-pulse" />
-              <div className="lg:col-span-6 aspect-[21/9] rounded-2xl bg-surface-overlay animate-pulse" />
-              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-surface-overlay animate-pulse" />
-              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-surface-overlay animate-pulse" />
-              <div className="lg:col-span-2 aspect-[4/3] rounded-2xl bg-surface-overlay animate-pulse" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    "rounded-xl border border-surface-border bg-surface-overlay animate-pulse",
+                    i < 2 && "md:col-span-2 lg:col-span-2"
+                  )}
+                  style={{ aspectRatio: "16 / 10" }}
+                />
+              ))}
             </div>
           </div>
         </section>

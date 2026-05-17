@@ -8,7 +8,7 @@ import { ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react'
 import { SubpageCTA } from '@/components/sections/subpage-cta'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { GSAPStaggerContainer, GSAPStaggerItem } from '@/components/ui/gsap-stagger-container'
-import { Badge } from '@/components/ui/badge'
+import { BrowserFrame } from '@/components/ui/browser-frame'
 import { ShareButtons } from '@/components/ui/share-buttons'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
@@ -20,9 +20,13 @@ const ImageGallery = dynamic(
   () => import('@/components/ui/image-gallery').then((mod) => mod.ImageGallery),
   {
     loading: () => (
-      <div className="grid md:grid-cols-2 gap-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="aspect-video bg-background-secondary rounded-lg animate-pulse" />
+      <div className="grid md:grid-cols-2 gap-6">
+        {Array.from({ length: 2 }).map((_, i) => (
+          <div
+            key={i}
+            className="rounded-xl border border-surface-border bg-background-secondary animate-pulse"
+            style={{ aspectRatio: '16 / 10' }}
+          />
         ))}
       </div>
     ),
@@ -35,20 +39,29 @@ interface CaseStudyClientProps {
 }
 
 export function CaseStudyClient({ project, relatedProjects }: CaseStudyClientProps) {
+  // Most projects reuse the hero shot as gallery[0] — drop it so the gallery
+  // adds new context instead of repeating the hero.
+  const dedupedGallery = project.gallery.filter((g) => g !== project.image)
+  const galleryImages = dedupedGallery.length > 0 ? dedupedGallery : project.gallery
+
   return (
     <>
       <CaseStudyHero project={project} />
       <ChallengeAndSolutionSection challenge={project.challenge} solution={project.solution} />
       <ResultsSection results={project.results} />
-      <GallerySection images={project.gallery} title={project.title} />
+      <GallerySection images={galleryImages} title={project.title} projectUrl={project.url} />
       <TechSection technologies={project.technologies} />
       {project.testimonial && <TestimonialSection testimonial={project.testimonial} />}
       {relatedProjects.length > 0 && <RelatedSection projects={relatedProjects} category={project.category} />}
-      <SubpageCTA
-        headline="READY TO START"
-        highlightedText="YOUR PROJECT"
-        subtitle="Let's discuss how we can help transform your vision into reality."
-      />
+      <div data-testid="case-study-cta">
+        <SubpageCTA
+          headline="READY TO START"
+          highlightedText="YOUR PROJECT"
+          subtitle="Let's discuss how we can help transform your vision into reality."
+          primaryCTA={{ label: 'Start Your Project', href: '/contact' }}
+          secondaryCTA={{ label: 'View Our Work', href: '/portfolio' }}
+        />
+      </div>
     </>
   )
 }
@@ -59,19 +72,17 @@ const grainStyle: React.CSSProperties = {
   opacity: 0.03,
 }
 
-/* ─── Decorative outlined section number ─────────────────── */
+/* ─── Decorative section number — restrained, mono eyebrow ── */
 function SectionNumber({ children }: { children: React.ReactNode }) {
   return (
     <span
-      className="block font-mono mb-4"
+      className="block font-mono mb-3 text-coral-500/70"
       aria-hidden="true"
       style={{
-        fontSize: 'clamp(3.5rem, 8vw, 6rem)',
-        fontWeight: 200,
-        WebkitTextStroke: '1px var(--color-coral-500)',
-        WebkitTextFillColor: 'transparent',
-        opacity: 0.4,
+        fontSize: 'clamp(2rem, 4vw, 3rem)',
+        fontWeight: 300,
         lineHeight: 1,
+        letterSpacing: '0.05em',
       }}
     >
       {children}
@@ -90,13 +101,12 @@ function CaseStudyHero({ project }: { project: CaseStudyProject }) {
     () => {
       if (!mounted) return
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        gsap.set('[data-csh]', { opacity: 1, y: 0, clipPath: 'inset(0%)', scale: 1 })
+        gsap.set('[data-csh]', { opacity: 1, y: 0, x: 0, clipPath: 'inset(0%)', scale: 1 })
         return
       }
 
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-      // Orbs fade + scale
       tl.fromTo(
         '[data-csh="orb"]',
         { opacity: 0, scale: 0.5 },
@@ -111,43 +121,44 @@ function CaseStudyHero({ project }: { project: CaseStudyProject }) {
       tl.fromTo('[data-csh="meta"]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.7)
       tl.fromTo('[data-csh="share"]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.8)
 
-      // Hero image clip-path reveal
       tl.fromTo(
         '[data-csh="img"]',
-        { clipPath: 'inset(8%)' },
-        { clipPath: 'inset(0%)', duration: 1.2, ease: 'power4.out' },
-        0.3
+        { clipPath: 'inset(8%)', opacity: 0 },
+        { clipPath: 'inset(0%)', opacity: 1, duration: 1.2, ease: 'power4.out' },
+        0.35
       )
     },
     { scope: sectionRef, dependencies: [mounted] }
   )
 
   return (
-    <section ref={sectionRef} data-testid="case-study-hero" aria-labelledby="case-study-hero-title" className="relative pt-28 md:pt-36 pb-16 md:pb-20 bg-background" style={{ overflow: 'clip' }}>
+    <section
+      ref={sectionRef}
+      data-testid="case-study-hero"
+      aria-labelledby="case-study-hero-title"
+      className="relative pt-28 md:pt-36 pb-16 md:pb-24 bg-background"
+      style={{ overflow: 'clip' }}
+    >
       {/* Grain */}
       <div className="absolute inset-0 pointer-events-none z-[2]" aria-hidden="true" style={grainStyle} />
 
-      {/* Triple orb atmosphere (matching SubpageHero) */}
+      {/* Triple orb atmosphere */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {/* Primary coral radiance */}
         <div
           data-csh="orb"
           className="absolute top-[15%] right-[5%] rounded-full opacity-0 will-change-transform"
           style={{ width: 600, height: 600, background: 'radial-gradient(circle, rgba(255,106,55,0.08) 0%, transparent 70%)' }}
         />
-        {/* Secondary inner glow */}
         <div
           data-csh="orb"
           className="absolute top-[25%] right-[12%] rounded-full opacity-0 will-change-transform"
           style={{ width: 400, height: 400, background: 'radial-gradient(circle, rgba(255,106,55,0.12) 0%, transparent 60%)' }}
         />
-        {/* Subtle purple accent — top left */}
         <div
           data-csh="orb"
           className="absolute -top-20 left-[20%] rounded-full opacity-0"
           style={{ width: 400, height: 400, background: 'radial-gradient(circle, rgba(139,92,246,0.04) 0%, transparent 70%)' }}
         />
-        {/* Faint grid */}
         <div
           className="absolute inset-0 opacity-[0.012]"
           style={{
@@ -158,88 +169,109 @@ function CaseStudyHero({ project }: { project: CaseStudyProject }) {
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        {/* Back to Portfolio — above image for better hierarchy */}
-        <Link href="/portfolio" className="inline-flex items-center gap-2 text-foreground-muted hover:text-foreground transition-colors mb-8 group" data-csh="back">
+        {/* Back to Portfolio */}
+        <Link
+          href="/portfolio"
+          className="inline-flex items-center gap-2 text-foreground-muted hover:text-foreground transition-colors mb-10 group"
+          data-csh="back"
+        >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back to Portfolio
         </Link>
 
-        {/* Weight-contrast headline: thin client name + bold coral title */}
-        <div data-csh="client">
-          <span
-            className="block text-foreground/50 leading-tight tracking-[-0.02em]"
-            style={{ fontSize: 'clamp(1.4rem, 3vw, 2.5rem)', fontWeight: 200 }}
+        <div className="max-w-4xl">
+          {/* Client name — strong mono coral eyebrow (was a weak 200-weight grey) */}
+          <p
+            data-csh="client"
+            data-testid="case-study-client"
+            className="font-mono text-sm md:text-base tracking-[0.25em] uppercase text-coral-500 mb-5"
           >
             {project.client}
-          </span>
-        </div>
+          </p>
 
-        <h1
-          id="case-study-hero-title"
-          data-csh="title"
-          className="leading-[0.9] tracking-[-0.04em] mt-2"
-          style={{
-            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-            fontWeight: 900,
-            background: 'linear-gradient(135deg, var(--color-coral-500) 0%, var(--color-coral-400) 40%, var(--color-coral-600) 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}
-        >
-          {project.title}
-        </h1>
+          {/* Title — coral gradient, lighter stops for stronger contrast on dark */}
+          <h1
+            id="case-study-hero-title"
+            data-csh="title"
+            className="leading-[0.92] tracking-[-0.04em]"
+            style={{
+              fontSize: 'clamp(2.75rem, 6.5vw, 5.5rem)',
+              fontWeight: 900,
+              background: 'linear-gradient(135deg, var(--color-coral-300) 0%, var(--color-coral-400) 45%, var(--color-coral-500) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            {project.title}
+          </h1>
 
-        {/* Excerpt with coral accent border */}
-        {project.excerpt && (
-          <div data-csh="meta" className="mt-8 md:mt-10 flex">
-            <div className="w-0.5 min-h-[3rem] bg-coral-500 shrink-0" />
-            <p className="pl-4 md:pl-5 text-base md:text-lg text-foreground-muted max-w-lg leading-relaxed">
-              {project.excerpt}
-            </p>
+          {/* Category + meta strip */}
+          <div data-csh="badge" className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-foreground-muted">
+            <span
+              data-testid="case-study-category"
+              className="inline-flex items-center gap-2 rounded-full border border-coral-500/30 bg-coral-500/10 px-4 py-1.5 text-xs font-medium text-coral-400"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-coral-500" aria-hidden="true" />
+              {project.category}
+            </span>
+            <span className="hidden sm:inline h-4 w-px bg-surface-overlay-hover" />
+            <span>{project.client}</span>
+            {project.url && (
+              <>
+                <span className="hidden sm:inline h-4 w-px bg-surface-overlay-hover" />
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+                >
+                  Visit Live Site <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                </a>
+              </>
+            )}
           </div>
-        )}
 
-        {/* Meta strip */}
-        <div data-csh="meta" className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-foreground-muted">
-          <Badge data-testid="case-study-category">{project.category}</Badge>
-          <span className="hidden sm:inline h-4 w-px bg-surface-overlay-hover" />
-          <span>{project.client}</span>
-          {project.url && (
-            <>
-              <span className="hidden sm:inline h-4 w-px bg-surface-overlay-hover" />
-              <a href={project.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
-                Visit Live Site <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-              </a>
-            </>
+          {/* Excerpt with coral accent rule */}
+          {project.excerpt && (
+            <div data-csh="meta" className="mt-8 md:mt-10 flex">
+              <div className="w-0.5 min-h-[3rem] bg-coral-500 shrink-0" />
+              <p className="pl-4 md:pl-5 text-base md:text-lg lg:text-xl text-foreground-muted max-w-xl leading-relaxed">
+                {project.excerpt}
+              </p>
+            </div>
           )}
-        </div>
 
-        <div data-csh="share"><ShareButtons title={`${project.title} - Case Study`} className="mt-6" /></div>
+          <div data-csh="share"><ShareButtons title={`${project.title} - Case Study`} className="mt-8" /></div>
+        </div>
       </div>
 
-      {/* Full-width hero image with clip-path reveal */}
+      {/* Browser-framed hero showcase with clip-path reveal */}
       {project.image && (
-        <div data-csh="img" className="container mx-auto px-6 md:px-12 mt-12 relative z-10" style={{ clipPath: 'inset(8%)' }}>
-          <div className="aspect-video rounded-2xl overflow-hidden relative border border-surface-border">
+        <div
+          data-csh="img"
+          className="container mx-auto px-6 md:px-12 mt-14 md:mt-20 relative z-10"
+          style={{ clipPath: 'inset(8%)' }}
+        >
+          <BrowserFrame url={project.url} variant="showcase" tiltable aspectRatio="16 / 10">
             <Image
               src={project.image}
-              alt={`${project.title} project screenshot`}
+              alt={`${project.title} — project by Invenex Solutions`}
               fill
-              className="object-cover"
+              className="object-cover object-top"
               sizes="(max-width: 1024px) 100vw, 1200px"
               priority
             />
-          </div>
+          </BrowserFrame>
         </div>
       )}
     </section>
   )
 }
 
-/* ─── Challenge & Solution (Editorial Layout) ────────────── */
+/* ─── Challenge & Solution (split sections, editorial) ───── */
 function ChallengeAndSolutionSection({ challenge, solution }: { challenge: string; solution: string }) {
-  const sectionRef = useRef<HTMLElement>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
@@ -267,38 +299,61 @@ function ChallengeAndSolutionSection({ challenge, solution }: { challenge: strin
   )
 
   return (
-    <section ref={sectionRef} className="py-24 md:py-36 bg-background relative overflow-hidden">
+    <div ref={sectionRef} className="bg-background relative overflow-hidden">
       {/* Atmospheric orbs */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-[10%] right-[5%] rounded-full" style={{ width: 500, height: 500, background: 'radial-gradient(circle, rgba(255,106,55,0.04) 0%, transparent 70%)', filter: 'blur(80px)' }} />
         <div className="absolute bottom-[10%] left-[5%] rounded-full" style={{ width: 400, height: 400, background: 'radial-gradient(circle, rgba(139,92,246,0.03) 0%, transparent 70%)', filter: 'blur(80px)' }} />
       </div>
 
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
-        {/* 01 — THE CHALLENGE */}
-        <div data-testid="case-study-challenge" data-cs className="grid md:grid-cols-[auto_1fr] gap-6 md:gap-12 items-start">
-          <SectionNumber>01</SectionNumber>
-          <div>
-            <p className="text-xs md:text-sm tracking-[0.2em] uppercase text-foreground-muted font-mono mb-3" aria-hidden="true">The Challenge</p>
-            <h2 id="challenge-heading" className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">The Challenge</h2>
-            <p className="text-lg md:text-xl text-foreground-muted leading-relaxed max-w-2xl">{challenge}</p>
+      {/* 01 — THE CHALLENGE */}
+      <section
+        data-testid="case-study-challenge"
+        aria-labelledby="challenge-heading"
+        className="pt-24 md:pt-36 pb-12 md:pb-20 relative z-10"
+      >
+        <div className="container mx-auto px-6 md:px-12">
+          <div data-cs className="grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-6 md:gap-16 items-start">
+            <div>
+              <SectionNumber>01</SectionNumber>
+              <p className="text-xs md:text-sm tracking-[0.2em] uppercase text-foreground-muted font-mono" aria-hidden="true">The Challenge</p>
+            </div>
+            <div>
+              <h2 id="challenge-heading" className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">The Challenge</h2>
+              <p className="text-lg md:text-xl text-foreground-muted leading-relaxed">{challenge}</p>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Coral gradient divider */}
-        <div data-cs className="my-16 md:my-24" style={{ height: 1, background: 'linear-gradient(90deg, var(--color-coral-500), var(--color-coral-400) 30%, transparent 100%)', opacity: 0.3 }} />
-
-        {/* 02 — OUR SOLUTION */}
-        <div data-testid="case-study-solution" data-cs className="grid md:grid-cols-[auto_1fr] gap-6 md:gap-12 items-start">
-          <SectionNumber>02</SectionNumber>
-          <div>
-            <p className="text-xs md:text-sm tracking-[0.2em] uppercase text-foreground-muted font-mono mb-3" aria-hidden="true">Our Solution</p>
-            <h2 id="solution-heading" className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">Our Solution</h2>
-            <p className="text-lg md:text-xl text-foreground-muted leading-relaxed max-w-2xl">{solution}</p>
-          </div>
-        </div>
+      {/* Coral gradient divider */}
+      <div
+        data-cs
+        className="container mx-auto px-6 md:px-12"
+      >
+        <div style={{ height: 1, background: 'linear-gradient(90deg, var(--color-coral-500), var(--color-coral-400) 30%, transparent 100%)', opacity: 0.3 }} />
       </div>
-    </section>
+
+      {/* 02 — OUR SOLUTION */}
+      <section
+        data-testid="case-study-solution"
+        aria-labelledby="solution-heading"
+        className="pt-12 md:pt-20 pb-24 md:pb-36 relative z-10"
+      >
+        <div className="container mx-auto px-6 md:px-12">
+          <div data-cs className="grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-6 md:gap-16 items-start">
+            <div>
+              <SectionNumber>02</SectionNumber>
+              <p className="text-xs md:text-sm tracking-[0.2em] uppercase text-foreground-muted font-mono" aria-hidden="true">Our Solution</p>
+            </div>
+            <div>
+              <h2 id="solution-heading" className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">Our Solution</h2>
+              <p className="text-lg md:text-xl text-foreground-muted leading-relaxed">{solution}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   )
 }
 
@@ -306,9 +361,8 @@ function ChallengeAndSolutionSection({ challenge, solution }: { challenge: strin
 function ResultsSection({ results }: { results: CaseStudyProject['results'] }) {
   return (
     <section data-testid="case-study-results" aria-labelledby="results-heading" className="py-24 md:py-36 bg-background-secondary relative overflow-hidden">
-      {/* Atmospheric orb */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ width: 700, height: 700, background: 'radial-gradient(circle, rgba(255,106,55,0.04) 0%, transparent 70%)', filter: 'blur(100px)' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ width: 700, height: 700, background: 'radial-gradient(circle, rgba(255,106,55,0.05) 0%, transparent 70%)', filter: 'blur(100px)' }} />
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
@@ -327,12 +381,11 @@ function ResultsSection({ results }: { results: CaseStudyProject['results'] }) {
               <GSAPStaggerItem key={result.label}>
                 <div
                   data-testid="result-metric"
-                  className="group p-10 text-center rounded-2xl border border-surface-border transition-all duration-300 hover:border-coral-500/20 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(255,106,55,0.1)] relative overflow-hidden"
+                  className="group p-10 text-center rounded-2xl border border-surface-border transition-all duration-300 hover:border-coral-500/30 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(255,106,55,0.12)] relative overflow-hidden h-full"
                   style={{ background: 'linear-gradient(135deg, var(--color-card-gradient-from) 0%, var(--color-card-gradient-to) 100%)' }}
                 >
-                  {/* Coral gradient accent bar */}
-                  <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, var(--color-coral-500) 0%, var(--color-coral-400) 50%, transparent 100%)' }} />
-                  <div className="text-5xl md:text-6xl font-bold text-gradient mb-4">
+                  <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: 'linear-gradient(90deg, var(--color-coral-500) 0%, var(--color-coral-400) 50%, transparent 100%)' }} />
+                  <div className="text-5xl md:text-6xl font-bold text-gradient-orange mb-4">
                     {num !== null ? (
                       <AnimatedCounter value={num} prefix={prefix} suffix={suffix} />
                     ) : (
@@ -351,7 +404,7 @@ function ResultsSection({ results }: { results: CaseStudyProject['results'] }) {
 }
 
 /* ─── Gallery Section ──────────────────────────────────── */
-function GallerySection({ images, title }: { images: CaseStudyProject['gallery']; title: string }) {
+function GallerySection({ images, title, projectUrl }: { images: string[]; title: string; projectUrl?: string }) {
   const sectionRef = useRef<HTMLElement>(null)
   const [mounted, setMounted] = useState(false)
 
@@ -381,10 +434,7 @@ function GallerySection({ images, title }: { images: CaseStudyProject['gallery']
 
   return (
     <section ref={sectionRef} data-testid="case-study-gallery" aria-labelledby="gallery-heading" className="py-24 md:py-36 bg-background relative overflow-hidden">
-      {/* Grain texture */}
       <div className="absolute inset-0 pointer-events-none z-[1]" aria-hidden="true" style={grainStyle} />
-
-      {/* Atmospheric orbs */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute -top-20 right-[5%] rounded-full" style={{ width: 500, height: 500, background: 'radial-gradient(circle, rgba(255,106,55,0.05) 0%, transparent 70%)', filter: 'blur(80px)' }} />
         <div className="absolute bottom-[10%] left-[10%] rounded-full" style={{ width: 300, height: 300, background: 'radial-gradient(circle, rgba(139,92,246,0.03) 0%, transparent 70%)', filter: 'blur(60px)' }} />
@@ -394,7 +444,7 @@ function GallerySection({ images, title }: { images: CaseStudyProject['gallery']
         <SectionNumber>04</SectionNumber>
         <h2 id="gallery-heading" className="text-3xl md:text-4xl font-bold mb-12">Project Gallery</h2>
         <div data-gal>
-          <ImageGallery images={images} projectTitle={title} />
+          <ImageGallery images={images} projectTitle={title} projectUrl={projectUrl} />
         </div>
       </div>
     </section>
@@ -415,10 +465,9 @@ function TechSection({ technologies }: { technologies: string[] }) {
             <GSAPStaggerItem key={tech}>
               <div
                 data-testid="tech-badge"
-                className="group p-5 rounded-2xl border border-surface-border text-center font-medium text-foreground-muted transition-all duration-300 hover:border-coral-500/20 hover:text-foreground hover:shadow-[0_0_25px_rgba(255,106,55,0.08)] relative overflow-hidden"
+                className="group p-5 rounded-2xl border border-surface-border text-center font-medium text-foreground-muted transition-all duration-300 hover:border-coral-500/30 hover:text-foreground hover:shadow-[0_0_25px_rgba(255,106,55,0.1)] relative overflow-hidden"
                 style={{ background: 'linear-gradient(135deg, var(--color-card-gradient-from) 0%, var(--color-card-gradient-to) 100%)' }}
               >
-                {/* Subtle top accent on hover */}
                 <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(90deg, transparent, var(--color-coral-500), transparent)' }} />
                 {tech}
               </div>
@@ -441,7 +490,7 @@ function TestimonialSection({ testimonial }: { testimonial: NonNullable<CaseStud
     () => {
       if (!mounted) return
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        gsap.set('[data-test]', { opacity: 1, y: 0 })
+        gsap.set('[data-test]', { opacity: 1, y: 0, scaleX: 1, scale: 1 })
         return
       }
 
@@ -478,9 +527,7 @@ function TestimonialSection({ testimonial }: { testimonial: NonNullable<CaseStud
 
   return (
     <section ref={sectionRef} data-testid="case-study-testimonial" aria-labelledby="testimonial-heading" className="py-24 md:py-36 bg-background relative overflow-hidden">
-      {/* Grain */}
       <div className="absolute inset-0 pointer-events-none z-[1]" aria-hidden="true" style={grainStyle} />
-
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ width: 700, height: 700, background: 'radial-gradient(circle, rgba(255,106,55,0.05) 0%, transparent 70%)', filter: 'blur(100px)' }} />
       </div>
@@ -488,13 +535,10 @@ function TestimonialSection({ testimonial }: { testimonial: NonNullable<CaseStud
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <h2 id="testimonial-heading" className="sr-only">Client Testimonial</h2>
         <div className="max-w-4xl mx-auto">
-          {/* Glassmorphic card */}
           <div className="rounded-2xl border border-surface-border p-8 md:p-12 lg:p-16 text-center relative overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--color-surface-overlay) 0%, transparent 100%)' }}>
-            {/* Top accent */}
             <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, var(--color-coral-500), transparent)', opacity: 0.4 }} />
 
-            {/* Large decorative quote mark */}
-            <div data-test="icon" className="mx-auto mb-6" aria-hidden="true" style={{ fontSize: 'clamp(4rem, 10vw, 7rem)', lineHeight: 0.8, color: 'rgba(255,106,55,0.15)', fontFamily: 'Georgia, serif' }}>
+            <div data-test="icon" className="mx-auto mb-6" aria-hidden="true" style={{ fontSize: 'clamp(4rem, 10vw, 7rem)', lineHeight: 0.8, color: 'rgba(255,106,55,0.18)', fontFamily: 'Georgia, serif' }}>
               &ldquo;
             </div>
 
@@ -502,7 +546,6 @@ function TestimonialSection({ testimonial }: { testimonial: NonNullable<CaseStud
               {testimonial.quote}
             </blockquote>
 
-            {/* Coral rule */}
             <div data-test="rule" className="h-px w-20 bg-coral-500 mx-auto mt-10 mb-8" style={{ transformOrigin: 'center' }} />
 
             <div data-test="author">
@@ -525,31 +568,30 @@ function RelatedSection({ projects, category }: { projects: CaseStudyProject[]; 
         <h2 id="related-heading" className="text-3xl md:text-4xl font-bold mb-4">Related Projects</h2>
         <p className="text-foreground-muted mb-12">More {category.toLowerCase()} projects we&apos;ve delivered</p>
 
-        <GSAPStaggerContainer className="grid md:grid-cols-3 gap-6">
+        <GSAPStaggerContainer className="grid md:grid-cols-3 gap-8">
           {projects.map((relatedProject) => (
             <GSAPStaggerItem key={relatedProject.id}>
-              <Link href={`/portfolio/${relatedProject.slug}`}>
-                <div className="rounded-xl overflow-hidden backdrop-blur-xl border border-surface-border transition-all duration-300 hover:border-coral-500/30 hover:shadow-[0_0_30px_rgba(255,106,55,0.08)] group" style={{ background: 'var(--color-surface-overlay)' }}>
-                  <div className="aspect-video bg-background-tertiary relative overflow-hidden">
-                    <Image
-                      src={relatedProject.image}
-                      alt={`${relatedProject.title} screenshot`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <span className="text-white font-medium flex items-center gap-2">
-                        View Case Study <ArrowRight className="w-4 h-4" />
-                      </span>
-                    </div>
+              <Link href={`/portfolio/${relatedProject.slug}`} className="group block">
+                <BrowserFrame url={relatedProject.url} variant="card">
+                  <Image
+                    src={relatedProject.image}
+                    alt={`${relatedProject.title} — ${relatedProject.category} project by Invenex Solutions`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-background/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-coral-500/40 bg-coral-500/20 px-5 py-2.5 text-sm font-medium text-white">
+                      View Case Study <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    </span>
                   </div>
-                  <div className="p-6">
-                    <Badge size="sm" className="mb-3">{relatedProject.category}</Badge>
-                    <h3 className="font-semibold text-lg group-hover:text-white transition-colors">{relatedProject.title}</h3>
-                    <p className="text-sm text-foreground-muted mt-1">{relatedProject.client}</p>
-                  </div>
+                </BrowserFrame>
+                <div className="mt-4">
+                  <span className="inline-block rounded-full border border-surface-border bg-surface-overlay px-3 py-1 text-xs font-medium text-foreground-muted mb-3">
+                    {relatedProject.category}
+                  </span>
+                  <h3 className="font-semibold text-lg text-foreground transition-colors group-hover:text-coral-400">{relatedProject.title}</h3>
+                  <p className="text-sm text-foreground-muted mt-1">{relatedProject.client}</p>
                 </div>
               </Link>
             </GSAPStaggerItem>
