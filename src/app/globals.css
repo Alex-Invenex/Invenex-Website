@@ -993,3 +993,66 @@ html.js-ready [data-animate] {
     letter-spacing: -0.02em;
   }
 }
+
+/* ── Portfolio editorial card (spec 2026-05-17) ───────────────────────── */
+.pf-card-media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  aspect-ratio: 16 / 10;
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-surface-overlay-hover);
+}
+@media (max-width: 767px) {
+  .pf-card-media { aspect-ratio: 4 / 3; }
+}
+.pf-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  filter: grayscale(0.4) brightness(0.82);
+  transition: filter 0.7s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* requires a Tailwind .group ancestor (the card link) */
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .pf-card-img { filter: none; transform: scale(1.035); }
+}
+.pf-card-rule { position: relative; display: inline-block; }
+.pf-card-rule::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 100%; bottom: -8px;
+  height: 2px;
+  background: var(--color-coral-500);
+  transition: right 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .pf-card-rule::after { right: 0; }
+}
+/* One-shot scroll reveal: .is-in is added once when the card enters view and never removed (see bento-portfolio-grid GSAP). Transition lives on .is-in by design. */
+.pf-reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  clip-path: inset(0 0 12% 0);
+}
+.pf-reveal.is-in {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0 0);
+  transition: opacity 0.9s ease,
+              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-reveal, .pf-reveal.is-in {
+    opacity: 1; transform: none; clip-path: none; transition: none;
+  }
+  .pf-card-img { filter: none; }
+}
+@media (hover: none) and (pointer: coarse) {
+  .pf-reveal, .pf-reveal.is-in {
+    opacity: 1; transform: none; clip-path: none; transition: none;
+  }
+}

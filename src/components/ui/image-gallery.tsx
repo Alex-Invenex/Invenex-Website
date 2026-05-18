@@ -4,16 +4,12 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { BrowserFrame } from "@/components/ui/browser-frame";
-
 interface ImageGalleryProps {
   images: string[];
   projectTitle?: string;
-  /** Project live URL — shown in each framed cell's chrome bar. */
-  projectUrl?: string;
 }
 
-export function ImageGallery({ images, projectTitle = "Project", projectUrl }: ImageGalleryProps) {
+export function ImageGallery({ images, projectTitle = "Project" }: ImageGalleryProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const openLightbox = (index: number) => {
@@ -71,15 +67,15 @@ export function ImageGallery({ images, projectTitle = "Project", projectUrl }: I
             className="group block w-full cursor-pointer rounded-xl text-left transition-opacity hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label={`View image ${i + 1} of ${images.length} in fullscreen`}
           >
-            <BrowserFrame url={projectUrl} variant="card">
+            <div className="pf-card-media">
               <Image
                 src={image}
                 alt={`${projectTitle} screenshot ${i + 1}`}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                className="pf-card-img"
               />
-            </BrowserFrame>
+            </div>
           </button>
         ))}
       </div>

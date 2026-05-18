@@ -30,46 +30,16 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
   });
 
   // AC1: Bento Grid Layout
-  test("renders bento grid with varied card sizes", async ({ page }) => {
+  test("renders a uniform grid of project cards", async ({ page }) => {
     const grid = page.locator('[data-testid="bento-portfolio-grid"]');
     await expect(grid).toBeVisible();
-
-    // Check for different card sizes
-    const featuredCards = page.locator(
-      '[data-testid="bento-project-card"][data-size="featured"]'
-    );
-    const smallCards = page.locator(
-      '[data-testid="bento-project-card"][data-size="small"]'
-    );
-    const mediumCards = page.locator(
-      '[data-testid="bento-project-card"][data-size="medium"]'
-    );
-
-    // Should have variety
-    expect(await featuredCards.count()).toBeGreaterThan(0);
-    expect(await smallCards.count()).toBeGreaterThan(0);
-    expect(await mediumCards.count()).toBeGreaterThanOrEqual(0);
+    const cards = page.locator('[data-testid="bento-project-card"]');
+    expect(await cards.count()).toBe(14);
   });
 
-  test("featured projects get larger cards (2x2 or 2x1)", async ({ page }) => {
-    const featuredCards = page.locator(
-      '[data-testid="bento-project-card"][data-size="featured"]'
-    );
-    // We have 4 featured projects
-    expect(await featuredCards.count()).toBe(4);
-  });
-
-  test("featured badge appears on featured cards", async ({ page }) => {
-    const featuredBadges = page.locator(
-      '[data-testid="bento-card-featured-badge"]'
-    );
-    expect(await featuredBadges.count()).toBe(4);
-    await expect(featuredBadges.first()).toContainText("Featured");
-  });
-
-  test("grid uses CSS Grid with 4 columns on desktop", async ({ page }) => {
+  test("grid uses 2 columns on desktop", async ({ page }) => {
     const grid = page.locator('[data-testid="bento-portfolio-grid"]');
-    await expect(grid).toHaveClass(/lg:grid-cols-4/);
+    await expect(grid).toHaveClass(/lg:grid-cols-2/);
   });
 
   // Filter Tabs
@@ -134,37 +104,19 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
     expect(webCount).toBeGreaterThan(platformCount);
   });
 
-  // AC2: Enhanced Hover Effects (desktop only - hover doesn't work on mobile)
-  test("card shows overlay on hover", async ({ page, isMobile }) => {
-    test.skip(isMobile, "Hover effects not applicable on mobile");
-
-    const card = page.locator('[data-testid="bento-project-card"]').first();
-    const overlay = card.locator('[data-testid="bento-card-overlay"]');
-
-    await expect(overlay).toHaveCSS("opacity", "0");
-
-    await card.hover();
-    await page.waitForTimeout(400);
-
-    await expect(overlay).toHaveCSS("opacity", "1");
-  });
-
-  test("image zooms on hover", async ({ page, isMobile }) => {
-    test.skip(isMobile, "Hover effects not applicable on mobile");
-
-    const card = page.locator('[data-testid="bento-project-card"]').first();
-    const image = card.locator('[data-testid="bento-card-image"] img');
-
-    // Check that image has hover transition class
-    await expect(image).toHaveClass(/group-hover:scale-105/);
-
-    // Verify the card has proper hover styling
-    await card.hover();
-    await page.waitForTimeout(400);
-
-    // The overlay should be visible after hover
-    const overlay = card.locator('[data-testid="bento-card-overlay"]');
-    await expect(overlay).toHaveCSS("opacity", "1");
+  // AC2: Editorial hover — desaturation via CSS class, no browser chrome
+  test("card image desaturates by default and has no browser chrome", async ({ page, isMobile }) => {
+    test.skip(isMobile, "desktop DOM check");
+    const img = page.locator('[data-testid="bento-card-image"] img').first();
+    await expect(img).toBeVisible();
+    await expect(img).toHaveClass(/pf-card-img/);
+    const firstCard = page
+      .locator('[data-testid="bento-project-card"]')
+      .first();
+    // Clean media wrapper exists (no browser-chrome frame).
+    expect(await firstCard.locator(".pf-card-media").count()).toBeGreaterThan(0);
+    expect(await firstCard.locator('[data-testid="browser-frame"]').count()).toBe(0);
+    expect(await firstCard.locator('[class*="browser"]').count()).toBe(0);
   });
 
   // AC3: FLIP Transitions on Filter
@@ -193,19 +145,22 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
     await expect(card.locator('[data-testid="bento-card-image"]')).toBeVisible();
   });
 
-  test("featured cards show client name", async ({ page }) => {
-    const featuredCard = page
-      .locator('[data-testid="bento-project-card"][data-size="featured"]')
-      .first();
-
-    await expect(
-      featuredCard.locator('[data-testid="bento-card-client"]')
-    ).toBeVisible();
-  });
-
   test("cards are clickable links to case studies", async ({ page }) => {
     const firstCard = page.locator('[data-testid="bento-project-card"]').first();
     await expect(firstCard).toHaveAttribute("href", /\/portfolio\/[a-z0-9-]+/);
+  });
+
+  test("cards use flat website screenshots (no device-mockup, no portrait png)", async ({ page }) => {
+    const srcs = await page.$$eval(
+      '[data-testid="bento-card-image"] img',
+      (imgs) => imgs.map((i) => (i as HTMLImageElement).getAttribute("src") || "")
+    );
+    expect(srcs.length).toBeGreaterThan(0);
+    for (const s of srcs) {
+      const decoded = decodeURIComponent(s);
+      expect(decoded).not.toContain("-mockup.webp");
+      expect(decoded).toMatch(/\.webp(\?|&|$)/);
+    }
   });
 });
 
@@ -331,6 +286,13 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Reduced Motion (AC5)", () =
     const cards = page.locator('[data-testid="bento-project-card"]');
     await page.waitForTimeout(500); // Wait for filter to apply
     expect(await cards.count()).toBe(2); // 2 Platform projects
+  });
+
+  test("reveal cards are visible (not stuck at opacity 0)", async ({ page }) => {
+    const card = page.locator('.pf-reveal').first();
+    await expect(card).toBeVisible();
+    const opacity = await card.evaluate((el) => getComputedStyle(el).opacity);
+    expect(Number(opacity)).toBeGreaterThan(0.9);
   });
 });
 
