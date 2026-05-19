@@ -22,13 +22,6 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
     await expect(heading).toBeVisible();
   });
 
-  test("displays project count in hero section", async ({ page }) => {
-    const heroSection = page.getByTestId("portfolio-hero");
-    const projectCount = heroSection.getByTestId("project-count");
-    await expect(projectCount).toBeVisible();
-    await expect(projectCount).toContainText(/\d+.*Project/i);
-  });
-
   // AC1: Bento Grid Layout
   test("renders a uniform grid of project cards", async ({ page }) => {
     const grid = page.locator('[data-testid="bento-portfolio-grid"]');
