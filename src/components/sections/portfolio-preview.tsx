@@ -10,25 +10,25 @@ const featuredProjects = [
   {
     title: "CoolTech International",
     categories: ["Web", "Corporate"],
-    image: "/portfolio/cooltech-international.webp",
+    image: "/portfolio/cooltech-international-mockup.webp",
     href: "/portfolio/cooltech-international",
   },
   {
     title: "Ginger Designs",
     categories: ["Web", "Creative"],
-    image: "/portfolio/ginger-designs.webp",
+    image: "/portfolio/ginger-designs-mockup.webp",
     href: "/portfolio/ginger-designs",
   },
   {
     title: "GrabToGo",
     categories: ["Platform", "Deals"],
-    image: "/portfolio/grabtogo.webp",
+    image: "/portfolio/grabtogo-mockup.webp",
     href: "/portfolio/grabtogo",
   },
   {
     title: "Ziera Inc",
     categories: ["E-Commerce", "LED"],
-    image: "/portfolio/zierainc.webp",
+    image: "/portfolio/ziera-mockup.webp",
     href: "/portfolio/ziera-inc",
   },
 ];
@@ -41,6 +41,7 @@ function ProjectCard({
   index: number;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const isMockup = project.image.includes("-mockup");
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (shouldSkipAnimations() || !cardRef.current) return;
@@ -77,7 +78,7 @@ function ProjectCard({
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="pf-card-media" data-portfolio-img>
+          <div className={`pf-card-media${isMockup ? " pf-card-media--mockup" : ""}`} data-portfolio-img>
             <Image
               src={project.image}
               alt={`${project.title} — ${project.categories.join(", ")}`}

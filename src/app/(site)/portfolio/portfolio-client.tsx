@@ -1,7 +1,6 @@
 'use client'
 
 import { SubpageHero, HeadlineWord } from '@/components/sections/subpage-hero'
-import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { BentoPortfolioGrid } from '@/components/sections/bento-portfolio-grid'
 import type { SimpleProject } from '@/lib/projects'
 
@@ -16,6 +15,7 @@ export function PortfolioClient({ projects }: PortfolioClientProps) {
       <SubpageHero
         id="portfolio-hero-title"
         testId="portfolio-hero"
+        compact
         tag="// Selected Work"
         headline={
           <>
@@ -24,11 +24,7 @@ export function PortfolioClient({ projects }: PortfolioClientProps) {
           </>
         }
         subtitle="Explore our portfolio of web, mobile, and platform development projects."
-      >
-        <p className="text-lg text-foreground-muted" data-testid="project-count">
-          <AnimatedCounter value={projects.length} className="text-foreground font-bold text-2xl" /> Projects delivered with excellence
-        </p>
-      </SubpageHero>
+      />
 
       {/* Atmospheric wrapper around grid */}
       <div className="relative">

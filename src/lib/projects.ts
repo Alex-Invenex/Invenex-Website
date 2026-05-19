@@ -35,7 +35,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Corporate website for an international technology solutions company with modern design and seamless user experience.",
-    image: "/portfolio/cooltech-international.webp",
+    image: "/portfolio/cooltech-international-mockup.webp",
     slug: "cooltech-international",
     url: "https://cooltechintl.com",
     featured: true,
@@ -68,7 +68,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Creative agency website showcasing interior design and branding services in the UAE market.",
-    image: "/portfolio/ginger-designs.webp",
+    image: "/portfolio/ginger-designs-mockup.webp",
     slug: "ginger-designs",
     url: "https://gingerdesigns.ae",
     challenge:
@@ -100,7 +100,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Portfolio website for a UAE-based design studio featuring elegant layouts and project showcases.",
-    image: "/portfolio/ahazz-designs.webp",
+    image: "/portfolio/ahazz-designs-mockup.webp",
     slug: "ahazz-designs",
     url: "https://ahazzdesigns.com",
     challenge:
@@ -157,7 +157,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Elegant restaurant website with online reservations, menu showcase, and event booking capabilities.",
-    image: "/portfolio/la-mirage.webp",
+    image: "/portfolio/la-mirage-mockup.webp",
     slug: "la-mirage",
     url: "https://la-mirage.in",
     challenge:
@@ -189,7 +189,7 @@ export const projects: CaseStudyProject[] = [
     category: "Platform",
     excerpt:
       "Deals and offers aggregation platform helping users discover the best local promotions and discounts.",
-    image: "/portfolio/grabtogo.webp",
+    image: "/portfolio/grabtogo-mockup.webp",
     slug: "grabtogo",
     url: "https://www.grabtogo.in",
     featured: true,
@@ -222,7 +222,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Technology consulting firm website with service showcases, case studies, and client testimonials.",
-    image: "/portfolio/babbage-solutions.webp",
+    image: "/portfolio/babbage-solutions-mockup.webp",
     slug: "babbage-solutions",
     url: "https://babbagesolutions.in",
     challenge:
@@ -248,7 +248,7 @@ export const projects: CaseStudyProject[] = [
     category: "Web",
     excerpt:
       "Modern corporate website with clean aesthetics and comprehensive business information architecture.",
-    image: "/portfolio/molvexa.webp",
+    image: "/portfolio/molvexa-mockup.webp",
     slug: "molvexa",
     url: "https://molvexa.com",
     challenge:
@@ -390,7 +390,7 @@ export const projects: CaseStudyProject[] = [
     category: "E-Commerce",
     excerpt:
       "Online retail platform with advanced product filtering, customer reviews, and integrated payment solutions.",
-    image: "/portfolio/zierainc.webp",
+    image: "/portfolio/ziera-mockup.webp",
     slug: "ziera-inc",
     url: "https://zierainc.com",
     challenge:

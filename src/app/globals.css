@@ -1056,3 +1056,15 @@ html.js-ready [data-animate] {
     opacity: 1; transform: none; clip-path: none; transition: none;
   }
 }
+
+/* Device-mockup composites: show the whole render (contain), full colour,
+   on a soft backdrop so the laptop/phone isn't cropped by object-cover. */
+.pf-card-media--mockup {
+  background: radial-gradient(120% 120% at 50% 0%, #181818 0%, #0d0d0d 72%);
+}
+.pf-card-media--mockup .pf-card-img {
+  object-fit: contain;
+  object-position: center;
+  filter: none;
+  padding: 5%;
+}

@@ -93,6 +93,7 @@ function SectionNumber({ children }: { children: React.ReactNode }) {
 function CaseStudyHero({ project }: { project: CaseStudyProject }) {
   const sectionRef = useRef<HTMLElement>(null)
   const [mounted, setMounted] = useState(false)
+  const heroMockup = project.image.includes('-mockup')
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -249,12 +250,15 @@ function CaseStudyHero({ project }: { project: CaseStudyProject }) {
       {project.image && (
         <div data-csh="img" className="container mx-auto px-6 md:px-12 mt-14 md:mt-20 relative z-10"
              style={{ clipPath: 'inset(8%)' }}>
-          <div className="pf-card-media" style={{ borderRadius: '20px' }}>
+          <div
+            className={`pf-card-media${heroMockup ? ' pf-card-media--mockup' : ''}`}
+            style={{ borderRadius: '20px' }}
+          >
             <Image
               src={project.image}
               alt={`${project.title} — project by Invenex Solutions`}
               fill
-              className="object-cover object-top"
+              className={heroMockup ? 'pf-card-img' : 'object-cover object-top'}
               sizes="(max-width: 1024px) 100vw, 1200px"
               priority
             />
@@ -568,7 +572,7 @@ function RelatedSection({ projects, category }: { projects: CaseStudyProject[]; 
           {projects.map((relatedProject) => (
             <GSAPStaggerItem key={relatedProject.id}>
               <Link href={`/portfolio/${relatedProject.slug}`} className="group block">
-                <div className="pf-card-media">
+                <div className={`pf-card-media${relatedProject.image.includes('-mockup') ? ' pf-card-media--mockup' : ''}`}>
                   <Image
                     src={relatedProject.image}
                     alt={`${relatedProject.title} — ${relatedProject.category} project by Invenex Solutions`}

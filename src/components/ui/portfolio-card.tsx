@@ -15,6 +15,7 @@ interface PortfolioCardProps {
  * Hover/desaturation handled by .pf-card-* classes in globals.css (pointer:fine only).
  */
 export function PortfolioCard({ project, index, priority }: PortfolioCardProps) {
+  const isMockup = project.image.includes('-mockup')
   return (
     <Link
       href={`/portfolio/${project.slug}`}
@@ -22,7 +23,10 @@ export function PortfolioCard({ project, index, priority }: PortfolioCardProps) 
       data-testid="bento-project-card"
       data-size="uniform"
     >
-      <div className="pf-card-media" data-testid="bento-card-image">
+      <div
+        className={`pf-card-media${isMockup ? ' pf-card-media--mockup' : ''}`}
+        data-testid="bento-card-image"
+      >
         <Image
           src={project.image}
           alt={`${project.title} — ${project.category} project by Invenex Solutions`}

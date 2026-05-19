@@ -16,6 +16,8 @@ interface SubpageHeroProps {
   id?: string
   /** Optional test id applied to the hero section root. */
   testId?: string
+  /** Tighten the hero: no tall min-height / vertical centering, less padding. */
+  compact?: boolean
 }
 
 /**
@@ -33,6 +35,7 @@ export function SubpageHero({
   variant = 'left-aligned',
   id,
   testId,
+  compact = false,
 }: SubpageHeroProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const [mounted, setMounted] = useState(false)
@@ -146,7 +149,11 @@ export function SubpageHero({
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[60dvh] md:min-h-[70dvh] flex flex-col justify-center bg-background pt-24 pb-12 md:pb-16"
+      className={`relative flex flex-col bg-background ${
+        compact
+          ? 'pt-28 md:pt-32 pb-6 md:pb-8'
+          : 'min-h-[60dvh] md:min-h-[70dvh] justify-center pt-24 pb-12 md:pb-16'
+      }`}
       style={{ overflow: 'clip' }}
       aria-labelledby={id}
       data-testid={testId}

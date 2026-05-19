@@ -22,13 +22,6 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
     await expect(heading).toBeVisible();
   });
 
-  test("displays project count in hero section", async ({ page }) => {
-    const heroSection = page.getByTestId("portfolio-hero");
-    const projectCount = heroSection.getByTestId("project-count");
-    await expect(projectCount).toBeVisible();
-    await expect(projectCount).toContainText(/\d+.*Project/i);
-  });
-
   // AC1: Bento Grid Layout
   test("renders a uniform grid of project cards", async ({ page }) => {
     const grid = page.locator('[data-testid="bento-portfolio-grid"]');
@@ -150,7 +143,7 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
     await expect(firstCard).toHaveAttribute("href", /\/portfolio\/[a-z0-9-]+/);
   });
 
-  test("cards use flat website screenshots (no device-mockup, no portrait png)", async ({ page }) => {
+  test("cards use webp images and no squished portrait png", async ({ page }) => {
     const srcs = await page.$$eval(
       '[data-testid="bento-card-image"] img',
       (imgs) => imgs.map((i) => (i as HTMLImageElement).getAttribute("src") || "")
@@ -158,7 +151,9 @@ test.describe("Story 9-7: Bento Box Portfolio Grid - Desktop", () => {
     expect(srcs.length).toBeGreaterThan(0);
     for (const s of srcs) {
       const decoded = decodeURIComponent(s);
-      expect(decoded).not.toContain("-mockup.webp");
+      // Device-mockup composites are intentional; the only forbidden source is
+      // the 390x844 portrait phone PNG that letterboxes in a landscape card.
+      expect(decoded).not.toContain("alshahama-marine-new-1.png");
       expect(decoded).toMatch(/\.webp(\?|&|$)/);
     }
   });
