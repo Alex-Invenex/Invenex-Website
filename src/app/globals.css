@@ -1068,3 +1068,19 @@ html.js-ready [data-animate] {
   filter: none;
   padding: 5%;
 }
+
+/* Portfolio hero wordmark — bigger on phones only (<768px). Opt-in via the
+   .pf-title-word-* classes (only /portfolio passes them, so other subpage
+   heroes are untouched). Desktop (>=768px) is unchanged: the rule doesn't
+   apply, so SubpageHero/HeadlineWord render exactly as before. !important
+   is required to beat HeadlineWord's inline font-size. */
+@media (max-width: 767px) {
+  .pf-title-word-thin {
+    font-size: clamp(2.5rem, 12vw, 3.5rem) !important;
+    line-height: 0.95 !important;
+  }
+  .pf-title-word-bold {
+    font-size: clamp(3.75rem, 18vw, 5rem) !important;
+    line-height: 0.9 !important;
+  }
+}

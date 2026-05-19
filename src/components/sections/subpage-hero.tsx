@@ -283,17 +283,20 @@ export function HeadlineWord({
   children,
   thin = false,
   coral = false,
+  className = '',
 }: {
   children: ReactNode
   thin?: boolean
   coral?: boolean
+  /** Optional extra classes (opt-in; other subpages pass nothing → unaffected). */
+  className?: string
 }) {
   return (
     <span
       data-sh="word"
       className={`block will-change-transform ${
         coral ? '' : thin ? 'text-foreground/50' : 'text-foreground'
-      }`}
+      } ${className}`}
       style={{
         fontSize: thin
           ? 'clamp(1.8rem, 4vw, 3.5rem)'

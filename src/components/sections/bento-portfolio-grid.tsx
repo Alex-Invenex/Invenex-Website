@@ -109,9 +109,14 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
           Project Portfolio
         </h2>
 
-        {/* Filter Tabs */}
+        {/* Filter Tabs — edge-to-edge swipe strip on phone, centered wrap from sm up */}
         <div
-          className="flex flex-wrap justify-center gap-2 mb-16"
+          className={cn(
+            "mb-16 flex gap-2",
+            "-mx-6 overflow-x-auto px-6 pb-1",
+            "sm:mx-0 sm:flex-wrap sm:justify-center sm:overflow-visible sm:px-0 sm:pb-0",
+            "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          )}
           role="group"
           aria-label="Filter projects by category"
           data-testid="portfolio-filters"
@@ -121,7 +126,7 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
               key={cat.value}
               onClick={() => handleFilterChange(cat.value)}
               className={cn(
-                "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300",
+                "shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-all duration-300",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                 activeFilter === cat.value
                   ? "bg-coral-500 text-white shadow-lg shadow-coral-500/25"

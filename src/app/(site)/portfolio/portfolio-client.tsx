@@ -19,8 +19,8 @@ export function PortfolioClient({ projects }: PortfolioClientProps) {
         tag="// Selected Work"
         headline={
           <>
-            <HeadlineWord thin>OUR</HeadlineWord>
-            <HeadlineWord coral>WORK</HeadlineWord>
+            <HeadlineWord thin className="pf-title-word-thin">OUR</HeadlineWord>
+            <HeadlineWord coral className="pf-title-word-bold">WORK.</HeadlineWord>
           </>
         }
         subtitle="Explore our portfolio of web, mobile, and platform development projects."
