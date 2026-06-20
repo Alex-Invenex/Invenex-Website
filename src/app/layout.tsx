@@ -1,5 +1,5 @@
 import type { Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk, Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { defaultMetadata } from "@/lib/metadata";
@@ -21,6 +21,26 @@ const inter = Inter({
   ],
 });
 
+// Reference design system fonts (used by the /profile company-profile page)
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-display",
+  weight: ["400", "500", "600", "700"],
+});
+
+const geist = Geist({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist-mono",
+});
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -35,7 +55,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${spaceGrotesk.variable} ${geist.variable} ${geistMono.variable} antialiased`}
+      suppressHydrationWarning
+    >
       <head>
         {/* Preconnect to external domains for performance */}
         <link rel="preconnect" href="https://cdn.sanity.io" />
