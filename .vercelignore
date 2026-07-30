@@ -1,0 +1,15 @@
+# Keeps CLI deploys from uploading working-tree junk.
+# Root-level patterns only — nothing under src/ or public/ is affected.
+
+# Debug, audit and QA screenshots left in the working tree
+/*.png
+/*.jpeg
+/*.jpg
+
+# Test output
+/test-results
+/playwright-report
+/test-screenshots
+/mobile-audit
+/.playwright-mcp
+/lighthouse-*.json
