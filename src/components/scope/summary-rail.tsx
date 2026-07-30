@@ -122,7 +122,7 @@ export function SummaryBar({
       // Fully opaque, not glass: backdrop-blur is disabled on touch devices,
       // so a translucent bar let page text bleed through and rows read as
       // cut off mid-sentence.
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-border-hover px-4 py-3 lg:hidden"
+      className="scope-bar-in fixed inset-x-0 bottom-0 z-40 border-t border-surface-border-hover px-4 py-3 lg:hidden"
       style={{
         background: 'var(--color-background)',
         paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))',
@@ -136,11 +136,13 @@ export function SummaryBar({
         className="mx-auto flex max-w-2xl items-center justify-between gap-4"
         style={{ paddingRight: '68px' }}
       >
-        <p className="text-sm text-foreground-muted">
+        {/* nowrap: the wider "Pick features" label pushed this onto a second
+            line, which made the bar grow and look ragged. */}
+        <p className="whitespace-nowrap text-[13px] text-foreground-muted">
           <span className="text-lg font-bold tabular-nums text-coral-500">
             {selectedCount}
-          </span>{' '}
-          / {totalCount} selected
+          </span>
+          <span className="text-foreground-subtle"> / {totalCount}</span>
         </p>
         <button
           type="button"

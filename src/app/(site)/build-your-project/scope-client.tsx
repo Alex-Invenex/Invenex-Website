@@ -174,7 +174,7 @@ export function ScopeClient() {
         }
         subtitle="Pick your services, tick the features you want, and send it over. We price exactly what you selected — and nothing you didn't ask for."
       >
-        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+        <div className="mt-7 grid gap-3 sm:mt-10 sm:gap-6 sm:grid-cols-3">
           {[
             {
               step: '01 / CHOOSE',
@@ -188,12 +188,16 @@ export function ScopeClient() {
               step: '03 / SEND',
               text: 'Add your details. Your list reaches us instantly and we reply with pricing and a timeline.',
             },
-          ].map((item) => (
-            <div key={item.step} className="border-t border-surface-border-hover pt-4">
+          ].map((item, i) => (
+            <div
+              key={item.step}
+              className="scope-rise border-t border-surface-border-hover pt-2.5 sm:pt-4"
+              style={{ animationDelay: `${240 + i * 70}ms` }}
+            >
               <p className="font-mono text-[11px] tracking-[0.16em] text-coral-500">
                 {item.step}
               </p>
-              <p className="mt-2 text-sm leading-relaxed text-foreground-muted">
+              <p className="mt-1 text-[13px] leading-snug text-foreground-muted sm:mt-2 sm:text-sm sm:leading-relaxed">
                 {item.text}
               </p>
             </div>
@@ -233,10 +237,14 @@ export function ScopeClient() {
 
             <div className="grid items-start gap-12 lg:grid-cols-[1fr_320px]">
               {/* Feature groups */}
-              <div className="flex flex-col gap-12">
+              <div className="flex flex-col gap-8 sm:gap-12">
                 {activeTracks.map((track, index) => (
-                  <div key={track.id} data-testid={`track-panel-${track.id}`}>
-                    <div className="mb-5 flex items-end justify-between gap-4 border-b border-surface-border-hover pb-3">
+                  <div
+                    key={track.id}
+                    data-testid={`track-panel-${track.id}`}
+                    className="scope-rise"
+                  >
+                    <div className="mb-4 flex items-end justify-between gap-4 border-b border-surface-border-hover pb-3 sm:mb-5">
                       <div>
                         <p className="font-mono text-[11px] tracking-[0.14em] text-coral-500">
                           {String(index + 1).padStart(2, '0')} / {track.code}

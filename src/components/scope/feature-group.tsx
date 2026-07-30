@@ -43,7 +43,7 @@ export function FeatureGroup({
       data-testid={`group-${group.id}`}
     >
       {/* ── Header ───────────────────────────────────────── */}
-      <div className="flex items-start gap-3 p-4 sm:p-5">
+      <div className="flex items-start gap-3 p-3.5 sm:p-5">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
@@ -72,7 +72,7 @@ export function FeatureGroup({
                 {selectedCount}/{group.features.length}
               </span>
             </span>
-            <span className="mt-1 block text-sm leading-relaxed text-foreground-subtle">
+            <span className="mt-1 block text-[13px] leading-snug text-foreground-subtle sm:text-sm sm:leading-relaxed">
               {group.desc}
             </span>
           </span>
@@ -104,7 +104,15 @@ export function FeatureGroup({
         {/* minHeight:0 is required — a grid item's automatic minimum size
             otherwise refuses to shrink below its content and 0fr does nothing. */}
         <div style={{ overflow: 'clip', minHeight: 0 }}>
-          <div className="flex flex-col gap-2 px-3 pb-4 sm:px-4 sm:pb-5">
+          {/* Content fades with the height so opening reads as one gesture */}
+          <div
+            className="flex flex-col gap-1.5 px-2.5 pb-3.5 sm:gap-2 sm:px-4 sm:pb-5"
+            style={{
+              opacity: open ? 1 : 0,
+              transition: 'opacity 240ms ease',
+              transitionDelay: open ? '80ms' : '0ms',
+            }}
+          >
             {group.features.map((feature) => (
               <FeatureRow
                 key={feature.id}
@@ -149,7 +157,7 @@ function FeatureRow({
       data-testid={`feature-${feature.id}`}
       data-checked={checked ? 'true' : 'false'}
       className={cn(
-        'relative flex items-start gap-3 rounded-lg border p-3 transition-all duration-200',
+        'scope-tap relative flex items-start gap-3 rounded-lg border p-2.5 sm:p-3',
         isCore
           ? 'cursor-default border-surface-border'
           : 'cursor-pointer border-surface-border hover:border-surface-border-hover',
@@ -185,8 +193,10 @@ function FeatureRow({
       >
         <Check
           className={cn(
-            'h-3 w-3 text-background transition-all duration-200',
-            checked ? 'scale-100 opacity-100' : 'scale-50 opacity-0'
+            'scope-tick h-3 w-3 text-background',
+            checked
+              ? cn('scale-100 opacity-100', !isCore && 'scope-tick-on')
+              : 'scale-50 opacity-0'
           )}
           strokeWidth={3.5}
         />
@@ -214,7 +224,7 @@ function FeatureRow({
             </span>
           )}
         </span>
-        <span className="mt-1 block text-[13px] leading-relaxed text-foreground-subtle">
+        <span className="mt-0.5 block text-[12.5px] leading-snug text-foreground-subtle sm:mt-1 sm:text-[13px] sm:leading-relaxed">
           {feature.desc}
         </span>
       </span>
