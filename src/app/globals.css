@@ -145,6 +145,12 @@ html.lenis body {
   --animate-page-enter: page-enter 0.3s var(--ease-out);
 }
 
+/* Dark is the default theme; tell the browser so it paints native
+   controls (select popups, scrollbars, pickers) to match. */
+:root {
+  color-scheme: dark;
+}
+
 /* ============================================
    Light Theme Overrides
    ============================================ */
@@ -168,11 +174,27 @@ html.lenis body {
   --color-card-gradient-to: rgba(242, 242, 242, 1);
   --color-grid-line: rgba(0, 0, 0, 0.06);
   --color-dot-pattern: rgba(0, 0, 0, 0.10);
+  color-scheme: light;
 }
 
 /* Smooth theme transition */
 [data-theme] {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ============================================
+   Native control rendering
+
+   Browsers draw <select> dropdowns, scrollbars and date pickers
+   themselves, ignoring page CSS. Without color-scheme they default to
+   light, so our near-white option text landed on a white popup and
+   became unreadable. The explicit option rule below is a fallback for
+   platforms (notably Linux/Chrome) that still paint the popup from
+   page colours.
+   ============================================ */
+option {
+  background-color: var(--color-background-secondary);
+  color: var(--color-foreground);
 }
 
 /* Light mode text gradient override */
