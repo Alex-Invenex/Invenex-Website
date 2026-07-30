@@ -5,7 +5,7 @@ import { Check } from 'lucide-react';
 import { SubpageHero, HeadlineWord } from '@/components/sections/subpage-hero';
 import { TrackPicker } from '@/components/scope/track-picker';
 import { FeatureGroup } from '@/components/scope/feature-group';
-import { SummaryRail, SummaryBar, type TrackTally } from '@/components/scope/summary-rail';
+import { SummaryRail, SummaryBar } from '@/components/scope/summary-rail';
 import { ScopeForm } from '@/components/scope/scope-form';
 import { contactInfo } from '@/lib/constants';
 import {
@@ -115,11 +115,11 @@ export function ScopeClient() {
     [selectedTracks]
   );
 
-  const tallies: TrackTally[] = useMemo(
+  /** Per-track counts, shown beside each track heading. */
+  const tallies = useMemo(
     () =>
       activeTracks.map((track) => ({
         id: track.id,
-        title: track.title,
         selected: featureIdsForTrack(track.id).filter((id) =>
           selectedFeatures.has(id)
         ).length,
@@ -129,11 +129,6 @@ export function ScopeClient() {
   );
 
   const selectedCount = selectedFeatures.size;
-  const totalCount = useMemo(
-    () => activeTracks.reduce((n, t) => n + featureIdsForTrack(t.id).length, 0),
-    [activeTracks]
-  );
-
   const hasTracks = activeTracks.length > 0;
 
   /* ── Success screen ──────────────────────────────────────── */
@@ -215,52 +210,50 @@ export function ScopeClient() {
 
             <div className="grid items-start gap-12 lg:grid-cols-[1fr_320px]">
               {/* Feature groups */}
-              <div className="flex flex-col gap-12">
-                {activeTracks.map((track, index) => (
-                  <div key={track.id} data-testid={`track-panel-${track.id}`}>
-                    <div className="mb-5 flex items-end justify-between gap-4 border-b border-surface-border-hover pb-3">
-                      <div>
-                        <p className="font-mono text-[11px] tracking-[0.14em] text-coral-500">
-                          {String(index + 1).padStart(2, '0')} / {track.code}
-                        </p>
-                        <h3 className="mt-1.5 text-2xl font-semibold tracking-tight text-foreground">
+              <div className="flex flex-col gap-14">
+                {activeTracks.map((track) => {
+                  const tally = tallies.find((t) => t.id === track.id);
+                  return (
+                    <div key={track.id} data-testid={`track-panel-${track.id}`}>
+                      <div className="mb-1 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                        <h3 className="text-2xl font-semibold tracking-tight text-foreground">
                           {track.title}
                         </h3>
+                        <div className="flex items-baseline gap-4">
+                          <span className="text-[13px] text-foreground-subtle">
+                            {tally?.selected ?? 0} of {tally?.total ?? 0}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => toggleTrack(track.id)}
+                            className="text-[13px] text-foreground-subtle underline underline-offset-4 transition-colors duration-200 hover:text-error"
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => toggleTrack(track.id)}
-                        className="shrink-0 rounded-md border border-surface-border-hover px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground-subtle transition-colors duration-200 hover:border-error hover:text-error"
-                      >
-                        Remove
-                      </button>
-                    </div>
 
-                    <div className="flex flex-col gap-3">
-                      {track.groups.map((group) => (
-                        <FeatureGroup
-                          key={group.id}
-                          group={group}
-                          selected={selectedFeatures}
-                          onToggleFeature={toggleFeature}
-                          onSetGroup={(_, on) => setGroup(group, on)}
-                          onCoreAttempt={handleCoreAttempt}
-                          defaultOpen={group.features.some(
-                            (f) => f.tier === 'core' || f.tier === 'recommended'
-                          )}
-                        />
-                      ))}
+                      <div className="border-t border-surface-border">
+                        {track.groups.map((group) => (
+                          <FeatureGroup
+                            key={group.id}
+                            group={group}
+                            selected={selectedFeatures}
+                            onToggleFeature={toggleFeature}
+                            onSetGroup={(_, on) => setGroup(group, on)}
+                            onCoreAttempt={handleCoreAttempt}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Sticky rail */}
               <aside className="sticky top-24 hidden lg:block">
                 <SummaryRail
-                  tallies={tallies}
                   selectedCount={selectedCount}
-                  totalCount={totalCount}
                   onContinue={() => scrollToRef(formRef)}
                   onReset={resetToRecommended}
                 />
@@ -307,7 +300,6 @@ export function ScopeClient() {
       {hasTracks && (
         <SummaryBar
           selectedCount={selectedCount}
-          totalCount={totalCount}
           onContinue={() => scrollToRef(formRef)}
         />
       )}
