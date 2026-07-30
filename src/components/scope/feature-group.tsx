@@ -217,10 +217,6 @@ function FeatureRow({
           {feature.desc}
         </span>
       </span>
-
-      <span className="hidden shrink-0 pt-1 font-mono text-[10px] text-foreground-subtle opacity-50 sm:block">
-        {feature.id}
-      </span>
     </Wrapper>
   );
 }
