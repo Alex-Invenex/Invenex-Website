@@ -102,6 +102,7 @@ export const footerNav = {
     { title: "Portfolio", href: "/portfolio" },
     { title: "Careers", href: "/careers" },
     { title: "Contact", href: "/contact" },
+    { title: "Build Your Project", href: "/build-your-project" },
   ],
   resources: [
     { title: "Products", href: "/products" },
