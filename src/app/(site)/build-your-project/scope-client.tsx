@@ -136,6 +136,24 @@ export function ScopeClient() {
 
   const hasTracks = activeTracks.length > 0;
 
+  /* ── Mobile bar target ───────────────────────────────────
+     Without this the bar's button always jumped to the details form,
+     so a customer who had just picked their services was thrown past
+     every feature they were meant to choose. */
+  const [reachedFeatures, setReachedFeatures] = useState(false);
+
+  useEffect(() => {
+    if (!hasTracks) return;
+    const onScroll = () => {
+      const el = featuresRef.current;
+      if (!el) return;
+      setReachedFeatures(el.getBoundingClientRect().top < window.innerHeight * 0.5);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [hasTracks]);
+
   /* ── Success screen ──────────────────────────────────────── */
 
   if (submitted) {
@@ -308,7 +326,10 @@ export function ScopeClient() {
         <SummaryBar
           selectedCount={selectedCount}
           totalCount={totalCount}
-          onContinue={() => scrollToRef(formRef)}
+          label={reachedFeatures ? 'Continue' : 'Pick features'}
+          onContinue={() =>
+            scrollToRef(reachedFeatures ? formRef : featuresRef)
+          }
         />
       )}
 

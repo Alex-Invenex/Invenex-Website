@@ -194,19 +194,20 @@ function FeatureRow({
 
       {/* Text */}
       <span className="min-w-0 flex-1">
-        <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span className="text-[15px] font-medium leading-snug text-foreground">
-            {feature.title}
-          </span>
+        {/* Badges sit in the text flow rather than as flex siblings, so a long
+            title wraps and the badge follows the last word instead of dropping
+            onto a line of its own — which made narrow screens look ragged. */}
+        <span className="block text-[15px] font-medium leading-snug text-foreground">
+          {feature.title}
           {isCore && (
-            <span className="inline-flex items-center gap-1 rounded-sm bg-surface-overlay-hover px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-foreground-muted">
+            <span className="ml-2 inline-flex translate-y-[-1px] items-center gap-1 whitespace-nowrap rounded-sm bg-surface-overlay-hover px-1.5 py-0.5 align-middle font-mono text-[9px] uppercase tracking-[0.1em] text-foreground-muted">
               <Lock className="h-2.5 w-2.5" aria-hidden="true" />
               Core
             </span>
           )}
           {feature.tier === 'recommended' && (
             <span
-              className="rounded-sm px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-coral-500"
+              className="ml-2 inline-block translate-y-[-1px] whitespace-nowrap rounded-sm px-1.5 py-0.5 align-middle font-mono text-[9px] uppercase tracking-[0.1em] text-coral-500"
               style={{ background: 'rgba(255,106,55,0.14)' }}
             >
               Recommended

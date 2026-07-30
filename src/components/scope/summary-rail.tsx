@@ -112,13 +112,21 @@ export function SummaryBar({
   selectedCount,
   totalCount,
   onContinue,
-}: Pick<SummaryProps, 'selectedCount' | 'totalCount' | 'onContinue'>) {
+  label = 'Continue',
+}: Pick<SummaryProps, 'selectedCount' | 'totalCount' | 'onContinue'> & {
+  /** What tapping the bar does next, so it never skips a step. */
+  label?: string;
+}) {
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-border px-4 py-3 lg:hidden"
+      // Fully opaque, not glass: backdrop-blur is disabled on touch devices,
+      // so a translucent bar let page text bleed through and rows read as
+      // cut off mid-sentence.
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-border-hover px-4 py-3 lg:hidden"
       style={{
-        background: 'var(--color-surface-glass)',
+        background: 'var(--color-background)',
         paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))',
+        boxShadow: '0 -12px 28px rgba(0, 0, 0, 0.55)',
       }}
       data-testid="summary-bar"
     >
@@ -138,9 +146,9 @@ export function SummaryBar({
           type="button"
           onClick={onContinue}
           disabled={selectedCount === 0}
-          className="inline-flex items-center gap-2 rounded-full bg-coral-500 px-5 py-2.5 text-sm font-semibold text-background transition-opacity duration-200 disabled:opacity-40"
+          className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-coral-500 px-5 py-2.5 text-sm font-semibold text-background transition-opacity duration-200 disabled:opacity-40"
         >
-          Continue
+          {label}
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
