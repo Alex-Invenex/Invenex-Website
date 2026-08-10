@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { CURRENCY_COOKIE, CURRENCIES, isCurrency, type Currency } from "@/lib/currency";
+import { CURRENCIES, type Currency } from "@/lib/currency";
 import { useCurrency } from "@/components/providers/currency-provider";
 
 const CURRENCY_LABELS: Record<Currency, string> = {
@@ -11,26 +10,14 @@ const CURRENCY_LABELS: Record<Currency, string> = {
   USD: "$ USD",
 };
 
+// Note: stored-choice-beats-initial and corrupt-value-falls-back are both
+// guaranteed by `CurrencyProvider`'s own mount-time reconciliation effect,
+// which runs regardless of whether a toggle is mounted anywhere in the tree.
+// Duplicating that reconciliation here would just be a second, redundant
+// policy racing the provider's -- the toggle only needs to read and write
+// context.
 export function CurrencyToggle({ className }: { className?: string }) {
   const { currency, setCurrency } = useCurrency();
-
-  useEffect(() => {
-    // Stored choice beats the server-derived initial, and a corrupt/absent
-    // stored value simply falls back to whatever the provider already has.
-    let stored: string | null = null;
-    try {
-      stored = localStorage.getItem(CURRENCY_COOKIE);
-    } catch {
-      stored = null;
-    }
-
-    if (isCurrency(stored) && stored !== currency) {
-      setCurrency(stored);
-    }
-    // Runs once on mount only -- this is a one-time reconciliation, not a
-    // continuous sync.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div className={cn("flex items-center gap-3", className)}>

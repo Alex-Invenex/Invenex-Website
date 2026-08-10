@@ -10,18 +10,6 @@ interface CurrencyContextValue {
 
 const CurrencyContext = createContext<CurrencyContextValue | null>(null);
 
-/**
- * Reads the raw `invenex.currency` cookie value from `document.cookie`.
- * Returns `null` when the cookie is absent (as opposed to present-but-empty).
- */
-function readCurrencyCookie(): string | null {
-  const match = document.cookie
-    .split("; ")
-    .find((entry) => entry.startsWith(`${CURRENCY_COOKIE}=`));
-  if (!match) return null;
-  return match.slice(CURRENCY_COOKIE.length + 1);
-}
-
 export function CurrencyProvider({
   initialCurrency,
   children,
@@ -49,9 +37,16 @@ export function CurrencyProvider({
   }
 
   useEffect(() => {
-    // Cookie-cleared edge case: if the cookie that produced `initialCurrency`
-    // is now gone but localStorage still holds a valid, different choice,
-    // restore it. This only fires once, after hydration is complete.
+    // Reconcile on ANY divergence between localStorage and the server-derived
+    // `initialCurrency`, not just when the cookie is missing. The cookie can
+    // be stale or absent for reasons other than "the user never chose": a
+    // privacy tool can block the cookie write in `setCurrency` while the
+    // localStorage write still succeeds, or the cookie can simply expire out
+    // of sync with localStorage. In every such case localStorage is the more
+    // durable signal of an explicit user choice, so it wins -- and going
+    // through `setCurrency` rewrites the cookie to match, self-healing the
+    // divergence. This runs once, after hydration is complete, and never
+    // during render (no-flash guarantee unchanged).
     let stored: string | null = null;
     try {
       stored = localStorage.getItem(CURRENCY_COOKIE);
@@ -61,7 +56,6 @@ export function CurrencyProvider({
 
     if (!isCurrency(stored)) return;
     if (stored === initialCurrency) return;
-    if (readCurrencyCookie() !== null) return;
 
     setCurrency(stored);
     // eslint-disable-next-line react-hooks/exhaustive-deps

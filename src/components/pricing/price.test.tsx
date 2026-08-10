@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { describe, it, expect, beforeEach } from "vitest";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CurrencyProvider } from "@/components/providers/currency-provider";
 import { CurrencyToggle } from "./currency-toggle";
@@ -13,8 +13,6 @@ describe("Price", () => {
     localStorage.clear();
     document.cookie = "invenex.currency=; path=/; max-age=0";
   });
-
-  afterEach(cleanup);
 
   it("renders the formatted amount for the initial currency", () => {
     render(
