@@ -12,13 +12,19 @@ import { NotForYou } from '@/components/pricing/not-for-you'
 import { SlotCounter } from '@/components/pricing/slot-counter'
 import { PricingFaq } from '@/components/pricing/pricing-faq'
 import { Price } from '@/components/pricing/price'
+import { useCurrency } from '@/components/providers/currency-provider'
+import { formatPrice } from '@/lib/format-price'
 import { cn } from '@/lib/utils'
 import {
+  AD_SPEND_DISCLOSURE,
+  APP_CARE,
   APP_TIERS,
   BLUEPRINT,
   CARE_PLANS,
   CARE_PLANS_ANNUAL_PREPAY_NOTE,
   ECOM_TIERS,
+  MIN_AD_SPEND,
+  minAdSpendNote,
   MOMENTUM_INCLUDED_IN_GROWTH,
   MOMENTUM_INCLUDED_IN_PLATFORM,
   OUT_OF_SCOPE_RATE,
@@ -40,17 +46,25 @@ function Section({
   orb = 'right',
   children,
   labelledBy,
+  label,
 }: {
   id?: string
   tone?: 'base' | 'raised'
   orb?: 'left' | 'right' | 'none'
   children: ReactNode
+  /** Id of the heading that names this landmark. Prefer this over `label`. */
   labelledBy?: string
+  /**
+   * Literal accessible name, for bands whose heading is rendered by a shared
+   * component that exposes no id to point `aria-labelledby` at.
+   */
+  label?: string
 }) {
   return (
     <section
       id={id}
       aria-labelledby={labelledBy}
+      aria-label={labelledBy ? undefined : label}
       className={cn(
         'relative py-20 md:py-32',
         tone === 'raised' ? 'bg-background-secondary' : 'bg-background'
@@ -193,10 +207,26 @@ function PriceTable({
   )
 }
 
+/**
+ * The ad-spend disclosure, said before anyone signs: the fixed sentence from
+ * `lib/pricing.ts` plus the minimum useful spend rendered in the visitor's own
+ * currency. A rupee figure here would undo the point of the whole page for the
+ * 60% of clients who are not paying in rupees.
+ */
+function AdSpendDisclosure({ className }: { className?: string }) {
+  const { currency } = useCurrency()
+
+  return (
+    <p className={className}>
+      {AD_SPEND_DISCLOSURE}{' '}
+      {minAdSpendNote(formatPrice(MIN_AD_SPEND[currency], currency))}
+    </p>
+  )
+}
+
 /* ─── Data shaped for the tables ───────────────────────── */
 
-const appBuilds = APP_TIERS.filter((tier) => !tier.mandatory)
-const appCare = APP_TIERS.find((tier) => tier.mandatory)!
+const appBuilds = APP_TIERS.filter((tier) => tier.id !== APP_CARE.id)
 
 const carePlanNotes = [
   MOMENTUM_INCLUDED_IN_GROWTH,
@@ -397,7 +427,7 @@ function OtherServices() {
               Mandatory
             </span>
             <Price
-              amount={appCare.price}
+              amount={APP_CARE.price}
               suffix="/mo"
               className="text-2xl font-light text-gradient-orange"
             />
@@ -486,9 +516,7 @@ function OtherServices() {
             }))}
           />
         </div>
-        <p className="mt-5 max-w-3xl text-sm text-foreground-muted">
-          {RETAINERS[0].adSpendNote}
-        </p>
+        <AdSpendDisclosure className="mt-5 max-w-3xl text-sm text-foreground-muted" />
       </div>
     </Section>
   )
@@ -554,7 +582,13 @@ function BlueprintBlock() {
 
 function NotForYouSection() {
   return (
-    <Section tone="raised" orb="none">
+    // `NotForYou` owns its own heading and exposes no id to reference, so the
+    // landmark is named literally rather than left anonymous.
+    <Section
+      tone="raised"
+      orb="none"
+      label="We’re probably not for you if…"
+    >
       <div className="mx-auto max-w-3xl">
         <NotForYou />
       </div>

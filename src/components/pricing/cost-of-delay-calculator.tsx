@@ -5,9 +5,21 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useCurrency } from "@/components/providers/currency-provider";
 import { formatPrice } from "@/lib/format-price";
+import type { Currency } from "@/lib/currency";
 
 /** The benchmark this calculator measures a site's conversion rate against. */
 const BENCHMARK_CONVERSION_RATE = 3;
+
+/**
+ * Unit shown after the "average order value" label. It follows the active
+ * currency: a Gulf visitor asked for a figure "(₹)" would either enter the
+ * wrong number or conclude the whole page is an India price list.
+ */
+const CURRENCY_UNIT: Record<Currency, string> = {
+  INR: "₹",
+  AED: "AED",
+  USD: "$",
+};
 
 export interface CostOfDelayInputs {
   visitors: number;
@@ -87,7 +99,11 @@ export function CostOfDelayCalculator({
       </h3>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        {/* Explicit ids: `Input` otherwise derives one from the label text,
+            which would change every time the currency unit changes and break
+            the label/field association mid-session. */}
         <Input
+          id="cod-visitors"
           label="Monthly visitors to your site"
           type="number"
           inputMode="numeric"
@@ -96,6 +112,7 @@ export function CostOfDelayCalculator({
           onChange={handleChange("visitors")}
         />
         <Input
+          id="cod-rate"
           label="Your current conversion rate (%)"
           type="number"
           inputMode="decimal"
@@ -105,7 +122,8 @@ export function CostOfDelayCalculator({
           onChange={handleChange("rate")}
         />
         <Input
-          label="Your average order or enquiry value (₹)"
+          id="cod-aov"
+          label={`Your average order or enquiry value (${CURRENCY_UNIT[currency]})`}
           type="number"
           inputMode="numeric"
           min={0}

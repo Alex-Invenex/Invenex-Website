@@ -2,7 +2,11 @@ import { describe, it, expect } from 'vitest'
 import {
   TIERS,
   CARE_PLANS,
+  AD_SPEND_DISCLOSURE,
+  APP_CARE,
   APP_TIERS,
+  MIN_AD_SPEND,
+  minAdSpendNote,
   ECOM_TIERS,
   BLUEPRINT,
   RETAINERS,
@@ -174,6 +178,15 @@ describe('pricing data — mobile apps', () => {
     expect(APP_TIERS.find((t) => t.id === 'appCare')!.mandatory).toBe(true)
   })
 
+  // Exported by name so no consumer has to reach for `find(...)!`.
+  it('exports App Care by name, and it is the same object in APP_TIERS', () => {
+    expect(APP_CARE.id).toBe('appCare')
+    expect(APP_CARE.mandatory).toBe(true)
+    expect(APP_CARE.price).toEqual({ INR: 28_000, AED: 2_100, USD: 950 })
+    expect(APP_TIERS).toContain(APP_CARE)
+    expect(APP_TIERS.filter((t) => t.mandatory)).toEqual([APP_CARE])
+  })
+
   it('marks the non-care app tiers as not mandatory', () => {
     for (const id of ['appLite', 'appCrossPlatform', 'appNative']) {
       expect(APP_TIERS.find((t) => t.id === id)!.mandatory).toBeFalsy()
@@ -274,6 +287,30 @@ describe('pricing data — retainers', () => {
       expect(retainer.adSpendNote).toMatch(/billed separately/i)
       expect(retainer.adSpendNote).toMatch(/never marked up/i)
     }
+  })
+
+  // The disclosure used to end "...Minimum useful spend ₹40,000/month.", which
+  // put the India sheet in front of Gulf and Western visitors. The monetary
+  // half now lives in MIN_AD_SPEND and is formatted per currency at render.
+  it('keeps every currency symbol and amount out of the ad-spend note', () => {
+    for (const retainer of RETAINERS) {
+      expect(retainer.adSpendNote).toBe(AD_SPEND_DISCLOSURE)
+      expect(retainer.adSpendNote).not.toMatch(/₹|\$|AED|\d/)
+    }
+    expect(AD_SPEND_DISCLOSURE).not.toMatch(/₹|\$|AED|\d/)
+  })
+
+  it('publishes the minimum useful ad spend in all three currencies', () => {
+    expect(MIN_AD_SPEND).toEqual({ INR: 40_000, AED: 1_800, USD: 475 })
+  })
+
+  it('builds the minimum-spend sentence around a pre-formatted amount', () => {
+    expect(minAdSpendNote('AED 1,800')).toBe(
+      'Minimum useful spend AED 1,800/month.'
+    )
+    expect(minAdSpendNote('₹40,000')).toBe(
+      'Minimum useful spend ₹40,000/month.'
+    )
   })
 })
 

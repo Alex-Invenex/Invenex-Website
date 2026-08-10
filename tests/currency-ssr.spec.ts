@@ -13,6 +13,21 @@ const GROWTH_INR = '3,85,000';
 const GROWTH_AED = '28,400';
 const GROWTH_USD = '12,900';
 
+/**
+ * The only legitimate rupee sign on a non-INR page is the currency toggle's
+ * own "₹ INR" button label — it has to name the option it switches to. Every
+ * other ₹ is the India sheet leaking into a market that does not pay in
+ * rupees. Note the escaped HTML entities: React emits "₹" literally, but a
+ * label written as an entity would slip past a naive check.
+ */
+function rupeesOutsideTheToggle(html: string): number {
+  const stripped = html
+    .replaceAll('₹ INR', '')
+    .replaceAll('&#x20B9; INR', '')
+    .replaceAll('&#8377; INR', '');
+  return (stripped.match(/₹|&#x20B9;|&#8377;/gi) ?? []).length;
+}
+
 // The dev server compiles /pricing on first hit; be generous.
 test.describe.configure({ timeout: 120_000 });
 
@@ -29,6 +44,9 @@ test.describe('regional currency', () => {
     expect(html).toContain(GROWTH_AED);
     // Must NOT contain the INR price anywhere in the served document.
     expect(html).not.toContain(GROWTH_INR);
+    // ...nor any other rupee figure: not in the ad-spend disclosure, not in a
+    // form label, not in body copy.
+    expect(rupeesOutsideTheToggle(html)).toBe(0);
   });
 
   test('serves USD in the initial server HTML for a US visitor', async ({
@@ -42,6 +60,7 @@ test.describe('regional currency', () => {
     const html = await res.text();
     expect(html).toContain(GROWTH_USD);
     expect(html).not.toContain(GROWTH_INR);
+    expect(rupeesOutsideTheToggle(html)).toBe(0);
   });
 
   test('serves INR in the initial server HTML for an Indian visitor', async ({
@@ -72,18 +91,45 @@ test.describe('regional currency', () => {
     });
     await page.setExtraHTTPHeaders({ 'x-vercel-ip-country': 'AE' });
 
-    const snapshots: Promise<string>[] = [];
-    page.on('domcontentloaded', () => {
-      snapshots.push(page.content().catch(() => ''));
-    });
+    // `commit` returns as soon as the navigation response starts, so the
+    // samples below are taken WHILE the document streams and hydrates —
+    // exactly the window a currency flash would live in. Waiting for `load`
+    // and inspecting the settled DOM would prove nothing.
+    await page.goto('/pricing', { waitUntil: 'commit' });
 
-    await page.goto('/pricing', { waitUntil: 'load' });
-    snapshots.push(page.content());
+    const samples: string[] = [await page.content().catch(() => '')];
+    let loaded = false;
+    const load = page
+      .waitForLoadState('load')
+      .then(() => {
+        loaded = true;
+      })
+      .catch(() => {
+        loaded = true;
+      });
 
-    const seen = await Promise.all(snapshots);
-    // No observed frame may contain the INR price.
-    expect(seen.some((html) => html.includes(GROWTH_INR))).toBe(false);
-    expect(seen.some((html) => html.includes(GROWTH_AED))).toBe(true);
+    const deadline = Date.now() + 20_000;
+    while (!loaded && Date.now() < deadline) {
+      await page.waitForTimeout(50);
+      samples.push(await page.content().catch(() => ''));
+    }
+    await load;
+    samples.push(await page.content());
+
+    // Guard the guard: a single post-load sample would make every assertion
+    // below trivially true.
+    expect(samples.length).toBeGreaterThan(1);
+
+    const preLoad = samples.slice(0, -1);
+    expect(preLoad.some((html) => html.includes('<body'))).toBe(true);
+    // The correct currency was already in the DOM before load completed.
+    expect(preLoad.some((html) => html.includes(GROWTH_AED))).toBe(true);
+
+    // ...and no sample, at any point, showed the India sheet.
+    expect(samples.some((html) => html.includes(GROWTH_INR))).toBe(false);
+    expect(samples.some((html) => rupeesOutsideTheToggle(html) > 0)).toBe(
+      false
+    );
   });
 
   test('an explicit toggle choice survives a reload and persists', async ({

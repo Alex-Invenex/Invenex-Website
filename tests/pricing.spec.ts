@@ -62,6 +62,10 @@ test.describe('/pricing', () => {
   test('shows the "probably not for you" section', async ({ page }) => {
     await page.goto('/pricing');
     await expect(page.getByText(/probably not for you/i).first()).toBeVisible();
+    // ...and its landmark is named, not anonymous.
+    await expect(
+      page.getByRole('region', { name: /probably not for you/i }).first()
+    ).toBeVisible();
   });
 
   // Open-ended pricing reintroduces the negotiation the published ladder
@@ -70,6 +74,10 @@ test.describe('/pricing', () => {
     await page.goto('/pricing');
     const main = (await page.textContent('main')) ?? '';
     expect(main).not.toMatch(/starting at|starting from|prices from|onwards/i);
+    expect(main).not.toMatch(/from ₹|from AED|from \$|\bPOA\b/i);
+    expect(main).not.toMatch(
+      /contact for pricing|contact us for a price|price on request/i
+    );
     expect(main).not.toMatch(/get a quote|request a quote|get an estimate/i);
   });
 

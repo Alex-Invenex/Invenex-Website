@@ -55,6 +55,46 @@ describe("CostOfDelayCalculator", () => {
     ).toBeInTheDocument();
   });
 
+  // A Gulf visitor asked for an order value "(₹)" either types the wrong
+  // number or decides the whole page is an India price list.
+  it("labels the order-value field with the active currency's unit", () => {
+    renderCalculator();
+    expect(
+      screen.getByLabelText(/your average order or enquiry value \(₹\)/i)
+    ).toBeInTheDocument();
+
+    cleanup();
+
+    renderCalculator(undefined, "AED");
+    expect(
+      screen.getByLabelText(/your average order or enquiry value \(AED\)/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByLabelText(/enquiry value \(₹\)/i)
+    ).not.toBeInTheDocument();
+
+    cleanup();
+
+    renderCalculator(undefined, "USD");
+    expect(
+      screen.getByLabelText(/your average order or enquiry value \(\$\)/i)
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the field ids stable across currencies", () => {
+    renderCalculator(undefined, "INR");
+    expect(
+      screen.getByLabelText(/enquiry value/i).getAttribute("id")
+    ).toBe("cod-aov");
+
+    cleanup();
+
+    renderCalculator(undefined, "USD");
+    expect(
+      screen.getByLabelText(/enquiry value/i).getAttribute("id")
+    ).toBe("cod-aov");
+  });
+
   it("shows no output until all three inputs have values", () => {
     renderCalculator();
     expect(

@@ -179,6 +179,21 @@ export interface AppTier {
   mandatory?: true
 }
 
+/**
+ * App Care — the mandatory monthly plan every app client is on.
+ *
+ * Exported by name so consumers never have to `find(...)!` their way to it.
+ * It is also the last entry of {@link APP_TIERS}, by reference.
+ */
+export const APP_CARE: AppTier = {
+  id: 'appCare',
+  name: 'App Care',
+  price: { INR: 28_000, AED: 2_100, USD: 950 },
+  timeline: 'ongoing',
+  includesStoreSubmission: false,
+  mandatory: true,
+}
+
 export const APP_TIERS: AppTier[] = [
   {
     id: 'appLite',
@@ -201,14 +216,7 @@ export const APP_TIERS: AppTier[] = [
     timeline: '14 weeks',
     includesStoreSubmission: true,
   },
-  {
-    id: 'appCare',
-    name: 'App Care',
-    price: { INR: 28_000, AED: 2_100, USD: 950 },
-    timeline: 'ongoing',
-    includesStoreSubmission: false,
-    mandatory: true,
-  },
+  APP_CARE,
 ]
 
 // ---------------------------------------------------------------------------
@@ -368,11 +376,42 @@ export interface Retainer {
   /** Monthly price. */
   price: PriceSet
   scope: string[]
+  /**
+   * Currency-free half of the ad-spend disclosure. The monetary half lives in
+   * {@link MIN_AD_SPEND} / {@link minAdSpendNote} so it can be rendered in the
+   * visitor's own currency — see the note on {@link AD_SPEND_DISCLOSURE}.
+   */
   adSpendNote: string
 }
 
-const AD_SPEND_NOTE =
-  'Ad spend is billed separately and never marked up. Minimum useful spend ₹40,000/month.'
+/**
+ * The half of the ad-spend disclosure that carries no money in it.
+ *
+ * This string used to end "...Minimum useful spend ₹40,000/month.", which put
+ * a rupee figure in front of Gulf and Western visitors on a page whose entire
+ * purpose is to show each market its own sheet. Never reintroduce a currency
+ * symbol or amount into this constant — pair it with {@link minAdSpendNote}
+ * instead.
+ */
+export const AD_SPEND_DISCLOSURE =
+  'Ad spend is billed separately and never marked up.'
+
+/**
+ * Minimum monthly ad spend below which a campaign cannot gather enough data
+ * to be worth running. Converted from the ₹40,000 baseline at the sheet rates
+ * used throughout `01-PRICING-DATA.md` (₹23.5/AED, ₹86/USD) and rounded to a
+ * credible round figure, as every other retainer-adjacent number is.
+ */
+export const MIN_AD_SPEND: PriceSet = { INR: 40_000, AED: 1_800, USD: 475 }
+
+/**
+ * Builds the monetary half of the ad-spend disclosure. The caller formats the
+ * amount for the active currency (`formatPrice(MIN_AD_SPEND[currency], currency)`)
+ * so this module stays free of formatting concerns.
+ */
+export function minAdSpendNote(formattedMinimum: string): string {
+  return `Minimum useful spend ${formattedMinimum}/month.`
+}
 
 export const RETAINERS: Retainer[] = [
   {
@@ -380,7 +419,7 @@ export const RETAINERS: Retainer[] = [
     name: 'Presence',
     price: { INR: 32_000, AED: 2_400, USD: 1_100 },
     scope: ['12 static posts + 8 reels monthly', 'community management', 'monthly report'],
-    adSpendNote: AD_SPEND_NOTE,
+    adSpendNote: AD_SPEND_DISCLOSURE,
   },
   {
     id: 'performance',
@@ -392,7 +431,7 @@ export const RETAINERS: Retainer[] = [
       'landing pages',
       'weekly optimisation',
     ],
-    adSpendNote: AD_SPEND_NOTE,
+    adSpendNote: AD_SPEND_DISCLOSURE,
   },
 ]
 
