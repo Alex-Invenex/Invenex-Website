@@ -41,7 +41,6 @@ export const projects: CaseStudyProject[] = [
     slug: "grabtogo",
     url: "https://www.grabtogo.in",
     featured: true,
-    location: "Kerala, India",
     challenge:
       "GrabToGo wanted to become the go-to app for local deals, but merchants had no way to list offers at scale and shoppers had no way to find the ones actually relevant to them.",
     solution:
