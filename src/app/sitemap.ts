@@ -34,11 +34,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1.0,
     },
+    // Published pricing is the site's primary conversion path — it answers
+    // the question every other page defers.
+    {
+      url: `${siteUrl}/pricing`,
+      lastModified: CONTENT_REVISED,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
     {
       url: `${siteUrl}/services`,
       lastModified: CONTENT_REVISED,
       changeFrequency: "monthly",
       priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/blueprint`,
+      lastModified: CONTENT_REVISED,
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
     {
       url: `${siteUrl}/build-your-project`,
