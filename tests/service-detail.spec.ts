@@ -146,6 +146,15 @@ test.describe('Service Detail Pages — pricing (Task 11)', () => {
       const pricingSection = page.locator('[data-testid="service-pricing"]');
       await expect(pricingSection.getByText(/Priced by catalogue size, not page count\./i)).toBeVisible();
     });
+
+    test('Social Media pricing pairs the ad-spend disclosure with the minimum-spend figure', async ({ page }) => {
+      await page.goto('/services/social-media');
+      const pricingSection = page.locator('[data-testid="service-pricing"]');
+      await expect(pricingSection.getByText(/Ad spend is billed separately and never marked up\./i)).toBeVisible();
+      // INR is the default currency — the sheet's ₹40,000 minimum useful spend
+      // must not be silently dropped from the disclosure.
+      await expect(pricingSection.getByText(/Minimum useful spend ₹40,000\/month\./i)).toBeVisible();
+    });
   });
 
   test.describe('All 6 service pages', () => {

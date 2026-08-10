@@ -9,7 +9,9 @@ import { GSAPStaggerContainer, GSAPStaggerItem } from '@/components/ui/gsap-stag
 import { ShareButtons } from '@/components/ui/share-buttons'
 import { Button } from '@/components/ui/button'
 import { Price } from '@/components/pricing/price'
-import { TIERS, APP_TIERS, APP_CARE, ECOM_TIERS, RETAINERS, STRATEGY, type PriceSet } from '@/lib/pricing'
+import { useCurrency } from '@/components/providers/currency-provider'
+import { formatPrice } from '@/lib/format-price'
+import { TIERS, APP_TIERS, APP_CARE, ECOM_TIERS, RETAINERS, STRATEGY, MIN_AD_SPEND, minAdSpendNote, type PriceSet } from '@/lib/pricing'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
@@ -220,6 +222,7 @@ function FeaturesSection({ features }: { features: string[] }) {
 /* ─── Pricing Section ──────────────────────────────────── */
 function PricingSection({ slug }: { slug: string }) {
   const items = PRICING_BY_SLUG[slug]
+  const { currency } = useCurrency()
   if (!items || items.length === 0) return null
 
   return (
@@ -268,7 +271,9 @@ function PricingSection({ slug }: { slug: string }) {
         )}
 
         {slug === 'social-media' && (
-          <p className="text-sm text-foreground-muted mb-6">{RETAINERS[0].adSpendNote}</p>
+          <p className="text-sm text-foreground-muted mb-6">
+            {RETAINERS[0].adSpendNote} {minAdSpendNote(formatPrice(MIN_AD_SPEND[currency], currency))}
+          </p>
         )}
 
         <Link

@@ -16,7 +16,9 @@ import {
 import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from '@/lib/gsap'
 import { cn } from '@/lib/utils'
 import { Price } from '@/components/pricing/price'
-import { TIERS, APP_TIERS, APP_CARE, ECOM_TIERS, RETAINERS, STRATEGY, BLUEPRINT, type PriceSet } from '@/lib/pricing'
+import { TIERS, APP_TIERS, APP_CARE, ECOM_TIERS, RETAINERS, STRATEGY, BLUEPRINT, CARE_PLANS, type PriceSet } from '@/lib/pricing'
+
+const momentum = CARE_PLANS.find((p) => p.id === 'momentum')!
 
 /* ─── Pricing slices ──────────────────────────────────────
    Every price literal traces back to `src/lib/pricing.ts` — nothing here is
@@ -180,7 +182,14 @@ const processSteps = [
     number: '05',
     title: 'Launch',
     duration: 'Week 6',
-    description: 'Launch day is just the beginning. We provide ongoing support, analytics insights, and iterative improvements to keep your product ahead of the curve — and Growth and Platform builds include their first month of Momentum care.',
+    description: (
+      <>
+        Launch day is just the beginning. We provide ongoing support, analytics insights, and
+        iterative improvements to keep your product ahead of the curve — and Growth and Platform
+        builds include the first month of Momentum care (
+        <Price amount={momentum.price} suffix="/mo" />) — most clients keep it.
+      </>
+    ),
     highlight: 'Deploy & Growth',
   },
 ]

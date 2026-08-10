@@ -159,8 +159,9 @@ test.describe('Services Overview Page — restructure (Task 11)', () => {
       await expect(page.getByText('₹15,000').first()).toBeVisible();
     });
 
-    test('step 05 mentions the Momentum care plan', async ({ page }) => {
+    test('step 05 mentions the Momentum care plan and surfaces its price', async ({ page }) => {
       await expect(page.getByText(/first month of Momentum care/i).first()).toBeVisible();
+      await expect(page.getByText('₹42,000/mo').first()).toBeVisible();
     });
   });
 
@@ -232,5 +233,53 @@ test.describe('Services Overview Page — restructure (Task 11)', () => {
     test('should have correct page title', async ({ page }) => {
       await expect(page).toHaveTitle(/Web & Mobile App Development Services/i);
     });
+  });
+});
+
+test.describe('Homepage services preview — real demotion (Task 11 fix round 1)', () => {
+  test('the pinned panel track holds exactly the 4 build services, not all 6', async ({ page }) => {
+    await page.goto('/');
+    const section = page.getByTestId('services-preview-section');
+    await expect(section).toBeVisible();
+
+    const panels = section.locator('[data-svc-panel]');
+    const panelCount = await panels.count();
+    expect(panelCount).toBe(4);
+    for (let i = 0; i < panelCount; i++) {
+      await expect(panels.nth(i)).not.toContainText('Social Media Marketing');
+      await expect(panels.nth(i)).not.toContainText('Digital Strategy');
+    }
+  });
+
+  test('Social Media Marketing and Digital Strategy render as a compact demoted "Ongoing" strip', async ({ page }) => {
+    await page.goto('/');
+    const ongoing = page.getByTestId('services-preview-ongoing').first();
+    await expect(ongoing).toBeVisible();
+    await expect(ongoing).toContainText('Ongoing');
+
+    const socialCard = ongoing.locator('[data-service-title="Social Media Marketing"]');
+    const strategyCard = ongoing.locator('[data-service-title="Digital Strategy"]');
+    await expect(socialCard).toBeVisible();
+    await expect(strategyCard).toBeVisible();
+
+    // Real prices via <Price>, not decoration.
+    await expect(socialCard).toContainText('₹32,000/mo');
+    await expect(socialCard).toContainText('₹68,000/mo');
+    await expect(strategyCard).toContainText('₹1,25,000');
+    await expect(strategyCard).toContainText('₹55,000/mo');
+  });
+
+  test('the Ongoing Social Media card links to its detail page', async ({ page }) => {
+    // Not a real .click() here: the pinned-scroll GSAP track above this strip
+    // resizes its spacer as ScrollTrigger initializes, which can shift this
+    // element's bounding box mid-poll and make Playwright's actionability
+    // check flaky. Asserting the href is just as strong a check of the wiring
+    // without depending on scroll-animation timing.
+    await page.goto('/');
+    const ongoing = page.getByTestId('services-preview-ongoing').first();
+    await expect(ongoing.locator('[data-service-title="Social Media Marketing"]')).toHaveAttribute(
+      'href',
+      '/services/social-media'
+    );
   });
 });
