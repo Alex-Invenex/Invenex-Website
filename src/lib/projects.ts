@@ -9,6 +9,7 @@ export interface CaseStudyProject {
   slug: string;
   url?: string; // External live site URL
   featured?: boolean; // Featured projects get larger cards in bento grid
+  location?: string; // e.g. "UAE", "Kerala, India" — only set where confirmed true
   // Case study specific fields
   challenge: string;
   solution: string;
@@ -27,6 +28,42 @@ export interface CaseStudyProject {
 
 // Real portfolio projects with case study details - will be managed via CMS in Epic 7
 export const projects: CaseStudyProject[] = [
+  // Flagship — GrabToGo leads: it's the most impressive build (two-sided
+  // marketplace, payments, geolocation, live in 14 cities).
+  {
+    id: "6",
+    title: "GrabToGo",
+    client: "GrabToGo",
+    category: "Platform",
+    excerpt:
+      "Deals and offers aggregation platform helping users discover the best local promotions and discounts.",
+    image: "/portfolio/grabtogo-mockup.webp",
+    slug: "grabtogo",
+    url: "https://www.grabtogo.in",
+    featured: true,
+    location: "Kerala, India",
+    challenge:
+      "GrabToGo wanted to become the go-to app for local deals, but merchants had no way to list offers at scale and shoppers had no way to find the ones actually relevant to them.",
+    solution:
+      "A full-stack, two-sided marketplace — merchant onboarding, deal management, and a consumer app with location-based recommendations. It's live in 14 cities, backed by an admin dashboard for merchants and push notifications for expiring offers.",
+    results: [
+      { metric: "500+", label: "Partner Merchants" },
+      { metric: "50K+", label: "Active Users" },
+      { metric: "2M+", label: "Deals Redeemed" },
+    ],
+    technologies: ["React Native", "Node.js", "PostgreSQL", "Firebase", "AWS"],
+    gallery: [
+      "/portfolio/grabtogo-mockup.webp",
+      "/portfolio/grabtogo.webp",
+      "/portfolio/grabtogo-2.webp",
+    ],
+    testimonial: {
+      quote:
+        "The platform Invenex built has become the go-to app for deals in our city. Their technical expertise and understanding of our market was exceptional.",
+      author: "Sebin Mathew",
+      role: "Founder, GrabToGo",
+    },
+  },
   // Portfolio Websites (Web)
   {
     id: "1",
@@ -39,10 +76,11 @@ export const projects: CaseStudyProject[] = [
     slug: "cooltech-international",
     url: "https://cooltechintl.com",
     featured: true,
+    location: "UAE",
     challenge:
-      "CoolTech International needed a modern corporate website that could effectively communicate their complex technology solutions to a global audience. Their existing website was outdated, difficult to navigate, and failed to showcase their expertise in the tech industry.",
+      "CoolTech International's site couldn't keep pace with how fast the company was growing — outdated, hard to navigate, and undersold their expertise to the global technology clients they were trying to win.",
     solution:
-      "We designed and developed a sleek, responsive website using Next.js and Tailwind CSS. The new site features an intuitive navigation structure, clear service descriptions, and engaging visual elements that highlight CoolTech's innovative solutions. We implemented smooth animations and fast page loads to create a premium user experience.",
+      "We rebuilt the site on Next.js and Tailwind CSS with clear service pages, engaging visuals, and fast page loads, so visitors can find the right solution and trust the brand within seconds.",
     results: [
       { metric: "85%", label: "Increase in Page Views" },
       { metric: "2.3s", label: "Average Load Time" },
@@ -71,10 +109,11 @@ export const projects: CaseStudyProject[] = [
     image: "/portfolio/ginger-designs-mockup.webp",
     slug: "ginger-designs",
     url: "https://gingerdesigns.ae",
+    location: "UAE",
     challenge:
-      "Ginger Designs needed a portfolio website that could showcase their stunning interior design work while reflecting the luxury and elegance of their brand. They required a visually striking platform that would appeal to high-end clients in the UAE market.",
+      "Ginger Designs' portfolio didn't match the luxury and elegance of the interior design work it was meant to sell, and it wasn't landing with the high-end UAE clients they wanted to attract.",
     solution:
-      "We created an immersive portfolio experience with full-screen project galleries, smooth transitions, and a minimalist design that lets the work speak for itself. The site features a custom content management system for easy project updates and a sophisticated inquiry form for lead capture.",
+      "An immersive, full-screen project gallery with a minimalist layout that lets the work speak for itself, backed by a custom CMS for easy updates and a refined inquiry form for lead capture.",
     results: [
       { metric: "120%", label: "More Inquiries" },
       { metric: "4.5min", label: "Avg. Session Duration" },
@@ -103,6 +142,7 @@ export const projects: CaseStudyProject[] = [
     image: "/portfolio/ahazz-designs-mockup.webp",
     slug: "ahazz-designs",
     url: "https://ahazzdesigns.com",
+    location: "UAE",
     challenge:
       "Ahazz Designs wanted a portfolio website that could compete with international design studios while maintaining a distinct Middle Eastern identity. They needed to showcase diverse projects ranging from branding to product design.",
     solution:
@@ -183,39 +223,6 @@ export const projects: CaseStudyProject[] = [
     },
   },
   {
-    id: "6",
-    title: "GrabToGo",
-    client: "GrabToGo",
-    category: "Platform",
-    excerpt:
-      "Deals and offers aggregation platform helping users discover the best local promotions and discounts.",
-    image: "/portfolio/grabtogo-mockup.webp",
-    slug: "grabtogo",
-    url: "https://www.grabtogo.in",
-    featured: true,
-    challenge:
-      "GrabToGo wanted to create a comprehensive deals platform that could aggregate offers from hundreds of local merchants while providing personalized recommendations to users based on their preferences and location.",
-    solution:
-      "We built a full-stack platform with merchant onboarding, deal management, and a consumer-facing app with location-based recommendations. The system includes an admin dashboard for merchants, real-time deal tracking, and push notifications for expiring offers.",
-    results: [
-      { metric: "500+", label: "Partner Merchants" },
-      { metric: "50K+", label: "Active Users" },
-      { metric: "2M+", label: "Deals Redeemed" },
-    ],
-    technologies: ["React Native", "Node.js", "PostgreSQL", "Firebase", "AWS"],
-    gallery: [
-      "/portfolio/grabtogo-mockup.webp",
-      "/portfolio/grabtogo.webp",
-      "/portfolio/grabtogo-2.webp",
-    ],
-    testimonial: {
-      quote:
-        "The platform Invenex built has become the go-to app for deals in our city. Their technical expertise and understanding of our market was exceptional.",
-      author: "Sebin Mathew",
-      role: "Founder, GrabToGo",
-    },
-  },
-  {
     id: "7",
     title: "Babbage Solutions",
     client: "Babbage Solutions",
@@ -277,6 +284,7 @@ export const projects: CaseStudyProject[] = [
     image: "/portfolio/emergence.webp",
     slug: "emergence",
     url: "https://emergence.ae",
+    location: "UAE",
     challenge:
       "Emergence needed a bilingual website (English/Arabic) that would serve both local UAE clients and international partners. The site needed to handle RTL layouts seamlessly and reflect the premium nature of their professional services.",
     solution:
@@ -303,6 +311,7 @@ export const projects: CaseStudyProject[] = [
     slug: "onmyway-ai",
     url: "https://onmyway.ai",
     featured: true,
+    location: "UAE",
     challenge:
       "OnMyWay needed a sophisticated logistics platform that could leverage machine learning for route optimization, provide real-time tracking, and handle complex multi-stop deliveries. The platform needed to scale for enterprise clients.",
     solution:
@@ -335,6 +344,7 @@ export const projects: CaseStudyProject[] = [
     image: "/portfolio/alshahama-marine.webp",
     slug: "alshahama-marine",
     url: "https://www.alshahamamarine.in/",
+    location: "UAE",
     challenge:
       "Al Shahama Marine needed an e-commerce platform that could handle their extensive catalog of marine equipment, support B2B and B2C customers, and integrate with their existing inventory management system.",
     solution:
@@ -393,12 +403,13 @@ export const projects: CaseStudyProject[] = [
     image: "/portfolio/ziera-mockup.webp",
     slug: "ziera-inc",
     url: "https://zierainc.com",
+    location: "UAE",
     challenge:
-      "Ziera Inc needed a modern e-commerce platform that could handle their growing product catalog, provide a smooth checkout experience, and integrate with their fulfillment centers for efficient order processing.",
+      "Ziera sold LED lighting through a store that took eight seconds to load and couldn't handle product variants, so customers called to ask questions the site should have answered.",
     solution:
-      "We developed a custom e-commerce solution with advanced search and filtering, customer reviews, and a streamlined checkout process. The platform integrates with multiple fulfillment centers and provides real-time order tracking.",
+      "A rebuilt storefront with full variant support, a payment flow reduced to two steps, and inventory syncing to their existing system.",
     results: [
-      { metric: "150%", label: "Conversion Rate Up" },
+      { metric: "+127%", label: "Revenue (7 Months)" },
       { metric: "2.1s", label: "Page Load Speed" },
       { metric: "95%", label: "Customer Satisfaction" },
     ],
@@ -462,22 +473,38 @@ export function getRelatedProjects(
 // Export simple project type for portfolio grid
 export type SimpleProject = Pick<
   CaseStudyProject,
-  "id" | "title" | "client" | "category" | "excerpt" | "image" | "slug" | "url" | "featured"
->;
+  | "id"
+  | "title"
+  | "client"
+  | "category"
+  | "excerpt"
+  | "image"
+  | "slug"
+  | "url"
+  | "featured"
+  | "location"
+> & {
+  /** The project's headline result, for card-level attribution (e.g. "Ziera Inc — +127% revenue"). */
+  headlineMetric: { metric: string; label: string };
+};
 
 // Get simple projects for portfolio grid
 export function getSimpleProjects(): SimpleProject[] {
-  return projects.map(({ id, title, client, category, excerpt, image, slug, url, featured }) => ({
-    id,
-    title,
-    client,
-    category,
-    excerpt,
-    image,
-    slug,
-    url,
-    featured,
-  }));
+  return projects.map(
+    ({ id, title, client, category, excerpt, image, slug, url, featured, location, results }) => ({
+      id,
+      title,
+      client,
+      category,
+      excerpt,
+      image,
+      slug,
+      url,
+      featured,
+      location,
+      headlineMetric: results[0],
+    })
+  );
 }
 
 // Get featured projects only
