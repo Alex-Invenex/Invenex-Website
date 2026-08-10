@@ -16,8 +16,12 @@ test.describe('Story 3-1: Homepage', () => {
     });
 
     test('should have CTA buttons', async ({ page }) => {
-      const ctaButton = page.getByRole('link', { name: /get.*quote|contact|start/i }).first();
-      await expect(ctaButton).toBeVisible();
+      // The hero now leads with the published price, not a project pitch:
+      // "See Pricing" → /pricing, "Book a 15-min fit call" → /contact.
+      await expect(page.getByTestId('hero-cta-primary')).toBeVisible();
+      await expect(page.getByTestId('hero-cta-primary')).toContainText(/see pricing/i);
+      await expect(page.getByTestId('hero-cta-secondary')).toBeVisible();
+      await expect(page.getByTestId('hero-cta-secondary')).toContainText(/book a 15-min fit call/i);
     });
   });
 

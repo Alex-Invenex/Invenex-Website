@@ -573,8 +573,11 @@ export function HeroV2() {
               data-a="desc"
               className="pl-4 md:pl-5 text-base md:text-lg lg:text-xl text-foreground-muted max-w-lg leading-relaxed"
             >
-              Premium web experiences, mobile apps &amp; platforms for
-              businesses that demand excellence and innovation.
+              We build the systems businesses actually run on. 12,000 catering
+              orders and counting.{' '}
+              <strong className="font-semibold text-foreground">
+                Prices published — no quote calls required.
+              </strong>
             </p>
           </div>
 
@@ -587,8 +590,8 @@ export function HeroV2() {
                 size="lg"
                 data-testid="hero-cta-primary"
               >
-                <Link href="/contact" className="group">
-                  Start a Project
+                <Link href="/pricing" className="group">
+                  See Pricing
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
                 </Link>
               </Button>
@@ -601,8 +604,8 @@ export function HeroV2() {
                 data-testid="hero-cta-secondary"
                 className="text-foreground-muted hover:text-foreground"
               >
-                <Link href="/portfolio" className="group">
-                  Our Work
+                <Link href="/contact" className="group">
+                  Book a 15-min fit call
                   <ArrowRight className="ml-2 w-5 h-5 text-coral-500 group-hover:translate-x-1.5 transition-transform duration-300" />
                 </Link>
               </Button>
