@@ -37,7 +37,19 @@ function Section({
   )
 }
 
-const WHAT_YOU_GET = BLUEPRINT.deliverables
+/**
+ * Verbatim from `02-COPY-DECK.md` §2 "What you get — list". Deliberately NOT
+ * `BLUEPRINT.deliverables` (that's a paraphrase for internal/other-page use)
+ * -- this page's copy must match the deck byte-for-byte.
+ */
+const WHAT_YOU_GET = [
+  '90-minute working session with two founders. A working session, not a sales call.',
+  'Written technical architecture — stack, integrations, data model, hosting',
+  'Competitor teardown: three named competitors, what they do better, where the gap is',
+  'Your scope broken into phases, with a fixed price against each',
+  'A 12-month roadmap you can execute with anyone',
+  'Delivered as a PDF with your logo on it',
+]
 
 /**
  * The three guarantees, keyed to their verbatim copy-deck lead-ins so the

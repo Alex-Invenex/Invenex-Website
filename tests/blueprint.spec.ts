@@ -41,6 +41,18 @@ test.describe('/blueprint', () => {
     await expect(page.getByText('Yours to keep.')).toBeVisible();
   });
 
+  test('renders the "what you get" list verbatim from the copy deck', async ({
+    page,
+  }) => {
+    await page.goto('/blueprint');
+
+    // Distinctive phrase unique to copy-deck §2 -- guards against the list
+    // silently drifting to a paraphrase (e.g. `BLUEPRINT.deliverables`).
+    await expect(
+      page.getByText('A working session, not a sales call.')
+    ).toBeVisible();
+  });
+
   test('has exactly one primary CTA, pointing at the contact fallback', async ({
     page,
   }) => {
