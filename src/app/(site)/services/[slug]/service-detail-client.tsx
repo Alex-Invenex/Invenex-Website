@@ -2,16 +2,43 @@
 
 import { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Check, Globe, Smartphone, Layers, ShoppingCart, Share2, Lightbulb, type LucideIcon } from 'lucide-react'
+import { Check, Globe, Smartphone, Layers, ShoppingCart, Share2, Lightbulb, ArrowRight, type LucideIcon } from 'lucide-react'
 import { SubpageCTA } from '@/components/sections/subpage-cta'
 import { SubpageHero, HeadlineWord } from '@/components/sections/subpage-hero'
 import { GSAPStaggerContainer, GSAPStaggerItem } from '@/components/ui/gsap-stagger-container'
 import { ShareButtons } from '@/components/ui/share-buttons'
 import { Button } from '@/components/ui/button'
+import { Price } from '@/components/pricing/price'
+import { TIERS, APP_TIERS, APP_CARE, ECOM_TIERS, RETAINERS, STRATEGY, type PriceSet } from '@/lib/pricing'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
 gsap.registerPlugin(useGSAP)
+
+/* ─── Pricing per service slug ─────────────────────────────
+   Every price literal traces back to `src/lib/pricing.ts`. */
+interface PricingItem {
+  name: string
+  price: PriceSet
+  suffix?: string
+}
+
+const webTiers = TIERS.filter((t) => t.id === 'launchpad' || t.id === 'launch' || t.id === 'growth')
+const platformTiers = TIERS.filter((t) => t.id === 'platform' || t.id === 'platformScale')
+const appCare = APP_CARE
+const mobileTiers = APP_TIERS.filter((t) => t.id !== 'appCare')
+
+const PRICING_BY_SLUG: Record<string, PricingItem[]> = {
+  'web-development': webTiers.map((t) => ({ name: t.name, price: t.price })),
+  'mobile-development': mobileTiers.map((t) => ({ name: t.name, price: t.price })),
+  'platform-development': platformTiers.map((t) => ({ name: t.name, price: t.price })),
+  ecommerce: ECOM_TIERS.map((t) => ({ name: t.name, price: t.price })),
+  'social-media': RETAINERS.map((t) => ({ name: t.name, price: t.price, suffix: '/mo' })),
+  'digital-strategy': [
+    { name: STRATEGY.sprint.name, price: STRATEGY.sprint.price },
+    { name: STRATEGY.advisory.name, price: STRATEGY.advisory.price, suffix: '/mo' },
+  ],
+}
 
 /* ─── Icon mapping ─────────────────────────────────────── */
 const iconMap: Record<string, LucideIcon> = {
@@ -62,6 +89,7 @@ export function ServiceDetailClient({ service }: ServiceDetailClientProps) {
           </>
         }
         subtitle={service.description}
+        testId="service-hero"
       >
         <div className="flex items-center gap-4 flex-wrap">
           <div className="w-16 h-16 rounded-2xl backdrop-blur-xl border border-surface-border flex items-center justify-center" style={{ background: 'var(--color-surface-overlay)' }}>
@@ -76,6 +104,9 @@ export function ServiceDetailClient({ service }: ServiceDetailClientProps) {
 
       {/* Features */}
       <FeaturesSection features={service.features} />
+
+      {/* Pricing */}
+      <PricingSection slug={service.slug} />
 
       {/* Technologies */}
       <TechSection technologies={service.technologies} />
@@ -186,6 +217,72 @@ function FeaturesSection({ features }: { features: string[] }) {
   )
 }
 
+/* ─── Pricing Section ──────────────────────────────────── */
+function PricingSection({ slug }: { slug: string }) {
+  const items = PRICING_BY_SLUG[slug]
+  if (!items || items.length === 0) return null
+
+  return (
+    <section aria-labelledby="pricing-heading" data-testid="service-pricing" className="py-16 bg-background-secondary">
+      <div className="container mx-auto px-6 md:px-12">
+        <h2 id="pricing-heading" className="text-3xl font-bold mb-4">What It Costs</h2>
+        <p className="text-foreground-muted max-w-2xl mb-10">
+          Every price traces back to the same sheet everyone else sees — no quote call required.
+        </p>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {items.map((item) => (
+            <div
+              key={item.name}
+              className="p-6 rounded-xl backdrop-blur-xl border border-surface-border"
+              style={{ background: 'var(--color-surface-overlay)' }}
+            >
+              <p className="text-sm text-foreground-muted mb-2">{item.name}</p>
+              <p className="font-mono text-2xl md:text-3xl text-coral-500 font-semibold">
+                <Price amount={item.price} suffix={item.suffix} />
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {slug === 'mobile-development' && (
+          <p className="flex items-center gap-2 text-sm text-foreground-muted mb-6">
+            <span
+              data-testid="app-care-required"
+              className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-semibold uppercase tracking-wide border border-amber-500/20 shrink-0"
+            >
+              Required
+            </span>
+            <span>
+              App Care{' '}
+              <span className="font-mono text-coral-500 font-semibold">
+                <Price amount={appCare.price} suffix="/mo" />
+              </span>{' '}
+              — an app that stops being updated eventually stops being downloadable. This isn&apos;t an upsell, it&apos;s the cost of your app continuing to exist.
+            </span>
+          </p>
+        )}
+
+        {slug === 'ecommerce' && (
+          <p className="text-sm text-foreground-muted italic mb-6">Priced by catalogue size, not page count.</p>
+        )}
+
+        {slug === 'social-media' && (
+          <p className="text-sm text-foreground-muted mb-6">{RETAINERS[0].adSpendNote}</p>
+        )}
+
+        <Link
+          href="/pricing"
+          className="group inline-flex items-center gap-2 text-coral-500 hover:text-coral-400 transition-colors text-sm font-medium"
+        >
+          See full pricing
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+        </Link>
+      </div>
+    </section>
+  )
+}
+
 /* ─── Technologies Section ─────────────────────────────── */
 function TechSection({ technologies }: { technologies: string[] }) {
   return (
@@ -262,7 +359,7 @@ function ProcessSection({ title }: { title: string }) {
           <div ref={connectorRef} className="hidden md:block absolute top-7 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-coral-500/50 via-coral-400/50 to-coral-500/50 origin-left" aria-hidden="true" style={{ transform: 'scaleX(0)' }} />
 
           {processSteps.map((step) => (
-            <div key={step.step} className="flex-1 relative" data-sp="step">
+            <div key={step.step} className="flex-1 relative" data-sp="step" data-testid="process-step">
               <div className="flex items-start gap-4 md:block md:text-center">
                 <div className="relative z-10 w-10 h-10 md:w-14 md:h-14 rounded-full flex-shrink-0 flex items-center justify-center md:mx-auto md:mb-4 font-bold text-white text-sm md:text-lg shadow-[0_0_20px_rgba(255,106,55,0.3)]" style={{ background: 'linear-gradient(135deg, var(--color-coral-500), var(--color-coral-600))' }}>
                   {step.step}

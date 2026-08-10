@@ -4,36 +4,48 @@ import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
-import { VISUAL_CARDS } from "@/components/ui/service-visual-cards";
+import {
+  WebDevCard,
+  MobileAppCard,
+  PlatformCard,
+  ECommerceCard,
+  SocialMediaCard,
+  StrategyCard,
+} from "@/components/ui/service-visual-cards";
 
 /* ─── Service data ─────────────────────────────────────── */
+/* Order: Platform Development leads, then Web / Mobile / E-Commerce, then the
+   ongoing (demoted) Social Media Marketing and Digital Strategy lines. */
 const SERVICES = [
   {
     number: "01",
+    title: "Platform Development",
+    tagline: "Enterprise SaaS",
+    description:
+      "Scalable SaaS platforms and enterprise systems built on cloud infrastructure. Reliable, secure, and engineered for growth.",
+    tags: ["Next.js", "Node.js", "PostgreSQL"],
+    href: "/services/platform-development",
+    Card: PlatformCard,
+  },
+  {
+    number: "02",
     title: "Web Development",
     tagline: "Next.js + React",
     description:
       "Custom websites and web applications built with Next.js, React, and TypeScript. Blazing-fast performance, SEO-optimized, and designed to convert.",
     tags: ["Next.js", "React", "TypeScript"],
     href: "/services/web-development",
+    Card: WebDevCard,
   },
   {
-    number: "02",
+    number: "03",
     title: "Mobile Apps",
     tagline: "iOS & Android",
     description:
       "Native and cross-platform mobile applications for iOS and Android. Smooth, responsive interfaces that users love to interact with.",
     tags: ["React Native", "iOS", "Android"],
     href: "/services/mobile-development",
-  },
-  {
-    number: "03",
-    title: "Platform Development",
-    tagline: "Enterprise SaaS",
-    description:
-      "Scalable SaaS platforms and enterprise systems built on cloud infrastructure. Reliable, secure, and engineered for growth.",
-    tags: ["AWS", "Node.js", "PostgreSQL"],
-    href: "/services/platform-development",
+    Card: MobileAppCard,
   },
   {
     number: "04",
@@ -43,6 +55,7 @@ const SERVICES = [
       "End-to-end online stores and marketplaces. From product catalogs to checkout flows, we build commerce experiences that drive revenue.",
     tags: ["Shopify", "WooCommerce", "Stripe"],
     href: "/services/ecommerce",
+    Card: ECommerceCard,
   },
   {
     number: "05",
@@ -52,6 +65,7 @@ const SERVICES = [
       "Data-driven social media strategies that grow your audience and engagement. Content creation, ad campaigns, and performance analytics.",
     tags: ["Instagram", "Meta Ads", "Analytics"],
     href: "/services/social-media",
+    Card: SocialMediaCard,
   },
   {
     number: "06",
@@ -61,6 +75,7 @@ const SERVICES = [
       "Comprehensive digital roadmaps that align technology with business goals. Market research, competitive analysis, and growth frameworks.",
     tags: ["Consulting", "Analytics", "Growth"],
     href: "/services/digital-strategy",
+    Card: StrategyCard,
   },
 ];
 
@@ -310,8 +325,8 @@ export function ServicesPreview() {
 
         {/* Service panels — stacked in same position */}
         <div className="flex-1 relative">
-          {SERVICES.map((svc, i) => {
-            const Card = VISUAL_CARDS[i];
+          {SERVICES.map((svc) => {
+            const Card = svc.Card;
             return (
               <div
                 key={svc.number}

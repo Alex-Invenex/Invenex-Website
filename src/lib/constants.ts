@@ -60,6 +60,11 @@ export const mainNav: NavItem[] = [
     href: "/services",
     children: [
       {
+        title: "Platform Development",
+        href: "/services/platform-development",
+        description: "Enterprise platforms and SaaS solutions",
+      },
+      {
         title: "Web Development",
         href: "/services/web-development",
         description: "Custom websites and web applications",
@@ -68,11 +73,6 @@ export const mainNav: NavItem[] = [
         title: "Mobile App Development",
         href: "/services/mobile-development",
         description: "iOS and Android applications",
-      },
-      {
-        title: "Platform Development",
-        href: "/services/platform-development",
-        description: "Enterprise platforms and SaaS solutions",
       },
       {
         title: "E-Commerce Solutions",
@@ -115,9 +115,9 @@ export const mainNav: NavItem[] = [
 
 export const footerNav = {
   services: [
+    { title: "Platform Development", href: "/services/platform-development" },
     { title: "Web Development", href: "/services/web-development" },
     { title: "Mobile Apps", href: "/services/mobile-development" },
-    { title: "Platform Development", href: "/services/platform-development" },
     { title: "E-Commerce", href: "/services/ecommerce" },
     { title: "Social Media", href: "/services/social-media" },
     { title: "Digital Strategy", href: "/services/digital-strategy" },

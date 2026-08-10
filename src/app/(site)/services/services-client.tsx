@@ -1,110 +1,202 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, type ComponentType } from 'react'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { SubpageHero, HeadlineWord } from '@/components/sections/subpage-hero'
 import { SubpageCTA } from '@/components/sections/subpage-cta'
-import { VISUAL_CARDS } from '@/components/ui/service-visual-cards'
+import {
+  WebDevCard,
+  MobileAppCard,
+  PlatformCard,
+  ECommerceCard,
+  SocialMediaCard,
+  StrategyCard,
+} from '@/components/ui/service-visual-cards'
 import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from '@/lib/gsap'
 import { cn } from '@/lib/utils'
+import { Price } from '@/components/pricing/price'
+import { TIERS, APP_TIERS, APP_CARE, ECOM_TIERS, RETAINERS, STRATEGY, BLUEPRINT, type PriceSet } from '@/lib/pricing'
 
-/* ─── Data ─────────────────────────────────────────────── */
-const services = [
+/* ─── Pricing slices ──────────────────────────────────────
+   Every price literal traces back to `src/lib/pricing.ts` — nothing here is
+   invented, only sliced into the groupings each service card needs. */
+const webTiers = TIERS.filter((t) => t.id === 'launchpad' || t.id === 'launch' || t.id === 'growth')
+const platformTiers = TIERS.filter((t) => t.id === 'platform' || t.id === 'platformScale')
+const appCare = APP_CARE
+const mobileTiers = APP_TIERS.filter((t) => t.id !== 'appCare')
+
+interface PriceItem {
+  name: string
+  price: PriceSet
+  suffix?: string
+}
+
+interface ServiceEntry {
+  num: string
+  title: string
+  description: string
+  tags: string[]
+  href: string
+  card: ComponentType
+  prices: PriceItem[]
+  /** Platform only — the CaterFlow proof line. */
+  proof?: string
+  /** Small qualifier under the price row (e.g. "priced by catalogue size"). */
+  note?: string
+  /** Mobile only — App Care is mandatory, not an upsell. */
+  careRequired?: boolean
+}
+
+/* ─── Data ─────────────────────────────────────── */
+/* Order: Platform Development leads, then Web / Mobile / E-Commerce as the
+   supporting row, then Social Media Marketing and Digital Strategy demoted
+   into a small "Ongoing" strip beneath. */
+const primaryServices: ServiceEntry[] = [
   {
+    num: '01',
+    title: 'Platform Development',
+    description:
+      "Scalable SaaS platforms and internal systems. We don't just build these — we run one. CaterFlow has processed 12,000 orders for 50 catering businesses, which means we've already made the expensive mistakes at our own cost.",
+    tags: ['Next.js', 'Node.js', 'PostgreSQL'],
+    href: '/services/platform-development',
+    card: PlatformCard,
+    prices: platformTiers.map((t) => ({ name: t.name, price: t.price })),
+    proof:
+      "CaterFlow: 12,000 orders processed for 50+ catering businesses. We don't just build platforms — we run one.",
+  },
+  {
+    num: '02',
     title: 'Web Development',
-    description: 'Custom websites and web applications built with Next.js, React, and TypeScript. Blazing-fast performance, SEO-optimized, and designed to convert.',
+    description:
+      'Custom websites and web applications built with Next.js, React, and TypeScript. Blazing-fast performance, SEO-optimized, and designed to convert.',
     tags: ['Next.js', 'React', 'TypeScript'],
     href: '/services/web-development',
-    num: '01',
+    card: WebDevCard,
+    prices: webTiers.map((t) => ({ name: t.name, price: t.price })),
   },
   {
+    num: '03',
     title: 'Mobile App Development',
-    description: 'Native and cross-platform mobile applications for iOS and Android. Smooth, responsive interfaces that users love to interact with.',
+    description:
+      'Native and cross-platform mobile applications for iOS and Android. Smooth, responsive interfaces that users love to interact with.',
     tags: ['React Native', 'iOS', 'Android'],
     href: '/services/mobile-development',
-    num: '02',
+    card: MobileAppCard,
+    prices: mobileTiers.map((t) => ({ name: t.name, price: t.price })),
+    careRequired: true,
   },
   {
-    title: 'Platform Development',
-    description: 'Scalable SaaS platforms and enterprise systems built on cloud infrastructure. Reliable, secure, and engineered for growth.',
-    tags: ['AWS', 'Node.js', 'PostgreSQL'],
-    href: '/services/platform-development',
-    num: '03',
-  },
-  {
+    num: '04',
     title: 'E-Commerce Solutions',
-    description: 'End-to-end online stores and marketplaces. From product catalogs to checkout flows, we build commerce experiences that drive revenue.',
+    description:
+      'End-to-end online stores and marketplaces. From product catalogs to checkout flows, we build commerce experiences that drive revenue.',
     tags: ['Shopify', 'WooCommerce', 'Stripe'],
     href: '/services/ecommerce',
-    num: '04',
-  },
-  {
-    title: 'Social Media Marketing',
-    description: 'Data-driven social media strategies that grow your audience and engagement. Content creation, ad campaigns, and performance analytics.',
-    tags: ['Instagram', 'Meta Ads', 'Analytics'],
-    href: '/services/social-media',
-    num: '05',
-  },
-  {
-    title: 'Digital Strategy',
-    description: 'Comprehensive digital roadmaps that align technology with business goals. Market research, competitive analysis, and growth frameworks.',
-    tags: ['Consulting', 'Analytics', 'Growth'],
-    href: '/services/digital-strategy',
-    num: '06',
+    card: ECommerceCard,
+    prices: ECOM_TIERS.map((t) => ({ name: t.name, price: t.price })),
+    note: 'Priced by catalogue size, not page count.',
   },
 ]
+
+const ongoingServices: ServiceEntry[] = [
+  {
+    num: '05',
+    title: 'Social Media Marketing',
+    description:
+      'Data-driven social media strategies that grow your audience and engagement. Content creation, ad campaigns, and performance analytics.',
+    tags: ['Instagram', 'Meta Ads', 'Analytics'],
+    href: '/services/social-media',
+    card: SocialMediaCard,
+    prices: RETAINERS.map((t) => ({ name: t.name, price: t.price, suffix: '/mo' })),
+  },
+  {
+    num: '06',
+    title: 'Digital Strategy',
+    description:
+      'Comprehensive digital roadmaps that align technology with business goals. Market research, competitive analysis, and growth frameworks.',
+    tags: ['Consulting', 'Analytics', 'Growth'],
+    href: '/services/digital-strategy',
+    card: StrategyCard,
+    prices: [
+      { name: STRATEGY.sprint.name, price: STRATEGY.sprint.price },
+      { name: STRATEGY.advisory.name, price: STRATEGY.advisory.price, suffix: '/mo' },
+    ],
+  },
+]
+
+/* ─── Compact price row — mono, coral numbers ─────────────── */
+function PriceList({ items }: { items: PriceItem[] }) {
+  return (
+    <div className="flex flex-wrap gap-x-5 gap-y-2 mb-4 font-mono text-sm" data-testid="service-price-row">
+      {items.map((item) => (
+        <span key={item.name} className="inline-flex items-baseline gap-1.5">
+          <span className="text-foreground-muted/60">{item.name}</span>
+          <span className="text-coral-500 font-semibold">
+            <Price amount={item.price} suffix={item.suffix} />
+          </span>
+        </span>
+      ))}
+    </div>
+  )
+}
 
 const processSteps = [
   {
     number: '01',
     title: 'Discovery',
-    description: 'We dive deep into your business, audience, and goals. Through collaborative workshops and research, we uncover the insights that shape exceptional solutions.',
+    duration: 'Week 1',
+    description: (
+      <>
+        Discovery is where most agencies guess. We don&apos;t — for larger projects it&apos;s a
+        paid Blueprint (<Price amount={BLUEPRINT.price} />), credited back in full when you
+        build with us.
+      </>
+    ),
     highlight: 'Research & Strategy',
   },
   {
     number: '02',
     title: 'Strategy',
+    duration: 'Week 1',
     description: 'We create a detailed roadmap for your project. From technology choices to timeline milestones, every decision is deliberate and purposeful.',
     highlight: 'Planning & Roadmap',
   },
   {
     number: '03',
     title: 'Design',
+    duration: 'Weeks 2–3',
     description: 'From wireframes to high-fidelity prototypes, we craft pixel-perfect interfaces that balance beauty with usability and align with your brand identity.',
     highlight: 'UI/UX & Prototyping',
   },
   {
     number: '04',
     title: 'Development',
+    duration: 'Weeks 3–5',
     description: 'Clean, scalable code built with Next.js, React, and modern technologies. Every feature is tested, optimized, and ready for production at scale.',
     highlight: 'Engineering & QA',
   },
   {
     number: '05',
     title: 'Launch',
-    description: 'Launch day is just the beginning. We provide ongoing support, analytics insights, and iterative improvements to keep your product ahead of the curve.',
+    duration: 'Week 6',
+    description: 'Launch day is just the beginning. We provide ongoing support, analytics insights, and iterative improvements to keep your product ahead of the curve — and Growth and Platform builds include their first month of Momentum care.',
     highlight: 'Deploy & Growth',
   },
 ]
 
+/* Cut from 16 to 8: React, Next.js, TypeScript, Node.js, PostgreSQL,
+   React Native, Tailwind CSS, Vercel. Sixteen logos said "we'll use
+   whatever" — eight says "we're deliberate". */
 const technologies = [
   { name: 'React', abbr: 'Re' },
   { name: 'Next.js', abbr: 'Nx' },
-  { name: 'Node.js', abbr: 'No' },
   { name: 'TypeScript', abbr: 'TS' },
-  { name: 'Python', abbr: 'Py' },
-  { name: 'AWS', abbr: 'AW' },
+  { name: 'Node.js', abbr: 'No' },
   { name: 'PostgreSQL', abbr: 'Pg' },
-  { name: 'MongoDB', abbr: 'Mg' },
+  { name: 'React Native', abbr: 'RN' },
   { name: 'Tailwind CSS', abbr: 'TW' },
-  { name: 'Docker', abbr: 'Dk' },
-  { name: 'GraphQL', abbr: 'GQ' },
-  { name: 'Redis', abbr: 'Rd' },
-  { name: 'Stripe', abbr: 'St' },
   { name: 'Vercel', abbr: 'Vc' },
-  { name: 'Figma', abbr: 'Fg' },
-  { name: 'Firebase', abbr: 'Fb' },
 ]
 
 /* ─── Component ────────────────────────────────────────── */
@@ -120,7 +212,7 @@ export function ServicesClient() {
             <HeadlineWord coral>BUILD</HeadlineWord>
           </>
         }
-        subtitle="Web development, mobile app development, custom SaaS platforms, ecommerce and digital marketing — delivered from Kerala, India to clients worldwide."
+        subtitle="Six things we build, and what each one costs. No quote calls — the prices are on this page."
       />
 
       <ServicesShowcase />
@@ -137,7 +229,9 @@ export function ServicesClient() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   Service Showcase — full-width magazine spreads
+   Service Showcase — full-width magazine spreads (Platform,
+   Web, Mobile, E-Commerce), then a demoted "Ongoing" strip for
+   Social Media Marketing and Digital Strategy.
    ═══════════════════════════════════════════════════════════ */
 function ServicesShowcase() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -158,6 +252,7 @@ function ServicesShowcase() {
       if (rmRef.current) {
         gsap.set('[data-svc-spread]', { opacity: 1, x: 0, y: 0 })
         gsap.set('[data-svc-card]', { opacity: 1, x: 0, y: 0 })
+        gsap.set('[data-svc-ongoing-item]', { opacity: 1, y: 0 })
         return
       }
 
@@ -211,6 +306,20 @@ function ServicesShowcase() {
             scrollTrigger: { trigger: section, start: 'top 70%' },
           }
         )
+
+        // Ongoing strip stagger entrance
+        gsap.fromTo(
+          '[data-svc-ongoing-item]',
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.1,
+            duration: 0.5,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: '[data-svc-ongoing]', start: 'top 85%' },
+          }
+        )
       }
       init()
     },
@@ -239,11 +348,11 @@ function ServicesShowcase() {
 
       {/* ═══ DESKTOP LAYOUT (lg+) ═══ */}
       <div className="hidden lg:block relative z-10 py-24">
-        {services.map((service, i) => {
-          const Card = VISUAL_CARDS[i]
+        {primaryServices.map((service, i) => {
+          const Card = service.card
           const isEven = i % 2 === 1
           return (
-            <div key={service.num}>
+            <div key={service.num} data-testid="service-block" data-service-title={service.title}>
               <div
                 data-svc-row
                 data-svc-even={String(isEven)}
@@ -275,6 +384,40 @@ function ServicesShowcase() {
                   <p className="text-foreground-muted leading-relaxed mb-6" style={{ maxWidth: '28rem' }}>
                     {service.description}
                   </p>
+
+                  <PriceList items={service.prices} />
+
+                  {service.careRequired && (
+                    <p className="flex items-center gap-2 text-sm text-foreground-muted mb-6" style={{ maxWidth: '28rem' }}>
+                      <span
+                        data-testid="app-care-required"
+                        className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-semibold uppercase tracking-wide border border-amber-500/20 shrink-0"
+                      >
+                        Required
+                      </span>
+                      <span>
+                        App Care{' '}
+                        <span className="font-mono text-coral-500 font-semibold">
+                          <Price amount={appCare.price} suffix="/mo" />
+                        </span>{' '}
+                        — an app that stops being updated eventually stops being downloadable.
+                      </span>
+                    </p>
+                  )}
+
+                  {service.note && (
+                    <p className="text-sm text-foreground-muted/70 italic mb-6">{service.note}</p>
+                  )}
+
+                  {service.proof && (
+                    <blockquote
+                      className="text-sm text-foreground-muted border-l-2 border-coral-500/40 pl-4 mb-6"
+                      style={{ maxWidth: '28rem' }}
+                    >
+                      {service.proof}
+                    </blockquote>
+                  )}
+
                   <div className="flex gap-2 flex-wrap mb-6">
                     {service.tags.map((tag) => (
                       <span
@@ -304,28 +447,28 @@ function ServicesShowcase() {
               </div>
 
               {/* Separator line */}
-              {i < services.length - 1 && (
-                <div className="container mx-auto px-6 lg:px-16 xl:px-20">
-                  <div
-                    className="h-px"
-                    style={{
-                      background: 'linear-gradient(90deg, transparent, rgba(255,107,53,0.15) 30%, rgba(255,107,53,0.15) 70%, transparent)',
-                    }}
-                  />
-                </div>
-              )}
+              <div className="container mx-auto px-6 lg:px-16 xl:px-20">
+                <div
+                  className="h-px"
+                  style={{
+                    background: 'linear-gradient(90deg, transparent, rgba(255,107,53,0.15) 30%, rgba(255,107,53,0.15) 70%, transparent)',
+                  }}
+                />
+              </div>
             </div>
           )
         })}
+
+        <OngoingStrip />
       </div>
 
       {/* ═══ MOBILE / TABLET LAYOUT (<lg) ═══ */}
       <div className="lg:hidden relative z-10 py-16 md:py-20">
         <div className="container mx-auto px-6 md:px-12 space-y-12">
-          {services.map((service, i) => {
-            const Card = VISUAL_CARDS[i]
+          {primaryServices.map((service) => {
+            const Card = service.card
             return (
-              <div key={service.num} data-svc-mobile-item>
+              <div key={service.num} data-svc-mobile-item data-testid="service-block" data-service-title={service.title}>
                 <div className="flex justify-center mb-6">
                   <div style={{ maxWidth: 280, width: '100%' }}>
                     <Card />
@@ -349,6 +492,36 @@ function ServicesShowcase() {
                 <p className="text-foreground-muted text-sm md:text-base leading-relaxed mb-4">
                   {service.description}
                 </p>
+
+                <PriceList items={service.prices} />
+
+                {service.careRequired && (
+                  <p className="flex items-center gap-2 text-sm text-foreground-muted mb-4">
+                    <span
+                      data-testid="app-care-required"
+                      className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-semibold uppercase tracking-wide border border-amber-500/20 shrink-0"
+                    >
+                      Required
+                    </span>
+                    <span>
+                      App Care{' '}
+                      <span className="font-mono text-coral-500 font-semibold">
+                        <Price amount={appCare.price} suffix="/mo" />
+                      </span>
+                    </span>
+                  </p>
+                )}
+
+                {service.note && (
+                  <p className="text-sm text-foreground-muted/70 italic mb-4">{service.note}</p>
+                )}
+
+                {service.proof && (
+                  <blockquote className="text-sm text-foreground-muted border-l-2 border-coral-500/40 pl-4 mb-4">
+                    {service.proof}
+                  </blockquote>
+                )}
+
                 <div className="flex gap-2 flex-wrap mb-4">
                   {service.tags.map((tag) => (
                     <span
@@ -369,20 +542,54 @@ function ServicesShowcase() {
                 </Link>
 
                 {/* Separator */}
-                {i < services.length - 1 && (
-                  <div
-                    className="mt-12 h-px"
-                    style={{
-                      background: 'linear-gradient(90deg, transparent, rgba(255,107,53,0.12) 30%, rgba(255,107,53,0.12) 70%, transparent)',
-                    }}
-                  />
-                )}
+                <div
+                  className="mt-12 h-px"
+                  style={{
+                    background: 'linear-gradient(90deg, transparent, rgba(255,107,53,0.12) 30%, rgba(255,107,53,0.12) 70%, transparent)',
+                  }}
+                />
               </div>
             )
           })}
+
+          <OngoingStrip />
         </div>
       </div>
     </section>
+  )
+}
+
+/* ─── Ongoing strip — Social Media + Digital Strategy, demoted ────── */
+function OngoingStrip() {
+  return (
+    <div data-svc-ongoing className="container mx-auto px-6 lg:px-16 xl:px-20 pt-16 pb-4">
+      <p className="text-xs text-foreground-muted/60 tracking-[0.25em] uppercase mb-6 font-mono">
+        // Ongoing
+      </p>
+      <div className="grid sm:grid-cols-2 gap-6">
+        {ongoingServices.map((service) => (
+          <div
+            key={service.num}
+            data-svc-ongoing-item
+            data-testid="service-block"
+            data-service-title={service.title}
+            className="rounded-xl border border-surface-border p-5 md:p-6"
+            style={{ background: 'var(--color-surface-overlay)' }}
+          >
+            <h4 className="text-base md:text-lg font-semibold mb-2">{service.title}</h4>
+            <p className="text-sm text-foreground-muted mb-4">{service.description}</p>
+            <PriceList items={service.prices} />
+            <Link
+              href={service.href}
+              className="group inline-flex items-center gap-2 text-coral-500 hover:text-coral-400 transition-colors text-xs font-medium"
+            >
+              Learn More
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
+            </Link>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -647,18 +854,26 @@ function ProcessSection() {
                       }}
                     />
 
-                    <span
-                      className="block font-mono leading-none mb-6 select-none"
-                      style={{
-                        fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-                        fontWeight: 200,
-                        WebkitTextStroke: '1px var(--color-coral-500)',
-                        WebkitTextFillColor: 'transparent',
-                      }}
-                      aria-hidden="true"
-                    >
-                      {step.number}
-                    </span>
+                    <div className="flex items-start justify-between mb-6">
+                      <span
+                        className="block font-mono leading-none select-none"
+                        style={{
+                          fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+                          fontWeight: 200,
+                          WebkitTextStroke: '1px var(--color-coral-500)',
+                          WebkitTextFillColor: 'transparent',
+                        }}
+                        aria-hidden="true"
+                      >
+                        {step.number}
+                      </span>
+                      <span
+                        data-testid="process-duration"
+                        className="text-xs font-mono text-foreground-muted/60 px-2.5 py-1 rounded-full border border-surface-border mt-2"
+                      >
+                        {step.duration}
+                      </span>
+                    </div>
 
                     <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight mb-3 md:mb-4 group-hover:text-white transition-colors duration-300">
                       {step.title}
@@ -707,18 +922,26 @@ function ProcessSection() {
                   opacity: 0.4,
                 }}
               />
-              <span
-                className="block font-mono leading-none mb-4 select-none"
-                style={{
-                  fontSize: '3rem',
-                  fontWeight: 200,
-                  WebkitTextStroke: '1px var(--color-coral-500)',
-                  WebkitTextFillColor: 'transparent',
-                }}
-                aria-hidden="true"
-              >
-                {step.number}
-              </span>
+              <div className="flex items-start justify-between mb-4">
+                <span
+                  className="block font-mono leading-none select-none"
+                  style={{
+                    fontSize: '3rem',
+                    fontWeight: 200,
+                    WebkitTextStroke: '1px var(--color-coral-500)',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                  aria-hidden="true"
+                >
+                  {step.number}
+                </span>
+                <span
+                  data-testid="process-duration"
+                  className="text-xs font-mono text-foreground-muted/60 px-2.5 py-1 rounded-full border border-surface-border mt-2"
+                >
+                  {step.duration}
+                </span>
+              </div>
               <h3 className="text-xl font-semibold tracking-tight mb-3">{step.title}</h3>
               <p className="text-foreground-muted text-sm leading-relaxed mb-4">{step.description}</p>
               <span className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full bg-coral-500/10 text-coral-500 border border-coral-500/20">
@@ -786,8 +1009,10 @@ function TechSection() {
             <span style={{ fontWeight: 200 }}>Technologies We </span>
             <span className="text-gradient-orange" style={{ fontWeight: 900 }}>Use</span>
           </h2>
-          <p className="mt-4 text-foreground-muted max-w-2xl mx-auto" data-tech-head>
-            Modern tools and frameworks for cutting-edge solutions
+          <p className="mt-4 text-foreground-muted max-w-2xl mx-auto" data-tech-head data-testid="tech-justification">
+            We build on Next.js because it&apos;s the fastest route to a site that loads under
+            two seconds and ranks. That&apos;s not a preference — it&apos;s why your Core Web
+            Vitals come back green.
           </p>
         </div>
 
