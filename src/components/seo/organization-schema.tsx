@@ -1,5 +1,5 @@
 import { JsonLd } from "./json-ld";
-import { contactInfo, socialLinks } from "@/lib/constants";
+import { areasServed, contactInfo, socialLinks } from "@/lib/constants";
 import { getSiteUrl } from "@/lib/metadata";
 
 /**
@@ -15,10 +15,31 @@ export function OrganizationSchema() {
     "@type": "Organization",
     "@id": `${siteUrl}/#organization`,
     name: "Invenex Solutions",
+    alternateName: ["Invenex", "Invenex Solutions Pvt Ltd"],
     url: siteUrl,
     logo: `${siteUrl}/og-image.png`,
     description:
-      "Premium software development and digital solutions company based in Kerala, India. We deliver world-class web development, mobile apps, and digital transformation services.",
+      "Web and mobile app development company based in Koratty, Thrissur, Kerala, India. Invenex Solutions builds custom websites, mobile apps, ecommerce stores and SaaS platforms for clients in India and worldwide.",
+    slogan: "We craft digital experiences",
+    // Topical signals — helps search engines associate the entity with the
+    // services and technologies we want to rank for.
+    knowsAbout: [
+      "Web Development",
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Mobile App Development",
+      "React Native",
+      "SaaS Platform Development",
+      "Ecommerce Development",
+      "Shopify",
+      "Digital Marketing",
+      "Digital Transformation",
+    ],
+    areaServed: areasServed.map((name) => ({
+      "@type": "Country",
+      name,
+    })),
     address: {
       "@type": "PostalAddress",
       streetAddress: contactInfo.address.street,

@@ -3,11 +3,24 @@ import { notFound } from "next/navigation";
 import { CaseStudyClient } from "./case-study-client";
 import { projects, getProjectBySlug, getRelatedProjects } from "@/lib/projects";
 import { getSiteUrl } from "@/lib/metadata";
-import { CreativeWorkSchema } from "@/components/seo";
+import { BreadcrumbSchema, CreativeWorkSchema } from "@/components/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
+
+/**
+ * Category → the phrase people actually search. Case study pages are the site's
+ * long-tail surface, so the title carries the service term rather than just the
+ * client name (nobody searches "CoolTech International case study" except
+ * CoolTech).
+ */
+const CATEGORY_TERM: Record<string, string> = {
+  Web: "Website Development",
+  Mobile: "Mobile App Development",
+  Platform: "Custom Platform Development",
+  "E-Commerce": "Ecommerce Development",
+};
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -27,15 +40,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ? project.image
     : `${siteUrl}${project.image}`;
 
+  const categoryTerm = CATEGORY_TERM[project.category] ?? "Development";
+  const seoTitle = `${project.title} — ${categoryTerm} Case Study`;
+  const seoDescription = `${project.excerpt} Built by Invenex Solutions with ${project.technologies.slice(0, 3).join(", ")}.`;
+
   return {
-    title: `${project.title} - Case Study`,
-    description: project.excerpt,
+    title: seoTitle,
+    description: seoDescription,
+    keywords: [
+      `${categoryTerm.toLowerCase()} case study`,
+      ...project.technologies.map((tech) => `${tech} development`),
+      "web development portfolio India",
+    ],
     alternates: {
       canonical: url,
+      languages: {
+        "en-IN": url,
+        "x-default": url,
+      },
     },
     openGraph: {
-      title: `${project.title} - Case Study`,
-      description: project.excerpt,
+      title: seoTitle,
+      description: seoDescription,
       url,
       type: "article",
       images: [
@@ -48,8 +74,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ],
     },
     twitter: {
-      title: `${project.title} - Case Study`,
-      description: project.excerpt,
+      title: seoTitle,
+      description: seoDescription,
       images: [ogImage],
     },
   };
@@ -73,6 +99,12 @@ export default async function CaseStudyPage({ params }: PageProps) {
         slug={slug}
         client={project.client}
         image={project.image}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Work", path: "/portfolio" },
+          { name: project.title, path: `/portfolio/${slug}` },
+        ]}
       />
       <CaseStudyClient project={project} relatedProjects={relatedProjects} />
     </>

@@ -120,7 +120,7 @@ export function ServicesClient() {
             <HeadlineWord coral>BUILD</HeadlineWord>
           </>
         }
-        subtitle="Comprehensive digital solutions tailored to your business needs. From concept to launch, we've got you covered."
+        subtitle="Web development, mobile app development, custom SaaS platforms, ecommerce and digital marketing — delivered from Kerala, India to clients worldwide."
       />
 
       <ServicesShowcase />

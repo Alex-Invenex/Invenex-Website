@@ -45,7 +45,7 @@ export function ProductsClient() {
             <HeadlineWord coral>PRODUCTS TOO.</HeadlineWord>
           </>
         }
-        subtitle="Beyond client work, we create products that solve real business problems. This proves our commitment to excellence and innovation."
+        subtitle="Beyond client work we build our own software — CaterFlow, a catering ERP for order, inventory and staff management, with Invenex ERP next."
       />
 
       {/* CaterFlow */}

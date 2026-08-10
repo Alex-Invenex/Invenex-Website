@@ -1,5 +1,6 @@
 import { JsonLd } from "./json-ld";
 import { getSiteUrl } from "@/lib/metadata";
+import { areasServed } from "@/lib/constants";
 
 /**
  * Service schema for service detail pages
@@ -26,10 +27,10 @@ export function ServiceSchema({ name, description, slug }: ServiceSchemaProps) {
       url: siteUrl,
       "@id": `${siteUrl}/#organization`,
     },
-    areaServed: {
+    areaServed: areasServed.map((name) => ({
       "@type": "Country",
-      name: "India",
-    },
+      name,
+    })),
     availableChannel: {
       "@type": "ServiceChannel",
       serviceUrl: `${siteUrl}/contact`,

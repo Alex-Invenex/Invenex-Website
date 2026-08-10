@@ -9,11 +9,21 @@ interface FeatureGroupProps {
   group: ScopeGroup;
   selected: ReadonlySet<string>;
   onToggleFeature: (featureId: string) => void;
-  onSetGroup: (groupId: string, on: boolean) => void;
+  /** Bulk-ticks exactly the rows handed over — the visible ones, not the group. */
+  onSetGroup: (features: ScopeFeature[], on: boolean) => void;
   /** Fired when someone tries to untick a locked core feature. */
   onCoreAttempt: (feature: ScopeFeature) => void;
   /** Groups holding a selection open on first render; the rest stay folded. */
   defaultOpen: boolean;
+  /**
+   * The rows passing the current filter. Always a subset of the group, and
+   * never empty — the parent drops groups with no matches.
+   */
+  visibleFeatures: ScopeFeature[];
+  /** A filtered list is no use folded away, so matches force the group open. */
+  forceOpen?: boolean;
+  /** Lowercased search term, highlighted in the rows it matched. */
+  query?: string;
 }
 
 /**
@@ -27,14 +37,23 @@ export function FeatureGroup({
   onSetGroup,
   onCoreAttempt,
   defaultOpen,
+  visibleFeatures,
+  forceOpen = false,
+  query = '',
 }: FeatureGroupProps) {
   const [open, setOpen] = useState(defaultOpen);
   const panelId = useId();
 
+  // Counts describe the whole group even while filtered, so the numbers never
+  // disagree with the ones in the summary rail.
   const selectedCount = group.features.filter((f) => selected.has(f.id)).length;
-  const allOn = selectedCount === group.features.length;
+  const isFiltered = visibleFeatures.length !== group.features.length;
+  // Bulk actions apply to what is on screen, so "All" cannot tick a hidden row.
+  const allOn = visibleFeatures.every((f) => selected.has(f.id));
   // A group of nothing but locked features has nothing to toggle.
-  const isAllCore = group.features.every((f) => f.tier === 'core');
+  const isAllCore = visibleFeatures.every((f) => f.tier === 'core');
+
+  const isOpen = forceOpen || open;
 
   return (
     <div
@@ -47,14 +66,15 @@ export function FeatureGroup({
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
+          aria-expanded={isOpen}
           aria-controls={panelId}
-          className="flex flex-1 items-start gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 rounded-lg"
+          disabled={forceOpen}
+          className="flex flex-1 items-start gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 rounded-lg disabled:cursor-default"
         >
           <ChevronDown
             className={cn(
               'mt-1 h-4 w-4 shrink-0 text-foreground-subtle transition-transform duration-300',
-              open && 'rotate-180'
+              isOpen && 'rotate-180'
             )}
             aria-hidden="true"
           />
@@ -71,6 +91,11 @@ export function FeatureGroup({
               >
                 {selectedCount}/{group.features.length}
               </span>
+              {isFiltered && (
+                <span className="font-mono text-[11px] tracking-[0.12em] text-foreground-subtle">
+                  · {visibleFeatures.length} shown
+                </span>
+              )}
             </span>
             <span className="mt-1 block text-[13px] leading-snug text-foreground-subtle sm:text-sm sm:leading-relaxed">
               {group.desc}
@@ -82,7 +107,7 @@ export function FeatureGroup({
           <button
             type="button"
             onClick={() => {
-              onSetGroup(group.id, !allOn);
+              onSetGroup(visibleFeatures, !allOn);
               if (!allOn) setOpen(true);
             }}
             className="shrink-0 rounded-md border border-surface-border-hover px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground-subtle transition-colors duration-200 hover:border-coral-500 hover:text-coral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500"
@@ -97,7 +122,7 @@ export function FeatureGroup({
         id={panelId}
         style={{
           display: 'grid',
-          gridTemplateRows: open ? '1fr' : '0fr',
+          gridTemplateRows: isOpen ? '1fr' : '0fr',
           transition: 'grid-template-rows 320ms cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       >
@@ -108,18 +133,19 @@ export function FeatureGroup({
           <div
             className="flex flex-col gap-1.5 px-2.5 pb-3.5 sm:gap-2 sm:px-4 sm:pb-5"
             style={{
-              opacity: open ? 1 : 0,
+              opacity: isOpen ? 1 : 0,
               transition: 'opacity 240ms ease',
-              transitionDelay: open ? '80ms' : '0ms',
+              transitionDelay: isOpen ? '80ms' : '0ms',
             }}
           >
-            {group.features.map((feature) => (
+            {visibleFeatures.map((feature) => (
               <FeatureRow
                 key={feature.id}
                 feature={feature}
                 checked={selected.has(feature.id)}
                 onToggle={onToggleFeature}
                 onCoreAttempt={onCoreAttempt}
+                query={query}
               />
             ))}
           </div>
@@ -136,6 +162,7 @@ interface FeatureRowProps {
   checked: boolean;
   onToggle: (featureId: string) => void;
   onCoreAttempt: (feature: ScopeFeature) => void;
+  query: string;
 }
 
 function FeatureRow({
@@ -143,6 +170,7 @@ function FeatureRow({
   checked,
   onToggle,
   onCoreAttempt,
+  query,
 }: FeatureRowProps) {
   const isCore = feature.tier === 'core';
 
@@ -208,7 +236,7 @@ function FeatureRow({
             title wraps and the badge follows the last word instead of dropping
             onto a line of its own — which made narrow screens look ragged. */}
         <span className="block text-[15px] font-medium leading-snug text-foreground">
-          {feature.title}
+          <Highlighted text={feature.title} query={query} />
           {isCore && (
             <span className="ml-2 inline-flex translate-y-[-1px] items-center gap-1 whitespace-nowrap rounded-sm bg-surface-overlay-hover px-1.5 py-0.5 align-middle font-mono text-[9px] uppercase tracking-[0.1em] text-foreground-muted">
               <Lock className="h-2.5 w-2.5" aria-hidden="true" />
@@ -225,9 +253,34 @@ function FeatureRow({
           )}
         </span>
         <span className="mt-0.5 block text-[12.5px] leading-snug text-foreground-subtle sm:mt-1 sm:text-[13px] sm:leading-relaxed">
-          {feature.desc}
+          <Highlighted text={feature.desc} query={query} />
         </span>
       </span>
     </Wrapper>
+  );
+}
+
+/**
+ * Marks the first occurrence of the search term so it is obvious why a row
+ * survived the filter — often the reason is in the description, not the title.
+ * Plain string matching, so a term full of regex punctuation is harmless.
+ */
+function Highlighted({ text, query }: { text: string; query: string }) {
+  if (query === '') return <>{text}</>;
+
+  const at = text.toLowerCase().indexOf(query);
+  if (at === -1) return <>{text}</>;
+
+  return (
+    <>
+      {text.slice(0, at)}
+      <mark
+        className="rounded-[3px] px-[1px] text-foreground"
+        style={{ background: 'rgba(255,106,55,0.28)' }}
+      >
+        {text.slice(at, at + query.length)}
+      </mark>
+      {text.slice(at + query.length)}
+    </>
   );
 }

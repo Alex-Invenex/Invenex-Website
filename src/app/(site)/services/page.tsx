@@ -2,10 +2,18 @@ import { generatePageMetadata } from "@/lib/metadata";
 import { ServicesClient } from "./services-client";
 
 export const metadata = generatePageMetadata({
-  title: "Our Services",
+  title: "Web & Mobile App Development Services",
   description:
-    "Explore our comprehensive digital services: Web Development, Mobile Apps, Platform Development, E-Commerce Solutions, and Digital Strategy.",
+    "Web development, mobile apps, custom SaaS platforms, ecommerce and digital marketing services from Invenex Solutions in Kerala, India — delivered to clients across India, the US, UK and Gulf.",
   path: "/services",
+  keywords: [
+    "web development services India",
+    "mobile app development services",
+    "custom software development services",
+    "SaaS platform development",
+    "ecommerce development services",
+    "digital marketing services India",
+  ],
 });
 
 export default function ServicesPage() {

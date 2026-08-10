@@ -23,7 +23,7 @@ export function PortfolioClient({ projects }: PortfolioClientProps) {
             <HeadlineWord coral className="pf-title-word-bold">WORK.</HeadlineWord>
           </>
         }
-        subtitle="Explore our portfolio of web, mobile, and platform development projects."
+        subtitle="Website development, mobile app and ecommerce case studies from our clients across India, the UAE and beyond."
       />
 
       {/* Atmospheric wrapper around grid */}

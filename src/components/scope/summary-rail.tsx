@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, RotateCcw } from 'lucide-react';
+import { ArrowRight, Check, Link2, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface TrackTally {
@@ -16,10 +16,14 @@ interface SummaryProps {
   totalCount: number;
   onContinue: () => void;
   onReset: () => void;
+  /** Copies a link that restores this exact selection. */
+  onCopyLink: () => void;
+  copied: boolean;
 }
 
 /**
- * Sticky desktop rail: live count, per-service breakdown, continue + reset.
+ * Sticky desktop rail: live count, per-service breakdown, continue, reset and
+ * a link to the selection so a long session is never lost.
  */
 export function SummaryRail({
   tallies,
@@ -27,6 +31,8 @@ export function SummaryRail({
   totalCount,
   onContinue,
   onReset,
+  onCopyLink,
+  copied,
 }: SummaryProps) {
   const pct = totalCount === 0 ? 0 : (selectedCount / totalCount) * 100;
 
@@ -95,6 +101,19 @@ export function SummaryRail({
         <RailButton onClick={onContinue} disabled={selectedCount === 0} primary>
           Continue
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </RailButton>
+        <RailButton onClick={onCopyLink} disabled={selectedCount === 0}>
+          {copied ? (
+            <>
+              <Check className="h-3.5 w-3.5 text-coral-500" aria-hidden="true" />
+              Link copied
+            </>
+          ) : (
+            <>
+              <Link2 className="h-3.5 w-3.5" aria-hidden="true" />
+              Copy link to selection
+            </>
+          )}
         </RailButton>
         <RailButton onClick={onReset}>
           <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
@@ -181,7 +200,7 @@ function RailButton({
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500',
         primary
           ? 'bg-coral-500 text-background hover:brightness-110 disabled:opacity-35 disabled:hover:brightness-100'
-          : 'mt-2 border border-surface-border-hover text-foreground-muted hover:border-coral-500 hover:text-coral-500'
+          : 'mt-2 border border-surface-border-hover text-foreground-muted hover:border-coral-500 hover:text-coral-500 disabled:opacity-40 disabled:hover:border-surface-border-hover disabled:hover:text-foreground-muted'
       )}
     >
       {children}

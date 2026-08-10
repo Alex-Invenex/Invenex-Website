@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://invenexsolutions.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://invenexsolutions.com";
 
 /**
  * Default metadata configuration for the entire site.
@@ -10,22 +10,32 @@ const siteUrl =
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Invenex Solutions - Premium Web Development & Digital Solutions",
+    // Homepage target: "web development company in India" + brand.
+    default: "Web Development Company in India | Invenex Solutions",
     template: "%s | Invenex Solutions",
   },
   description:
-    "Invenex Solutions delivers premium web development, mobile apps, and digital transformation services. Based in India, serving clients worldwide.",
+    "Invenex Solutions is a web and mobile app development company in Kerala, India, building custom websites, apps and SaaS platforms for clients worldwide. Get a free quote in 24 hours.",
   keywords: [
-    "software development",
-    "web development",
-    "mobile app development",
-    "digital solutions",
-    "Thrissur",
-    "Kerala",
-    "India",
-    "Next.js",
-    "React",
-    "TypeScript",
+    // Primary commercial head terms
+    "web development company in India",
+    "software development company in Kerala",
+    "mobile app development company India",
+    "custom software development company",
+    "SaaS development company",
+    "ecommerce website development India",
+    // Offshore / global intent
+    "offshore development team India",
+    "hire Next.js developers India",
+    "hire React developers",
+    // Local intent
+    "web design company Thrissur",
+    "software company Kochi",
+    "IT company Kerala",
+    // Technology qualifiers
+    "Next.js development agency",
+    "React Native app development",
+    "TypeScript development services",
   ],
   authors: [{ name: "Invenex Solutions", url: siteUrl }],
   creator: "Invenex Solutions",
@@ -37,29 +47,39 @@ export const defaultMetadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
+    // Single English site serving India + international traffic. en-IN is the
+    // primary variant; x-default catches everyone else so Google does not
+    // treat the site as India-only.
+    languages: {
+      "en-IN": siteUrl,
+      "x-default": siteUrl,
+    },
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    // en_IN as the primary locale, with the international variants declared —
+    // matches the "India + worldwide" positioning.
+    locale: "en_IN",
+    alternateLocale: ["en_US", "en_GB", "en_AE"],
     url: siteUrl,
     siteName: "Invenex Solutions",
-    title: "Invenex Solutions - Premium Web Development & Digital Solutions",
+    title: "Web Development Company in India | Invenex Solutions",
     description:
-      "Invenex Solutions delivers premium web development, mobile apps, and digital transformation services.",
+      "Custom websites, mobile apps and SaaS platforms built by Invenex Solutions — a web development company in Kerala, India, serving clients worldwide.",
     images: [
       {
         url: `${siteUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Invenex Solutions - Premium Web Development & Digital Solutions",
+        alt: "Invenex Solutions — web and mobile app development company in India",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Invenex Solutions - Premium Web Development & Digital Solutions",
+    title: "Web Development Company in India | Invenex Solutions",
     description:
-      "Invenex Solutions delivers premium web development, mobile apps, and digital transformation services.",
+      "Custom websites, mobile apps and SaaS platforms built by Invenex Solutions — a web development company in Kerala, India, serving clients worldwide.",
     images: [`${siteUrl}/og-image.png`],
     creator: "@invenex",
   },
@@ -90,6 +110,8 @@ interface PageMetadataOptions {
   image?: string;
   /** Set to true to prevent search engine indexing */
   noIndex?: boolean;
+  /** Page-specific target keywords (replaces the site-wide default set) */
+  keywords?: string[];
 }
 
 /**
@@ -111,6 +133,7 @@ export function generatePageMetadata({
   path = "",
   image,
   noIndex = false,
+  keywords,
 }: PageMetadataOptions): Metadata {
   const url = `${siteUrl}${path}`;
   const ogImage = image || `${siteUrl}/og-image.png`;
@@ -118,8 +141,13 @@ export function generatePageMetadata({
   return {
     title,
     description,
+    ...(keywords ? { keywords } : {}),
     alternates: {
       canonical: url,
+      languages: {
+        "en-IN": url,
+        "x-default": url,
+      },
     },
     openGraph: {
       title,

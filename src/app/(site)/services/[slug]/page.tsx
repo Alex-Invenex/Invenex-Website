@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ServiceDetailClient } from "./service-detail-client";
 import { getSiteUrl } from "@/lib/metadata";
-import { ServiceSchema } from "@/components/seo";
+import { BreadcrumbSchema, ServiceSchema } from "@/components/seo";
 
 // Icon type for mapping
 type IconName =
@@ -23,6 +23,15 @@ interface ServiceData {
   iconName: IconName;
   gradient: string;
   iconColor: string;
+  /**
+   * SEO overrides. `title`/`description` above are on-page display copy and are
+   * intentionally short and brand-led; these carry the keyword targeting.
+   * Keep seoTitle under ~42 chars — the title template appends
+   * " | Invenex Solutions" (20 chars) on top of it.
+   */
+  seoTitle: string;
+  seoDescription: string;
+  keywords: string[];
 }
 
 const services: Record<string, ServiceData> = {
@@ -53,6 +62,17 @@ const services: Record<string, ServiceData> = {
     iconName: "globe",
     gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
     iconColor: "text-coral-400",
+    seoTitle: "Custom Web Development Services",
+    seoDescription:
+      "Custom web development services from Invenex Solutions — Next.js, React and TypeScript websites and web apps built for speed, SEO and scale. India-based, working worldwide.",
+    keywords: [
+      "custom web development services",
+      "web development company in India",
+      "Next.js development agency",
+      "React web application development",
+      "hire web developers India",
+      "corporate website development India",
+    ],
   },
   "mobile-development": {
     title: "Mobile App Development",
@@ -74,6 +94,17 @@ const services: Record<string, ServiceData> = {
     iconName: "smartphone",
     gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
     iconColor: "text-coral-400",
+    seoTitle: "Mobile App Development Services",
+    seoDescription:
+      "iOS and Android app development with React Native and native code. Invenex Solutions builds, ships and maintains mobile apps for startups and businesses in India and worldwide.",
+    keywords: [
+      "mobile app development company India",
+      "React Native app development services",
+      "iOS app development India",
+      "Android app development company",
+      "hire mobile app developers",
+      "cross platform app development",
+    ],
   },
   "platform-development": {
     title: "Platform Development",
@@ -95,6 +126,17 @@ const services: Record<string, ServiceData> = {
     iconName: "layers",
     gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
     iconColor: "text-coral-400",
+    seoTitle: "Custom SaaS & Platform Development",
+    seoDescription:
+      "Custom SaaS platform development: multi-tenant architecture, dashboards, user management and integrations. Invenex Solutions builds internal tools and SaaS products that scale.",
+    keywords: [
+      "custom SaaS development company",
+      "SaaS platform development services",
+      "multi tenant SaaS architecture",
+      "custom enterprise software development",
+      "MVP development for startups",
+      "offshore development team India",
+    ],
   },
   ecommerce: {
     title: "E-Commerce Solutions",
@@ -116,6 +158,17 @@ const services: Record<string, ServiceData> = {
     iconName: "shopping-cart",
     gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
     iconColor: "text-coral-400",
+    seoTitle: "Ecommerce Website Development",
+    seoDescription:
+      "Ecommerce website development on Shopify, WooCommerce and headless Next.js — payment gateways, inventory and order tracking. Online stores that convert, built in India.",
+    keywords: [
+      "ecommerce website development India",
+      "Shopify development company India",
+      "WooCommerce development services",
+      "headless commerce Next.js",
+      "online store development company",
+      "marketplace development company",
+    ],
   },
   "social-media": {
     title: "Social Media Marketing",
@@ -142,6 +195,16 @@ const services: Record<string, ServiceData> = {
     iconName: "share2",
     gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
     iconColor: "text-coral-400",
+    seoTitle: "Social Media Marketing Services",
+    seoDescription:
+      "Social media marketing services from Invenex Solutions: content, community management and paid campaigns on Meta, Instagram and LinkedIn — with reporting you can act on.",
+    keywords: [
+      "social media marketing services India",
+      "social media marketing agency Kerala",
+      "Instagram marketing agency India",
+      "Meta ads management services",
+      "LinkedIn marketing agency",
+    ],
   },
   "digital-strategy": {
     title: "Digital Strategy",
@@ -163,6 +226,16 @@ const services: Record<string, ServiceData> = {
     iconName: "lightbulb",
     gradient: "from-coral-500/20 via-coral-400/10 to-transparent",
     iconColor: "text-coral-400",
+    seoTitle: "Digital Transformation Consulting",
+    seoDescription:
+      "Digital transformation consulting: technology assessment, roadmaps, vendor selection and process automation. Invenex Solutions turns digital strategy into a delivery plan.",
+    keywords: [
+      "digital transformation consulting services",
+      "IT consulting company India",
+      "technology consulting for SMEs",
+      "digital strategy agency",
+      "business process automation services",
+    ],
   },
 };
 
@@ -188,19 +261,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const url = `${siteUrl}/services/${slug}`;
 
   return {
-    title: service.title,
-    description: service.description,
+    title: service.seoTitle,
+    description: service.seoDescription,
+    keywords: service.keywords,
     alternates: {
       canonical: url,
+      languages: {
+        "en-IN": url,
+        "x-default": url,
+      },
     },
     openGraph: {
-      title: service.title,
-      description: service.description,
+      title: service.seoTitle,
+      description: service.seoDescription,
       url,
     },
     twitter: {
-      title: service.title,
-      description: service.description,
+      title: service.seoTitle,
+      description: service.seoDescription,
     },
   };
 }
@@ -219,6 +297,12 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         name={service.title}
         description={service.description}
         slug={slug}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Services", path: "/services" },
+          { name: service.title, path: `/services/${slug}` },
+        ]}
       />
       <ServiceDetailClient
         service={{

@@ -35,7 +35,7 @@ export function CareersClient() {
             <HeadlineWord coral>OUR TEAM.</HeadlineWord>
           </>
         }
-        subtitle="Build amazing products with a team that values innovation, growth, and work-life balance."
+        subtitle="Software jobs in Thrissur, Kerala and remote — frontend, full-stack, mobile and design roles on a modern Next.js and TypeScript stack."
       >
         <Button asChild size="lg" className="bg-coral-500 hover:bg-coral-600 text-white shadow-[0_0_20px_rgba(255,106,55,0.3)]">
           <Link href="#positions">View Open Positions</Link>

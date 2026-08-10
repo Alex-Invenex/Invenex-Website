@@ -2,10 +2,16 @@ import { generatePageMetadata } from '@/lib/metadata';
 import { ScopeClient } from './scope-client';
 
 export const metadata = generatePageMetadata({
-  title: 'Build Your Project',
+  title: 'Website & App Cost Calculator',
   description:
-    'Choose the services you need — website, mobile app, custom platform, AI automation, marketing — tick the exact features you want, and send your requirements to Invenex Solutions for pricing.',
+    'Scope your project in minutes: pick the website, mobile app, platform, AI automation or marketing features you need and get pricing from Invenex Solutions. Free, no obligation.',
   path: '/build-your-project',
+  keywords: [
+    'website development cost calculator',
+    'app development cost estimate India',
+    'website price quote',
+    'software project scoping tool',
+  ],
 });
 
 export default function BuildYourProjectPage() {

@@ -2,10 +2,20 @@
 
 /* ============================================
    Base scroll — ensure iOS Safari can scroll
+
+   clip, never hidden: overflow-x: hidden turns into a scroll trap on iOS.
+   The vertical axis is declared on html only. On body an explicit overflow-y
+   makes body its own scrollport, and every position: sticky element on the
+   site then measures against a box that never scrolls — which silently stops
+   them sticking at all.
    ============================================ */
-html, body {
+html {
   overflow-x: clip;
   overflow-y: auto;
+}
+
+body {
+  overflow-x: clip;
 }
 
 /* ============================================

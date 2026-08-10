@@ -1,5 +1,5 @@
 import { JsonLd } from "./json-ld";
-import { contactInfo } from "@/lib/constants";
+import { areasServed, contactInfo } from "@/lib/constants";
 import { getSiteUrl } from "@/lib/metadata";
 
 /**
@@ -27,10 +27,12 @@ export function LocalBusinessSchema() {
       postalCode: contactInfo.address.zip,
       addressCountry: "IN",
     },
+    // Koratty, Thrissur — matches the postal address above. (Previously these
+    // were Kochi's coordinates, ~50km away, which contradicts the NAP data.)
     geo: {
       "@type": "GeoCoordinates",
-      latitude: 9.9312,
-      longitude: 76.2673,
+      latitude: 10.2333,
+      longitude: 76.3333,
     },
     openingHoursSpecification: [
       {
@@ -42,19 +44,21 @@ export function LocalBusinessSchema() {
     ],
     priceRange: "$$",
     areaServed: [
-      {
-        "@type": "Country",
-        name: "India",
-      },
+      // Local service radius around Koratty — covers Thrissur, Kochi and Palakkad.
       {
         "@type": "GeoCircle",
         geoMidpoint: {
           "@type": "GeoCoordinates",
-          latitude: 9.9312,
-          longitude: 76.2673,
+          latitude: 10.2333,
+          longitude: 76.3333,
         },
-        geoRadius: "50000",
+        geoRadius: "80000",
       },
+      // Everywhere else we take work from.
+      ...areasServed.map((name) => ({
+        "@type": "Country",
+        name,
+      })),
     ],
     serviceType: [
       "Web Development",

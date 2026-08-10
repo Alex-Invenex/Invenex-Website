@@ -3,10 +3,16 @@ import { generatePageMetadata } from "@/lib/metadata";
 import { PortfolioClient } from "./portfolio-client";
 
 export const metadata = generatePageMetadata({
-  title: "Our Work",
+  title: "Web Development Portfolio & Case Studies",
   description:
-    "Browse our portfolio of web, mobile, and platform development projects. See how Invenex transforms ideas into exceptional digital experiences.",
+    "Real web, mobile app and platform projects delivered by Invenex Solutions — ecommerce stores, booking platforms, ERPs and brand sites for clients in India, the UAE and beyond.",
   path: "/portfolio",
+  keywords: [
+    "web development portfolio",
+    "web design case studies India",
+    "app development case study",
+    "software development projects India",
+  ],
 });
 
 const projects = getSimpleProjects();

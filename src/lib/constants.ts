@@ -5,19 +5,40 @@ export const siteConfig = {
   name: "Invenex Solutions",
   description:
     "Premium web development, mobile apps, and digital solutions. Transform your vision into reality with our world-class team.",
-  url: "https://invenexsolutions.vercel.app",
+  url: "https://invenexsolutions.com",
   ogImage: "/og/default.png",
   creator: "Invenex Solutions",
   keywords: [
-    "web development",
-    "mobile apps",
-    "digital solutions",
-    "software development",
-    "Thrissur",
-    "Kerala",
-    "India",
+    "web development company in India",
+    "mobile app development company India",
+    "custom software development company",
+    "SaaS development company",
+    "ecommerce website development India",
+    "offshore development team India",
+    "software company Kerala",
+    "web design company Thrissur",
   ],
 } as const;
+
+// ============================================
+// Markets Served (used by structured data)
+// ============================================
+/**
+ * Countries we actively sell into. Emitted as schema.org `areaServed` so search
+ * engines do not read the India-based address as "serves India only" — the
+ * business takes work from the US, UK, Gulf, Canada, Australia and Singapore.
+ */
+export const areasServed = [
+  "India",
+  "United States",
+  "United Kingdom",
+  "United Arab Emirates",
+  "Saudi Arabia",
+  "Qatar",
+  "Canada",
+  "Australia",
+  "Singapore",
+] as const;
 
 // ============================================
 // Navigation Items
