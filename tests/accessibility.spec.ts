@@ -100,8 +100,10 @@ test.describe("Focus Styles (AC2)", () => {
   });
 
   test("buttons have visible focus indicator", async ({ page }) => {
-    // Tab through to the CTA button (keyboard navigation triggers focus-visible)
-    // Skip link -> Logo -> nav items (incl. Contact) -> See Pricing CTA
+    // Tab through to a focusable element (keyboard navigation triggers focus-visible)
+    // Skip link -> Logo -> nav items, stopping as soon as href="/contact" is
+    // focused — that's the "Contact" mainNav link, reached before the navbar's
+    // "See Pricing" CTA (which points at /pricing, not /contact).
     for (let i = 0; i < 10; i++) {
       await page.keyboard.press("Tab");
       const focused = page.locator(":focus");
