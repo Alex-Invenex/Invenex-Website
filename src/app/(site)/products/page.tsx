@@ -1,19 +1,26 @@
 import { generatePageMetadata } from '@/lib/metadata'
+import { getCurrency } from '@/lib/get-currency'
+import { CurrencyProvider } from '@/components/providers/currency-provider'
 import { ProductsClient } from './products-client'
 
 export const metadata = generatePageMetadata({
-  title: 'CaterFlow Catering ERP & Our Products',
+  title: 'CaterFlow Catering Management Software & Our Products',
   description:
-    'CaterFlow catering ERP — order management, inventory, staff scheduling and reporting for catering businesses — plus the upcoming Invenex ERP. Built and supported in Kerala, India.',
+    'CaterFlow catering management software — order management, inventory, staff scheduling and reporting for catering businesses — plus the upcoming Invenex ERP. Built and supported in Kerala, India.',
   path: '/products',
   keywords: [
-    'catering ERP software',
+    'catering management software',
     'catering management software India',
     'ERP software for small business',
     'CaterFlow',
   ],
 })
 
-export default function ProductsPage() {
-  return <ProductsClient />
+export default async function ProductsPage() {
+  const currency = await getCurrency()
+  return (
+    <CurrencyProvider initialCurrency={currency}>
+      <ProductsClient />
+    </CurrencyProvider>
+  )
 }

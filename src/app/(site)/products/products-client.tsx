@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Building2, Check } from 'lucide-react'
 import { SubpageHero, HeadlineWord } from '@/components/sections/subpage-hero'
 import { SubpageCTA } from '@/components/sections/subpage-cta'
@@ -9,8 +10,12 @@ import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { GSAPStaggerContainer, GSAPStaggerItem } from '@/components/ui/gsap-stagger-container'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Price } from '@/components/pricing/price'
+import { TIERS } from '@/lib/pricing'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
+
+const platformTier = TIERS.find((tier) => tier.id === 'platform')!
 
 gsap.registerPlugin(useGSAP)
 
@@ -45,8 +50,17 @@ export function ProductsClient() {
             <HeadlineWord coral>PRODUCTS TOO.</HeadlineWord>
           </>
         }
-        subtitle="Beyond client work we build our own software — CaterFlow, a catering ERP for order, inventory and staff management, with Invenex ERP next."
+        subtitle="Beyond client work we build our own software — CaterFlow, a catering management platform for order, inventory and staff management, with Invenex ERP next."
       />
+
+      {/* Authority line */}
+      <div className="container mx-auto px-6 md:px-12 pt-4 pb-4">
+        <p className="max-w-3xl mx-auto text-center text-foreground-muted text-lg">
+          Running our own product is why we&rsquo;re different. We&rsquo;ve made the expensive
+          mistakes at our own cost — churn, onboarding, support at 2am — before making them at
+          yours.
+        </p>
+      </div>
 
       {/* CaterFlow */}
       <CaterFlowSection />
@@ -60,6 +74,15 @@ export function ProductsClient() {
         highlightedText="BUILD YOURS"
         subtitle="We bring the same dedication and expertise to client projects."
       />
+      <div className="container mx-auto px-6 md:px-12 pb-20 text-center">
+        <p className="text-foreground-muted">
+          Platform builds are <Price amount={platformTier.price} /> — see{' '}
+          <Link href="/pricing" className="text-coral-400 hover:text-coral-300 underline underline-offset-4">
+            pricing
+          </Link>
+          .
+        </p>
+      </div>
     </>
   )
 }
@@ -120,19 +143,22 @@ function CaterFlowSection() {
           <div>
             <Badge variant="success" className="mb-4" data-cf="text">Live Product</Badge>
             <h2 id="caterflow-title" className="text-4xl font-bold mb-6" data-cf="text">CaterFlow</h2>
-            <p className="text-xl text-foreground-muted mb-6" data-cf="text">
-              The complete ERP solution for the catering industry. Manage orders, inventory, staff, and finances in one place.
+            <p className="text-xl text-foreground-muted mb-2" data-cf="text">
+              A complete catering management platform. Manage orders, inventory, staff, and finances in one place.
+            </p>
+            <p className="text-sm text-foreground-muted mb-6" data-cf="text">
+              Currently in private trial with 50 catering businesses.
             </p>
 
             {/* Stats */}
             <div className="flex gap-6 mb-8" data-cf="text">
               <div className="p-4 rounded-xl backdrop-blur-xl border border-surface-border" style={{ background: 'var(--color-surface-overlay)' }}>
-                <div className="text-2xl font-bold"><AnimatedCounter value={500} suffix="+" /></div>
-                <div className="text-xs text-foreground-muted">Active Users</div>
+                <div className="text-2xl font-bold"><AnimatedCounter value={50} suffix="+" /></div>
+                <div className="text-xs text-foreground-muted">Catering Businesses</div>
               </div>
               <div className="p-4 rounded-xl backdrop-blur-xl border border-surface-border" style={{ background: 'var(--color-surface-overlay)' }}>
-                <div className="text-2xl font-bold"><AnimatedCounter value={99} suffix="%" /></div>
-                <div className="text-xs text-foreground-muted">Uptime</div>
+                <div className="text-2xl font-bold"><AnimatedCounter value={12} suffix="K+" /></div>
+                <div className="text-xs text-foreground-muted">Orders Processed</div>
               </div>
             </div>
 
@@ -252,7 +278,7 @@ function ERPSection() {
             <Badge variant="warning" className="mb-4" data-erp>Coming Soon</Badge>
             <h2 id="invenex-erp-title" className="text-4xl font-bold mb-6" data-erp>Invenex ERP</h2>
             <p className="text-xl text-foreground-muted mb-6" data-erp>
-              A modern, affordable alternative to Zoho One. Complete business management for growing companies.
+              ERP built for catering and food service businesses — by the team behind CaterFlow.
             </p>
 
             <GSAPStaggerContainer className="space-y-3 mb-8" aria-label="Invenex ERP planned features">
@@ -267,8 +293,8 @@ function ERPSection() {
             </GSAPStaggerContainer>
 
             <div className="flex items-center gap-4" data-erp>
-              <Button variant="secondary" disabled aria-describedby="notify-description">
-                Notify Me When Ready
+              <Button asChild variant="secondary" aria-describedby="notify-description">
+                <Link href="/contact?intent=erp-waitlist">Join the waitlist</Link>
               </Button>
               <span id="notify-description" className="text-sm text-foreground-muted">2026</span>
             </div>

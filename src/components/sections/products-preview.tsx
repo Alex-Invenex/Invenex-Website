@@ -9,8 +9,7 @@ import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/li
 
 const CATERFLOW_METRICS = [
   { value: "12K+", label: "Orders Managed" },
-  { value: "50+", label: "Active Caterers" },
-  { value: "99.9%", label: "Uptime" },
+  { value: "50+", label: "Catering Businesses" },
 ];
 
 const CATERFLOW_FEATURES = [
@@ -228,9 +227,7 @@ export function ProductsPreview() {
                   className={`absolute opacity-0 backdrop-blur-xl bg-surface-overlay border border-surface-border rounded-xl px-4 py-3 shadow-xl ${
                     i === 0
                       ? "top-4 right-4 lg:top-8 lg:right-8"
-                      : i === 1
-                      ? "bottom-4 left-4 lg:bottom-8 lg:left-8"
-                      : "bottom-4 right-4 lg:bottom-8 lg:right-8"
+                      : "bottom-4 left-4 lg:bottom-8 lg:left-8"
                   }`}
                 >
                   <div className="text-xl md:text-2xl font-bold text-foreground">
