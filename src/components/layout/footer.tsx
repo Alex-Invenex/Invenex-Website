@@ -10,7 +10,6 @@ import {
   Mail,
   Phone,
   ArrowUpRight,
-  Heart,
   MessageCircle,
 } from "lucide-react";
 import {
@@ -265,10 +264,9 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-6 sm:mt-12 pt-5 sm:pt-8 border-t border-surface-border">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
-            <p className="text-xs sm:text-sm text-foreground-muted flex items-center gap-1">
-              &copy; {currentYear} {siteConfig.name}. Made with
-              <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400 animate-pulse" />
-              in India
+            <p className="text-xs sm:text-sm text-foreground-muted">
+              &copy; {currentYear} {siteConfig.name}. Built in Kerala. Working
+              across India, the UAE and the UK.
             </p>
 
             <div className="flex items-center gap-4 sm:gap-6">

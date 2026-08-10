@@ -91,7 +91,7 @@ export function ServiceDetailClient({ service }: ServiceDetailClientProps) {
         headline="READY TO"
         highlightedText="GET STARTED"
         subtitle={`Let's discuss your ${service.title.toLowerCase()} project and see how we can help.`}
-        primaryCTA={{ label: 'Request a Quote', href: `/contact?service=${service.slug}` }}
+        primaryCTA={{ label: 'See Pricing', href: '/pricing' }}
       />
     </>
   )

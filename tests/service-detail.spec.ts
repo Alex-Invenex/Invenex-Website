@@ -53,9 +53,11 @@ test.describe('Story 3-4: Service Detail Pages', () => {
       const ctaHeading = page.getByRole('heading', { name: /Ready to Get Started/i });
       await expect(ctaHeading).toBeVisible();
 
-      const quoteButton = page.getByRole('link', { name: /Request a Quote/i });
+      const quoteButton = page
+        .locator('section[aria-labelledby="subpage-cta-title"]')
+        .getByRole('link', { name: /See Pricing/i });
       await expect(quoteButton).toBeVisible();
-      await expect(quoteButton).toHaveAttribute('href', /\/contact\?service=web-development/);
+      await expect(quoteButton).toHaveAttribute('href', '/pricing');
     });
 
     test('should display long description section', async ({ page }) => {
@@ -114,9 +116,11 @@ test.describe('Story 3-4: Service Detail Pages', () => {
         await expect(techHeading).toBeVisible();
 
         // Should have CTA section
-        const ctaButton = page.getByRole('link', { name: /Request a Quote/i });
+        const ctaButton = page
+          .locator('section[aria-labelledby="subpage-cta-title"]')
+          .getByRole('link', { name: /See Pricing/i });
         await expect(ctaButton).toBeVisible();
-        await expect(ctaButton).toHaveAttribute('href', `/contact?service=${service.slug}`);
+        await expect(ctaButton).toHaveAttribute('href', '/pricing');
       });
     }
   });
@@ -152,13 +156,15 @@ test.describe('Story 3-4: Service Detail Pages', () => {
       await expect(page.getByRole('heading', { level: 1 })).toContainText('Web Development');
     });
 
-    test('CTA should link to contact page with service parameter', async ({ page }) => {
+    test('CTA should link to the pricing page', async ({ page }) => {
       await page.goto('/services/ecommerce');
 
-      const quoteButton = page.getByRole('link', { name: /Request a Quote/i });
+      const quoteButton = page
+        .locator('section[aria-labelledby="subpage-cta-title"]')
+        .getByRole('link', { name: /See Pricing/i });
       await quoteButton.click();
 
-      await expect(page).toHaveURL(/\/contact\?service=ecommerce/);
+      await expect(page).toHaveURL(/\/pricing/);
     });
   });
 

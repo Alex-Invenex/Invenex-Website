@@ -15,7 +15,7 @@ export const defaultMetadata: Metadata = {
     template: "%s | Invenex Solutions",
   },
   description:
-    "Invenex Solutions is a web and mobile app development company in Kerala, India, building custom websites, apps and SaaS platforms for clients worldwide. Get a free quote in 24 hours.",
+    "Invenex Solutions builds websites, apps and SaaS platforms from Kerala, India, for clients worldwide. Prices are published — no quote calls required.",
   keywords: [
     // Primary commercial head terms
     "web development company in India",

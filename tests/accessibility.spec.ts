@@ -101,7 +101,7 @@ test.describe("Focus Styles (AC2)", () => {
 
   test("buttons have visible focus indicator", async ({ page }) => {
     // Tab through to the CTA button (keyboard navigation triggers focus-visible)
-    // Skip link -> Logo -> nav items -> Our Work -> Get a Quote
+    // Skip link -> Logo -> nav items (incl. Contact) -> See Pricing CTA
     for (let i = 0; i < 10; i++) {
       await page.keyboard.press("Tab");
       const focused = page.locator(":focus");

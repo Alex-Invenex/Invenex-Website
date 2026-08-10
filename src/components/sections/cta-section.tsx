@@ -214,17 +214,17 @@ export function CTASection() {
                 size="lg"
                 className="bg-coral-500 hover:bg-coral-600 text-white rounded-full px-8 shadow-[0_0_20px_rgba(255,106,55,0.3)] hover:shadow-[0_0_30px_rgba(255,106,55,0.5)]"
               >
-                <Link href="/contact" className="group">
-                  Start a Project
+                <Link href="/pricing" className="group">
+                  See Pricing
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button asChild variant="ghost" size="lg">
                 <Link
-                  href="/portfolio"
+                  href="/contact"
                   className="group text-foreground-muted hover:text-foreground"
                 >
-                  View Our Work
+                  Book a 15-min fit call
                   <ArrowRight className="ml-2 w-5 h-5 text-coral-500 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>

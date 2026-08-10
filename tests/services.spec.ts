@@ -174,8 +174,8 @@ test.describe('Story 3-3: Services Overview Page', () => {
       const consultationButton = page.getByRole('link', { name: /Get a Free Consultation/i });
       await expect(consultationButton).toHaveAttribute('href', '/contact');
 
-      const portfolioButton = page.getByRole('link', { name: /View Our Work/i });
-      await expect(portfolioButton).toHaveAttribute('href', '/portfolio');
+      const fitCallButton = page.getByRole('link', { name: /Book a 15-min fit call/i });
+      await expect(fitCallButton).toHaveAttribute('href', '/contact');
     });
   });
 });

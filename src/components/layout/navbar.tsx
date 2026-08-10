@@ -260,13 +260,10 @@ export function Navbar() {
 
           {/* CTA Button */}
           <div className="hidden lg:flex items-center gap-3">
-            <Button asChild size="sm" variant="ghost">
-              <Link href="/portfolio">Our Work</Link>
-            </Button>
             <ThemeToggle />
             <Button asChild>
-              <Link href="/contact" className="group">
-                Get a Quote
+              <Link href="/pricing" className="group">
+                See Pricing
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>

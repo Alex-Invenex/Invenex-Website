@@ -88,7 +88,7 @@ test.describe("Metadata Utilities", () => {
       },
       {
         path: "/contact",
-        expectedTitle: "Contact Us",
+        expectedTitle: "Contact",
         pathInCanonical: "/contact",
       },
       {

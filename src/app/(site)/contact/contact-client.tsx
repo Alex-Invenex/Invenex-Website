@@ -59,7 +59,7 @@ export function ContactClient() {
             <HeadlineWord coral>BUILD SOMETHING GREAT.</HeadlineWord>
           </>
         }
-        subtitle="Tell us about your website, mobile app or platform project and get a free quote within 24 hours — from our team in Thrissur, Kerala."
+        subtitle="Fifteen minutes, and we'll both know if this is a fit. Not a sales call — if we're not the right people, we'll say so and point you elsewhere."
       />
 
       {/* Form + Contact Info */}

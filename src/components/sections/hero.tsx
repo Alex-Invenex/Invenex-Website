@@ -82,13 +82,13 @@ export function Hero() {
           {/* TODO: /contact pending Epic 5-1, /portfolio pending Epic 4-1 */}
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button asChild size="lg">
-              <Link href="/contact" className="group">
-                Get a Quote
+              <Link href="/pricing" className="group">
+                See Pricing
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
             <Button asChild variant="secondary" size="lg">
-              <Link href="/portfolio">View Our Work</Link>
+              <Link href="/contact">Book a 15-min fit call</Link>
             </Button>
           </div>
         </AnimatedSection>

@@ -4,7 +4,7 @@
 export const siteConfig = {
   name: "Invenex Solutions",
   description:
-    "Premium web development, mobile apps, and digital solutions. Transform your vision into reality with our world-class team.",
+    "Web, mobile and platform development with published fixed pricing. Built in Kerala, working across India, the UAE and the UK.",
   url: "https://invenexsolutions.com",
   ogImage: "/og/default.png",
   creator: "Invenex Solutions",
@@ -92,7 +92,7 @@ export const mainNav: NavItem[] = [
     ],
   },
   {
-    title: "Portfolio",
+    title: "Work",
     href: "/portfolio",
   },
   {
@@ -102,6 +102,10 @@ export const mainNav: NavItem[] = [
   {
     title: "Careers",
     href: "/careers",
+  },
+  {
+    title: "Pricing",
+    href: "/pricing",
   },
   {
     title: "Contact",
@@ -124,6 +128,8 @@ export const footerNav = {
     { title: "Careers", href: "/careers" },
     { title: "Contact", href: "/contact" },
     { title: "Build Your Project", href: "/build-your-project" },
+    { title: "Pricing", href: "/pricing" },
+    { title: "The Blueprint", href: "/blueprint" },
   ],
   resources: [
     { title: "Products", href: "/products" },
