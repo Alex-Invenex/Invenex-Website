@@ -26,7 +26,7 @@ const FAQ_ITEMS: FaqItem[] = [
       <>
         Happy to do it — that&rsquo;s{" "}
         <Price amount={OUT_OF_SCOPE_RATE.hourly} suffix=" an hour" />,
-        minimum {OUT_OF_SCOPE_RATE.minimumHours} hours, and we&rsquo;ll send
+        minimum four hours, and we&rsquo;ll send
         an estimate in writing before starting. The project price stays
         fixed; only the scope moves.
       </>
@@ -46,8 +46,8 @@ const FAQ_ITEMS: FaqItem[] = [
     question: "Can we pay after launch?",
     answer: (
       <>
-        No — and it&rsquo;s better for you that way. Taking 50% up front
-        means we&rsquo;ve blocked our calendar for you and can&rsquo;t sell
+        No — and it&rsquo;s better for you that way. Taking {deposit.share}%
+        up front means we&rsquo;ve blocked our calendar for you and can&rsquo;t sell
         that slot. An agency paid only at the end is rewarded for stretching
         the timeline; we&rsquo;re rewarded for shipping. If cash flow is
         tight, we&rsquo;ll split it four ways instead of three.
