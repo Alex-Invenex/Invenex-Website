@@ -192,7 +192,7 @@ function RateCard({
           <Link href="/pricing" className="svc-rate-link group">
             See full pricing
             <ArrowRight
-              className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
+              className="svc-arrow w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
               aria-hidden="true"
             />
           </Link>
@@ -541,7 +541,7 @@ function ServicesShowcase() {
                       className="group inline-flex items-center gap-2 text-coral-500 hover:text-coral-400 transition-colors text-sm font-medium ml-auto focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral-500 rounded"
                     >
                       Learn More
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      <ArrowRight className="svc-arrow w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                     </Link>
                   </div>
                 </div>
@@ -632,7 +632,7 @@ function ServicesShowcase() {
                     className="group inline-flex items-center gap-2 text-coral-500 hover:text-coral-400 transition-colors text-sm font-medium ml-auto focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral-500 rounded"
                   >
                     Learn More
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                    <ArrowRight className="svc-arrow w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                   </Link>
                 </div>
 
@@ -693,7 +693,7 @@ function OngoingStrip() {
               className="group mt-auto inline-flex items-center gap-2 self-start text-coral-500 hover:text-coral-400 transition-colors text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral-500 rounded"
             >
               Learn More
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
+              <ArrowRight className="svc-arrow w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
           </div>
         ))}

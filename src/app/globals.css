@@ -1521,12 +1521,13 @@ html.js-ready [data-animate] {
   transform-origin: center;
   transition: transform 240ms cubic-bezier(0.22, 0.7, 0.3, 1);
 }
-.svc-rate-row:hover,
-.svc-rate-row:focus-within {
+/* Hover only — a rate row is a read-only line item with no focusable
+   descendant of its own. The panel's "See full pricing" link is the keyboard
+   affordance; a :focus-within rule here would be dead code. */
+.svc-rate-row:hover {
   background: color-mix(in srgb, var(--color-coral-500) 7%, transparent);
 }
-.svc-rate-row:hover::before,
-.svc-rate-row:focus-within::before {
+.svc-rate-row:hover::before {
   transform: scaleY(1);
 }
 
@@ -1786,6 +1787,13 @@ html.js-ready [data-animate] {
 }
 
 /* ─── Shared micro-interactions ─────────────────────────────────────────── */
+/* The arrow that slides on link hover. Tailwind supplies the transition and
+   the translate; this class exists so the reduced-motion block below can
+   switch both off in one place. */
+.svc-arrow {
+  will-change: transform;
+}
+
 .svc-lift {
   transition: transform 300ms cubic-bezier(0.22, 0.7, 0.3, 1), border-color 300ms ease;
 }
@@ -1800,8 +1808,20 @@ html.js-ready [data-animate] {
   .svc-node,
   .svc-rail-num,
   .svc-rail-title,
+  .svc-arrow,
   .svc-lift {
     transition: none !important;
+  }
+  /* Tailwind v4 drives `translate-x-1` through the `translate` property via
+     `--tw-translate-x`, not through `transform`. Neutralise the variable as
+     well as the property: pairing `translate: none` with `transform: none` in
+     one rule lets the CSS minifier fold both into a single `transform`
+     declaration, which silently drops the part that actually matters. */
+  .svc-arrow,
+  .svc-arrow:hover,
+  .group:hover .svc-arrow {
+    --tw-translate-x: 0px !important;
+    translate: none !important;
   }
   .svc-rail-step[data-state="active"] .svc-node {
     animation: none !important;
@@ -1850,6 +1870,22 @@ html.js-ready [data-animate] {
 .pr-chip {
   transition: color 0.25s ease, background-color 0.25s ease,
     border-color 0.25s ease;
+}
+
+/* The bar is `bg-background/85` + `backdrop-blur-xl`, and the blur is what
+   makes 85% opacity legible. On coarse pointers this file nulls
+   backdrop-filter outright (it wrecks scroll performance on iOS), which
+   would leave the map as a translucent strip with six sections of copy
+   sliding visibly through it. Take the blur away and the background has to
+   carry the separation on its own, so it goes near-solid there. */
+@media (hover: none) and (pointer: coarse) {
+  .pr-subnav-bar {
+    background-color: color-mix(
+      in srgb,
+      var(--color-background) 97%,
+      transparent
+    );
+  }
 }
 
 /* ── The ladder ─────────────────────────────────────────────
@@ -1980,7 +2016,7 @@ html.js-ready [data-animate] {
 
 .pr-price-in {
   display: inline-block;
-  animation: pr-price-in 260ms cubic-bezier(0.22, 0.7, 0.3, 1);
+  animation: pr-price-in 200ms cubic-bezier(0.22, 0.7, 0.3, 1);
 }
 
 /* ── Carousel dots ──────────────────────────────────────── */
@@ -2188,15 +2224,6 @@ html.js-ready [data-animate] {
   line-height: 1.3;
 }
 
-/* In a five-across ladder the columns are ~220px: "Choose Platform Scale"
-   has to stay on one line. */
-@media (min-width: 1280px) {
-  .pr-ladder .pr-tier-cta {
-    font-size: 0.8125rem;
-    padding-inline: 0.75rem;
-  }
-}
-
 /* On a phone the ladder is a carousel: cards end where their content ends,
    rather than all stretching to the height of the longest exclusion list. */
 @media (max-width: 767px) {
@@ -2205,13 +2232,46 @@ html.js-ready [data-animate] {
   }
 }
 
-/* Keep the ladder CTAs on one line even in a 220px column. */
+/* In a five-across ladder the columns are ~220px: "Choose Platform Scale"
+   has to stay on one line. */
 @media (min-width: 1280px) {
   .pr-ladder .pr-tier-cta {
     font-size: 0.78rem;
     padding-inline: 0.5rem;
     white-space: nowrap;
   }
+}
+
+/* ── Includes disclosure ────────────────────────────────────
+   The rest of a tier's includes sit in a native <details>, so
+   they are reachable before hydration and with JavaScript off.
+   Both summary labels are in the DOM; the cascade picks the
+   one that matches [open], which is what keeps the control
+   honest without a script. Exclusions are NOT in here — they
+   are a sibling after it, and always visible.
+   ---------------------------------------------------------- */
+.pr-disclosure-summary {
+  list-style: none;
+}
+
+.pr-disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+
+.pr-disclosure-less {
+  display: none;
+}
+
+.pr-disclosure[open] > .pr-disclosure-summary .pr-disclosure-more {
+  display: none;
+}
+
+.pr-disclosure[open] > .pr-disclosure-summary .pr-disclosure-less {
+  display: inline;
+}
+
+.pr-disclosure[open] > .pr-disclosure-summary .pr-disclosure-icon {
+  transform: rotate(180deg);
 }
 
 /* ── Snap row ───────────────────────────────────────────────

@@ -294,7 +294,7 @@ function PricingSection({ slug }: { slug: string }) {
             <Link href="/pricing" className="svc-rate-link group">
               See full pricing
               <ArrowRight
-                className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                className="svc-arrow w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
                 aria-hidden="true"
               />
             </Link>
