@@ -1,15 +1,20 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Mail, Phone, MessageCircle, MapPin, Clock } from 'lucide-react'
 import { SubpageHero, HeadlineWord } from '@/components/sections/subpage-hero'
 import { QuoteForm } from '@/components/forms/quote-form'
+import { CalEmbed } from '@/components/ui/cal-embed'
 import { contactInfo } from '@/lib/constants'
+import { calLink } from '@/lib/site-config'
 import { GSAPStaggerContainer, GSAPStaggerItem } from '@/components/ui/gsap-stagger-container'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
 gsap.registerPlugin(useGSAP)
+
+const whatsappHref = `https://wa.me/${contactInfo.whatsapp.replace(/[^0-9]/g, '')}`
 
 /* ─── Contact info items ───────────────────────────────── */
 const contactItems = [
@@ -29,7 +34,7 @@ const contactItems = [
     icon: MessageCircle,
     label: 'WhatsApp',
     value: contactInfo.whatsapp,
-    href: `https://wa.me/${contactInfo.whatsapp.replace(/[^0-9]/g, '')}`,
+    href: whatsappHref,
     external: true,
   },
   {
@@ -40,7 +45,8 @@ const contactItems = [
   {
     icon: Clock,
     label: 'Business Hours',
-    value: contactInfo.businessHours,
+    value: contactInfo.businessHours.ist,
+    secondaryValue: contactInfo.businessHours.gulf,
   },
 ]
 
@@ -55,14 +61,14 @@ export function ContactClient() {
         variant="centered"
         headline={
           <>
-            <HeadlineWord thin>LET&apos;S</HeadlineWord>
-            <HeadlineWord coral>BUILD SOMETHING GREAT.</HeadlineWord>
+            <HeadlineWord thin>TELL US WHAT</HeadlineWord>
+            <HeadlineWord coral>YOU&apos;RE BUILDING.</HeadlineWord>
           </>
         }
         subtitle="Fifteen minutes, and we'll both know if this is a fit. Not a sales call — if we're not the right people, we'll say so and point you elsewhere."
       />
 
-      {/* Form + Contact Info */}
+      {/* Form/Calendar + Contact Info */}
       <FormSection />
     </>
   )
@@ -133,13 +139,52 @@ function FormSection() {
       <h2 id="contact-form-heading" className="sr-only">Contact Form and Information</h2>
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16">
-          {/* Quote Form — glassmorphic wrapper */}
+          {/* Calendar (if configured) or trimmed form — glassmorphic wrapper */}
           <div
             data-cf="form"
             className="rounded-2xl p-6 md:p-8 backdrop-blur-xl border border-surface-border"
             style={{ background: 'var(--color-surface-overlay)' }}
           >
-            <QuoteForm />
+            {calLink ? (
+              <div className="space-y-6" data-testid="cal-booking-panel">
+                <div>
+                  <h3 className="text-heading-3 font-semibold mb-3">
+                    15 minutes, and we&apos;ll both know if this is a fit
+                  </h3>
+                  <p className="text-foreground-muted">
+                    Not a sales call. We&apos;ll ask what you&apos;re trying to do, tell you
+                    honestly whether we&apos;re the right people, and point you elsewhere if
+                    we&apos;re not.
+                  </p>
+                </div>
+
+                <CalEmbed link={calLink} />
+
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-testid="contact-whatsapp-cta"
+                  className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-full border border-surface-border-hover bg-surface-overlay font-semibold text-foreground transition-colors duration-normal hover:border-coral-500/30 hover:bg-surface-overlay-hover"
+                >
+                  <MessageCircle className="w-5 h-5 text-[#25D366]" aria-hidden="true" />
+                  Message us on WhatsApp
+                </a>
+              </div>
+            ) : (
+              <QuoteForm />
+            )}
+
+            <p className="mt-8 text-sm text-foreground-muted">
+              Looking for prices? They&apos;re all published —{' '}
+              <Link
+                href="/pricing"
+                className="text-foreground underline decoration-white/20 underline-offset-4 transition-colors duration-normal hover:decoration-coral-500"
+              >
+                see pricing
+              </Link>
+              .
+            </p>
           </div>
 
           {/* Contact info cards */}
@@ -168,6 +213,11 @@ function FormSection() {
                     <div>
                       <h3 className="font-semibold mb-1 text-sm">{item.label}</h3>
                       <p className="text-foreground-muted text-sm group-hover:text-foreground transition-colors">{item.value}</p>
+                      {'secondaryValue' in item && item.secondaryValue && (
+                        <p className="text-foreground-muted text-sm group-hover:text-foreground transition-colors mt-1">
+                          {item.secondaryValue}
+                        </p>
+                      )}
                     </div>
                   </Wrapper>
                 </GSAPStaggerItem>

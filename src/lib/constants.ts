@@ -184,27 +184,21 @@ export const contactInfo = {
     country: "India",
     zip: "680308",
   },
-  businessHours: "Mon - Fri: 9:00 AM - 6:00 PM IST",
+  /**
+   * Two lines, deliberately never collapsed into one string: the IST line
+   * serves the India base, the Gulf line tells ~60% of clients (per
+   * `currency.ts`'s Gulf/Western split) that their own working days and
+   * WhatsApp are covered too. Contact cards render both.
+   */
+  businessHours: {
+    ist: "Mon - Fri: 9:00 AM - 6:00 PM IST",
+    gulf: "Gulf clients — we work your hours. Sun–Thu, and WhatsApp any time.",
+  },
 };
 
 // ============================================
 // Form Options (for dropdowns)
 // ============================================
-export const projectTypes = [
-  { value: "web", label: "Web Development" },
-  { value: "mobile", label: "Mobile App" },
-  { value: "platform", label: "Platform/SaaS" },
-  { value: "ecommerce", label: "E-Commerce" },
-  { value: "other", label: "Other" },
-] as const;
-
-export const budgetRanges = [
-  { value: "under-5k", label: "Under $5,000" },
-  { value: "5k-15k", label: "$5,000 - $15,000" },
-  { value: "15k-50k", label: "$15,000 - $50,000" },
-  { value: "50k-plus", label: "$50,000+" },
-] as const;
-
 export const referralSources = [
   { value: "google", label: "Google Search" },
   { value: "social", label: "Social Media" },
@@ -215,6 +209,4 @@ export const referralSources = [
 // ============================================
 // Type exports for external use
 // ============================================
-export type ProjectType = (typeof projectTypes)[number]["value"];
-export type BudgetRange = (typeof budgetRanges)[number]["value"];
 export type ReferralSource = (typeof referralSources)[number]["value"];

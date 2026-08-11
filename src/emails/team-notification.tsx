@@ -16,17 +16,15 @@ import {
 interface TeamNotificationProps {
   name: string;
   email: string;
-  projectType: string;
   budget: string;
   description: string;
-  source?: string;
+  source: string;
   submittedAt: string;
 }
 
 export default function TeamNotification({
   name,
   email,
-  projectType,
   budget,
   description,
   source,
@@ -52,11 +50,10 @@ export default function TeamNotification({
 
           {/* Main Content */}
           <Section style={styles.content}>
-            {/* Project Type Badge */}
+            {/* Budget Badge */}
             <Section style={styles.projectBadge}>
-              <Text style={styles.badgeLabel}>PROJECT TYPE</Text>
-              <Text style={styles.badgeTitle}>{projectType}</Text>
-              <Text style={styles.budgetText}>Budget: {budget}</Text>
+              <Text style={styles.badgeLabel}>BUDGET</Text>
+              <Text style={styles.badgeTitle}>{budget}</Text>
             </Section>
 
             <Hr style={styles.divider} />
@@ -92,19 +89,17 @@ export default function TeamNotification({
                   <Text style={styles.labelText}>Source</Text>
                 </Column>
                 <Column style={styles.infoValue}>
-                  <Text style={styles.valueText}>
-                    {source || 'Not specified'}
-                  </Text>
+                  <Text style={styles.valueText}>{source}</Text>
                 </Column>
               </Row>
             </Section>
 
             <Hr style={styles.divider} />
 
-            {/* Project Description */}
+            {/* What they're building */}
             <Section style={styles.descriptionSection}>
               <Heading as="h2" style={styles.sectionTitle}>
-                Project Description
+                What They&apos;re Building
               </Heading>
               <Text style={styles.descriptionText}>{description}</Text>
             </Section>
