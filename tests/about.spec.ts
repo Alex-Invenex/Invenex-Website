@@ -29,10 +29,19 @@ test.describe('Story 3-2: About Page', () => {
       await expect(valuesHeading).toBeVisible();
 
       // Check for value items (using headings to avoid duplicate matches)
-      await expect(page.getByRole('heading', { name: 'Excellence' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'We publish our prices' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'We run our own software' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'We say no' })).toBeVisible();
       await expect(page.getByRole('heading', { name: 'Partnership' })).toBeVisible();
-      await expect(page.getByRole('heading', { name: 'Innovation' })).toBeVisible();
-      await expect(page.getByRole('heading', { name: 'Speed' })).toBeVisible();
+    });
+
+    test('should display the 12K+ orders stat', async ({ page }) => {
+      const statsCard = page.locator('[data-testid="about-story-section"]');
+      await expect(statsCard.getByText('Orders Processed')).toBeVisible();
+    });
+
+    test('should not display "world-class" claims', async ({ page }) => {
+      await expect(page.getByText(/world-class/i)).toHaveCount(0);
     });
 
     test('should display team grid section', async ({ page }) => {

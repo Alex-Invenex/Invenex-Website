@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import Image from 'next/image'
-import { Target, Handshake, Lightbulb, Zap, Linkedin, User, Rocket } from 'lucide-react'
+import { Tag, Cpu, ThumbsDown, Handshake, Linkedin, User, Rocket } from 'lucide-react'
 import { SubpageHero, HeadlineWord } from '@/components/sections/subpage-hero'
 import { SubpageCTA } from '@/components/sections/subpage-cta'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
@@ -14,16 +14,17 @@ gsap.registerPlugin(useGSAP)
 
 /* ─── Data ─────────────────────────────────────────────── */
 const values = [
-  { icon: Target, title: 'Excellence', description: 'We deliver nothing but the best' },
+  { icon: Tag, title: 'We publish our prices', description: 'Every price is on the site. No quote calls, no negotiation.' },
+  { icon: Cpu, title: 'We run our own software', description: 'CaterFlow is ours — we make the expensive mistakes at our own cost first.' },
+  { icon: ThumbsDown, title: 'We say no', description: "If we're not the right fit, we'll tell you and point you elsewhere." },
   { icon: Handshake, title: 'Partnership', description: 'Your success is our success' },
-  { icon: Lightbulb, title: 'Innovation', description: 'Always pushing boundaries' },
-  { icon: Zap, title: 'Speed', description: 'Fast delivery without compromise' },
 ]
 
 const stats = [
   { value: 2024, label: 'Founded' },
   { value: 50, suffix: '+', label: 'Projects' },
   { value: 4, label: 'Founders' },
+  { value: 12, suffix: 'K+', label: 'Orders Processed' },
 ]
 
 const team = [
@@ -47,7 +48,7 @@ export function AboutClient() {
             <HeadlineWord coral>FUTURE</HeadlineWord>
           </>
         }
-        subtitle="Your trusted partner in digital transformation — one project at a time."
+        subtitle="We build software for businesses — and we run software businesses. That's the difference."
       />
 
       {/* Story */}
@@ -61,11 +62,11 @@ export function AboutClient() {
 
       {/* CTA */}
       <SubpageCTA
-        headline="LET'S"
-        highlightedText="CONNECT"
-        subtitle="Have a project in mind? Let's discuss how we can bring your vision to life."
-        primaryCTA={{ label: 'Get In Touch', href: '/contact' }}
-        secondaryCTA={{ label: 'View Our Work', href: '/portfolio' }}
+        headline="SEE WHAT IT"
+        highlightedText="COSTS"
+        subtitle="Every price is on the site. See the numbers, or talk it through first."
+        primaryCTA={{ label: 'See Pricing', href: '/pricing' }}
+        secondaryCTA={{ label: 'Book 15 Minutes', href: '/contact' }}
       />
     </>
   )
@@ -138,8 +139,8 @@ function StorySection() {
             <h2 id="about-story-title" className="text-3xl font-bold mb-6" data-story="p">Our Story</h2>
             <div className="space-y-4 text-foreground-muted">
               <p data-story="p">
-                Invenex Solutions started with a simple mission: deliver world-class digital
-                solutions that help businesses thrive in the digital age.
+                Invenex Solutions started with a simple mission: build digital
+                solutions that help businesses thrive — and prove it by running our own.
               </p>
               <p data-story="p">
                 Today, we&apos;re a team of passionate developers, designers, and strategists
@@ -312,13 +313,15 @@ function TeamSection() {
           <p className="mt-4 text-coral-400/70" data-tm="head">The people behind the magic</p>
         </div>
 
-        <GSAPStaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" data-testid="team-grid">
-          {team.map((member) => (
-            <GSAPStaggerItem key={member.name}>
-              <TeamMemberCard member={member} />
-            </GSAPStaggerItem>
-          ))}
-        </GSAPStaggerContainer>
+        <div data-testid="team-grid">
+          <GSAPStaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {team.map((member) => (
+              <GSAPStaggerItem key={member.name}>
+                <TeamMemberCard member={member} />
+              </GSAPStaggerItem>
+            ))}
+          </GSAPStaggerContainer>
+        </div>
       </div>
     </section>
   )

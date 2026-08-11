@@ -4,7 +4,7 @@ import { AboutClient } from "./about-client";
 export const metadata = generatePageMetadata({
   title: "About Our Software Company in Kerala",
   description:
-    "Invenex Solutions is a software development company based in Koratty, Thrissur, Kerala. Meet the team building web, mobile and platform products for clients in India and worldwide.",
+    "Invenex Solutions is a software development company based in Koratty, Thrissur, Kerala. We publish our prices and run our own product, CaterFlow. Meet the team building web, mobile and platform products for clients in India and the UAE.",
   path: "/about",
   keywords: [
     "software company in Kerala",
