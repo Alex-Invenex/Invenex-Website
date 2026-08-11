@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef, type RefObject } from "react";
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/components/providers/currency-provider";
 import { formatPrice } from "@/lib/format-price";
@@ -43,11 +43,16 @@ export function Price({
     mode: "view",
   });
 
+  // The figure is NOT keyed on the currency. A key would remount the span on
+  // every switch, and a remount resets `useCountUp`'s "already played" flag —
+  // so every visible price on the page re-rolled from zero each time the
+  // reader compared INR with USD. The node is now stable for the life of the
+  // page: React rewrites its text in place, the count-up plays once, and a
+  // currency switch is an immediate swap under a short crossfade (below).
+  useCurrencyCrossfade(numberRef, currency);
+
   return (
-    // Keyed on the currency so switching sheets crossfades the figure rather
-    // than swapping it mid-glance.
     <span
-      key={currency}
       ref={numberRef}
       // The published string, kept where the count-up can put it back.
       data-count-final={formatted}
@@ -56,4 +61,37 @@ export function Price({
       {formatted}
     </span>
   );
+}
+
+/**
+ * Replays the 200ms `pr-price-in` fade when — and only when — the currency
+ * changes.
+ *
+ * The fade used to come free with the `key={currency}` remount that this
+ * component no longer does. Restarting the animation by hand keeps the visual
+ * softening without touching the text: the price is swapped by React in the
+ * same frame, so the reader never sees a partial or an empty figure, only a
+ * brief dip in opacity (the keyframe starts at 0.25, never at 0).
+ */
+function useCurrencyCrossfade(
+  ref: RefObject<HTMLSpanElement | null>,
+  currency: string
+): void {
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    // Skip the first pass: the class is already on the element from the
+    // server, and its mount animation has run.
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+    const el = ref.current;
+    if (!el) return;
+
+    el.classList.remove("pr-price-in");
+    // Forced reflow — the one reliable way to restart a CSS animation.
+    void el.offsetWidth;
+    el.classList.add("pr-price-in");
+  }, [ref, currency]);
 }

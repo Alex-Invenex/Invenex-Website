@@ -115,30 +115,37 @@ export function TierCard({
         ))}
       </ul>
 
+      {/* A native <details>, not a button + `hidden` list. The rest of the
+          includes are part of what the tier costs, so they have to be
+          reachable before hydration and with JavaScript off — a scripted
+          disclosure hides them from both. `open` is still mirrored into
+          React state (via `onToggle`) so the rest of the card can react to
+          it, but the element itself is what holds the truth.
+
+          No `aria-expanded` here on purpose: <summary> exposes its own
+          expanded state, and a hand-written copy would go stale the moment
+          the element is toggled without JavaScript. */}
       {rest.length > 0 && (
-        <>
-          <button
-            type="button"
-            aria-expanded={expanded}
+        <details
+          className="pr-disclosure mt-3"
+          open={expanded}
+          onToggle={(event) => setExpanded(event.currentTarget.open)}
+        >
+          <summary
             aria-controls={detailsId}
-            onClick={() => setExpanded((open) => !open)}
-            className="mt-3 inline-flex items-center gap-1.5 self-start rounded-full py-1 text-xs font-medium text-coral-500 transition-colors duration-normal hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="pr-disclosure-summary inline-flex cursor-pointer items-center gap-1.5 rounded-full py-1 text-xs font-medium text-coral-500 transition-colors duration-normal hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            {expanded ? "Show less" : "Everything in detail"}
+            {/* Both labels ship; CSS shows the one that matches [open], so
+                the summary reads correctly with no JavaScript at all. */}
+            <span className="pr-disclosure-more">Everything in detail</span>
+            <span className="pr-disclosure-less">Show less</span>
             <ChevronDown
               aria-hidden="true"
-              className={cn(
-                "h-3.5 w-3.5 transition-transform duration-normal motion-reduce:transition-none",
-                expanded && "rotate-180"
-              )}
+              className="pr-disclosure-icon h-3.5 w-3.5 transition-transform duration-normal motion-reduce:transition-none"
             />
-          </button>
+          </summary>
 
-          <ul
-            id={detailsId}
-            hidden={!expanded}
-            className="mt-3 flex flex-col gap-2.5"
-          >
+          <ul id={detailsId} className="mt-3 flex flex-col gap-2.5">
             {rest.map((item) => (
               <li
                 key={item}
@@ -152,7 +159,7 @@ export function TierCard({
               </li>
             ))}
           </ul>
-        </>
+        </details>
       )}
 
       {tier.excludes.length > 0 && (

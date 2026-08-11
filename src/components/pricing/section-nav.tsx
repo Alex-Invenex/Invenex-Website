@@ -71,7 +71,10 @@ export function PricingSectionNav({
 
   return (
     <div className={cn("pr-subnav", className)}>
-      <div className="border-y border-white/10 bg-background/85 backdrop-blur-xl">
+      {/* `pr-subnav-bar` carries the touch-device fallback: globals.css nulls
+          backdrop-filter on coarse pointers, and an 85%-opaque bar with no
+          blur behind it is just a smear of the content sliding under it. */}
+      <div className="pr-subnav-bar border-y border-white/10 bg-background/85 backdrop-blur-xl">
         <div className="container mx-auto px-6 md:px-12">
           <nav aria-label="Pricing sections">
             <div
@@ -89,11 +92,26 @@ export function PricingSectionNav({
                       chipRefs.current[section.id] = node;
                     }}
                     onClick={(event) => {
+                      // Modifier clicks belong to the browser: cmd/ctrl opens a
+                      // new tab, shift a new window. The href is a real
+                      // `#anchor`, so bailing out before `preventDefault` hands
+                      // those gestures back intact.
+                      if (event.metaKey || event.ctrlKey || event.shiftKey) {
+                        return;
+                      }
                       const target = document.getElementById(section.id);
                       if (!target) return;
                       event.preventDefault();
                       cancelAnimationFrame(frame.current);
                       scrollToSection(target, frame);
+                      // A scripted scroll moves the viewport but NOT the
+                      // sequential-focus starting point — a native hash jump
+                      // would have moved both. Without this, Tab after a chip
+                      // click continues from the chip and walks the reader
+                      // back through the map instead of into the section they
+                      // just asked for.
+                      target.setAttribute("tabindex", "-1");
+                      target.focus({ preventScroll: true });
                       history.replaceState(null, "", `#${section.id}`);
                       setActive(section.id);
                     }}
@@ -133,6 +151,11 @@ const SCROLL_DURATION = 700;
  *
  * `frameRef` is kept pointing at the live frame so a second click — or an
  * unmount — can cancel a scroll already in flight.
+ *
+ * The animation also yields to the reader: 700ms is long enough that a wheel
+ * or a swipe arrives mid-flight, and a scripted scroll that fights the user's
+ * own input for half a second reads as a broken page. One-shot `wheel` and
+ * `touchstart` listeners abort the loop and then take themselves off.
  */
 function scrollToSection(
   target: HTMLElement,
@@ -148,11 +171,35 @@ function scrollToSection(
 
   const start = window.scrollY;
   const t0 = performance.now();
+
+  let cancelled = false;
+  const detach = () => {
+    window.removeEventListener("wheel", abort);
+    window.removeEventListener("touchstart", abort);
+  };
+  // Named so `detach` can remove whichever of the pair did not fire. The
+  // listeners are added during `click`, which on a touch device happens
+  // *after* the tap's own `touchstart` — so the tap never aborts itself.
+  function abort() {
+    cancelled = true;
+    cancelAnimationFrame(frameRef.current);
+    detach();
+  }
+  window.addEventListener("wheel", abort, { passive: true, once: true });
+  window.addEventListener("touchstart", abort, { passive: true, once: true });
+
   const step = (now: number) => {
-    const t = Math.min(1, (now - t0) / SCROLL_DURATION);
+    if (cancelled) return;
+    // Clamped at both ends: a rAF timestamp can predate the
+    // `performance.now()` taken a moment earlier in the same frame.
+    const t = Math.min(1, Math.max(0, (now - t0) / SCROLL_DURATION));
     const eased = 1 - Math.pow(1 - t, 3);
     window.scrollTo(0, Math.round(start + (destination - start) * eased));
-    if (t < 1) frameRef.current = requestAnimationFrame(step);
+    if (t < 1) {
+      frameRef.current = requestAnimationFrame(step);
+      return;
+    }
+    detach();
   };
   frameRef.current = requestAnimationFrame(step);
 }

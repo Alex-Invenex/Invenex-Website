@@ -71,4 +71,49 @@ describe("TierCard", () => {
     renderTier(launchpad, "INR");
     expect(screen.getByText(/not included — on purpose:/i)).toBeInTheDocument();
   });
+
+  // Load-bearing: the collapsed includes are part of what the tier costs, so
+  // they have to survive with no JavaScript. A native <details> is reachable
+  // pre-hydration; a button + `hidden` list is not.
+  it("collapses the rest of the includes behind a native details element", () => {
+    const { container } = renderTier(launchpad, "INR");
+
+    const details = container.querySelector("details");
+    expect(details).not.toBeNull();
+    expect(details!.querySelector("summary")).not.toBeNull();
+
+    // Every include is in the document, collapsed or not.
+    for (const item of launchpad.includes) {
+      expect(screen.getByText(item)).toBeInTheDocument();
+    }
+  });
+
+  // The exclusions are the reason a buyer moves up a tier by themselves. They
+  // must never end up inside the disclosure that the includes hide behind.
+  it("keeps the exclusions outside and after the includes disclosure", () => {
+    const { container } = renderTier(launchpad, "INR");
+
+    const details = container.querySelector("details")!;
+    const heading = screen.getByText(/not included — on purpose:/i);
+
+    expect(details.contains(heading)).toBe(false);
+    expect(
+      details.compareDocumentPosition(heading) &
+        Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy();
+  });
+
+  // The card the page is built around opens with its full list showing; the
+  // entry tiers stay collapsed so the five columns can be read across.
+  // Rendered separately on purpose — `rerender` would carry the first card's
+  // disclosure state into the second.
+  it("opens the default tier's disclosure and leaves the others closed", () => {
+    const growthRender = renderTier(growth, "INR");
+    const growthDetails = growthRender.container.querySelector("details");
+    if (growthDetails) expect(growthDetails.open).toBe(true);
+    growthRender.unmount();
+
+    const { container } = renderTier(launchpad, "INR");
+    expect(container.querySelector("details")!.open).toBe(false);
+  });
 });

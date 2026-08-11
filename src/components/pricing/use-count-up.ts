@@ -22,6 +22,13 @@ import { useEffect, useRef } from 'react'
  * Guards: reduced motion skips the animation entirely, `mode: 'change'` never
  * animates the first value it sees, and `format` must be referentially stable
  * (wrap it in `useCallback`) or the animation restarts on every render.
+ *
+ * CONTRACT for `mode: 'view'`: the host element must NOT be remounted while
+ * the page lives. "Already played" is per-hook-instance state, so a `key` that
+ * changes — a currency, say — throws it away and the figure re-rolls from
+ * zero every time the reader switches. Change the *props* instead: a currency
+ * change re-runs this effect, finds `played`, and lets React rewrite the text
+ * in place. See the note in `price.tsx`.
  */
 export function useCountUp<T extends HTMLElement = HTMLSpanElement>({
   target,
