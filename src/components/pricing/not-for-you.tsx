@@ -11,27 +11,30 @@ const launchpad = TIERS.find((tier) => tier.id === "launchpad")!;
  */
 export function NotForYou({ className }: { className?: string } = {}) {
   return (
+    // Deliberately plain: no glass, no glow, no card. This section works
+    // because it reads as someone talking straight, and decoration would
+    // undo that.
     <section className={className}>
-      <h2 className="text-h4 font-semibold text-foreground">
+      <h2 className="pr-display text-h4 font-semibold text-foreground">
         We&rsquo;re probably not for you if&hellip;
       </h2>
 
-      <ul className="mt-6 space-y-4">
-        <li className="border-l-2 border-white/10 pl-4 text-body text-foreground-muted">
+      <ul className="mt-8 space-y-6">
+        <li className="border-l-2 border-white/10 pl-5 text-body leading-relaxed text-foreground-muted">
           <strong className="text-foreground">
             You need it in under three weeks.
           </strong>{" "}
           Good work takes the time it takes, and we&rsquo;d rather say no
           than ship you something half-finished.
         </li>
-        <li className="border-l-2 border-white/10 pl-4 text-body text-foreground-muted">
+        <li className="border-l-2 border-white/10 pl-5 text-body leading-relaxed text-foreground-muted">
           <strong className="text-foreground">
             Your budget is under <Price amount={launchpad.price} />.
           </strong>{" "}
           Below that we can&rsquo;t build something we&rsquo;d put our name
           on. Wix or Squarespace will serve you better, genuinely.
         </li>
-        <li className="border-l-2 border-white/10 pl-4 text-body text-foreground-muted">
+        <li className="border-l-2 border-white/10 pl-5 text-body leading-relaxed text-foreground-muted">
           <strong className="text-foreground">
             You want us to make the business decisions too.
           </strong>{" "}

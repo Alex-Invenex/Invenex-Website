@@ -101,17 +101,45 @@ test.describe('/pricing', () => {
     expect(scrolledX).toBe(0);
   });
 
-  test('every pricing table scrolls inside its own container', async ({
+  // The wide price sheets are no longer <table>s — they are the tier
+  // carousel and the section map, each of which owns its own scrollport and
+  // is marked `data-hscroll`. The rule they have to obey is unchanged: on a
+  // 375px screen the content scrolls INSIDE its container and the body never
+  // scrolls sideways. Any <table> that comes back is held to the same rule.
+  test('every horizontally scrolling region scrolls inside its own container', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 375, height: 800 });
     await page.goto('/pricing');
+    await page.waitForLoadState('load');
 
-    const tables = page.locator('table');
-    const count = await tables.count();
+    const scrollers = page.locator('[data-hscroll]');
+    const count = await scrollers.count();
     expect(count).toBeGreaterThan(0);
 
     for (let i = 0; i < count; i++) {
+      const scroller = scrollers.nth(i);
+      expect(
+        await scroller.evaluate((el) => getComputedStyle(el).overflowX)
+      ).toBe('auto');
+
+      // ...and it really is the scrollport: the content overflows it, and
+      // scrolling that content to the end still leaves the page put.
+      const overflows = await scroller.evaluate(
+        (el) => el.scrollWidth > el.clientWidth
+      );
+      expect(overflows).toBe(true);
+
+      const pageScrolledX = await scroller.evaluate((el) => {
+        el.scrollLeft = el.scrollWidth;
+        return window.scrollX;
+      });
+      expect(pageScrolledX).toBe(0);
+    }
+
+    // Tables are allowed back, but only inside their own scroll container.
+    const tables = page.locator('table');
+    for (let i = 0; i < (await tables.count()); i++) {
       const overflowX = await tables.nth(i).evaluate((table) => {
         const wrapper = table.parentElement!;
         return getComputedStyle(wrapper).overflowX;

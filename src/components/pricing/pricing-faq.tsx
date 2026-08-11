@@ -86,27 +86,32 @@ const FAQ_ITEMS: FaqItem[] = [
 export function PricingFaq({ className }: { className?: string } = {}) {
   return (
     <section className={className}>
-      <h2 className="text-h4 font-semibold text-foreground">Pricing FAQ</h2>
+      <h2 className="pr-display text-h4 font-semibold text-foreground">
+        Pricing FAQ
+      </h2>
 
-      <div className="mt-6 divide-y divide-white/10 rounded-2xl border border-white/10">
+      {/* Native <details>: the answers are in the HTML whether or not
+          JavaScript runs, and the browser handles the keyboard for us. */}
+      <div className="mt-8 divide-y divide-white/10 overflow-hidden rounded-2xl border border-white/10">
         {FAQ_ITEMS.map((item) => (
-          <details key={item.question} className="group px-6 py-5">
+          <details key={item.question} className="pr-faq-item group">
             <summary
               className={[
-                "flex cursor-pointer list-none items-center justify-between gap-4",
-                "text-body font-medium text-foreground",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                "flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-5 md:px-6",
+                "text-body font-medium text-foreground transition-colors duration-200",
+                "hover:text-coral-500 group-open:text-coral-500",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-coral-500",
               ].join(" ")}
             >
               {item.question}
               <span
                 aria-hidden="true"
-                className="shrink-0 font-mono text-coral-500 transition-transform duration-200 group-open:rotate-45"
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-coral-500/40 bg-coral-500/10 font-mono text-body-sm text-coral-500 transition-transform duration-300 group-open:rotate-45 motion-reduce:transition-none"
               >
                 +
               </span>
             </summary>
-            <div className="mt-3 text-body-sm text-foreground-muted">
+            <div className="px-5 pb-5 text-body-sm leading-relaxed text-foreground-muted md:px-6">
               {item.answer}
             </div>
           </details>

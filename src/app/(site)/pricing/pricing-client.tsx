@@ -5,10 +5,15 @@ import type { ReactNode } from 'react'
 import { ArrowRight, Check } from 'lucide-react'
 import { SubpageHero, HeadlineWord } from '@/components/sections/subpage-hero'
 import { CurrencyToggle } from '@/components/pricing/currency-toggle'
-import { TierCard } from '@/components/pricing/tier-card'
-import { CarePlanCard } from '@/components/pricing/care-plan-card'
+import { TierLadder } from '@/components/pricing/tier-ladder'
+import { CarePlanRow } from '@/components/pricing/care-plan-row'
 import { CostOfDelayCalculator } from '@/components/pricing/cost-of-delay-calculator'
 import { NotForYou } from '@/components/pricing/not-for-you'
+import { RateCard } from '@/components/pricing/rate-card'
+import {
+  PricingSectionNav,
+  type PricingSection,
+} from '@/components/pricing/section-nav'
 import { SlotCounter } from '@/components/pricing/slot-counter'
 import { PricingFaq } from '@/components/pricing/pricing-faq'
 import { Price } from '@/components/pricing/price'
@@ -20,7 +25,6 @@ import {
   APP_CARE,
   APP_TIERS,
   BLUEPRINT,
-  CARE_PLANS,
   CARE_PLANS_ANNUAL_PREPAY_NOTE,
   ECOM_TIERS,
   MIN_AD_SPEND,
@@ -30,15 +34,18 @@ import {
   OUT_OF_SCOPE_RATE,
   RETAINERS,
   STRATEGY,
-  TIERS,
-  type PriceSet,
 } from '@/lib/pricing'
 
 /* ─── Layout primitives ────────────────────────────────── */
 
 /**
- * Section shell — alternating backgrounds and the site's standard vertical
- * rhythm. `tone="raised"` is the `background-secondary` band.
+ * Section shell — alternating backgrounds and the page's vertical rhythm.
+ * `tone="raised"` is the `background-secondary` band, `tone="warm"` the
+ * single coral band the page is allowed (the Blueprint).
+ *
+ * The padding is deliberately tighter than the site default: this page is
+ * six price sheets long, and 32-unit gutters between dense tables is what
+ * made it a 10,000px scroll with no landmarks in it.
  */
 function Section({
   id,
@@ -47,9 +54,10 @@ function Section({
   children,
   labelledBy,
   label,
+  className,
 }: {
   id?: string
-  tone?: 'base' | 'raised'
+  tone?: 'base' | 'raised' | 'warm'
   orb?: 'left' | 'right' | 'none'
   children: ReactNode
   /** Id of the heading that names this landmark. Prefer this over `label`. */
@@ -59,6 +67,7 @@ function Section({
    * component that exposes no id to point `aria-labelledby` at.
    */
   label?: string
+  className?: string
 }) {
   return (
     <section
@@ -66,8 +75,11 @@ function Section({
       aria-labelledby={labelledBy}
       aria-label={labelledBy ? undefined : label}
       className={cn(
-        'relative py-20 md:py-32',
-        tone === 'raised' ? 'bg-background-secondary' : 'bg-background'
+        'pr-anchor relative py-12 md:py-24',
+        tone === 'raised' && 'bg-background-secondary',
+        tone === 'base' && 'bg-background',
+        tone === 'warm' && 'pr-band',
+        className
       )}
       style={{ overflow: 'clip' }}
     >
@@ -101,24 +113,26 @@ function SectionHeading({
   lead,
   accent,
   intro,
+  className,
 }: {
   id?: string
   eyebrow: string
   lead: string
   accent: string
   intro?: ReactNode
+  className?: string
 }) {
   return (
-    <div className="max-w-3xl">
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-foreground-muted md:text-sm">
+    <div className={cn('max-w-3xl', className)}>
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-foreground-muted">
         {eyebrow}
       </p>
-      <h2 id={id} className="mt-6 leading-[0.95] tracking-[-0.03em]">
-        <span className="block text-xl font-extralight text-foreground/50 md:text-2xl">
+      <h2 id={id} className="mt-4 leading-[0.95] tracking-[-0.03em]">
+        <span className="block text-lg font-extralight text-foreground/50 md:text-2xl">
           {lead}
         </span>
         <span
-          className="mt-1 block text-3xl font-black md:text-5xl"
+          className="pr-display mt-1 block text-3xl font-black md:text-5xl"
           style={{
             background:
               'linear-gradient(135deg, var(--color-coral-500) 0%, var(--color-coral-400) 40%, var(--color-coral-600) 100%)',
@@ -131,7 +145,7 @@ function SectionHeading({
         </span>
       </h2>
       {intro && (
-        <p className="mt-6 text-base leading-relaxed text-foreground-muted md:text-lg">
+        <p className="mt-5 text-base leading-relaxed text-foreground-muted">
           {intro}
         </p>
       )}
@@ -139,70 +153,31 @@ function SectionHeading({
   )
 }
 
-interface PriceRow {
-  name: string
-  detail: string
-  price: PriceSet
-  suffix?: string
-}
-
-/**
- * Compact pricing table. The wrapper — not the page — is the scroll
- * container: on a 375px screen the table scrolls inside itself and the body
- * never scrolls horizontally.
- */
-function PriceTable({
-  caption,
-  rows,
-  columns = ['Offer', 'What it covers', 'Price'],
+/** A group inside the "everything else" sheet: heading, one line, cards. */
+function RateGroup({
+  id,
+  title,
+  intro,
+  children,
+  className,
 }: {
-  caption: string
-  rows: PriceRow[]
-  columns?: [string, string, string]
+  id?: string
+  title: string
+  intro: string
+  children: ReactNode
+  className?: string
 }) {
   return (
-    <div className="glass overflow-x-auto rounded-2xl border border-white/10">
-      <table className="w-full min-w-[34rem] border-collapse text-left">
-        <caption className="sr-only">{caption}</caption>
-        <thead>
-          <tr className="border-b border-white/10">
-            {columns.map((col, i) => (
-              <th
-                key={col}
-                scope="col"
-                className={cn(
-                  'px-5 py-4 font-mono text-xs uppercase tracking-[0.14em] text-foreground-muted',
-                  i === 2 && 'text-right'
-                )}
-              >
-                {col}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.name} className="border-b border-white/5 last:border-0">
-              <th
-                scope="row"
-                className="px-5 py-5 align-top text-base font-medium text-foreground"
-              >
-                {row.name}
-              </th>
-              <td className="px-5 py-5 align-top text-sm text-foreground-muted">
-                {row.detail}
-              </td>
-              <td className="px-5 py-5 align-top text-right">
-                <Price
-                  amount={row.price}
-                  suffix={row.suffix}
-                  className="whitespace-nowrap text-lg font-light text-gradient-orange"
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className={cn('mt-10 md:mt-12', className)}>
+      <div className="flex flex-col gap-2 border-t border-white/10 pt-6 md:flex-row md:items-baseline md:justify-between md:gap-8 md:pt-8">
+        <h3 id={id} className="pr-display text-xl font-medium text-foreground md:text-2xl">
+          {title}
+        </h3>
+        <p className="max-w-xl text-sm leading-relaxed text-foreground-muted">
+          {intro}
+        </p>
+      </div>
+      <div className="mt-5 md:mt-6">{children}</div>
     </div>
   )
 }
@@ -224,7 +199,7 @@ function AdSpendDisclosure({ className }: { className?: string }) {
   )
 }
 
-/* ─── Data shaped for the tables ───────────────────────── */
+/* ─── Data shaped for the cards ────────────────────────── */
 
 const appBuilds = APP_TIERS.filter((tier) => tier.id !== APP_CARE.id)
 
@@ -233,6 +208,17 @@ const carePlanNotes = [
   MOMENTUM_INCLUDED_IN_PLATFORM,
   CARE_PLANS_ANNUAL_PREPAY_NOTE,
 ]
+
+const SECTIONS: PricingSection[] = [
+  { id: 'builds', label: 'Builds' },
+  { id: 'calculator', label: 'Calculator' },
+  { id: 'care-plans', label: 'Care plans' },
+  { id: 'apps-commerce', label: 'Apps & commerce' },
+  { id: 'blueprint', label: 'Blueprint' },
+  { id: 'faq', label: 'FAQ' },
+]
+
+const CARD_GRID = 'grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3'
 
 /* ─── Page ─────────────────────────────────────────────── */
 
@@ -251,6 +237,10 @@ export function PricingClient() {
         subtitle="Most agencies hide their pricing so you have to call and find out. We’d rather you decided in eleven seconds than in a forty-minute meeting. These are the same prices every client sees."
       />
 
+      {/* Sits outside every Section: a sticky element inside a box with
+          `overflow: clip` would be cropped the moment it stuck. */}
+      <PricingSectionNav sections={SECTIONS} />
+
       <BuildTiers />
       <CostOfDelay />
       <CarePlans />
@@ -266,8 +256,8 @@ export function PricingClient() {
 
 function BuildTiers() {
   return (
-    <Section id="build-tiers" labelledBy="build-tiers-title">
-      <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+    <Section id="builds" labelledBy="build-tiers-title">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <SectionHeading
           id="build-tiers-title"
           eyebrow="// Websites & platforms"
@@ -278,41 +268,18 @@ function BuildTiers() {
         <CurrencyToggle className="shrink-0 flex-wrap" />
       </div>
 
-      {/* Ladder order, on every viewport. Growth spans the row and is the
-          only card that carries a badge — the contrast effect depends on it
-          (see 04-STRATEGY-RULES §1). */}
-      <div className="mt-14 grid max-w-5xl gap-6 md:grid-cols-2 lg:mx-auto">
-        {TIERS.map((tier) => (
-          <div
-            key={tier.id}
-            data-tier={tier.id}
-            className={cn(
-              'flex',
-              // Growth takes the whole middle row and sits centred: the widest
-              // card, the tallest card, the only badged card.
-              tier.isDefault && 'md:col-span-2 md:justify-center md:py-4'
-            )}
-          >
-            <TierCard
-              tier={tier}
-              ctaHref="/contact"
-              ctaLabel={
-                tier.isDefault ? `Start with ${tier.name}` : `Choose ${tier.name}`
-              }
-              className={cn('w-full', tier.isDefault && 'md:max-w-2xl')}
-            />
-          </div>
-        ))}
-      </div>
+      {/* Ladder order — launchpad → platformScale — on every viewport, with
+          Growth the only badged card (04-STRATEGY-RULES §1). */}
+      <TierLadder />
 
-      <div className="mx-auto mt-14 max-w-3xl">
-        <p className="text-base leading-relaxed text-foreground-muted md:text-lg">
+      <div className="mt-12 grid gap-8 border-t border-white/10 pt-8 md:grid-cols-2 md:gap-12">
+        <p className="text-base leading-relaxed text-foreground-muted">
           Every price above is fixed. What moves is scope, not the number. If a
           tier is more than you need, take the one below it — we&rsquo;d rather
           build you the right smaller thing than the wrong bigger one.
         </p>
 
-        <p className="mt-6 text-sm text-foreground-muted">
+        <p className="text-sm leading-relaxed text-foreground-muted">
           <span className="font-mono uppercase tracking-[0.14em] text-foreground">
             Work outside the agreed scope:
           </span>{' '}
@@ -333,7 +300,12 @@ function BuildTiers() {
 
 function CostOfDelay() {
   return (
-    <Section tone="raised" orb="left" labelledBy="cost-of-delay-title">
+    <Section
+      id="calculator"
+      tone="raised"
+      orb="left"
+      labelledBy="cost-of-delay-title"
+    >
       <SectionHeading
         id="cost-of-delay-title"
         eyebrow="// Cost of delay"
@@ -341,7 +313,7 @@ function CostOfDelay() {
         accent="price the waiting."
         intro="A site that converts below the benchmark costs money every month it stays up. Put your own numbers in."
       />
-      <div className="mt-12 max-w-4xl">
+      <div className="mt-10">
         <CostOfDelayCalculator />
       </div>
     </Section>
@@ -352,7 +324,7 @@ function CostOfDelay() {
 
 function CarePlans() {
   return (
-    <Section labelledBy="care-plans-title">
+    <Section id="care-plans" labelledBy="care-plans-title">
       <SectionHeading
         id="care-plans-title"
         eyebrow="// After launch"
@@ -361,13 +333,11 @@ function CarePlans() {
         intro="A site is not finished on launch day. These are the three ways we keep one working, published at the same fixed prices."
       />
 
-      <div className="mt-14 grid gap-6 md:grid-cols-3">
-        {CARE_PLANS.map((plan) => (
-          <CarePlanCard key={plan.id} plan={plan} />
-        ))}
-      </div>
+      {/* Carousel on a phone, three-up above md — the same behaviour as the
+          build ladder, so the page only teaches one gesture. */}
+      <CarePlanRow />
 
-      <ul className="mt-12 flex max-w-3xl flex-col gap-3">
+      <ul className="mt-12 flex flex-col gap-3 md:flex-row md:flex-wrap md:gap-x-10">
         {carePlanNotes.map((note) => (
           <li
             key={note}
@@ -389,7 +359,12 @@ function CarePlans() {
 
 function OtherServices() {
   return (
-    <Section tone="raised" orb="left" labelledBy="other-services-title">
+    <Section
+      id="apps-commerce"
+      tone="raised"
+      orb="left"
+      labelledBy="other-services-title"
+    >
       <SectionHeading
         id="other-services-title"
         eyebrow="// Everything else"
@@ -399,125 +374,119 @@ function OtherServices() {
       />
 
       {/* Mobile apps */}
-      <div className="mt-16">
-        <h3 className="text-2xl font-light text-foreground">Mobile apps</h3>
-        <p className="mt-3 max-w-2xl text-sm text-foreground-muted">
-          Priced by how the app is built, not by screen count. Cross-platform
-          and native both include store submission.
-        </p>
-        <div className="mt-6">
-          <PriceTable
-            caption="Mobile app builds and their fixed prices"
-            rows={appBuilds.map((tier) => ({
-              name: tier.name,
-              detail: `${tier.timeline}${
+      <RateGroup
+        title="Mobile apps"
+        intro="Priced by how the app is built, not by screen count. Cross-platform and native both include store submission."
+      >
+        <div className={CARD_GRID}>
+          {appBuilds.map((tier) => (
+            <RateCard
+              key={tier.id}
+              name={tier.name}
+              eyebrow={tier.timeline}
+              detail={
                 tier.includesStoreSubmission
-                  ? ' · App Store + Play Store submission included'
-                  : ' · installable on any device, no store submission'
-              }`,
-              price: tier.price,
-            }))}
-          />
+                  ? 'App Store + Play Store submission included'
+                  : 'Installable on any device, no store submission'
+              }
+              price={tier.price}
+            />
+          ))}
         </div>
 
         {/* App Care — mandatory, and said plainly (copy deck §5). */}
-        <div className="mt-8 rounded-2xl border border-coral-500/30 bg-coral-500/[0.04] p-6 md:p-8">
+        <div className="mt-6 rounded-2xl border border-coral-500/30 bg-coral-500/[0.05] p-6 md:p-8">
           <div className="flex flex-wrap items-center gap-4">
-            <span className="rounded-full bg-gradient-to-r from-coral-500 to-coral-700 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-white">
+            <span className="pr-badge rounded-full bg-gradient-to-r from-coral-500 to-coral-700 px-3 py-1 font-semibold uppercase text-white">
               Mandatory
             </span>
             <Price
               amount={APP_CARE.price}
               suffix="/mo"
-              className="text-2xl font-light text-gradient-orange"
+              animate
+              className="pr-display text-2xl font-light text-gradient-orange"
             />
           </div>
 
-          <h4 className="mt-5 text-xl font-light text-foreground">
+          <h4 className="pr-display mt-5 text-xl font-medium text-foreground">
             Why App Care isn&rsquo;t optional
           </h4>
-          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-foreground-muted">
-            An app isn&rsquo;t a purchase — it&rsquo;s a subscription with a
-            large first payment. Apple and Google force SDK and OS-version
-            changes roughly twice a year, whether you want them or not, and an
-            app that stops being updated eventually stops being downloadable.
-          </p>
-          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-foreground-muted">
-            App Care isn&rsquo;t an upsell. It&rsquo;s the cost of your app
-            continuing to exist. We&rsquo;d rather tell you that now than three
-            months after launch.
-          </p>
+          <div className="mt-4 grid gap-4 md:grid-cols-2 md:gap-8">
+            <p className="text-sm leading-relaxed text-foreground-muted">
+              An app isn&rsquo;t a purchase — it&rsquo;s a subscription with a
+              large first payment. Apple and Google force SDK and OS-version
+              changes roughly twice a year, whether you want them or not, and
+              an app that stops being updated eventually stops being
+              downloadable.
+            </p>
+            <p className="text-sm leading-relaxed text-foreground-muted">
+              App Care isn&rsquo;t an upsell. It&rsquo;s the cost of your app
+              continuing to exist. We&rsquo;d rather tell you that now than
+              three months after launch.
+            </p>
+          </div>
         </div>
-      </div>
+      </RateGroup>
 
       {/* E-commerce */}
-      <div className="mt-16">
-        <h3 className="text-2xl font-light text-foreground">E-Commerce</h3>
-        <p className="mt-3 max-w-2xl text-sm text-foreground-muted">
-          Priced by catalogue size, not page count. A 3,000-SKU store and a
-          15-page brochure site are not the same work.
-        </p>
-        <div className="mt-6">
-          <PriceTable
-            caption="E-commerce builds by catalogue size"
-            columns={['Store', 'Catalogue & scope', 'Price']}
-            rows={ECOM_TIERS.map((tier) => ({
-              name: tier.name,
-              detail: `${tier.scope.join(' · ')} · ${tier.timeline}`,
-              price: tier.price,
-            }))}
-          />
+      <RateGroup
+        title="E-Commerce"
+        intro="Priced by catalogue size, not page count. A 3,000-SKU store and a 15-page brochure site are not the same work."
+      >
+        <div className={CARD_GRID}>
+          {ECOM_TIERS.map((tier) => (
+            <RateCard
+              key={tier.id}
+              name={tier.name}
+              eyebrow={tier.timeline}
+              chips={tier.scope}
+              price={tier.price}
+            />
+          ))}
         </div>
-      </div>
+      </RateGroup>
 
       {/* Digital strategy */}
-      <div className="mt-16">
-        <h3 className="text-2xl font-light text-foreground">Digital strategy</h3>
-        <p className="mt-3 max-w-2xl text-sm text-foreground-muted">
-          Advice on its own, for when the build question is not the first
-          question.
-        </p>
-        <div className="mt-6">
-          <PriceTable
-            caption="Digital strategy offers"
-            columns={['Offer', 'What it covers', 'Price']}
-            rows={[
-              {
-                name: STRATEGY.sprint.name,
-                detail: `${STRATEGY.sprint.timeline} · research, competitor teardown, a costed roadmap you can execute with anyone`,
-                price: STRATEGY.sprint.price,
-              },
-              {
-                name: STRATEGY.advisory.name,
-                detail: `Minimum ${STRATEGY.advisory.minimumMonths} months · a founder in your corner, monthly`,
-                price: STRATEGY.advisory.price,
-                suffix: '/mo',
-              },
-            ]}
+      <RateGroup
+        title="Digital strategy"
+        intro="Advice on its own, for when the build question is not the first question."
+      >
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+          <RateCard
+            name={STRATEGY.sprint.name}
+            eyebrow={STRATEGY.sprint.timeline}
+            detail="Research, competitor teardown, a costed roadmap you can execute with anyone."
+            price={STRATEGY.sprint.price}
+          />
+          <RateCard
+            name={STRATEGY.advisory.name}
+            eyebrow={`Minimum ${STRATEGY.advisory.minimumMonths} months`}
+            detail="A founder in your corner, monthly."
+            price={STRATEGY.advisory.price}
+            suffix="/mo"
           />
         </div>
-      </div>
+      </RateGroup>
 
       {/* Social retainers */}
-      <div className="mt-16">
-        <h3 className="text-2xl font-light text-foreground">Social retainers</h3>
-        <p className="mt-3 max-w-2xl text-sm text-foreground-muted">
-          Monthly, cancellable, and separate from any build.
-        </p>
-        <div className="mt-6">
-          <PriceTable
-            caption="Social media retainers"
-            columns={['Retainer', 'What it covers', 'Per month']}
-            rows={RETAINERS.map((retainer) => ({
-              name: retainer.name,
-              detail: retainer.scope.join(' · '),
-              price: retainer.price,
-              suffix: '/mo',
-            }))}
-          />
+      <RateGroup
+        title="Social retainers"
+        intro="Monthly, cancellable, and separate from any build."
+      >
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+          {RETAINERS.map((retainer) => (
+            <RateCard
+              key={retainer.id}
+              name={retainer.name}
+              eyebrow="Per month"
+              chips={retainer.scope}
+              price={retainer.price}
+              suffix="/mo"
+            />
+          ))}
         </div>
-        <AdSpendDisclosure className="mt-5 max-w-3xl text-sm text-foreground-muted" />
-      </div>
+        <AdSpendDisclosure className="mt-5 text-sm text-foreground-muted" />
+      </RateGroup>
     </Section>
   )
 }
@@ -526,53 +495,55 @@ function OtherServices() {
 
 function BlueprintBlock() {
   return (
-    <Section labelledBy="blueprint-title">
-      <div className="glass mx-auto max-w-4xl rounded-3xl border border-white/10 p-8 md:p-12">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-foreground-muted">
-          // The Blueprint
-        </p>
-        <h2
-          id="blueprint-title"
-          className="mt-5 text-3xl font-light leading-tight text-foreground md:text-4xl"
-        >
-          Before we build you anything, we&rsquo;ll tell you exactly what to
-          build.
-        </h2>
-        <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground-muted">
-          A free quote is a guess. So we replaced it with a paid diagnostic: a
-          90-minute working session with two founders, then a written
-          architecture, a teardown of three named competitors, and your scope
-          broken into phases with a fixed price against each.
-        </p>
-
-        <div className="mt-8 flex flex-wrap items-center gap-6">
-          <Price
-            amount={BLUEPRINT.price}
-            className="text-4xl font-light text-gradient-orange"
-          />
-          <span className="text-sm text-foreground-muted">
-            {BLUEPRINT.timeline} · credited in full against any build started
-            within 30 days · refundable, and the document is yours either way
-          </span>
+    // The one warm band on the page: everything else is dark, so this is
+    // where the eye rests before the closing sections.
+    <Section id="blueprint" tone="warm" orb="none" labelledBy="blueprint-title">
+      <div className="grid items-start gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-coral-500">
+            {'// The Blueprint'}
+          </p>
+          <h2
+            id="blueprint-title"
+            className="pr-display mt-4 text-3xl font-medium leading-tight text-foreground md:text-4xl"
+          >
+            Before we build you anything, we&rsquo;ll tell you exactly what to
+            build.
+          </h2>
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground-muted">
+            A free quote is a guess. So we replaced it with a paid diagnostic:
+            a 90-minute working session with two founders, then a written
+            architecture, a teardown of three named competitors, and your scope
+            broken into phases with a fixed price against each.
+          </p>
         </div>
 
-        <p className="mt-6 text-sm text-foreground-muted">
-          The Blueprint is for projects above{' '}
+        <div className="glass rounded-3xl border border-coral-500/25 p-6 md:p-8">
           <Price
-            amount={BLUEPRINT.threshold}
-            className="text-foreground"
+            amount={BLUEPRINT.price}
+            animate
+            className="pr-display block text-5xl font-light text-gradient-orange"
           />
-          . If you&rsquo;re looking for something smaller, you don&rsquo;t need
-          it — the prices are published and you can just book.
-        </p>
+          <p className="mt-4 text-sm leading-relaxed text-foreground-muted">
+            {BLUEPRINT.timeline} · credited in full against any build started
+            within 30 days · refundable, and the document is yours either way
+          </p>
 
-        <Link
-          href="/blueprint"
-          className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-coral-500 to-coral-700 px-7 text-sm font-semibold text-white shadow-[0_0_20px_rgba(255,106,55,0.3)] transition-all duration-normal hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,106,55,0.5)]"
-        >
-          Read about the Blueprint
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-        </Link>
+          <p className="mt-5 border-t border-white/10 pt-5 text-sm leading-relaxed text-foreground-muted">
+            The Blueprint is for projects above{' '}
+            <Price amount={BLUEPRINT.threshold} className="text-foreground" />.
+            If you&rsquo;re looking for something smaller, you don&rsquo;t need
+            it — the prices are published and you can just book.
+          </p>
+
+          <Link
+            href="/blueprint"
+            className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-coral-500 to-coral-700 px-7 text-sm font-semibold text-white shadow-[0_0_20px_rgba(255,106,55,0.3)] transition-all duration-normal hover:shadow-[0_0_30px_rgba(255,106,55,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            Read about the Blueprint
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
     </Section>
   )
@@ -584,12 +555,8 @@ function NotForYouSection() {
   return (
     // `NotForYou` owns its own heading and exposes no id to reference, so the
     // landmark is named literally rather than left anonymous.
-    <Section
-      tone="raised"
-      orb="none"
-      label="We’re probably not for you if…"
-    >
-      <div className="mx-auto max-w-3xl">
+    <Section tone="base" orb="none" label="We’re probably not for you if…">
+      <div className="max-w-3xl">
         <NotForYou />
       </div>
     </Section>
@@ -600,27 +567,35 @@ function NotForYouSection() {
 
 function FaqSection() {
   return (
-    <Section>
-      <div className="mx-auto max-w-3xl">
-        {/* Renders nothing while the slot count is unknown — see site-config. */}
-        <SlotCounter className="mb-10" />
-        <PricingFaq />
+    <Section id="faq" tone="raised" orb="right">
+      <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+        {/* Sticks while the answers are being opened, so the two ways out of
+            the page are never scrolled away from. */}
+        <div className="lg:sticky lg:top-40 lg:self-start">
+          {/* Renders nothing while the slot count is unknown — see site-config. */}
+          <SlotCounter className="mb-6" />
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-foreground-muted">
+            {'// Questions & next steps'}
+          </p>
 
-        <div className="mt-14 flex flex-wrap items-center gap-4">
-          <Link
-            href="/contact"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-coral-500 to-coral-700 px-7 text-sm font-semibold text-white shadow-[0_0_20px_rgba(255,106,55,0.3)] transition-all duration-normal hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,106,55,0.5)]"
-          >
-            Book a 15-min fit call
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-          <Link
-            href="/blueprint"
-            className="inline-flex h-12 items-center justify-center rounded-full border border-white/10 bg-surface-overlay px-7 text-sm font-semibold text-foreground transition-colors duration-normal hover:border-white/20"
-          >
-            Start with a Blueprint
-          </Link>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:flex-col">
+            <Link
+              href="/contact"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-coral-500 to-coral-700 px-7 text-sm font-semibold text-white shadow-[0_0_20px_rgba(255,106,55,0.3)] transition-all duration-normal hover:shadow-[0_0_30px_rgba(255,106,55,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              Book a 15-min fit call
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <Link
+              href="/blueprint"
+              className="inline-flex h-12 items-center justify-center rounded-full border border-white/10 bg-surface-overlay px-7 text-sm font-semibold text-foreground transition-colors duration-normal hover:border-white/25"
+            >
+              Start with a Blueprint
+            </Link>
+          </div>
         </div>
+
+        <PricingFaq />
       </div>
     </Section>
   )
