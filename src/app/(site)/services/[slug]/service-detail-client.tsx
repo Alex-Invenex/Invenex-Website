@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, type ReactNode } from 'react'
 import Link from 'next/link'
 import { Check, Globe, Smartphone, Layers, ShoppingCart, Share2, Lightbulb, ArrowRight, type LucideIcon } from 'lucide-react'
 import { SubpageCTA } from '@/components/sections/subpage-cta'
@@ -23,6 +23,12 @@ interface PricingItem {
   name: string
   price: PriceSet
   suffix?: string
+  /** One-line scope, shown in the middle column once the panel is wide enough. */
+  scope?: string
+  /** App Care only — the row is mandatory, not an upsell. */
+  required?: boolean
+  /** Straight from `Tier.badge` — only the default tier carries one. */
+  badge?: string
 }
 
 const webTiers = TIERS.filter((t) => t.id === 'launchpad' || t.id === 'launch' || t.id === 'growth')
@@ -31,14 +37,36 @@ const appCare = APP_CARE
 const mobileTiers = APP_TIERS.filter((t) => t.id !== 'appCare')
 
 const PRICING_BY_SLUG: Record<string, PricingItem[]> = {
-  'web-development': webTiers.map((t) => ({ name: t.name, price: t.price })),
-  'mobile-development': mobileTiers.map((t) => ({ name: t.name, price: t.price })),
-  'platform-development': platformTiers.map((t) => ({ name: t.name, price: t.price })),
-  ecommerce: ECOM_TIERS.map((t) => ({ name: t.name, price: t.price })),
-  'social-media': RETAINERS.map((t) => ({ name: t.name, price: t.price, suffix: '/mo' })),
+  'web-development': webTiers.map((t) => ({
+    name: t.name,
+    price: t.price,
+    scope: t.timeline,
+    badge: t.badge,
+  })),
+  'mobile-development': [
+    ...mobileTiers.map((t) => ({ name: t.name, price: t.price, scope: t.timeline })),
+    { name: appCare.name, price: appCare.price, suffix: '/mo', scope: 'Ongoing', required: true },
+  ],
+  'platform-development': platformTiers.map((t) => ({
+    name: t.name,
+    price: t.price,
+    scope: t.timeline,
+  })),
+  ecommerce: ECOM_TIERS.map((t) => ({ name: t.name, price: t.price, scope: t.scope[0] })),
+  'social-media': RETAINERS.map((t) => ({
+    name: t.name,
+    price: t.price,
+    suffix: '/mo',
+    scope: t.scope[0],
+  })),
   'digital-strategy': [
-    { name: STRATEGY.sprint.name, price: STRATEGY.sprint.price },
-    { name: STRATEGY.advisory.name, price: STRATEGY.advisory.price, suffix: '/mo' },
+    { name: STRATEGY.sprint.name, price: STRATEGY.sprint.price, scope: STRATEGY.sprint.timeline },
+    {
+      name: STRATEGY.advisory.name,
+      price: STRATEGY.advisory.price,
+      suffix: '/mo',
+      scope: `${STRATEGY.advisory.minimumMonths}-month minimum`,
+    },
   ],
 }
 
@@ -219,70 +247,81 @@ function FeaturesSection({ features }: { features: string[] }) {
   )
 }
 
-/* ─── Pricing Section ──────────────────────────────────── */
+/* ─── Pricing Section ──────────────────────────────────────
+   Same anatomy as the rate cards on /services: a glass panel of
+   hairline-divided rows — name, one-line scope, price — so a visitor who
+   arrives from the overview page recognises the shape immediately. */
 function PricingSection({ slug }: { slug: string }) {
   const items = PRICING_BY_SLUG[slug]
   const { currency } = useCurrency()
   if (!items || items.length === 0) return null
 
+  const footnotes: ReactNode[] = []
+  if (slug === 'mobile-development') {
+    footnotes.push(
+      <p key="care">
+        An app that stops being updated eventually stops being downloadable. This isn&apos;t an
+        upsell, it&apos;s the cost of your app continuing to exist.
+      </p>
+    )
+  }
+  if (slug === 'ecommerce') {
+    footnotes.push(
+      <p key="note" className="italic">
+        Priced by catalogue size, not page count.
+      </p>
+    )
+  }
+  if (slug === 'social-media') {
+    footnotes.push(
+      <p key="ads">
+        {RETAINERS[0].adSpendNote} {minAdSpendNote(formatPrice(MIN_AD_SPEND[currency], currency))}
+      </p>
+    )
+  }
+
   return (
-    <section aria-labelledby="pricing-heading" data-testid="service-pricing" className="py-16 bg-background-secondary">
+    <section aria-labelledby="pricing-heading" data-testid="service-pricing" className="py-14 bg-background-secondary">
       <div className="container mx-auto px-6 md:px-12">
-        <h2 id="pricing-heading" className="text-3xl font-bold mb-4">What It Costs</h2>
-        <p className="text-foreground-muted max-w-2xl mb-10">
+        <h2 id="pricing-heading" className="text-3xl font-bold mb-3">What It Costs</h2>
+        <p className="text-foreground-muted max-w-2xl mb-7">
           Every price traces back to the same sheet everyone else sees — no quote call required.
         </p>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {items.map((item) => (
-            <div
-              key={item.name}
-              className="p-6 rounded-xl backdrop-blur-xl border border-surface-border"
-              style={{ background: 'var(--color-surface-overlay)' }}
-            >
-              <p className="text-sm text-foreground-muted mb-2">{item.name}</p>
-              <p className="font-mono text-2xl md:text-3xl text-coral-500 font-semibold">
-                <Price amount={item.price} suffix={item.suffix} />
-              </p>
-            </div>
-          ))}
+        <div className="svc-rate-card max-w-3xl">
+          <div className="svc-rate-head">
+            <span className="svc-rate-eyebrow">Rates</span>
+            <Link href="/pricing" className="svc-rate-link group">
+              See full pricing
+              <ArrowRight
+                className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                aria-hidden="true"
+              />
+            </Link>
+          </div>
+
+          <div>
+            {items.map((item) => (
+              <div key={item.name} className="svc-rate-row">
+                <span className="svc-rate-name">
+                  {item.name}
+                  {item.required && (
+                    <span data-testid="app-care-required" className="svc-rate-req">
+                      Required
+                    </span>
+                  )}
+                  {item.badge && <span className="svc-rate-badge">{item.badge}</span>}
+                </span>
+                <span className="svc-rate-scope">{item.scope ?? ''}</span>
+                <span className="svc-rate-price">
+                  <Price amount={item.price} suffix={item.suffix} />
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {footnotes.length > 0 && <div className="svc-rate-foot">{footnotes}</div>}
         </div>
-
-        {slug === 'mobile-development' && (
-          <p className="flex items-center gap-2 text-sm text-foreground-muted mb-6">
-            <span
-              data-testid="app-care-required"
-              className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-semibold uppercase tracking-wide border border-amber-500/20 shrink-0"
-            >
-              Required
-            </span>
-            <span>
-              App Care{' '}
-              <span className="font-mono text-coral-500 font-semibold">
-                <Price amount={appCare.price} suffix="/mo" />
-              </span>{' '}
-              — an app that stops being updated eventually stops being downloadable. This isn&apos;t an upsell, it&apos;s the cost of your app continuing to exist.
-            </span>
-          </p>
-        )}
-
-        {slug === 'ecommerce' && (
-          <p className="text-sm text-foreground-muted italic mb-6">Priced by catalogue size, not page count.</p>
-        )}
-
-        {slug === 'social-media' && (
-          <p className="text-sm text-foreground-muted mb-6">
-            {RETAINERS[0].adSpendNote} {minAdSpendNote(formatPrice(MIN_AD_SPEND[currency], currency))}
-          </p>
-        )}
-
-        <Link
-          href="/pricing"
-          className="group inline-flex items-center gap-2 text-coral-500 hover:text-coral-400 transition-colors text-sm font-medium"
-        >
-          See full pricing
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-        </Link>
       </div>
     </section>
   )
