@@ -66,9 +66,13 @@ export function PortfolioCard({ project, index, priority }: PortfolioCardProps) 
         data-testid="bento-card-metric"
       >
         <span>{project.client}</span>
-        <span aria-hidden="true">—</span>
-        <span className="text-coral-400 font-semibold">{project.headlineMetric.metric}</span>
-        <span>{project.headlineMetric.label}</span>
+        {project.headlineMetric && (
+          <>
+            <span aria-hidden="true">—</span>
+            <span className="text-coral-400 font-semibold">{project.headlineMetric.metric}</span>
+            <span>{project.headlineMetric.label}</span>
+          </>
+        )}
         {project.location && (
           <span
             className="ml-auto inline-flex items-center gap-1 rounded-full border border-surface-border px-2 py-0.5 text-[10px] uppercase tracking-wide text-foreground-subtle"

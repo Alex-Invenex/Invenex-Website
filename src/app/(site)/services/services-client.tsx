@@ -81,7 +81,7 @@ const primaryServices: ServiceEntry[] = [
     num: '01',
     title: 'Platform Development',
     description:
-      "Scalable SaaS platforms and internal systems. We don't just build these — we run one. CaterFlow has processed 12,000 orders for 50 catering businesses, which means we've already made the expensive mistakes at our own cost.",
+      "Scalable SaaS platforms and internal systems. We don't just build these — we run one. CaterFlow has processed 12,000 orders for 50+ catering businesses, which means we've already made the expensive mistakes at our own cost.",
     tags: ['Next.js', 'Node.js', 'PostgreSQL'],
     href: '/services/platform-development',
     card: PlatformCard,

@@ -102,11 +102,17 @@ function ProjectCard({
           {/* The result, with the client's name on it. An unattributed number
               reads as decoration; an attributed one reads as evidence. */}
           <p className="mt-2 text-sm text-foreground-muted">
-            {project.client} —{" "}
-            <span className="font-medium text-coral-400">
-              {project.headlineMetric.metric}
-            </span>{" "}
-            {project.headlineMetric.label.toLowerCase()}
+            {project.client}
+            {project.headlineMetric && (
+              <>
+                {" "}
+                —{" "}
+                <span className="font-medium text-coral-400">
+                  {project.headlineMetric.metric}
+                </span>{" "}
+                {project.headlineMetric.label.toLowerCase()}
+              </>
+            )}
           </p>
         </div>
       </Link>

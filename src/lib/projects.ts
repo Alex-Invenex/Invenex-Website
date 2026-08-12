@@ -483,8 +483,14 @@ export type SimpleProject = Pick<
   | "featured"
   | "location"
 > & {
-  /** The project's headline result, for card-level attribution (e.g. "Ziera Inc — +127% revenue"). */
-  headlineMetric: { metric: string; label: string };
+  /**
+   * The project's headline result, for card-level attribution (e.g. "Ziera Inc
+   * — +127% revenue"). Null when a project carries no results yet: `projects`
+   * is hand-edited content, and a new entry added without a `results` array
+   * must degrade to a card without a metric line, never take down `/portfolio`
+   * and the homepage (both render this) with a white screen.
+   */
+  headlineMetric: { metric: string; label: string } | null;
 };
 
 // Get simple projects for portfolio grid
@@ -501,7 +507,7 @@ export function getSimpleProjects(): SimpleProject[] {
       url,
       featured,
       location,
-      headlineMetric: results[0],
+      headlineMetric: results[0] ?? null,
     })
   );
 }

@@ -49,6 +49,7 @@ export function QuoteForm() {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const budgetRef = useRef<HTMLSelectElement>(null);
   const sourceRef = useRef<HTMLSelectElement>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -76,6 +77,10 @@ export function QuoteForm() {
       newErrors.description = "Please tell us what you're building";
     }
 
+    if (!data.budget || (data.budget as string).trim() === '') {
+      newErrors.budget = 'Please pick a budget range';
+    }
+
     if (!data.source || (data.source as string).trim() === '') {
       newErrors.source = 'Please tell us how you heard about us';
     }
@@ -91,6 +96,8 @@ export function QuoteForm() {
         emailRef.current?.focus();
       } else if (newErrors.description) {
         descriptionRef.current?.focus();
+      } else if (newErrors.budget) {
+        budgetRef.current?.focus();
       } else if (newErrors.source) {
         sourceRef.current?.focus();
       }
@@ -171,11 +178,23 @@ export function QuoteForm() {
         aria-invalid={errors.description ? 'true' : undefined}
       />
 
+      {/* Bands are listed highest-first to anchor upward (§4.1 / P2), but the
+          field must start EMPTY. Defaulting to `budgetBands[0]` would submit
+          the top band for everyone who never touches the select, so a
+          Launchpad enquiry would land in the founder's inbox tagged
+          "₹10,00,000+" — bad for the first call and worthless as data.
+          Same placeholder treatment as `source` below: no native `required`
+          prop (it disables the placeholder option), `aria-required` plus the
+          client check above and the Zod check server-side. */}
       <Select
+        ref={budgetRef}
         name="budget"
         label="Budget"
         options={budgetBands.map((b) => ({ value: b.value, label: b.label }))}
-        defaultValue={budgetBands[0].value}
+        placeholder="Select a range..."
+        error={errors.budget}
+        aria-invalid={errors.budget ? 'true' : undefined}
+        aria-required="true"
       />
 
       {/* Required (§4.1 / P2): the only reliable channel signal the business
