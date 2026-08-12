@@ -1,5 +1,23 @@
 import { test, expect } from '@playwright/test'
 
+/**
+ * /portfolio renders `BentoPortfolioGrid` (`bento-portfolio-grid.tsx`, Story
+ * 9-7), not the `project-grid.tsx` component this file (Story 4-2) was
+ * originally written against — `project-grid.tsx` is no longer imported by
+ * any route. The active grid reuses the same `portfolio-filters` /
+ * `portfolio-empty-state` testids but names cards `bento-project-card` /
+ * `bento-card-category`, and marks the active filter with `aria-pressed`
+ * rather than an `active`/`bg-primary` class. Retargeted below; behavior
+ * asserted is unchanged.
+ *
+ * Post-filter waits bumped from 500ms to 1000ms: the grid re-filter is a
+ * framer-motion `AnimatePresence`/`layout` transition, and 500ms was
+ * occasionally too short to let it settle before the test read card
+ * categories, catching stale (pre-filter) DOM state. Verified manually that
+ * the underlying filter itself is correct — after a longer wait every
+ * visible card matches the active category — so this was test timing, not
+ * an app bug.
+ */
 test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/portfolio')
@@ -55,15 +73,15 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
     await webFilter.click()
 
     // Wait for filter to apply
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
 
     // All visible project cards should have Web category
-    const projectCards = page.getByTestId('project-card')
+    const projectCards = page.getByTestId('bento-project-card')
     const visibleCards = await projectCards.all()
 
     for (const card of visibleCards) {
       if (await card.isVisible()) {
-        const category = card.getByTestId('project-category')
+        const category = card.getByTestId('bento-card-category')
         const categoryText = await category.textContent()
         expect(categoryText).toMatch(/Web/i)
       }
@@ -74,13 +92,13 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
     const mobileFilter = page.getByRole('button', { name: /^Mobile$/i })
     await mobileFilter.click()
 
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
 
-    const projectCards = page.getByTestId('project-card')
+    const projectCards = page.getByTestId('bento-project-card')
     const firstCard = projectCards.first()
 
     if (await firstCard.isVisible()) {
-      const category = firstCard.getByTestId('project-category')
+      const category = firstCard.getByTestId('bento-card-category')
       const categoryText = await category.textContent()
       expect(categoryText).toMatch(/Mobile/i)
     }
@@ -90,13 +108,13 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
     const platformFilter = page.getByRole('button', { name: /^Platform$/i })
     await platformFilter.click()
 
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
 
-    const projectCards = page.getByTestId('project-card')
+    const projectCards = page.getByTestId('bento-project-card')
     const firstCard = projectCards.first()
 
     if (await firstCard.isVisible()) {
-      const category = firstCard.getByTestId('project-category')
+      const category = firstCard.getByTestId('bento-card-category')
       const categoryText = await category.textContent()
       expect(categoryText).toMatch(/Platform/i)
     }
@@ -106,13 +124,13 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
     const ecommerceFilter = page.getByRole('button', { name: /E-Commerce|E Commerce|Ecommerce/i })
     await ecommerceFilter.click()
 
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
 
-    const projectCards = page.getByTestId('project-card')
+    const projectCards = page.getByTestId('bento-project-card')
     const firstCard = projectCards.first()
 
     if (await firstCard.isVisible()) {
-      const category = firstCard.getByTestId('project-category')
+      const category = firstCard.getByTestId('bento-card-category')
       const categoryText = await category.textContent()
       expect(categoryText).toMatch(/E-Commerce|E Commerce|Ecommerce/i)
     }
@@ -122,16 +140,16 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
     // First apply a filter to reduce count
     const webFilter = page.getByRole('button', { name: /^Web$/i })
     await webFilter.click()
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
 
-    const filteredCount = await page.getByTestId('project-card').count()
+    const filteredCount = await page.getByTestId('bento-project-card').count()
 
     // Click All
     const allFilter = page.getByRole('button', { name: /^All$/i })
     await allFilter.click()
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
 
-    const allCount = await page.getByTestId('project-card').count()
+    const allCount = await page.getByTestId('bento-project-card').count()
 
     // All count should be >= filtered count
     expect(allCount).toBeGreaterThanOrEqual(filteredCount)
@@ -143,14 +161,14 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
 
     // Web filter should be active
     const webFilter = page.getByRole('button', { name: /^Web$/i })
-    await expect(webFilter).toHaveClass(/active|selected|bg-primary|text-primary/i)
+    await expect(webFilter).toHaveAttribute('aria-pressed', 'true')
 
     // Projects should be filtered
-    const projectCards = page.getByTestId('project-card')
+    const projectCards = page.getByTestId('bento-project-card')
     const firstCard = projectCards.first()
 
     if (await firstCard.isVisible()) {
-      const category = firstCard.getByTestId('project-category')
+      const category = firstCard.getByTestId('bento-card-category')
       const categoryText = await category.textContent()
       expect(categoryText).toMatch(/Web/i)
     }
@@ -160,21 +178,21 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
     await page.goto('/portfolio?category=mobile')
 
     const mobileFilter = page.getByRole('button', { name: /^Mobile$/i })
-    await expect(mobileFilter).toHaveClass(/active|selected|bg-primary|text-primary/i)
+    await expect(mobileFilter).toHaveAttribute('aria-pressed', 'true')
   })
 
   test('direct URL /portfolio?category=platform shows filtered results', async ({ page }) => {
     await page.goto('/portfolio?category=platform')
 
     const platformFilter = page.getByRole('button', { name: /^Platform$/i })
-    await expect(platformFilter).toHaveClass(/active|selected|bg-primary|text-primary/i)
+    await expect(platformFilter).toHaveAttribute('aria-pressed', 'true')
   })
 
   test('direct URL /portfolio?category=e-commerce shows filtered results', async ({ page }) => {
     await page.goto('/portfolio?category=e-commerce')
 
     const ecommerceFilter = page.getByRole('button', { name: /E-Commerce|E Commerce|Ecommerce/i })
-    await expect(ecommerceFilter).toHaveClass(/active|selected|bg-primary|text-primary/i)
+    await expect(ecommerceFilter).toHaveAttribute('aria-pressed', 'true')
   })
 
   test('invalid category parameter shows all projects', async ({ page }) => {
@@ -182,10 +200,10 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
 
     // Should show all projects
     const allFilter = page.getByRole('button', { name: /^All$/i })
-    await expect(allFilter).toHaveClass(/active|selected|bg-primary|text-primary/i)
+    await expect(allFilter).toHaveAttribute('aria-pressed', 'true')
 
     // Projects should be visible
-    const projectCards = page.getByTestId('project-card')
+    const projectCards = page.getByTestId('bento-project-card')
     await expect(projectCards.first()).toBeVisible()
   })
 
@@ -196,8 +214,13 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
     await webFilter.click()
     await expect(page).toHaveURL(/category=web/i)
 
+    // Wait for the filtered grid to settle (framer-motion layout animation)
+    // before interacting with a card — same wait used by the other filter
+    // tests in this file.
+    await page.waitForTimeout(1000)
+
     // Navigate to a project
-    const firstCard = page.getByTestId('project-card').first()
+    const firstCard = page.getByTestId('bento-project-card').first()
     await firstCard.click()
 
     // Wait for navigation
@@ -208,25 +231,24 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
 
     // Should still have Web filter active
     await expect(page).toHaveURL(/category=web/i)
-    await expect(webFilter).toHaveClass(/active|selected|bg-primary|text-primary/i)
+    await expect(webFilter).toHaveAttribute('aria-pressed', 'true')
   })
 
   // Visual Feedback
   test('active filter has visual indication', async ({ page }) => {
     // All should be active by default
     const allFilter = page.getByRole('button', { name: /^All$/i })
-    await expect(allFilter).toHaveClass(/active|selected|bg-primary|text-primary/i)
+    await expect(allFilter).toHaveAttribute('aria-pressed', 'true')
 
     // Click Web filter
     const webFilter = page.getByRole('button', { name: /^Web$/i })
     await webFilter.click()
 
     // Web should now be active
-    await expect(webFilter).toHaveClass(/active|selected|bg-primary|text-primary/i)
+    await expect(webFilter).toHaveAttribute('aria-pressed', 'true')
 
     // All should not be active
-    const allFilterClass = await allFilter.getAttribute('class')
-    expect(allFilterClass).not.toMatch(/active|selected|bg-primary|text-primary/)
+    await expect(allFilter).toHaveAttribute('aria-pressed', 'false')
   })
 
   // Empty State
@@ -238,10 +260,10 @@ test.describe('Story 4-2: Portfolio Filtering - Desktop', () => {
     // For now, we'll just verify the page handles filtering gracefully
     const webFilter = page.getByRole('button', { name: /^Web$/i })
     await webFilter.click()
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
 
     // Either projects are shown or an empty state message
-    const projectCards = page.getByTestId('project-card')
+    const projectCards = page.getByTestId('bento-project-card')
     const cardCount = await projectCards.count()
 
     if (cardCount === 0) {
@@ -281,9 +303,9 @@ test.describe('Story 4-2: Portfolio Filtering - Mobile', () => {
   test('filtered results display correctly on mobile', async ({ page }) => {
     const mobileFilter = page.getByRole('button', { name: /^Mobile$/i })
     await mobileFilter.click()
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
 
-    const projectCards = page.getByTestId('project-card')
+    const projectCards = page.getByTestId('bento-project-card')
     await expect(projectCards.first()).toBeVisible()
   })
 })
@@ -292,13 +314,30 @@ test.describe('Story 4-2: Portfolio Filtering - Keyboard Navigation', () => {
   test('can navigate filters with keyboard', async ({ page }) => {
     await page.goto('/portfolio')
 
-    // Tab to filter buttons
-    await page.keyboard.press('Tab')
-
-    // Focus should be on a filter button
-    const focusedElement = page.locator(':focus')
-    const tagName = await focusedElement.evaluate(el => el.tagName)
-    expect(tagName).toBe('BUTTON')
+    // A single Tab from page load doesn't land on a filter button — it lands
+    // on the accessibility skip link first (see accessibility.spec.ts), then
+    // the navbar links, both of which correctly precede the filter group in
+    // tab order. Tab forward until focus reaches a button inside
+    // `[data-testid="portfolio-filters"]`, capped well above the number of
+    // links a visitor would realistically pass through first.
+    const filterGroup = page.getByTestId('portfolio-filters')
+    let reachedFilterButton = false
+    for (let i = 0; i < 30; i++) {
+      await page.keyboard.press('Tab')
+      const focused = page.locator(':focus')
+      const [tagName, inFilterGroup] = await Promise.all([
+        focused.evaluate((el) => el.tagName),
+        focused.evaluate(
+          (el, groupEl) => groupEl?.contains(el) ?? false,
+          await filterGroup.elementHandle()
+        ),
+      ])
+      if (tagName === 'BUTTON' && inFilterGroup) {
+        reachedFilterButton = true
+        break
+      }
+    }
+    expect(reachedFilterButton).toBe(true)
   })
 
   test('can activate filter with Enter key', async ({ page }) => {

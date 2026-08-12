@@ -7,7 +7,11 @@ test.describe('Story 6-1: Careers Page with Culture Showcase', () => {
 
   test.describe('AC1: Careers Page Content', () => {
     test('should display hero section with "Join Our Team" headline', async ({ page }) => {
-      const heroSection = page.locator('[data-testid="careers-hero-section"]');
+      // `SubpageHero` (used here since the careers-specific hero-section
+      // testid was retired) puts `aria-labelledby` on the <section> itself
+      // — no separate `data-testid="careers-hero-section"` is emitted
+      // unless a `testId` prop is passed, which `careers-client.tsx` doesn't do.
+      const heroSection = page.locator('section[aria-labelledby="careers-hero-title"]');
       await expect(heroSection).toBeVisible();
 
       const heroHeading = page.getByRole('heading', { level: 1, name: /join our team/i });
@@ -18,7 +22,7 @@ test.describe('Story 6-1: Careers Page with Culture Showcase', () => {
     });
 
     test('should display culture statement with modern tech and growth emphasis', async ({ page }) => {
-      const heroSection = page.locator('[data-testid="careers-hero-section"]');
+      const heroSection = page.locator('section[aria-labelledby="careers-hero-title"]');
       await expect(heroSection).toBeVisible();
 
       // Culture statement should mention innovation, growth, or work-life balance
@@ -33,8 +37,12 @@ test.describe('Story 6-1: Careers Page with Culture Showcase', () => {
       const sectionHeading = page.getByRole('heading', { name: /life at invenex/i });
       await expect(sectionHeading).toBeVisible();
 
-      // Should mention Kochi and remote work (scoped to life section to avoid matching job listings)
-      await expect(lifeSection.getByText(/kochi/i).first()).toBeVisible();
+      // Copy no longer names Kochi anywhere on the page — the hero subtitle
+      // now reads "Software jobs in Thrissur, Kerala and remote" instead, and
+      // the Life section itself talks about "remote team members" without
+      // naming a city. Check the current location claim at page level and
+      // keep the remote-work check scoped to the life section.
+      await expect(page.getByText(/thrissur/i).first()).toBeVisible();
       await expect(lifeSection.getByText(/remote/i).first()).toBeVisible();
     });
 
@@ -101,7 +109,7 @@ test.describe('Story 6-1: Careers Page with Culture Showcase', () => {
 
   test.describe('Accessibility', () => {
     test('hero section should have proper accessibility landmarks', async ({ page }) => {
-      const heroSection = page.locator('[data-testid="careers-hero-section"]');
+      const heroSection = page.locator('section[aria-labelledby="careers-hero-title"]');
       await expect(heroSection).toHaveAttribute('aria-labelledby');
     });
 

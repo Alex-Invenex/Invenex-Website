@@ -10,10 +10,11 @@ test.describe('Story 3-5: Products Page', () => {
   })
 
   test('displays hero section with correct messaging', async ({ page }) => {
+    // Copy is "WE BUILD" / "PRODUCTS TOO." now (was "We Build Our Own Products Too").
     const heroTitle = page.locator('#products-hero-title')
     await expect(heroTitle).toBeVisible()
-    await expect(heroTitle).toContainText('We Build Our Own')
-    await expect(heroTitle).toContainText('Products Too')
+    await expect(heroTitle).toContainText(/we build/i)
+    await expect(heroTitle).toContainText(/products too/i)
   })
 
   test('displays CaterFlow section with all features', async ({ page }) => {
@@ -107,14 +108,21 @@ test.describe('Story 3-5: Products Page', () => {
   })
 
   test('CTA section links to contact page', async ({ page }) => {
-    const ctaLink = page.getByRole('link', { name: /start a project/i })
+    // The page uses the shared `SubpageCTA` with its default CTAs — "See
+    // Pricing" (/pricing) and "Book a 15-min fit call" (/contact) — not a
+    // bespoke "Start a Project" link.
+    const ctaLink = page.getByRole('link', { name: /book a 15-min fit call/i })
     await expect(ctaLink).toBeVisible()
     await expect(ctaLink).toHaveAttribute('href', '/contact')
   })
 
   test('CTA area shows platform price with a pricing link', async ({ page }) => {
-    await expect(page.getByText(/platform builds are/i)).toBeVisible()
-    const pricingLink = page.getByRole('link', { name: /^pricing$/i })
+    const priceParagraph = page.getByText(/platform builds are/i)
+    await expect(priceParagraph).toBeVisible()
+    // Scope to the paragraph's own "pricing" link — the navbar and footer
+    // also have a "Pricing" link, so an unscoped role query strict-mode
+    // violates across all three.
+    const pricingLink = priceParagraph.getByRole('link', { name: /^pricing$/i })
     await expect(pricingLink).toBeVisible()
     await expect(pricingLink).toHaveAttribute('href', '/pricing')
   })
@@ -134,7 +142,9 @@ test.describe('Story 3-5: Products Page', () => {
     const invenexSection = page.locator('section[aria-labelledby="invenex-erp-title"]')
     await expect(invenexSection).toBeVisible()
 
-    const ctaSection = page.locator('section[aria-labelledby="products-cta-title"]')
+    // `SubpageCTA`'s default heading id is "subpage-cta-title" — products-client.tsx
+    // doesn't override it with a page-scoped "products-cta-title".
+    const ctaSection = page.locator('section[aria-labelledby="subpage-cta-title"]')
     await expect(ctaSection).toBeVisible()
   })
 

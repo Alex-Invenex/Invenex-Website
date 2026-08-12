@@ -25,9 +25,14 @@ test.describe("Coral Color Tokens (AC1)", () => {
       );
     });
 
-    // Should have coral-500 defined (primary coral color)
+    // Should have coral-500 defined (primary coral color).
+    // Brand token is #FF6A37 (rgb(255, 106, 55)) — see globals.css
+    // `--color-coral-500`, unchanged from main, predates this branch. The
+    // #FF6B35 figure this test originally asserted was only ever a design
+    // comment (globals.css line ~74, "Primary: #FF6B35") that never matched
+    // the shipped token.
     expect(coral500.trim()).toBeTruthy();
-    expect(coral500.trim().toLowerCase()).toMatch(/#ff6b35|rgb\(255,\s*107,\s*53\)/i);
+    expect(coral500.trim().toLowerCase()).toMatch(/#ff6a37|rgb\(255,\s*106,\s*55\)/i);
   });
 
   test("coral color scale is complete (50, 100, 300, 500, 700)", async ({
@@ -79,8 +84,8 @@ test.describe("Coral Utility Classes (AC1)", () => {
       return getComputedStyle(el).backgroundColor;
     });
 
-    // rgb(255, 107, 53) is #FF6B35
-    expect(bgColor).toMatch(/rgb\(255,\s*107,\s*53\)/);
+    // rgb(255, 106, 55) is #FF6A37, the current --color-coral-500 token
+    expect(bgColor).toMatch(/rgb\(255,\s*106,\s*55\)/);
   });
 
   test("text-coral-* utilities apply correct text colors", async ({ page }) => {
@@ -103,8 +108,8 @@ test.describe("Coral Utility Classes (AC1)", () => {
       return getComputedStyle(el).color;
     });
 
-    // rgb(255, 107, 53) is #FF6B35
-    expect(textColor).toMatch(/rgb\(255,\s*107,\s*53\)/);
+    // rgb(255, 106, 55) is #FF6A37, the current --color-coral-500 token
+    expect(textColor).toMatch(/rgb\(255,\s*106,\s*55\)/);
   });
 
   test("border-coral-* utilities apply correct border colors", async ({
@@ -132,8 +137,8 @@ test.describe("Coral Utility Classes (AC1)", () => {
       return getComputedStyle(el).borderColor;
     });
 
-    // rgb(255, 107, 53) is #FF6B35
-    expect(borderColor).toMatch(/rgb\(255,\s*107,\s*53\)/);
+    // rgb(255, 106, 55) is #FF6A37, the current --color-coral-500 token
+    expect(borderColor).toMatch(/rgb\(255,\s*106,\s*55\)/);
   });
 
   test("glow-coral utility applies box shadow", async ({ page }) => {
@@ -155,9 +160,12 @@ test.describe("Coral Utility Classes (AC1)", () => {
       return getComputedStyle(el).boxShadow;
     });
 
-    // Should have a box shadow with coral-ish color
+    // `.glow-coral` is built with `color-mix(in srgb, var(--color-coral-500) 30%, transparent)`
+    // (see globals.css), which Chromium reports back as a CSS Color 4
+    // `color(srgb ...)` function rather than `rgba(...)`. #FF6A37 normalizes
+    // to srgb(1, 0.415686, 0.215686).
     expect(boxShadow).not.toBe("none");
-    expect(boxShadow).toContain("rgba(255, 107, 53");
+    expect(boxShadow).toContain("color(srgb 1 0.415686 0.215686");
   });
 });
 
@@ -277,13 +285,13 @@ test.describe("WCAG AA Contrast (AC3)", () => {
       };
     });
 
-    // Coral-500 (#FF6B35) on dark (#0A0A0A) should pass
-    // Calculated contrast: ~5.8:1 which exceeds 4.5:1 for AA
+    // Coral-500 (#FF6A37) on dark (#0A0A0A) should pass
+    // Calculated contrast: ~5.7:1 which exceeds 4.5:1 for AA
     expect(colors.coral).toBeTruthy();
     expect(colors.background).toBeTruthy();
 
     // Verify colors are what we expect
-    expect(colors.coral.toLowerCase()).toMatch(/#ff6b35/);
+    expect(colors.coral.toLowerCase()).toMatch(/#ff6a37/);
     expect(colors.background.toLowerCase()).toMatch(/#0a0a0a/);
   });
 
@@ -325,7 +333,7 @@ test.describe("WCAG AA Contrast (AC3)", () => {
       return getComputedStyle(el).color;
     });
 
-    expect(textColor).toMatch(/rgb\(255,\s*107,\s*53\)/);
+    expect(textColor).toMatch(/rgb\(255,\s*106,\s*55\)/);
   });
 });
 
@@ -386,7 +394,7 @@ test.describe("Coral Integration", () => {
     });
 
     // Background should be coral
-    expect(styles.backgroundColor).toMatch(/rgb\(255,\s*107,\s*53\)/);
+    expect(styles.backgroundColor).toMatch(/rgb\(255,\s*106,\s*55\)/);
     // Text should be white
     expect(styles.color).toMatch(/rgb\(255,\s*255,\s*255\)/);
     // Padding should be applied

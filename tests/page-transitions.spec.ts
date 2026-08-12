@@ -309,8 +309,14 @@ test.describe("Link Types", () => {
     await page.goto("/");
     await page.waitForLoadState("domcontentloaded");
 
-    // Find an anchor link (if any)
-    const anchorLink = page.locator('a[href^="#"]').first();
+    // Find an anchor link (if any). Exclude the accessibility skip link —
+    // it's the first `#`-href anchor in DOM order but is deliberately
+    // sr-only (visually off-screen) until focused, so a real mouse .click()
+    // times out waiting for it to be "in viewport": that's correct a11y
+    // behavior, not a same-page-anchor bug this test is meant to catch.
+    const anchorLink = page
+      .locator('a[href^="#"]:not([data-testid="skip-link"])')
+      .first();
     const linkCount = await anchorLink.count();
 
     if (linkCount > 0) {
@@ -340,8 +346,11 @@ test.describe("Mobile Transitions", () => {
       await menuButton.click();
       await page.waitForTimeout(300);
 
-      // Click a nav link in mobile menu
-      const aboutLink = page.locator('a[href="/about"]').first();
+      // Click a nav link in mobile menu. The navbar renders `mainNav` twice
+      // (desktop row + mobile overlay), so scope to `:visible` — same
+      // pattern used in services.spec.ts — or `.first()` picks the
+      // display:none desktop copy and the click times out.
+      const aboutLink = page.locator('a[href="/about"]:visible').first();
       if ((await aboutLink.count()) > 0) {
         await aboutLink.click();
         await page.waitForURL("**/about", { timeout: 5000 });

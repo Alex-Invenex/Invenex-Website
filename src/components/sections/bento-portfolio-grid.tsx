@@ -42,7 +42,6 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
-  const activeFilter = categoryParam || "all";
   const prefersReduced = usePrefersReducedMotion();
   const sectionRef = React.useRef<HTMLElement>(null);
 
@@ -52,6 +51,17 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
     () => (showUAEFilter ? [...categories, { value: "uae", label: "UAE" }] : categories),
     [showUAEFilter]
   );
+
+  // An unrecognized `?category=` (typo'd, stale bookmark, or hand-edited URL)
+  // used to fall straight through to `.filter()`, which silently rendered an
+  // empty grid with no tab marked active — no error, no explanation, no way
+  // back to "All" short of a fresh navigation. Validate against the actual
+  // tab values and fall back to "all" so an unknown category degrades to the
+  // full, browsable grid instead of a dead end.
+  const activeFilter =
+    categoryParam && filterTabs.some((t) => t.value === categoryParam)
+      ? categoryParam
+      : "all";
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === "all") return projects;
