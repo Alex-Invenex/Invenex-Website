@@ -4,17 +4,19 @@ import { resend, isResendConfigured } from '@/lib/resend';
 import { quoteFormSchema } from '@/lib/validations/contact';
 import TeamNotification from '@/emails/team-notification';
 import QuoteConfirmation from '@/emails/quote-confirmation';
-import { contactInfo, projectTypes, budgetRanges } from '@/lib/constants';
+import { contactInfo, referralSources } from '@/lib/constants';
+import { getBudgetBands } from '@/lib/pricing';
+import { isCurrency, type Currency } from '@/lib/currency';
 import type { ActionResult } from '@/types';
 
-function getProjectTypeLabel(value: string): string {
-  const type = projectTypes.find((t) => t.value === value);
-  return type?.label || value;
+function getBudgetLabel(value: string, currency: Currency): string {
+  const band = getBudgetBands(currency).find((b) => b.value === value);
+  return band?.label || value;
 }
 
-function getBudgetLabel(value: string): string {
-  const budget = budgetRanges.find((b) => b.value === value);
-  return budget?.label || value;
+function getSourceLabel(value: string): string {
+  const source = referralSources.find((s) => s.value === value);
+  return source?.label || value;
 }
 
 /**
@@ -35,10 +37,10 @@ export async function submitQuoteRequest(
   const rawData = {
     name: formData.get('name'),
     email: formData.get('email'),
-    projectType: formData.get('projectType'),
     budget: formData.get('budget'),
     description: formData.get('description'),
-    source: formData.get('source') || undefined,
+    source: formData.get('source'),
+    currency: formData.get('currency') || undefined,
   };
 
   // Server-side validation with Zod
@@ -52,6 +54,11 @@ export async function submitQuoteRequest(
   }
 
   const data = result.data;
+  // The client sends the currency it displayed the budget select in, so the
+  // email shows the same label the visitor picked. Anything unrecognised
+  // (missing field, tampered value) falls back to INR rather than failing
+  // the submission over a cosmetic label.
+  const currency: Currency = isCurrency(data.currency) ? data.currency : 'INR';
   const submittedAt = new Date().toLocaleString('en-US', {
     dateStyle: 'full',
     timeStyle: 'short',
@@ -59,8 +66,8 @@ export async function submitQuoteRequest(
   });
 
   // Get human-readable labels for email display
-  const projectTypeLabel = getProjectTypeLabel(data.projectType);
-  const budgetLabel = getBudgetLabel(data.budget);
+  const budgetLabel = getBudgetLabel(data.budget, currency);
+  const sourceLabel = getSourceLabel(data.source);
 
   // Check if email service is configured
   if (!isResendConfigured() || !resend) {
@@ -70,10 +77,9 @@ export async function submitQuoteRequest(
       console.log('Quote Request (email not sent):', {
         name: data.name,
         email: data.email,
-        projectType: projectTypeLabel,
         budget: budgetLabel,
         description: data.description,
-        source: data.source,
+        source: sourceLabel,
         submittedAt,
       });
       return { success: true, data: { id: `dev-${Date.now()}` } };
@@ -94,10 +100,9 @@ export async function submitQuoteRequest(
       react: TeamNotification({
         name: data.name,
         email: data.email,
-        projectType: projectTypeLabel,
         budget: budgetLabel,
         description: data.description,
-        source: data.source,
+        source: sourceLabel,
         submittedAt,
       }),
     });
@@ -114,7 +119,6 @@ export async function submitQuoteRequest(
       subject: 'Thank you for your inquiry!',
       react: QuoteConfirmation({
         name: data.name,
-        projectType: projectTypeLabel,
         budget: budgetLabel,
         description: data.description,
       }),

@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test'
 
+// Known client roster (per copy deck §7 / 03-MARKET-RATES.md UAE roster). Any
+// card that shows an attributed "+N%" figure must name one of these clients —
+// unattributed growth numbers read as decoration, not evidence.
+const KNOWN_CLIENT_ROSTER =
+  /Ziera|CoolTech|GrabToGo|Ginger|Al Shahama|AutoAssist|OnMyWay|Emergence|Ahazz/
+
 test.describe('Story 4-1: Portfolio Grid Page', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/portfolio')
@@ -7,26 +13,22 @@ test.describe('Story 4-1: Portfolio Grid Page', () => {
 
   // AC1: Portfolio Page Layout
   test('has correct page title and metadata', async ({ page }) => {
-    await expect(page).toHaveTitle(/Our Work.*Invenex/i)
+    await expect(page).toHaveTitle(/Portfolio.*Invenex/i)
   })
 
-  test('displays hero section with project count', async ({ page }) => {
-    const heroSection = page.locator('section[aria-labelledby="portfolio-hero-title"]')
+  test('displays hero section', async ({ page }) => {
+    const heroSection = page.getByTestId('portfolio-hero')
     await expect(heroSection).toBeVisible()
 
     const heroTitle = page.locator('#portfolio-hero-title')
     await expect(heroTitle).toBeVisible()
-    await expect(heroTitle).toContainText('Our Work')
-
-    // Should show project count
-    await expect(heroSection.getByText(/projects? delivered/i)).toBeVisible()
+    await expect(heroTitle).toContainText(/Work/i)
   })
 
   test('displays filter tabs for categories', async ({ page }) => {
     const filterTabs = page.getByTestId('portfolio-filters')
     await expect(filterTabs).toBeVisible()
 
-    // Check all filter categories exist
     const categories = ['All', 'Web', 'Mobile', 'Platform', 'E-Commerce']
     for (const category of categories) {
       await expect(filterTabs.getByRole('button', { name: category })).toBeVisible()
@@ -39,60 +41,41 @@ test.describe('Story 4-1: Portfolio Grid Page', () => {
   })
 
   test('displays project grid with responsive layout', async ({ page }) => {
-    const projectGrid = page.getByTestId('portfolio-grid')
+    const projectGrid = page.getByTestId('bento-portfolio-grid')
     await expect(projectGrid).toBeVisible()
 
-    // Check that project cards exist
-    const projectCards = page.getByTestId('project-card')
+    const projectCards = page.getByTestId('bento-project-card')
     await expect(projectCards.first()).toBeVisible()
   })
 
   test('project cards show required information', async ({ page }) => {
-    const firstCard = page.getByTestId('project-card').first()
+    const firstCard = page.getByTestId('bento-project-card').first()
     await expect(firstCard).toBeVisible()
 
-    // Check card shows: thumbnail area, client name, project type, excerpt
-    await expect(firstCard.locator('[data-testid="project-thumbnail"]')).toBeVisible()
-    await expect(firstCard.locator('[data-testid="project-title"]')).toBeVisible()
-    await expect(firstCard.locator('[data-testid="project-client"]')).toBeVisible()
-    await expect(firstCard.locator('[data-testid="project-category"]')).toBeVisible()
-  })
-
-  // AC2: Project Card Hover - tested visually, but we check overlay exists
-  test('project card has hover overlay element', async ({ page }) => {
-    const firstCard = page.getByTestId('project-card').first()
-    const overlay = firstCard.locator('[data-testid="project-overlay"]')
-    await expect(overlay).toBeAttached()
-  })
-
-  test('project card overlay contains View Case Study text', async ({ page }) => {
-    const firstCard = page.getByTestId('project-card').first()
-    await expect(firstCard.getByText('View Case Study')).toBeAttached()
+    await expect(firstCard.locator('[data-testid="bento-card-image"]')).toBeVisible()
+    await expect(firstCard.locator('[data-testid="bento-card-title"]')).toBeVisible()
+    await expect(firstCard.locator('[data-testid="bento-card-category"]')).toBeVisible()
+    await expect(firstCard.locator('[data-testid="bento-card-metric"]')).toBeVisible()
   })
 
   // AC3: Project Navigation
   test('project cards are clickable links to case study pages', async ({ page }) => {
-    // The project-card itself is the link element
-    const firstCard = page.getByTestId('project-card').first()
+    const firstCard = page.getByTestId('bento-project-card').first()
     await expect(firstCard).toBeVisible()
 
-    // Verify it's a link with the correct href pattern
     const href = await firstCard.getAttribute('href')
     expect(href).toMatch(/^\/portfolio\//)
   })
 
   // Accessibility
   test('page is accessible with proper landmarks', async ({ page }) => {
-    // Check main landmark
     const main = page.locator('#main-content')
     await expect(main).toBeVisible()
 
-    // Check hero section has aria-labelledby
     const heroSection = page.locator('section[aria-labelledby="portfolio-hero-title"]')
     await expect(heroSection).toBeVisible()
 
-    // Check portfolio grid section has aria-labelledby
-    const gridSection = page.locator('section[aria-labelledby="portfolio-grid-title"]')
+    const gridSection = page.locator('section[aria-labelledby="bento-portfolio-grid-title"]')
     await expect(gridSection).toBeVisible()
   })
 
@@ -102,29 +85,25 @@ test.describe('Story 4-1: Portfolio Grid Page', () => {
 
     await expect(page.locator('#portfolio-hero-title')).toBeVisible()
     await expect(page.getByTestId('portfolio-filters')).toBeVisible()
-    await expect(page.getByTestId('portfolio-grid')).toBeVisible()
+    await expect(page.getByTestId('bento-portfolio-grid')).toBeVisible()
   })
 
   test('grid shows 1 column on mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 })
 
-    const grid = page.getByTestId('portfolio-grid')
+    const grid = page.getByTestId('bento-portfolio-grid')
     await expect(grid).toBeVisible()
-
-    // Grid should have single column class on mobile
     await expect(grid).toHaveClass(/grid-cols-1/)
   })
 })
 
 test.describe('Story 4-2: Portfolio Filtering', () => {
-  // AC1: Filter Functionality
   test('clicking a filter tab updates URL with category param', async ({ page }) => {
     await page.goto('/portfolio')
 
     const mobileFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Mobile' })
     await mobileFilter.click()
 
-    // URL should update with category param
     await expect(page).toHaveURL(/\/portfolio\?category=mobile/i)
   })
 
@@ -134,10 +113,8 @@ test.describe('Story 4-2: Portfolio Filtering', () => {
     const webFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Web' })
     await webFilter.click()
 
-    // Web filter should now be active
     await expect(webFilter).toHaveAttribute('aria-pressed', 'true')
 
-    // All filter should no longer be active
     const allFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'All' })
     await expect(allFilter).toHaveAttribute('aria-pressed', 'false')
   })
@@ -145,69 +122,53 @@ test.describe('Story 4-2: Portfolio Filtering', () => {
   test('filtering shows only projects of that category', async ({ page }) => {
     await page.goto('/portfolio')
 
-    // Get initial count of all projects
-    const allCards = page.getByTestId('project-card')
+    const allCards = page.getByTestId('bento-project-card')
     await expect(allCards.first()).toBeVisible()
     const initialCards = await allCards.count()
     expect(initialCards).toBeGreaterThan(0)
 
-    // Filter to Platform (which has 2 projects - less than total of 14)
+    // Filter to Platform (fewer projects than the total).
     const platformFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Platform' })
     await platformFilter.click()
 
-    // Wait for URL to update (confirms filter was applied)
     await expect(page).toHaveURL(/category=platform/i)
 
-    // Wait for the animation exit to complete and non-matching cards to be removed
     await page.waitForFunction(() => {
-      const cards = document.querySelectorAll('[data-testid="project-card"]')
-      // All visible cards should have Platform category
-      return cards.length > 0 && Array.from(cards).every(card => {
-        const badge = card.querySelector('[data-testid="project-category"]')
+      const cards = document.querySelectorAll('[data-testid="bento-project-card"]')
+      return cards.length > 0 && Array.from(cards).every((card) => {
+        const badge = card.querySelector('[data-testid="bento-card-category"]')
         return badge && badge.textContent?.toLowerCase().includes('platform')
       })
     }, { timeout: 5000 })
 
-    const platformCards = page.getByTestId('project-card')
+    const platformCards = page.getByTestId('bento-project-card')
     const cardCount = await platformCards.count()
 
-    // Filtered count should be less than total (Platform has 2 projects)
     expect(cardCount).toBeGreaterThan(0)
     expect(cardCount).toBeLessThan(initialCards)
 
-    // Verify all visible cards have Platform category
     for (let i = 0; i < cardCount; i++) {
-      const categoryBadge = platformCards.nth(i).getByTestId('project-category')
+      const categoryBadge = platformCards.nth(i).getByTestId('bento-card-category')
       await expect(categoryBadge).toHaveText(/platform/i)
     }
   })
 
-  // AC2: All Filter
   test('clicking All filter shows all projects and clears URL param', async ({ page }) => {
-    // Start with a filtered URL
     await page.goto('/portfolio?category=web')
 
-    // Click All filter
     const allFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'All' })
     await allFilter.click()
 
-    // URL should not have category param
     await expect(page).toHaveURL('/portfolio')
-
-    // All filter should be active
     await expect(allFilter).toHaveAttribute('aria-pressed', 'true')
   })
 
-  // AC3: URL State
   test('direct URL with category param pre-applies filter', async ({ page }) => {
-    // Navigate directly to filtered URL
     await page.goto('/portfolio?category=platform')
 
-    // Platform filter should be active
     const platformFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Platform' })
     await expect(platformFilter).toHaveAttribute('aria-pressed', 'true')
 
-    // All filter should NOT be active
     const allFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'All' })
     await expect(allFilter).toHaveAttribute('aria-pressed', 'false')
   })
@@ -215,16 +176,14 @@ test.describe('Story 4-2: Portfolio Filtering', () => {
   test('direct URL with category shows only that category projects', async ({ page }) => {
     await page.goto('/portfolio?category=e-commerce')
 
-    // Wait for page to load filtered results
-    const cards = page.getByTestId('project-card')
+    const cards = page.getByTestId('bento-project-card')
     await expect(cards.first()).toBeVisible()
 
     const cardCount = await cards.count()
     expect(cardCount).toBeGreaterThan(0)
 
-    // All visible cards should have E-Commerce category
     for (let i = 0; i < cardCount; i++) {
-      const categoryBadge = cards.nth(i).getByTestId('project-category')
+      const categoryBadge = cards.nth(i).getByTestId('bento-card-category')
       await expect(categoryBadge).toHaveText(/e-commerce/i)
     }
   })
@@ -232,17 +191,77 @@ test.describe('Story 4-2: Portfolio Filtering', () => {
   test('filter animation occurs on category change', async ({ page }) => {
     await page.goto('/portfolio')
 
-    // Click a filter and verify grid animates
     const webFilter = page.getByTestId('portfolio-filters').getByRole('button', { name: 'Web' })
     await webFilter.click()
 
-    // Grid should still be visible after animation
-    const grid = page.getByTestId('portfolio-grid')
+    const grid = page.getByTestId('bento-portfolio-grid')
     await expect(grid).toBeVisible()
 
-    // Cards should be visible after animation completes
     await page.waitForTimeout(500)
-    const cards = page.getByTestId('project-card')
+    const cards = page.getByTestId('bento-project-card')
     await expect(cards.first()).toBeVisible()
+  })
+})
+
+test.describe('Task 15: Case-study attribution + portfolio metrics', () => {
+  test('every card leads with GrabToGo, and it carries an attributed metric', async ({ page }) => {
+    await page.goto('/portfolio')
+    const firstCard = page.getByTestId('bento-project-card').first()
+    await expect(firstCard).toContainText('GrabToGo')
+    await expect(firstCard.getByTestId('bento-card-metric')).toContainText('GrabToGo')
+  })
+
+  test('every card whose metric reads as a +N% figure names a known client', async ({ page }) => {
+    await page.goto('/portfolio')
+    const cards = page.getByTestId('bento-project-card')
+    const count = await cards.count()
+    expect(count).toBeGreaterThan(0)
+
+    for (let i = 0; i < count; i++) {
+      const text = await cards.nth(i).innerText()
+      if (/\+\d+%/.test(text)) {
+        expect(text).toMatch(KNOWN_CLIENT_ROSTER)
+      }
+    }
+  })
+
+  test('Ziera Inc case study reads +127% revenue, attributed', async ({ page }) => {
+    await page.goto('/portfolio')
+    const zieraCard = page.getByTestId('bento-project-card').filter({ hasText: 'Ziera' })
+    await expect(zieraCard).toContainText(/\+127%/)
+    await expect(zieraCard).toContainText('Ziera Inc')
+  })
+
+  test('UAE filter tab appears (data-driven) and filters to UAE-located projects', async ({ page }) => {
+    await page.goto('/portfolio')
+
+    const filters = page.getByTestId('portfolio-filters')
+    const uaeFilter = filters.getByRole('button', { name: /^UAE$/i })
+    await expect(uaeFilter).toBeVisible()
+
+    await uaeFilter.click()
+    await expect(page).toHaveURL(/category=uae/i)
+
+    // Wait for the FLIP exit animation to finish so only UAE cards remain in the DOM.
+    await page.waitForFunction(() => {
+      const cards = document.querySelectorAll('[data-testid="bento-project-card"]')
+      return cards.length > 0 && Array.from(cards).every((card) =>
+        card.querySelector('[data-testid="bento-card-location"]')?.textContent?.toLowerCase().includes('uae')
+      )
+    }, { timeout: 5000 })
+
+    const cards = page.getByTestId('bento-project-card')
+    const cardCount = await cards.count()
+    expect(cardCount).toBeGreaterThan(0)
+
+    for (let i = 0; i < cardCount; i++) {
+      await expect(cards.nth(i).getByTestId('bento-card-location')).toContainText(/UAE/i)
+    }
+  })
+
+  test('server-rendered /portfolio HTML includes named case studies (indexable)', async ({ request }) => {
+    const response = await request.get('/portfolio')
+    const html = await response.text()
+    expect(html).toMatch(/GrabToGo|Ziera|CoolTech/)
   })
 })

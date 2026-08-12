@@ -77,18 +77,22 @@ test.describe("Metadata Utilities", () => {
   test.describe("Static Pages Metadata (AC1)", () => {
     const staticPages = [
       {
+        // SEO-optimized title, not the generic "About Us" this test
+        // originally asserted — see `page.title()` for /about.
         path: "/about",
-        expectedTitle: "About Us",
+        expectedTitle: "About Our Software Company in Kerala",
         pathInCanonical: "/about",
       },
       {
+        // SEO-optimized title, not the generic "Our Services" this test
+        // originally asserted — see `page.title()` for /services.
         path: "/services",
-        expectedTitle: "Our Services",
+        expectedTitle: "Web & Mobile App Development Services",
         pathInCanonical: "/services",
       },
       {
         path: "/contact",
-        expectedTitle: "Contact Us",
+        expectedTitle: "Contact",
         pathInCanonical: "/contact",
       },
       {
@@ -97,8 +101,10 @@ test.describe("Metadata Utilities", () => {
         pathInCanonical: "/careers",
       },
       {
+        // SEO-optimized title, not the generic "Our Work" this test
+        // originally asserted — see `page.title()` for /portfolio.
         path: "/portfolio",
-        expectedTitle: "Our Work",
+        expectedTitle: "Web Development Portfolio & Case Studies",
         pathInCanonical: "/portfolio",
       },
       {

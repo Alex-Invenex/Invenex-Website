@@ -4,36 +4,51 @@ import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
-import { VISUAL_CARDS } from "@/components/ui/service-visual-cards";
+import {
+  WebDevCard,
+  MobileAppCard,
+  PlatformCard,
+  ECommerceCard,
+} from "@/components/ui/service-visual-cards";
+import { Price } from "@/components/pricing/price";
+import { RETAINERS, STRATEGY, type PriceSet } from "@/lib/pricing";
 
 /* ─── Service data ─────────────────────────────────────── */
+/* Order: Platform Development leads, then Web / Mobile / E-Commerce as the
+   four full pinned-scroll panels. Social Media Marketing and Digital
+   Strategy are genuinely demoted out of the panel track into a compact
+   "Ongoing" strip rendered below it (see `OngoingStrip`), on every
+   breakpoint — not just listed last at equal visual weight. */
 const SERVICES = [
   {
     number: "01",
+    title: "Platform Development",
+    tagline: "Enterprise SaaS",
+    description:
+      "Scalable SaaS platforms and enterprise systems built on cloud infrastructure. Reliable, secure, and engineered for growth.",
+    tags: ["Next.js", "Node.js", "PostgreSQL"],
+    href: "/services/platform-development",
+    Card: PlatformCard,
+  },
+  {
+    number: "02",
     title: "Web Development",
     tagline: "Next.js + React",
     description:
       "Custom websites and web applications built with Next.js, React, and TypeScript. Blazing-fast performance, SEO-optimized, and designed to convert.",
     tags: ["Next.js", "React", "TypeScript"],
     href: "/services/web-development",
+    Card: WebDevCard,
   },
   {
-    number: "02",
+    number: "03",
     title: "Mobile Apps",
     tagline: "iOS & Android",
     description:
       "Native and cross-platform mobile applications for iOS and Android. Smooth, responsive interfaces that users love to interact with.",
     tags: ["React Native", "iOS", "Android"],
     href: "/services/mobile-development",
-  },
-  {
-    number: "03",
-    title: "Platform Development",
-    tagline: "Enterprise SaaS",
-    description:
-      "Scalable SaaS platforms and enterprise systems built on cloud infrastructure. Reliable, secure, and engineered for growth.",
-    tags: ["AWS", "Node.js", "PostgreSQL"],
-    href: "/services/platform-development",
+    Card: MobileAppCard,
   },
   {
     number: "04",
@@ -43,24 +58,35 @@ const SERVICES = [
       "End-to-end online stores and marketplaces. From product catalogs to checkout flows, we build commerce experiences that drive revenue.",
     tags: ["Shopify", "WooCommerce", "Stripe"],
     href: "/services/ecommerce",
+    Card: ECommerceCard,
   },
+];
+
+interface OngoingPrice {
+  name: string;
+  price: PriceSet;
+  suffix?: string;
+}
+
+interface OngoingService {
+  title: string;
+  href: string;
+  prices: OngoingPrice[];
+}
+
+const ONGOING_SERVICES: OngoingService[] = [
   {
-    number: "05",
     title: "Social Media Marketing",
-    tagline: "Growth & Engagement",
-    description:
-      "Data-driven social media strategies that grow your audience and engagement. Content creation, ad campaigns, and performance analytics.",
-    tags: ["Instagram", "Meta Ads", "Analytics"],
     href: "/services/social-media",
+    prices: RETAINERS.map((r) => ({ name: r.name, price: r.price, suffix: "/mo" })),
   },
   {
-    number: "06",
     title: "Digital Strategy",
-    tagline: "Growth & Consulting",
-    description:
-      "Comprehensive digital roadmaps that align technology with business goals. Market research, competitive analysis, and growth frameworks.",
-    tags: ["Consulting", "Analytics", "Growth"],
     href: "/services/digital-strategy",
+    prices: [
+      { name: STRATEGY.sprint.name, price: STRATEGY.sprint.price },
+      { name: STRATEGY.advisory.name, price: STRATEGY.advisory.price, suffix: "/mo" },
+    ],
   },
 ];
 
@@ -131,12 +157,16 @@ export function ServicesPreview() {
             if (!header || panels.length === 0) return;
 
             const FADE = 0.35;
+            // Scroll distance scales with panel count (1.25vh/panel — the same
+            // total distance the old 6-panel track used: 6 * (5/6)vh = 5vh),
+            // so trimming panels doesn't change the section's overall length.
+            const scrollDistance = panels.length * 1.25 * vh;
 
             const tl = gsap.timeline({
               scrollTrigger: {
                 trigger: section,
                 start: "top top",
-                end: `+=${5 * vh}`,
+                end: `+=${scrollDistance}`,
                 pin: true,
                 scrub: 0.8,
                 invalidateOnRefresh: true,
@@ -183,7 +213,7 @@ export function ServicesPreview() {
                   scrollTrigger: {
                     trigger: section,
                     start: "top top",
-                    end: `+=${5 * vh}`,
+                    end: `+=${scrollDistance}`,
                     scrub: 0.8,
                   },
                 }
@@ -310,8 +340,8 @@ export function ServicesPreview() {
 
         {/* Service panels — stacked in same position */}
         <div className="flex-1 relative">
-          {SERVICES.map((svc, i) => {
-            const Card = VISUAL_CARDS[i];
+          {SERVICES.map((svc) => {
+            const Card = svc.Card;
             return (
               <div
                 key={svc.number}
@@ -529,6 +559,58 @@ export function ServicesPreview() {
           </div>
         </div>
       </div>
+
+      {/* ═══ ONGOING STRIP — demoted, shown on every breakpoint ══ */}
+      <OngoingStrip />
     </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Ongoing strip — Social Media Marketing + Digital Strategy,
+   demoted out of the main panel track into compact cards.
+   ═══════════════════════════════════════════════════════════ */
+function OngoingStrip() {
+  return (
+    <div
+      data-svc-ongoing
+      className="relative z-10 py-16 md:py-20 border-t border-surface-border"
+      data-testid="services-preview-ongoing"
+    >
+      <div className="container mx-auto px-6 lg:px-16 xl:px-20">
+        <p className="text-xs text-foreground-muted/60 tracking-[0.25em] uppercase mb-6 font-mono">
+          Ongoing: Social Media Marketing &middot; Digital Strategy
+        </p>
+        <div className="grid sm:grid-cols-2 gap-4 max-w-3xl">
+          {ONGOING_SERVICES.map((svc) => (
+            <Link
+              key={svc.title}
+              href={svc.href}
+              data-svc-ongoing-item
+              data-service-title={svc.title}
+              className="group flex items-center justify-between gap-4 rounded-xl border border-surface-border p-4 hover:border-coral-500/30 transition-all duration-300"
+              style={{ background: "var(--color-surface-overlay)" }}
+            >
+              <div className="min-w-0">
+                <h4 className="text-sm font-semibold text-foreground group-hover:text-coral-400 transition-colors duration-300 mb-1.5">
+                  {svc.title}
+                </h4>
+                <div className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs">
+                  {svc.prices.map((p) => (
+                    <span key={p.name} className="inline-flex items-baseline gap-1">
+                      <span className="text-foreground-muted/60">{p.name}</span>
+                      <span className="text-coral-500 font-semibold">
+                        <Price amount={p.price} suffix={p.suffix} />
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-foreground-muted/40 group-hover:text-coral-500 group-hover:translate-x-1 transition-all duration-300 shrink-0" />
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

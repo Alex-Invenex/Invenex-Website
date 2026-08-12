@@ -117,7 +117,11 @@ export function MobileAppCard() {
   );
 }
 
-/* ─── Card 3: Dashboard with chart + uptime (static) ─── */
+/* ─── Card 3: Platform dashboard mockup (static) ──────
+   Decoration only. No numbers: every figure that used to sit here
+   ("99.9% Uptime", "12ms latency", "0 errors") was invented for the mockup,
+   and an invented number beside a real one makes the real one look invented
+   too. Real feature words carry the same visual weight and claim nothing. */
 export function PlatformCard() {
   return (
     <div
@@ -129,7 +133,7 @@ export function PlatformCard() {
     >
       <div className="flex items-center justify-between mb-4">
         <span className="text-[10px] uppercase tracking-widest text-foreground-muted/50 font-mono">
-          System Health
+          CaterFlow
         </span>
         <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[9px] text-emerald-400 font-mono">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -149,17 +153,20 @@ export function PlatformCard() {
           />
         ))}
       </div>
-      <div className="flex items-baseline gap-1">
-        <span className="text-xl font-bold text-foreground">99.9%</span>
-        <span className="text-[11px] text-foreground-muted/60">Uptime</span>
+      <div className="flex items-baseline gap-2">
+        <span className="text-lg font-semibold text-foreground">
+          Order dashboard
+        </span>
       </div>
       <div className="flex gap-2 mt-3">
-        <span className="text-[9px] px-2 py-0.5 rounded bg-white/[0.04] text-foreground-muted/50 font-mono">
-          12ms latency
-        </span>
-        <span className="text-[9px] px-2 py-0.5 rounded bg-white/[0.04] text-foreground-muted/50 font-mono">
-          0 errors
-        </span>
+        {["Orders", "Inventory", "Reports"].map((label) => (
+          <span
+            key={label}
+            className="text-[9px] px-2 py-0.5 rounded bg-white/[0.04] text-foreground-muted/50 font-mono"
+          >
+            {label}
+          </span>
+        ))}
       </div>
     </div>
   );
@@ -184,13 +191,14 @@ export function ECommerceCard() {
           <span className="text-[8px] text-foreground-muted/30 font-mono">store.yourbrand.com</span>
         </div>
       </div>
-      {/* Product grid */}
+      {/* Product grid — placeholder tiles, no invented prices. A mockup
+          price reads as a real price, and there is no real one to show. */}
       <div className="p-3 grid grid-cols-2 gap-2">
         {[
-          { color: "rgba(255,107,53,0.08)", price: "$49" },
-          { color: "rgba(139,92,246,0.08)", price: "$89" },
-          { color: "rgba(59,130,246,0.08)", price: "$35" },
-          { color: "rgba(16,185,129,0.08)", price: "$76" },
+          { color: "rgba(255,107,53,0.08)" },
+          { color: "rgba(139,92,246,0.08)" },
+          { color: "rgba(59,130,246,0.08)" },
+          { color: "rgba(16,185,129,0.08)" },
         ].map((item, i) => (
           <div key={i} className="rounded-lg border border-white/[0.06] p-2" style={{ background: "rgba(255,255,255,0.02)" }}>
             <div
@@ -198,7 +206,7 @@ export function ECommerceCard() {
               style={{ aspectRatio: "1", background: item.color }}
             />
             <div className="h-1.5 w-3/4 rounded bg-white/[0.08] mb-1" />
-            <span className="text-[9px] font-mono text-coral-400">{item.price}</span>
+            <span className="text-[9px] font-mono text-foreground-muted/40">In stock</span>
           </div>
         ))}
       </div>
@@ -208,12 +216,13 @@ export function ECommerceCard() {
           <div
             className="w-4 h-4 rounded flex items-center justify-center"
             style={{ background: "rgba(255,107,53,0.15)", border: "1px solid rgba(255,107,53,0.25)" }}
+            aria-hidden="true"
           >
-            <span className="text-[7px] text-coral-400 font-bold">3</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-coral-400" />
           </div>
-          <span className="text-[9px] text-foreground-muted/60 font-mono">3 items</span>
+          <span className="text-[9px] text-foreground-muted/60 font-mono">Cart</span>
         </div>
-        <span className="text-[10px] font-mono font-semibold text-coral-400">$249.99</span>
+        <span className="text-[10px] font-mono font-semibold text-coral-400">Checkout</span>
       </div>
     </div>
   );
@@ -221,10 +230,13 @@ export function ECommerceCard() {
 
 /* ─── Card 5: Social media engagement dashboard ──────── */
 export function SocialMediaCard() {
+  // `width` is layout only — a mockup bar, never labelled with a figure.
+  // The follower count and engagement percentages that used to sit here were
+  // invented, so they are gone rather than dressed up.
   const platforms = [
-    { name: "Instagram", value: 85, color: "#E4405F" },
-    { name: "LinkedIn", value: 62, color: "#0077B5" },
-    { name: "Twitter", value: 48, color: "#1DA1F2" },
+    { name: "Instagram", width: 85, color: "#E4405F" },
+    { name: "LinkedIn", width: 62, color: "#0077B5" },
+    { name: "Twitter", width: 48, color: "#1DA1F2" },
   ];
 
   return (
@@ -237,35 +249,33 @@ export function SocialMediaCard() {
     >
       <div className="flex items-center justify-between mb-4">
         <span className="text-[10px] uppercase tracking-widest text-foreground-muted/50 font-mono">
-          Engagement
+          Channels
         </span>
-        <span className="text-[9px] text-emerald-400 font-mono">+42%</span>
+        <span className="text-[9px] text-foreground-muted/40 font-mono">Monthly</span>
       </div>
-      {/* Engagement bars */}
+      {/* Channel bars — unlabelled by design */}
       <div className="space-y-3 mb-4">
-        {platforms.map(({ name, value, color }) => (
+        {platforms.map(({ name, width, color }) => (
           <div key={name}>
             <div className="flex items-center justify-between mb-1">
               <span className="text-[9px] text-foreground-muted/60 font-mono">{name}</span>
-              <span className="text-[9px] text-foreground-muted/40 font-mono">{value}%</span>
             </div>
             <div className="h-1.5 rounded-full" style={{ background: "rgba(255,255,255,0.04)" }}>
               <div
                 className="h-full rounded-full"
-                style={{ width: `${value}%`, background: color, opacity: 0.7 }}
+                style={{ width: `${width}%`, background: color, opacity: 0.7 }}
               />
             </div>
           </div>
         ))}
       </div>
-      {/* Follower count */}
+      {/* What actually ships each month */}
       <div className="flex items-baseline gap-1 mb-3">
-        <span className="text-xl font-bold text-foreground">47.2K</span>
-        <span className="text-[11px] text-foreground-muted/60">Followers</span>
+        <span className="text-lg font-semibold text-foreground">Content calendar</span>
       </div>
-      {/* Platform chips */}
+      {/* Content-type chips */}
       <div className="flex gap-2">
-        {["Meta Ads", "Reels", "Stories"].map((tag) => (
+        {["Reels", "Posts", "Stories"].map((tag) => (
           <span
             key={tag}
             className="text-[9px] px-2 py-0.5 rounded text-foreground-muted/50 font-mono"
@@ -291,9 +301,8 @@ export function StrategyCard() {
     >
       <div className="flex items-center justify-between mb-4">
         <span className="text-[10px] uppercase tracking-widest text-foreground-muted/50 font-mono">
-          Revenue Growth
+          Roadmap
         </span>
-        <span className="text-[9px] text-emerald-400 font-mono">+127%</span>
       </div>
       <svg
         viewBox="0 0 140 50"
@@ -324,9 +333,21 @@ export function StrategyCard() {
         <circle cx="140" cy="2" r="3" fill="var(--color-coral-500)" />
         <circle cx="140" cy="2" r="5" fill="var(--color-coral-500)" opacity="0.3" />
       </svg>
-      <div className="flex items-baseline gap-1">
-        <span className="text-xl font-bold text-foreground">3x</span>
-        <span className="text-[11px] text-foreground-muted/60">Avg. Growth</span>
+      {/* The trend line above is deliberately unlabelled: it shows direction,
+          not a measured result. "+127%" belongs on Ziera's case study, where
+          it has a client's name attached to it. */}
+      <div className="flex items-baseline gap-1 mb-3">
+        <span className="text-lg font-semibold text-foreground">Quarterly plan</span>
+      </div>
+      <div className="flex gap-2">
+        {["Research", "Positioning", "Roadmap"].map((label) => (
+          <span
+            key={label}
+            className="text-[9px] px-2 py-0.5 rounded bg-white/[0.04] text-foreground-muted/50 font-mono"
+          >
+            {label}
+          </span>
+        ))}
       </div>
     </div>
   );

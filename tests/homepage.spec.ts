@@ -16,8 +16,12 @@ test.describe('Story 3-1: Homepage', () => {
     });
 
     test('should have CTA buttons', async ({ page }) => {
-      const ctaButton = page.getByRole('link', { name: /get.*quote|contact|start/i }).first();
-      await expect(ctaButton).toBeVisible();
+      // The hero now leads with the published price, not a project pitch:
+      // "See Pricing" → /pricing, "Book a 15-min fit call" → /contact.
+      await expect(page.getByTestId('hero-cta-primary')).toBeVisible();
+      await expect(page.getByTestId('hero-cta-primary')).toContainText(/see pricing/i);
+      await expect(page.getByTestId('hero-cta-secondary')).toBeVisible();
+      await expect(page.getByTestId('hero-cta-secondary')).toContainText(/book a 15-min fit call/i);
     });
   });
 
@@ -58,23 +62,25 @@ test.describe('Story 3-1: Homepage', () => {
     });
   });
 
-  test.describe('WordPress Plugins Section', () => {
-    test('should display WordPress plugins section', async ({ page }) => {
-      const wpHeading = page.getByRole('heading', { name: /wordpress|plugins/i }).first();
-      await expect(wpHeading).toBeVisible();
-    });
-  });
+  // NOTE: `wordpress-plugins.tsx` exists in the codebase but is not imported
+  // by any route (checked `src/app/(site)/page.tsx` and
+  // `src/components/sections/below-fold-sections.tsx`) — it is dead code, not
+  // a homepage section. There is nothing on the homepage to assert against,
+  // so the old "WordPress Plugins Section" test is removed rather than
+  // retargeted.
 
-  test.describe('Why Choose Us Section', () => {
-    test('should display why choose us section', async ({ page }) => {
-      const whyHeading = page.getByRole('heading', { name: /why.*choose|why.*us/i }).first();
-      await expect(whyHeading).toBeVisible();
+  test.describe('How We Work Section', () => {
+    test('should display the how-we-work (process) section', async ({ page }) => {
+      // Current copy: eyebrow "Our Process", h2 "How We Work" (was "Why Choose Us").
+      const howHeading = page.getByRole('heading', { name: /how.*work/i }).first();
+      await expect(howHeading).toBeVisible();
     });
   });
 
   test.describe('Instagram Reels Section', () => {
     test('should display Instagram reels section', async ({ page }) => {
-      const instagramHeading = page.getByRole('heading', { name: /creative.*journey|instagram/i }).first();
+      // Current copy: h2 "WHAT'S HAPPENING" (was "Creative Journey").
+      const instagramHeading = page.getByRole('heading', { name: /what.*happening|instagram/i }).first();
       await expect(instagramHeading).toBeVisible();
     });
 
@@ -100,7 +106,8 @@ test.describe('Story 3-1: Homepage', () => {
 
   test.describe('CTA Section', () => {
     test('should display final CTA section', async ({ page }) => {
-      const ctaHeading = page.getByRole('heading', { name: /ready|start|contact|get.*started/i }).first();
+      // Current copy: h2 "LET'S BUILD SOMETHING EPIC." (was "Ready to start?" style copy).
+      const ctaHeading = page.getByRole('heading', { name: /let.?s build|ready|start|contact|get.*started/i }).first();
       await expect(ctaHeading).toBeVisible();
     });
   });

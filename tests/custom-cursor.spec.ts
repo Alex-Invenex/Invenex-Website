@@ -114,7 +114,7 @@ test.describe("Interactive Element Hover (AC2)", () => {
     await page.goto("/");
 
     // Find a button and click it
-    const ctaButton = page.locator('a:has-text("View Our Work")').first();
+    const ctaButton = page.locator('a:has-text("Book a 15-min fit call")').first();
     const buttonCount = await ctaButton.count();
 
     if (buttonCount > 0) {
@@ -394,7 +394,7 @@ test.describe("Reduced Motion Support", () => {
     await page.goto("/");
 
     // Should still be able to click buttons
-    const button = page.locator('a:has-text("View Our Work")').first();
+    const button = page.locator('a:has-text("Book a 15-min fit call")').first();
     const buttonCount = await button.count();
 
     if (buttonCount > 0) {

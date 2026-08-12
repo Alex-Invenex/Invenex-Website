@@ -5,43 +5,42 @@ import Image from "next/image";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { gsap, useGSAP, registerScrollTrigger, shouldSkipAnimations } from "@/lib/gsap";
+import { getSimpleProjects, type SimpleProject } from "@/lib/projects";
 
-const featuredProjects = [
-  {
-    title: "CoolTech International",
-    categories: ["Web", "Corporate"],
-    image: "/portfolio/cooltech-international-mockup.webp",
-    href: "/portfolio/cooltech-international",
-  },
-  {
-    title: "Ginger Designs",
-    categories: ["Web", "Creative"],
-    image: "/portfolio/ginger-designs-mockup.webp",
-    href: "/portfolio/ginger-designs",
-  },
-  {
-    title: "GrabToGo",
-    categories: ["Platform", "Deals"],
-    image: "/portfolio/grabtogo-mockup.webp",
-    href: "/portfolio/grabtogo",
-  },
-  {
-    title: "Ziera Inc",
-    categories: ["E-Commerce", "LED"],
-    image: "/portfolio/ziera-mockup.webp",
-    href: "/portfolio/ziera-inc",
-  },
-];
+/**
+ * The four projects the homepage leads with, in display order.
+ *
+ * GrabToGo is first on purpose — a two-sided marketplace with payments and
+ * geolocation is the most impressive thing we've shipped, and it used to sit
+ * third. The copy, images and metrics all come from `projects.ts` so the
+ * homepage can never drift from `/portfolio` or the case studies.
+ */
+const FEATURED_SLUGS = [
+  "grabtogo",
+  "cooltech-international",
+  "ginger-designs",
+  "ziera-inc",
+] as const;
+
+const allProjects = getSimpleProjects();
+
+const featuredProjects: SimpleProject[] = FEATURED_SLUGS.map((slug) => {
+  const project = allProjects.find((p) => p.slug === slug);
+  if (!project) throw new Error(`Unknown featured project slug: ${slug}`);
+  return project;
+});
 
 function ProjectCard({
   project,
   index,
 }: {
-  project: (typeof featuredProjects)[0];
+  project: SimpleProject;
   index: number;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const isMockup = project.image.includes("-mockup");
+  // Category first, then the location — but only where it's confirmed true.
+  const meta = [project.category, project.location].filter(Boolean) as string[];
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (shouldSkipAnimations() || !cardRef.current) return;
@@ -71,7 +70,7 @@ function ProjectCard({
 
   return (
     <div data-portfolio-card data-animate>
-      <Link href={project.href} className="group block">
+      <Link href={`/portfolio/${project.slug}`} className="group block">
         <div
           ref={cardRef}
           className="will-change-transform"
@@ -81,7 +80,7 @@ function ProjectCard({
           <div className={`pf-card-media${isMockup ? " pf-card-media--mockup" : ""}`} data-portfolio-img>
             <Image
               src={project.image}
-              alt={`${project.title} — ${project.categories.join(", ")}`}
+              alt={`${project.title} — ${meta.join(", ")}`}
               fill
               priority={index === 0}
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -93,13 +92,28 @@ function ProjectCard({
               {project.title}
             </h3>
             <div className="flex shrink-0 flex-wrap items-center gap-3">
-              {project.categories.map((cat) => (
-                <span key={cat} className="font-mono text-xs tracking-[0.18em] uppercase text-foreground-subtle">
-                  {cat}
+              {meta.map((item) => (
+                <span key={item} className="font-mono text-xs tracking-[0.18em] uppercase text-foreground-subtle">
+                  {item}
                 </span>
               ))}
             </div>
           </div>
+          {/* The result, with the client's name on it. An unattributed number
+              reads as decoration; an attributed one reads as evidence. */}
+          <p className="mt-2 text-sm text-foreground-muted">
+            {project.client}
+            {project.headlineMetric && (
+              <>
+                {" "}
+                —{" "}
+                <span className="font-medium text-coral-400">
+                  {project.headlineMetric.metric}
+                </span>{" "}
+                {project.headlineMetric.label.toLowerCase()}
+              </>
+            )}
+          </p>
         </div>
       </Link>
     </div>

@@ -46,6 +46,13 @@ interface SubpageCTAProps {
   subtitle?: string
   primaryCTA?: { label: string; href: string }
   secondaryCTA?: { label: string; href: string }
+  /**
+   * Id used for the section's heading and its aria-labelledby reference.
+   * Override this when a page needs a page-scoped id (e.g. to avoid
+   * duplicate ids when the component appears more than once, or to match
+   * a page's own aria-labelledby test expectations).
+   */
+  id?: string
 }
 
 /**
@@ -58,8 +65,9 @@ export function SubpageCTA({
   headline = "LET'S BUILD",
   highlightedText = 'SOMETHING EPIC',
   subtitle = "Ready to stand out? Let's create something that makes an impact.",
-  primaryCTA = { label: 'Start a Project', href: '/contact' },
-  secondaryCTA = { label: 'View Our Work', href: '/portfolio' },
+  primaryCTA = { label: 'See Pricing', href: '/pricing' },
+  secondaryCTA = { label: 'Book a 15-min fit call', href: '/contact' },
+  id = 'subpage-cta-title',
 }: SubpageCTAProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const spotlightRef = useRef<HTMLDivElement>(null)
@@ -159,7 +167,7 @@ export function SubpageCTA({
     <section
       ref={sectionRef}
       className="py-20 md:py-32 lg:py-44 bg-background relative overflow-hidden"
-      aria-labelledby="subpage-cta-title"
+      aria-labelledby={id}
     >
       {/* Static coral gradient orb */}
       <div className="absolute inset-0 pointer-events-none">
@@ -212,7 +220,7 @@ export function SubpageCTA({
 
           {/* Character reveal headline */}
           <h2
-            id="subpage-cta-title"
+            id={id}
             className="leading-[0.9] text-center md:text-left mb-12"
             style={{
               fontSize: 'clamp(1.75rem, 7vw, 7rem)',

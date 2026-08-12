@@ -14,14 +14,12 @@ import { contactInfo } from '@/lib/constants';
 
 interface QuoteConfirmationProps {
   name: string;
-  projectType: string;
   budget: string;
   description: string;
 }
 
 export default function QuoteConfirmation({
   name,
-  projectType,
   budget,
   description,
 }: QuoteConfirmationProps) {
@@ -56,8 +54,8 @@ export default function QuoteConfirmation({
           {/* Main Content */}
           <Section style={styles.content}>
             <Text style={styles.paragraph}>
-              Our team is reviewing your project details and will get back to
-              you within <strong style={styles.strong}>24 hours</strong>.
+              Got it. You&apos;ll hear from a founder within{' '}
+              <strong style={styles.strong}>one working day</strong>.
             </Text>
 
             {/* Summary Card */}
@@ -67,17 +65,12 @@ export default function QuoteConfirmation({
               </Heading>
 
               <Section style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Project Type</Text>
-                <Text style={styles.summaryValue}>{projectType}</Text>
-              </Section>
-
-              <Section style={styles.summaryItem}>
                 <Text style={styles.summaryLabel}>Budget Range</Text>
                 <Text style={styles.summaryValue}>{budget}</Text>
               </Section>
 
               <Section style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Project Description</Text>
+                <Text style={styles.summaryLabel}>What You&apos;re Building</Text>
                 <Text style={styles.summaryDescription}>{description}</Text>
               </Section>
             </Section>

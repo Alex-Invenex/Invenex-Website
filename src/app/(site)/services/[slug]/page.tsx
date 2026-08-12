@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { ServiceDetailClient } from "./service-detail-client";
 import { getSiteUrl } from "@/lib/metadata";
 import { BreadcrumbSchema, ServiceSchema } from "@/components/seo";
+import { getCurrency } from "@/lib/get-currency";
+import { CurrencyProvider } from "@/components/providers/currency-provider";
 
 // Icon type for mapping
 type IconName =
@@ -245,10 +247,6 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return Object.keys(services).map((slug) => ({ slug }));
-}
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const service = services[slug as ServiceSlug];
@@ -283,6 +281,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+/**
+ * `/services/[slug]` is a DYNAMIC route, deliberately — the pricing section
+ * on every service detail page shows real prices via `<Price>`, which reads
+ * the visitor's currency from `getCurrency()`. `generateStaticParams` was
+ * removed: it prerendered these pages, but `getCurrency()` reads cookies and
+ * headers, which forces dynamic rendering anyway. `dynamicParams` stays at
+ * its default (true), so every slug below is still served; unknown slugs
+ * still resolve to `notFound()`.
+ */
 export default async function ServiceDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const service = services[slug as ServiceSlug];
@@ -290,6 +297,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   if (!service) {
     notFound();
   }
+
+  const currency = await getCurrency();
 
   return (
     <>
@@ -304,12 +313,14 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           { name: service.title, path: `/services/${slug}` },
         ]}
       />
-      <ServiceDetailClient
-        service={{
-          ...service,
-          slug,
-        }}
-      />
+      <CurrencyProvider initialCurrency={currency}>
+        <ServiceDetailClient
+          service={{
+            ...service,
+            slug,
+          }}
+        />
+      </CurrencyProvider>
     </>
   );
 }

@@ -292,11 +292,11 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               >
                 <Button asChild size="lg" className="w-full">
                   <Link
-                    href="/contact"
+                    href="/pricing"
                     onClick={handleLinkClick}
                     className="flex items-center justify-center gap-2"
                   >
-                    Get a Quote
+                    See Pricing
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>

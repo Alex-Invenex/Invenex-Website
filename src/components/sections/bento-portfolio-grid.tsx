@@ -20,6 +20,10 @@ const categories = [
   { value: "e-commerce", label: "E-Commerce" },
 ];
 
+function hasUAELocation(project: SimpleProject): boolean {
+  return !!project.location && project.location.toLowerCase().includes("uae");
+}
+
 // Check for reduced motion preference
 function usePrefersReducedMotion(): boolean {
   const [prefersReducedMotion, setPrefersReducedMotion] = React.useState(false);
@@ -38,12 +42,30 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
-  const activeFilter = categoryParam || "all";
   const prefersReduced = usePrefersReducedMotion();
   const sectionRef = React.useRef<HTMLElement>(null);
 
+  // Data-driven: only offer the UAE tab when at least one project actually carries a UAE location.
+  const showUAEFilter = useMemo(() => projects.some(hasUAELocation), [projects]);
+  const filterTabs = useMemo(
+    () => (showUAEFilter ? [...categories, { value: "uae", label: "UAE" }] : categories),
+    [showUAEFilter]
+  );
+
+  // An unrecognized `?category=` (typo'd, stale bookmark, or hand-edited URL)
+  // used to fall straight through to `.filter()`, which silently rendered an
+  // empty grid with no tab marked active — no error, no explanation, no way
+  // back to "All" short of a fresh navigation. Validate against the actual
+  // tab values and fall back to "all" so an unknown category degrades to the
+  // full, browsable grid instead of a dead end.
+  const activeFilter =
+    categoryParam && filterTabs.some((t) => t.value === categoryParam)
+      ? categoryParam
+      : "all";
+
   const filteredProjects = useMemo(() => {
     if (activeFilter === "all") return projects;
+    if (activeFilter === "uae") return projects.filter(hasUAELocation);
     return projects.filter(
       (p) => p.category.toLowerCase() === activeFilter.toLowerCase()
     );
@@ -121,7 +143,7 @@ function EditorialPortfolioGridContent({ projects }: BentoPortfolioGridProps) {
           aria-label="Filter projects by category"
           data-testid="portfolio-filters"
         >
-          {categories.map((cat) => (
+          {filterTabs.map((cat) => (
             <button
               key={cat.value}
               onClick={() => handleFilterChange(cat.value)}

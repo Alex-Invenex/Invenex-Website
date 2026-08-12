@@ -73,7 +73,7 @@ export function ProfileClient() {
         <div className="pf-hero-glow" aria-hidden />
         <div className="pf-hero-grid" aria-hidden />
         <div className="pf-wrap pf-hero-inner">
-          <p className="pf-eyebrow pf-reveal-up">Premium Web Development &amp; Digital Solutions</p>
+          <p className="pf-eyebrow pf-reveal-up">Web Development &amp; Digital Solutions</p>
           <h1 className="pf-display pf-reveal-up">
             We Craft
             <br />
@@ -81,11 +81,11 @@ export function ProfileClient() {
             <span className="pf-outline">Futures.</span>
           </h1>
           <p className="pf-hero-sub pf-reveal-up">
-            Premium web experiences, mobile apps &amp; platforms for businesses that demand excellence and innovation.
+            We build the systems businesses actually run on.
           </p>
           <div className="pf-hero-actions pf-reveal-up">
-            <a href="#pf-contact" className="pf-btn pf-btn-primary">
-              Start a Project <span className="pf-arrow">→</span>
+            <a href="/pricing" className="pf-btn pf-btn-primary">
+              See Pricing <span className="pf-arrow">→</span>
             </a>
             <a href="#pf-work" className="pf-btn pf-btn-ghost">
               View Our Work
@@ -104,7 +104,7 @@ export function ProfileClient() {
           <header className="pf-head pf-reveal-up">
             <span className="pf-eyebrow">01 — What we do</span>
             <h2 className="pf-display">Services engineered for growth</h2>
-            <p>Transform your vision into reality with our world-class team — across web, mobile, platforms and growth.</p>
+            <p>A senior product team building across web, mobile, platforms and growth.</p>
           </header>
 
           <div className="pf-services">
@@ -142,15 +142,11 @@ export function ProfileClient() {
               <div className="pf-stats">
                 <div className="pf-stat">
                   <span className="pf-stat-num">12K+</span>
-                  <span className="pf-stat-label">Orders Managed</span>
+                  <span className="pf-stat-label">Orders Processed</span>
                 </div>
                 <div className="pf-stat">
                   <span className="pf-stat-num">50+</span>
-                  <span className="pf-stat-label">Active Caterers</span>
-                </div>
-                <div className="pf-stat">
-                  <span className="pf-stat-num">99.9%</span>
-                  <span className="pf-stat-label">Uptime</span>
+                  <span className="pf-stat-label">Catering Businesses</span>
                 </div>
               </div>
             </div>
@@ -192,13 +188,13 @@ export function ProfileClient() {
           </header>
           <div className="pf-reveal-up">
             <p className="pf-lead">
-              Premium web development, mobile apps, and digital solutions. Transform your vision into reality with our world-class team.
+              Web development, mobile apps, and digital solutions — built by a senior product team.
             </p>
             <p>
-              We&apos;re a digital innovation agency building premium web experiences, mobile apps &amp; platforms for businesses that demand
-              excellence and innovation — from custom websites to scalable SaaS platforms and our own products.
+              We&apos;re a digital innovation agency building web experiences, mobile apps &amp; platforms
+              for businesses — from custom websites to scalable SaaS platforms and our own products.
             </p>
-            <p className="pf-made">Made within India · Based in Koratty, Thrissur, Kerala.</p>
+            <p className="pf-made">Built in Kerala. Working across India, the UAE and the UK.</p>
           </div>
         </div>
       </section>
@@ -228,7 +224,7 @@ export function ProfileClient() {
           </div>
 
           <a href="mailto:info@invenex.in" className="pf-btn pf-btn-primary pf-btn-lg pf-reveal-up">
-            Start a Project <span className="pf-arrow">→</span>
+            Email Us <span className="pf-arrow">→</span>
           </a>
         </div>
       </section>

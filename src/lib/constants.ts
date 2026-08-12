@@ -4,7 +4,7 @@
 export const siteConfig = {
   name: "Invenex Solutions",
   description:
-    "Premium web development, mobile apps, and digital solutions. Transform your vision into reality with our world-class team.",
+    "Web, mobile and platform development with published fixed pricing. Built in Kerala, working across India, the UAE and the UK.",
   url: "https://invenexsolutions.com",
   ogImage: "/og/default.png",
   creator: "Invenex Solutions",
@@ -60,6 +60,11 @@ export const mainNav: NavItem[] = [
     href: "/services",
     children: [
       {
+        title: "Platform Development",
+        href: "/services/platform-development",
+        description: "Enterprise platforms and SaaS solutions",
+      },
+      {
         title: "Web Development",
         href: "/services/web-development",
         description: "Custom websites and web applications",
@@ -68,11 +73,6 @@ export const mainNav: NavItem[] = [
         title: "Mobile App Development",
         href: "/services/mobile-development",
         description: "iOS and Android applications",
-      },
-      {
-        title: "Platform Development",
-        href: "/services/platform-development",
-        description: "Enterprise platforms and SaaS solutions",
       },
       {
         title: "E-Commerce Solutions",
@@ -92,7 +92,7 @@ export const mainNav: NavItem[] = [
     ],
   },
   {
-    title: "Portfolio",
+    title: "Work",
     href: "/portfolio",
   },
   {
@@ -104,6 +104,10 @@ export const mainNav: NavItem[] = [
     href: "/careers",
   },
   {
+    title: "Pricing",
+    href: "/pricing",
+  },
+  {
     title: "Contact",
     href: "/contact",
   },
@@ -111,9 +115,9 @@ export const mainNav: NavItem[] = [
 
 export const footerNav = {
   services: [
+    { title: "Platform Development", href: "/services/platform-development" },
     { title: "Web Development", href: "/services/web-development" },
     { title: "Mobile Apps", href: "/services/mobile-development" },
-    { title: "Platform Development", href: "/services/platform-development" },
     { title: "E-Commerce", href: "/services/ecommerce" },
     { title: "Social Media", href: "/services/social-media" },
     { title: "Digital Strategy", href: "/services/digital-strategy" },
@@ -124,6 +128,8 @@ export const footerNav = {
     { title: "Careers", href: "/careers" },
     { title: "Contact", href: "/contact" },
     { title: "Build Your Project", href: "/build-your-project" },
+    { title: "Pricing", href: "/pricing" },
+    { title: "The Blueprint", href: "/blueprint" },
   ],
   resources: [
     { title: "Products", href: "/products" },
@@ -178,27 +184,21 @@ export const contactInfo = {
     country: "India",
     zip: "680308",
   },
-  businessHours: "Mon - Fri: 9:00 AM - 6:00 PM IST",
+  /**
+   * Two lines, deliberately never collapsed into one string: the IST line
+   * serves the India base, the Gulf line tells ~60% of clients (per
+   * `currency.ts`'s Gulf/Western split) that their own working days and
+   * WhatsApp are covered too. Contact cards render both.
+   */
+  businessHours: {
+    ist: "Mon - Fri: 9:00 AM - 6:00 PM IST",
+    gulf: "Gulf clients — we work your hours. Sun–Thu, and WhatsApp any time.",
+  },
 };
 
 // ============================================
 // Form Options (for dropdowns)
 // ============================================
-export const projectTypes = [
-  { value: "web", label: "Web Development" },
-  { value: "mobile", label: "Mobile App" },
-  { value: "platform", label: "Platform/SaaS" },
-  { value: "ecommerce", label: "E-Commerce" },
-  { value: "other", label: "Other" },
-] as const;
-
-export const budgetRanges = [
-  { value: "under-5k", label: "Under $5,000" },
-  { value: "5k-15k", label: "$5,000 - $15,000" },
-  { value: "15k-50k", label: "$15,000 - $50,000" },
-  { value: "50k-plus", label: "$50,000+" },
-] as const;
-
 export const referralSources = [
   { value: "google", label: "Google Search" },
   { value: "social", label: "Social Media" },
@@ -209,6 +209,4 @@ export const referralSources = [
 // ============================================
 // Type exports for external use
 // ============================================
-export type ProjectType = (typeof projectTypes)[number]["value"];
-export type BudgetRange = (typeof budgetRanges)[number]["value"];
 export type ReferralSource = (typeof referralSources)[number]["value"];

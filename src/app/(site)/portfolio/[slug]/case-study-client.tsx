@@ -47,7 +47,7 @@ export function CaseStudyClient({ project, relatedProjects }: CaseStudyClientPro
     <>
       <CaseStudyHero project={project} />
       <ChallengeAndSolutionSection challenge={project.challenge} solution={project.solution} />
-      <ResultsSection results={project.results} />
+      <ResultsSection results={project.results} client={project.client} />
       <GallerySection images={galleryImages} title={project.title} />
       <TechSection technologies={project.technologies} />
       {project.testimonial && <TestimonialSection testimonial={project.testimonial} />}
@@ -358,7 +358,7 @@ function ChallengeAndSolutionSection({ challenge, solution }: { challenge: strin
 }
 
 /* ─── Results Section ──────────────────────────────────── */
-function ResultsSection({ results }: { results: CaseStudyProject['results'] }) {
+function ResultsSection({ results, client }: { results: CaseStudyProject['results']; client: string }) {
   return (
     <section data-testid="case-study-results" aria-labelledby="results-heading" className="py-24 md:py-36 bg-background-secondary relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -369,6 +369,12 @@ function ResultsSection({ results }: { results: CaseStudyProject['results'] }) {
         <div className="text-center mb-16">
           <SectionNumber>03</SectionNumber>
           <h2 id="results-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold">The Results</h2>
+          <p
+            data-testid="results-client"
+            className="mt-3 font-mono text-sm tracking-[0.2em] uppercase text-coral-400"
+          >
+            Results for {client}
+          </p>
         </div>
         <GSAPStaggerContainer className="grid md:grid-cols-3 gap-6">
           {results.map((result) => {

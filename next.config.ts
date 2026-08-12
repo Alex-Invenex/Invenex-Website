@@ -29,6 +29,17 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === "production",
   },
 
+  // Redirects: legacy/short URLs to their canonical destinations
+  async redirects() {
+    return [
+      {
+        source: "/work",
+        destination: "/portfolio",
+        permanent: true,
+      },
+    ];
+  },
+
   // Headers for caching (AC1, AC2: Performance)
   async headers() {
     return [

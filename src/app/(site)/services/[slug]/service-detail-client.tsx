@@ -1,17 +1,74 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, type ReactNode } from 'react'
 import Link from 'next/link'
-import { Check, Globe, Smartphone, Layers, ShoppingCart, Share2, Lightbulb, type LucideIcon } from 'lucide-react'
+import { Check, Globe, Smartphone, Layers, ShoppingCart, Share2, Lightbulb, ArrowRight, type LucideIcon } from 'lucide-react'
 import { SubpageCTA } from '@/components/sections/subpage-cta'
 import { SubpageHero, HeadlineWord } from '@/components/sections/subpage-hero'
 import { GSAPStaggerContainer, GSAPStaggerItem } from '@/components/ui/gsap-stagger-container'
 import { ShareButtons } from '@/components/ui/share-buttons'
 import { Button } from '@/components/ui/button'
+import { Price } from '@/components/pricing/price'
+import { useCurrency } from '@/components/providers/currency-provider'
+import { formatPrice } from '@/lib/format-price'
+import { TIERS, APP_TIERS, APP_CARE, ECOM_TIERS, RETAINERS, STRATEGY, MIN_AD_SPEND, minAdSpendNote, type PriceSet } from '@/lib/pricing'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
 gsap.registerPlugin(useGSAP)
+
+/* ─── Pricing per service slug ─────────────────────────────
+   Every price literal traces back to `src/lib/pricing.ts`. */
+interface PricingItem {
+  name: string
+  price: PriceSet
+  suffix?: string
+  /** One-line scope, shown in the middle column once the panel is wide enough. */
+  scope?: string
+  /** App Care only — the row is mandatory, not an upsell. */
+  required?: boolean
+  /** Straight from `Tier.badge` — only the default tier carries one. */
+  badge?: string
+}
+
+const webTiers = TIERS.filter((t) => t.id === 'launchpad' || t.id === 'launch' || t.id === 'growth')
+const platformTiers = TIERS.filter((t) => t.id === 'platform' || t.id === 'platformScale')
+const appCare = APP_CARE
+const mobileTiers = APP_TIERS.filter((t) => t.id !== 'appCare')
+
+const PRICING_BY_SLUG: Record<string, PricingItem[]> = {
+  'web-development': webTiers.map((t) => ({
+    name: t.name,
+    price: t.price,
+    scope: t.timeline,
+    badge: t.badge,
+  })),
+  'mobile-development': [
+    ...mobileTiers.map((t) => ({ name: t.name, price: t.price, scope: t.timeline })),
+    { name: appCare.name, price: appCare.price, suffix: '/mo', scope: 'Ongoing', required: true },
+  ],
+  'platform-development': platformTiers.map((t) => ({
+    name: t.name,
+    price: t.price,
+    scope: t.timeline,
+  })),
+  ecommerce: ECOM_TIERS.map((t) => ({ name: t.name, price: t.price, scope: t.scope[0] })),
+  'social-media': RETAINERS.map((t) => ({
+    name: t.name,
+    price: t.price,
+    suffix: '/mo',
+    scope: t.scope[0],
+  })),
+  'digital-strategy': [
+    { name: STRATEGY.sprint.name, price: STRATEGY.sprint.price, scope: STRATEGY.sprint.timeline },
+    {
+      name: STRATEGY.advisory.name,
+      price: STRATEGY.advisory.price,
+      suffix: '/mo',
+      scope: `${STRATEGY.advisory.minimumMonths}-month minimum`,
+    },
+  ],
+}
 
 /* ─── Icon mapping ─────────────────────────────────────── */
 const iconMap: Record<string, LucideIcon> = {
@@ -62,6 +119,7 @@ export function ServiceDetailClient({ service }: ServiceDetailClientProps) {
           </>
         }
         subtitle={service.description}
+        testId="service-hero"
       >
         <div className="flex items-center gap-4 flex-wrap">
           <div className="w-16 h-16 rounded-2xl backdrop-blur-xl border border-surface-border flex items-center justify-center" style={{ background: 'var(--color-surface-overlay)' }}>
@@ -77,6 +135,9 @@ export function ServiceDetailClient({ service }: ServiceDetailClientProps) {
       {/* Features */}
       <FeaturesSection features={service.features} />
 
+      {/* Pricing */}
+      <PricingSection slug={service.slug} />
+
       {/* Technologies */}
       <TechSection technologies={service.technologies} />
 
@@ -91,7 +152,7 @@ export function ServiceDetailClient({ service }: ServiceDetailClientProps) {
         headline="READY TO"
         highlightedText="GET STARTED"
         subtitle={`Let's discuss your ${service.title.toLowerCase()} project and see how we can help.`}
-        primaryCTA={{ label: 'Request a Quote', href: `/contact?service=${service.slug}` }}
+        primaryCTA={{ label: 'See Pricing', href: '/pricing' }}
       />
     </>
   )
@@ -186,6 +247,86 @@ function FeaturesSection({ features }: { features: string[] }) {
   )
 }
 
+/* ─── Pricing Section ──────────────────────────────────────
+   Same anatomy as the rate cards on /services: a glass panel of
+   hairline-divided rows — name, one-line scope, price — so a visitor who
+   arrives from the overview page recognises the shape immediately. */
+function PricingSection({ slug }: { slug: string }) {
+  const items = PRICING_BY_SLUG[slug]
+  const { currency } = useCurrency()
+  if (!items || items.length === 0) return null
+
+  const footnotes: ReactNode[] = []
+  if (slug === 'mobile-development') {
+    footnotes.push(
+      <p key="care">
+        An app that stops being updated eventually stops being downloadable. This isn&apos;t an
+        upsell, it&apos;s the cost of your app continuing to exist.
+      </p>
+    )
+  }
+  if (slug === 'ecommerce') {
+    footnotes.push(
+      <p key="note" className="italic">
+        Priced by catalogue size, not page count.
+      </p>
+    )
+  }
+  if (slug === 'social-media') {
+    footnotes.push(
+      <p key="ads">
+        {RETAINERS[0].adSpendNote} {minAdSpendNote(formatPrice(MIN_AD_SPEND[currency], currency))}
+      </p>
+    )
+  }
+
+  return (
+    <section aria-labelledby="pricing-heading" data-testid="service-pricing" className="py-14 bg-background-secondary">
+      <div className="container mx-auto px-6 md:px-12">
+        <h2 id="pricing-heading" className="text-3xl font-bold mb-3">What It Costs</h2>
+        <p className="text-foreground-muted max-w-2xl mb-7">
+          Every price traces back to the same sheet everyone else sees — no quote call required.
+        </p>
+
+        <div className="svc-rate-card max-w-3xl">
+          <div className="svc-rate-head">
+            <span className="svc-rate-eyebrow">Rates</span>
+            <Link href="/pricing" className="svc-rate-link group">
+              See full pricing
+              <ArrowRight
+                className="svc-arrow w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                aria-hidden="true"
+              />
+            </Link>
+          </div>
+
+          <div>
+            {items.map((item) => (
+              <div key={item.name} className="svc-rate-row">
+                <span className="svc-rate-name">
+                  {item.name}
+                  {item.required && (
+                    <span data-testid="app-care-required" className="svc-rate-req">
+                      Required
+                    </span>
+                  )}
+                  {item.badge && <span className="svc-rate-badge">{item.badge}</span>}
+                </span>
+                <span className="svc-rate-scope">{item.scope ?? ''}</span>
+                <span className="svc-rate-price">
+                  <Price amount={item.price} suffix={item.suffix} />
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {footnotes.length > 0 && <div className="svc-rate-foot">{footnotes}</div>}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /* ─── Technologies Section ─────────────────────────────── */
 function TechSection({ technologies }: { technologies: string[] }) {
   return (
@@ -262,7 +403,7 @@ function ProcessSection({ title }: { title: string }) {
           <div ref={connectorRef} className="hidden md:block absolute top-7 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-coral-500/50 via-coral-400/50 to-coral-500/50 origin-left" aria-hidden="true" style={{ transform: 'scaleX(0)' }} />
 
           {processSteps.map((step) => (
-            <div key={step.step} className="flex-1 relative" data-sp="step">
+            <div key={step.step} className="flex-1 relative" data-sp="step" data-testid="process-step">
               <div className="flex items-start gap-4 md:block md:text-center">
                 <div className="relative z-10 w-10 h-10 md:w-14 md:h-14 rounded-full flex-shrink-0 flex items-center justify-center md:mx-auto md:mb-4 font-bold text-white text-sm md:text-lg shadow-[0_0_20px_rgba(255,106,55,0.3)]" style={{ background: 'linear-gradient(135deg, var(--color-coral-500), var(--color-coral-600))' }}>
                   {step.step}

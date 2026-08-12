@@ -100,8 +100,10 @@ test.describe("Focus Styles (AC2)", () => {
   });
 
   test("buttons have visible focus indicator", async ({ page }) => {
-    // Tab through to the CTA button (keyboard navigation triggers focus-visible)
-    // Skip link -> Logo -> nav items -> Our Work -> Get a Quote
+    // Tab through to a focusable element (keyboard navigation triggers focus-visible)
+    // Skip link -> Logo -> nav items, stopping as soon as href="/contact" is
+    // focused — that's the "Contact" mainNav link, reached before the navbar's
+    // "See Pricing" CTA (which points at /pricing, not /contact).
     for (let i = 0; i < 10; i++) {
       await page.keyboard.press("Tab");
       const focused = page.locator(":focus");
@@ -361,9 +363,16 @@ test.describe("Reduced Motion Support", () => {
     // Check that sections with data-testid exist and are not using framer-motion
     // When reduced motion is enabled, AnimatedSection renders a plain div
     // instead of motion.div (which would have data-framer-* attributes)
-    const animatedSections = page.locator("[data-testid]").filter({
-      has: page.locator("section, [aria-labelledby]"),
-    });
+    //
+    // NOTE: the original locator used `.filter({ has: page.locator("section, [aria-labelledby]") })`,
+    // which only matches a [data-testid] element that CONTAINS a nested
+    // <section>/[aria-labelledby] descendant. Every homepage section (see
+    // e.g. `hero-v2.tsx`, `services-preview.tsx`) puts `data-testid`,
+    // `aria-labelledby`, and the `<section>` tag on the SAME element, so
+    // that filter could never match anything — this always returned 0,
+    // independent of any reduced-motion behavior. Matching the actual
+    // pattern directly (a `<section>` that also carries `data-testid`).
+    const animatedSections = page.locator("section[data-testid]");
 
     const count = await animatedSections.count();
     expect(count).toBeGreaterThan(0);

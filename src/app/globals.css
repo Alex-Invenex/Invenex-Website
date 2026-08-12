@@ -1440,3 +1440,883 @@ html.js-ready [data-animate] {
     transform: none !important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SERVICES PAGES — rate cards, ongoing strip, process rail.
+   Owned by the services redesign. Purely additive and `.svc-` prefixed:
+   nothing here modifies an existing selector. Other agents append below.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Rate card ──────────────────────────────────────────────────────────
+   A bordered glass panel of hairline-divided rows: product name left,
+   one-line scope in the middle (only once the panel is wide enough for it),
+   price right in display type. The panel is a container so the same markup
+   works in a half-width magazine spread and a full-width detail section. */
+.svc-rate-card {
+  container-type: inline-size;
+  border: 1px solid var(--color-surface-border);
+  border-radius: 0.875rem;
+  background: var(--color-surface-glass);
+  overflow: hidden;
+}
+
+.svc-rate-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--color-surface-border);
+  background: color-mix(in srgb, var(--color-coral-500) 4%, transparent);
+}
+
+.svc-rate-eyebrow {
+  font-family: var(--pf-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-foreground-muted, #a1a1a1) 75%, transparent);
+}
+
+.svc-rate-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-coral-500);
+  transition: color 200ms ease;
+}
+.svc-rate-link:hover {
+  color: var(--color-coral-400);
+}
+.svc-rate-link:focus-visible {
+  outline: 2px solid var(--color-coral-500);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.svc-rate-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+  padding: 0.6rem 0.875rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-surface-border) 70%, transparent);
+  transition: background-color 220ms ease;
+}
+.svc-rate-row:first-child {
+  border-top: 0;
+}
+.svc-rate-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-coral-500);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 240ms cubic-bezier(0.22, 0.7, 0.3, 1);
+}
+/* Hover only — a rate row is a read-only line item with no focusable
+   descendant of its own. The panel's "See full pricing" link is the keyboard
+   affordance; a :focus-within rule here would be dead code. */
+.svc-rate-row:hover {
+  background: color-mix(in srgb, var(--color-coral-500) 7%, transparent);
+}
+.svc-rate-row:hover::before {
+  transform: scaleY(1);
+}
+
+.svc-rate-name {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: var(--color-foreground);
+}
+
+.svc-rate-scope {
+  display: none;
+  font-family: var(--pf-font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--color-foreground-muted, #a1a1a1) 65%, transparent);
+}
+
+.svc-rate-price {
+  font-family: var(--pf-font-display);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-coral-500);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Middle scope column only once the panel can carry three columns. */
+@container (min-width: 27rem) {
+  .svc-rate-row {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto;
+  }
+  .svc-rate-scope {
+    display: block;
+  }
+  .svc-rate-price {
+    font-size: 1.125rem;
+  }
+}
+
+.svc-rate-req {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05rem 0.4rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.svc-rate-foot {
+  padding: 0.625rem 0.875rem 0.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-surface-border) 70%, transparent);
+  background: rgba(0, 0, 0, 0.12);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--color-foreground-muted, #a1a1a1) 85%, transparent);
+}
+.svc-rate-foot > * + * {
+  margin-top: 0.375rem;
+}
+
+/* Wide panels (the detail pages' full-width rate card) get more air and a
+   larger price, without a second set of classes. */
+@container (min-width: 40rem) {
+  .svc-rate-head {
+    padding: 0.75rem 1.125rem;
+  }
+  .svc-rate-row {
+    padding: 0.8rem 1.125rem;
+  }
+  .svc-rate-name {
+    font-size: 0.9375rem;
+  }
+  .svc-rate-scope {
+    font-size: 0.75rem;
+  }
+  .svc-rate-price {
+    font-size: 1.375rem;
+  }
+  .svc-rate-foot {
+    padding: 0.875rem 1.125rem 1rem;
+  }
+}
+
+/* The default tier's badge, straight from the pricing sheet. */
+.svc-rate-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05rem 0.4rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--color-coral-500) 30%, transparent);
+  background: color-mix(in srgb, var(--color-coral-500) 12%, transparent);
+  color: var(--color-coral-500);
+  font-family: var(--pf-font-mono);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ─── Ongoing strip — deliberately quieter than the four build services ── */
+.svc-ongoing-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid color-mix(in srgb, var(--color-coral-500) 18%, var(--color-surface-border));
+  border-radius: 0.875rem;
+  padding: 1rem 1.125rem 1.125rem;
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--color-coral-500) 7%, transparent) 0%,
+    var(--color-surface-overlay) 55%
+  );
+  transition: transform 300ms cubic-bezier(0.22, 0.7, 0.3, 1), border-color 300ms ease,
+    box-shadow 300ms ease;
+}
+.svc-ongoing-card:hover,
+.svc-ongoing-card:focus-within {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--color-coral-500) 38%, transparent);
+  box-shadow: 0 14px 40px -22px rgba(255, 106, 55, 0.55);
+}
+
+.svc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--color-coral-500) 28%, transparent);
+  background: color-mix(in srgb, var(--color-coral-500) 12%, transparent);
+  color: var(--color-coral-500);
+  font-family: var(--pf-font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ─── Process rail — the 1→5 goal gradient ──────────────────────────────── */
+.svc-rail {
+  position: relative;
+}
+.svc-rail-line,
+.svc-rail-fill {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: 1px;
+  pointer-events: none;
+}
+.svc-rail-line {
+  right: 0;
+  background: var(--color-surface-border-hover);
+}
+.svc-rail-fill {
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--color-coral-500), var(--color-coral-400));
+}
+
+.svc-rail-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.svc-rail-step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  padding-right: 0.75rem;
+}
+.svc-rail-num {
+  font-family: var(--pf-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  color: color-mix(in srgb, var(--color-foreground-muted, #a1a1a1) 60%, transparent);
+  margin-top: 0.35rem;
+  transition: color 300ms ease;
+}
+.svc-rail-title {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--color-foreground-muted, #a1a1a1) 85%, transparent);
+  transition: color 300ms ease;
+}
+.svc-rail-dur {
+  font-family: var(--pf-font-mono);
+  font-size: 0.625rem;
+  color: color-mix(in srgb, var(--color-foreground-muted, #a1a1a1) 55%, transparent);
+}
+.svc-rail-step[data-state="done"] .svc-rail-num,
+.svc-rail-step[data-state="active"] .svc-rail-num {
+  color: var(--color-coral-500);
+}
+.svc-rail-step[data-state="active"] .svc-rail-title {
+  color: var(--color-foreground);
+}
+
+.svc-node {
+  position: relative;
+  width: 11px;
+  height: 11px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-surface-border-hover);
+  background: var(--color-background, #0a0a0a);
+  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+}
+.svc-rail-step[data-state="done"] .svc-node {
+  background: var(--color-coral-500);
+  border-color: var(--color-coral-500);
+}
+.svc-rail-step[data-state="active"] .svc-node {
+  background: var(--color-coral-500);
+  border-color: var(--color-coral-500);
+  animation: svc-node-pulse 2.2s cubic-bezier(0.22, 0.7, 0.3, 1) infinite;
+}
+
+@keyframes svc-node-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-coral-500) 45%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 9px color-mix(in srgb, var(--color-coral-500) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-coral-500) 0%, transparent);
+  }
+}
+
+/* The rail doubles as a compact mobile progress read-out — nodes and numbers
+   only, since five labelled columns will not fit a 375px screen. */
+@media (max-width: 640px) {
+  .svc-rail-title,
+  .svc-rail-dur {
+    display: none;
+  }
+  .svc-rail-steps {
+    gap: 0 0.375rem;
+  }
+}
+
+/* ─── Shared micro-interactions ─────────────────────────────────────────── */
+/* The arrow that slides on link hover. Tailwind supplies the transition and
+   the translate; this class exists so the reduced-motion block below can
+   switch both off in one place. */
+.svc-arrow {
+  will-change: transform;
+}
+
+.svc-lift {
+  transition: transform 300ms cubic-bezier(0.22, 0.7, 0.3, 1), border-color 300ms ease;
+}
+.svc-lift:hover {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-rate-row,
+  .svc-rate-row::before,
+  .svc-ongoing-card,
+  .svc-node,
+  .svc-rail-num,
+  .svc-rail-title,
+  .svc-arrow,
+  .svc-lift {
+    transition: none !important;
+  }
+  /* Tailwind v4 drives `translate-x-1` through the `translate` property via
+     `--tw-translate-x`, not through `transform`. Neutralise the variable as
+     well as the property: pairing `translate: none` with `transform: none` in
+     one rule lets the CSS minifier fold both into a single `transform`
+     declaration, which silently drops the part that actually matters. */
+  .svc-arrow,
+  .svc-arrow:hover,
+  .group:hover .svc-arrow {
+    --tw-translate-x: 0px !important;
+    translate: none !important;
+  }
+  .svc-rail-step[data-state="active"] .svc-node {
+    animation: none !important;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-coral-500) 25%, transparent);
+  }
+  .svc-ongoing-card:hover,
+  .svc-lift:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   /pricing — comparison ladder, rate cards, instrument panel
+   ADDITIVE ONLY. Every selector below is new and namespaced
+   `pr-`; nothing above this block is modified.
+   ============================================================ */
+
+.pr-display {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  letter-spacing: -0.03em;
+}
+
+/* Anchor targets sit clear of the fixed navbar (80px) + sticky map (~52px). */
+.pr-anchor {
+  scroll-margin-top: 9.5rem;
+}
+
+/* ── Sticky section map ─────────────────────────────────── */
+.pr-subnav {
+  position: sticky;
+  top: 5rem;
+  z-index: 30;
+}
+
+.pr-subnav-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pr-subnav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.pr-chip {
+  transition: color 0.25s ease, background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* The bar is `bg-background/85` + `backdrop-blur-xl`, and the blur is what
+   makes 85% opacity legible. On coarse pointers this file nulls
+   backdrop-filter outright (it wrecks scroll performance on iOS), which
+   would leave the map as a translucent strip with six sections of copy
+   sliding visibly through it. Take the blur away and the background has to
+   carry the separation on its own, so it goes near-solid there. */
+@media (hover: none) and (pointer: coarse) {
+  .pr-subnav-bar {
+    background-color: color-mix(
+      in srgb,
+      var(--color-background) 97%,
+      transparent
+    );
+  }
+}
+
+/* ── The ladder ─────────────────────────────────────────────
+   One DOM for every viewport: a scroll-snap carousel below md,
+   a two-column grid to xl, and five columns side by side above
+   it, with Growth given the widest track. DOM order is always
+   launchpad → platformScale.
+   ---------------------------------------------------------- */
+.pr-ladder {
+  display: flex;
+  gap: 0.875rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.5rem;
+  padding: 1.5rem 1.5rem 0.5rem;
+  margin-inline: -1.5rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pr-ladder::-webkit-scrollbar {
+  display: none;
+}
+
+.pr-ladder > * {
+  flex: 0 0 84vw;
+  max-width: 21rem;
+  scroll-snap-align: center;
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .pr-ladder {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    overflow: visible;
+    scroll-snap-type: none;
+    margin-inline: 0;
+    padding: 1.75rem 0 0;
+  }
+
+  .pr-ladder > * {
+    flex: initial;
+    max-width: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  .pr-ladder {
+    grid-template-columns: 1fr 1fr 1.32fr 1fr 1fr;
+    gap: 0.75rem;
+    align-items: stretch;
+    padding-top: 2.5rem;
+  }
+}
+
+.pr-tier {
+  transition: transform 0.4s cubic-bezier(0.22, 0.7, 0.3, 1),
+    opacity 0.4s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (hover: hover) {
+  .pr-tier:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* Above xl the ladder is a single row: the middle column stands up and its
+   neighbours sit back, so the eye lands on Growth before it reads a price. */
+@media (min-width: 1280px) {
+  .pr-ladder > [data-tier]:not([data-tier='growth']) > .pr-tier {
+    transform: scale(0.972);
+    opacity: 0.88;
+  }
+
+  .pr-ladder > [data-tier]:not([data-tier='growth']) > .pr-tier:hover {
+    transform: scale(1) translateY(-4px);
+    opacity: 1;
+  }
+
+  .pr-ladder > [data-tier='growth'] > .pr-tier {
+    transform: translateY(-14px);
+  }
+
+  .pr-ladder > [data-tier='growth'] > .pr-tier:hover {
+    transform: translateY(-18px);
+  }
+}
+
+/* Fixed-height head so every price in the row lands on one line. */
+@media (min-width: 768px) {
+  .pr-tier-head {
+    min-height: 6.25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .pr-tier-head {
+    min-height: 8.5rem;
+  }
+}
+
+.pr-price {
+  font-size: clamp(1.6rem, 1.15rem + 1.1vw, 2.05rem);
+  font-weight: 300;
+  line-height: 1.02;
+}
+
+@media (min-width: 1280px) {
+  .pr-ladder .pr-price {
+    font-size: 1.6rem;
+  }
+}
+
+/* Prices crossfade rather than jumping when the currency changes. */
+@keyframes pr-price-in {
+  from {
+    opacity: 0.25;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.pr-price-in {
+  display: inline-block;
+  animation: pr-price-in 200ms cubic-bezier(0.22, 0.7, 0.3, 1);
+}
+
+/* ── Carousel dots ──────────────────────────────────────── */
+.pr-dot {
+  transition: width 0.28s cubic-bezier(0.22, 0.7, 0.3, 1),
+    background-color 0.28s ease;
+}
+
+/* ── Segmented currency control ─────────────────────────── */
+.pr-seg {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(3.5rem, 1fr));
+  padding: 0.25rem;
+  border-radius: 9999px;
+}
+
+.pr-seg-pill {
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  width: calc((100% - 0.5rem) / 3);
+  border-radius: 9999px;
+  background: linear-gradient(
+    135deg,
+    var(--color-coral-500) 0%,
+    var(--color-coral-600) 100%
+  );
+  box-shadow: 0 0 18px rgba(255, 106, 55, 0.35);
+  transition: transform 0.34s cubic-bezier(0.22, 0.7, 0.3, 1);
+  pointer-events: none;
+}
+
+/* ── Rate cards ─────────────────────────────────────────── */
+.pr-rate {
+  transition: transform 0.3s cubic-bezier(0.22, 0.7, 0.3, 1),
+    border-color 0.3s ease, background-color 0.3s ease;
+}
+
+@media (hover: hover) {
+  .pr-rate:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 106, 55, 0.35);
+  }
+}
+
+/* ── Calculator sliders ─────────────────────────────────── */
+.pr-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2.5rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pr-range::-webkit-slider-runnable-track {
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    var(--color-coral-600) 0%,
+    var(--color-coral-500) var(--pr-fill, 0%),
+    rgba(255, 255, 255, 0.12) var(--pr-fill, 0%),
+    rgba(255, 255, 255, 0.12) 100%
+  );
+}
+
+.pr-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  margin-top: -0.5rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 3px solid var(--color-coral-500);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.pr-range::-moz-range-track {
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.pr-range::-moz-range-progress {
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: var(--color-coral-500);
+}
+
+.pr-range::-moz-range-thumb {
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 3px solid var(--color-coral-500);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+
+.pr-range:active::-webkit-slider-thumb {
+  transform: scale(1.14);
+}
+
+.pr-range:focus-visible {
+  outline: none;
+}
+
+.pr-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px rgba(255, 106, 55, 0.4);
+}
+
+.pr-range:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 4px rgba(255, 106, 55, 0.4);
+}
+
+/* ── FAQ disclosures ────────────────────────────────────── */
+.pr-faq-item {
+  transition: background-color 0.25s ease;
+}
+
+.pr-faq-item:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.pr-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ── The one warm band on the page ──────────────────────── */
+.pr-band {
+  background:
+    radial-gradient(
+      110% 130% at 12% 0%,
+      rgba(255, 106, 55, 0.22) 0%,
+      rgba(255, 106, 55, 0.07) 42%,
+      transparent 72%
+    ),
+    linear-gradient(180deg, #151110 0%, #0a0a0a 100%);
+  border-top: 1px solid rgba(255, 106, 55, 0.22);
+  border-bottom: 1px solid rgba(255, 106, 55, 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pr-tier,
+  .pr-rate,
+  .pr-chip,
+  .pr-dot,
+  .pr-seg-pill,
+  .pr-faq-item,
+  .pr-range::-webkit-slider-thumb {
+    transition: none !important;
+  }
+
+  .pr-price-in {
+    animation: none !important;
+  }
+
+  .pr-ladder {
+    scroll-behavior: auto;
+  }
+}
+
+/* Small type used across the pricing cards. Declared here rather than as
+   Tailwind arbitrary values, which have proved unreliable in this project
+   (see the `instagram-reels` note in the project memory). */
+.pr-eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+}
+
+.pr-item {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.pr-badge {
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+}
+
+/* The dominant card in a three-up row (Momentum). Declared after the plain
+   `.pr-tier:hover` rule so the lift is not cancelled on hover. */
+@media (min-width: 1024px) {
+  .pr-tier.pr-lift {
+    transform: translateY(-12px);
+  }
+}
+
+@media (hover: hover) and (min-width: 1024px) {
+  .pr-tier.pr-lift:hover {
+    transform: translateY(-16px);
+  }
+}
+
+/* Scope chips: small, but without the wide tracking of a mono eyebrow —
+   these are read as words, not as labels. */
+.pr-tag {
+  font-size: 0.6875rem;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+}
+
+/* On a phone the ladder is a carousel: cards end where their content ends,
+   rather than all stretching to the height of the longest exclusion list. */
+@media (max-width: 767px) {
+  .pr-ladder {
+    align-items: flex-start;
+  }
+}
+
+/* In a five-across ladder the columns are ~220px: "Choose Platform Scale"
+   has to stay on one line. */
+@media (min-width: 1280px) {
+  .pr-ladder .pr-tier-cta {
+    font-size: 0.78rem;
+    padding-inline: 0.5rem;
+    white-space: nowrap;
+  }
+}
+
+/* ── Includes disclosure ────────────────────────────────────
+   The rest of a tier's includes sit in a native <details>, so
+   they are reachable before hydration and with JavaScript off.
+   Both summary labels are in the DOM; the cascade picks the
+   one that matches [open], which is what keeps the control
+   honest without a script. Exclusions are NOT in here — they
+   are a sibling after it, and always visible.
+   ---------------------------------------------------------- */
+.pr-disclosure-summary {
+  list-style: none;
+}
+
+.pr-disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+
+.pr-disclosure-less {
+  display: none;
+}
+
+.pr-disclosure[open] > .pr-disclosure-summary .pr-disclosure-more {
+  display: none;
+}
+
+.pr-disclosure[open] > .pr-disclosure-summary .pr-disclosure-less {
+  display: inline;
+}
+
+.pr-disclosure[open] > .pr-disclosure-summary .pr-disclosure-icon {
+  transform: rotate(180deg);
+}
+
+/* ── Snap row ───────────────────────────────────────────────
+   The same carousel-below-md / grid-above-md behaviour as the
+   ladder, for three-up rows (the Care Plans). Stacking three
+   full-height cards is what made the phone page 14,000px long.
+   ---------------------------------------------------------- */
+.pr-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.5rem;
+  padding: 1.5rem 1.5rem 0.5rem;
+  margin-inline: -1.5rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pr-row::-webkit-scrollbar {
+  display: none;
+}
+
+.pr-row > * {
+  flex: 0 0 84vw;
+  max-width: 21rem;
+  scroll-snap-align: center;
+}
+
+@media (min-width: 768px) {
+  .pr-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 1.25rem;
+    overflow: visible;
+    scroll-snap-type: none;
+    margin-inline: 0;
+    padding: 1.75rem 0 0;
+  }
+
+  .pr-row > * {
+    flex: initial;
+    max-width: none;
+  }
+}
