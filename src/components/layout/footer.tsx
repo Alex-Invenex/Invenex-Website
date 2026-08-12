@@ -115,7 +115,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
+                    className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 py-1.5 group"
                   >
                     {link.title}
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all hidden sm:block" />
@@ -136,7 +136,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
+                    className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 py-1.5 group"
                   >
                     {link.title}
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all hidden sm:block" />
@@ -158,7 +158,7 @@ export function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
+                      className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 py-1.5 group"
                     >
                       {link.title}
                       <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all hidden sm:block" />
@@ -166,7 +166,7 @@ export function Footer() {
                   ) : (
                     <Link
                       href={link.href}
-                      className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 group"
+                      className="text-[13px] sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center gap-1 py-1.5 group"
                     >
                       {link.title}
                       <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all hidden sm:block" />
@@ -272,13 +272,13 @@ export function Footer() {
             <div className="flex items-center gap-4 sm:gap-6">
               <Link
                 href="/privacy"
-                className="text-xs sm:text-sm text-foreground-muted hover:text-foreground transition-colors"
+                className="text-xs sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center py-2"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms"
-                className="text-xs sm:text-sm text-foreground-muted hover:text-foreground transition-colors"
+                className="text-xs sm:text-sm text-foreground-muted hover:text-foreground transition-colors inline-flex items-center py-2"
               >
                 Terms of Service
               </Link>

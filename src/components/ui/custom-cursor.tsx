@@ -39,6 +39,8 @@ export function CustomCursor({
   // Store mouse position in refs to avoid re-renders
   const mousePos = useRef({ x: 0, y: 0 })
   const outlinePos = useRef({ x: 0, y: 0 })
+  /** False until the first real pointer position is known — see the effect. */
+  const hasPointer = useRef(false)
   const isHoveringRef = useRef(false)
   const isTextInputRef = useRef(false)
 
@@ -70,26 +72,41 @@ export function CustomCursor({
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReducedMotion) return
 
-    // Initialize outline position to center to avoid corner flash
-    outlinePos.current = {
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 2,
-    }
-
     // Defer state update to avoid synchronous setState in effect
     requestAnimationFrame(() => {
       setIsVisible(true)
     })
 
+    // Nothing may be drawn until we know where the pointer actually is.
+    // Seeding `outlinePos` to the viewport centre while `mousePos` was still
+    // {0,0} meant that, before the first mouse move, the ring lerped from
+    // mid-screen toward the top-left corner — a stray circle drifting across
+    // the page on every load. Worse, `cursor-none` is applied to <body> here
+    // but the elements only became visible on `mouseenter`, which never fires
+    // when the page loads with the pointer already inside the window: that
+    // left the visitor with no cursor at all until they moved it out and back.
+    const reveal = () => {
+      // Hide the native cursor only now, so a visitor is never left with no
+      // cursor at all if the custom one has not been positioned yet.
+      document.body.classList.add('cursor-none')
+      if (dotRef.current) dotRef.current.style.opacity = '1'
+      if (outlineRef.current) outlineRef.current.style.opacity = '1'
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       mousePos.current.x = e.clientX
       mousePos.current.y = e.clientY
+      if (!hasPointer.current) {
+        // First real position: snap the outline to it rather than flying in.
+        hasPointer.current = true
+        outlinePos.current = { x: e.clientX, y: e.clientY }
+        reveal()
+      }
     }
 
     // Handle mouse entering the window
     const handleMouseEnter = () => {
-      if (dotRef.current) dotRef.current.style.opacity = '1'
-      if (outlineRef.current) outlineRef.current.style.opacity = '1'
+      if (hasPointer.current) reveal()
     }
 
     // Handle mouse leaving the window
@@ -126,6 +143,11 @@ export function CustomCursor({
     // Animation loop using requestAnimationFrame
     let animationId: number
     const animate = () => {
+      // Draw nothing until the pointer's real position is known.
+      if (!hasPointer.current) {
+        animationId = requestAnimationFrame(animate)
+        return
+      }
       const { x: mouseX, y: mouseY } = mousePos.current
       const halfDot = dotSize / 2
       const halfOutline = outlineSize / 2
@@ -147,8 +169,7 @@ export function CustomCursor({
       animationId = requestAnimationFrame(animate)
     }
 
-    // Add cursor-none to body
-    document.body.classList.add('cursor-none')
+    // `cursor-none` is added in reveal(), once the custom cursor can be drawn.
 
     // Event listeners
     window.addEventListener('mousemove', handleMouseMove, { passive: true })

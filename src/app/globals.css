@@ -1927,6 +1927,9 @@ html.js-ready [data-animate] {
     scroll-snap-type: none;
     margin-inline: 0;
     padding: 1.75rem 0 0;
+    /* Same reason as the five-across rule below. The phone carousel keeps
+       equal heights (it is a flex row, one card per screen). */
+    align-items: start;
   }
 
   .pr-ladder > * {
@@ -1939,7 +1942,13 @@ html.js-ready [data-animate] {
   .pr-ladder {
     grid-template-columns: 1fr 1fr 1.32fr 1fr 1fr;
     gap: 0.75rem;
-    align-items: stretch;
+    /* Cards hug their content rather than stretching to the tallest in the
+       row. The tiers carry deliberately unequal amounts of copy — Launchpad
+       and Launch list what is excluded, while Platform and Platform Scale say
+       "Everything in Growth" and stop — so stretching left ~385px of empty
+       card under the two most expensive tiers, which read as unfinished
+       exactly where the price is highest. */
+    align-items: start;
     padding-top: 2.5rem;
   }
 }

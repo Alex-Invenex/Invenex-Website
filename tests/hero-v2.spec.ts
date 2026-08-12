@@ -12,14 +12,42 @@ import { test, expect } from '@playwright/test'
  * (This file previously described a long-replaced "BUILDING / DIGITAL /
  * EXCELLENCE" hero and asserted stats the component never rendered.)
  */
+/**
+ * The hero-section locator is always resolved with `.first()` below.
+ * `RouteScrollCleanup` wraps the tree in `<div key={pathname}>` (deliberately —
+ * it prevents a GSAP pin-spacer `removeChild` crash), and for a ~150ms window
+ * during hydration React holds both the outgoing and incoming subtree, so the
+ * document briefly contains two `hero-section` nodes and strict mode fails.
+ * Measured: 2 nodes at +150ms, back to 1 by +300ms. Nothing is visible to a
+ * visitor; the assertions below still describe a single rendered hero.
+ */
+/**
+ * Load the homepage and wait out the hydration window described above, so
+ * assertions never race the moment when two copies of the tree are mounted.
+ * Without this the flake hits `#hero-title` and the CTA testids too, not just
+ * `hero-section`.
+ */
+async function gotoHome(page: import('@playwright/test').Page) {
+  await page.goto('/')
+  await page.waitForLoadState('load')
+  // The count is already 1 on arrival and only becomes 2 once hydration
+  // starts, so polling for 1 straight away would pass before the window even
+  // opens. Require it to read 1 on two checks ~400ms apart instead, which
+  // brackets the measured 150-300ms duplicate.
+  const count = () => page.locator('[data-testid="hero-section"]').count()
+  await expect.poll(count, { timeout: 10_000 }).toBe(1)
+  await page.waitForTimeout(400)
+  await expect.poll(count, { timeout: 10_000 }).toBe(1)
+}
+
 test.describe('Hero', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/')
+    await gotoHome(page)
   })
 
   test.describe('Rendering', () => {
     test('renders the headline, badge and subline', async ({ page }) => {
-      const hero = page.getByTestId('hero-section')
+      const hero = page.getByTestId('hero-section').first()
       await expect(hero).toBeVisible()
 
       const headline = page.locator('#hero-title')
@@ -38,12 +66,12 @@ test.describe('Hero', () => {
     })
 
     test('does not fall back to the old adjective-led subline', async ({ page }) => {
-      const hero = page.getByTestId('hero-section')
+      const hero = page.getByTestId('hero-section').first()
       await expect(hero.getByText(/Premium web experiences/i)).toHaveCount(0)
     })
 
     test('has correct accessibility attributes', async ({ page }) => {
-      const hero = page.getByTestId('hero-section')
+      const hero = page.getByTestId('hero-section').first()
       await expect(hero).toHaveAttribute('aria-labelledby', 'hero-title')
       await expect(page.locator('#hero-title')).toBeVisible()
     })
@@ -87,13 +115,13 @@ test.describe('Hero', () => {
     test('gradient composition is present and hidden from screen readers', async ({
       page,
     }) => {
-      const hero = page.getByTestId('hero-section')
+      const hero = page.getByTestId('hero-section').first()
       await expect(hero.locator('[data-hero-orbs]')).toHaveCount(1)
       await expect(hero.locator('[aria-hidden="true"]').first()).toBeAttached()
     })
 
     test('scroll hint is present', async ({ page }) => {
-      const hero = page.getByTestId('hero-section')
+      const hero = page.getByTestId('hero-section').first()
       await expect(hero.getByText(/Scroll to Explore/i)).toBeVisible()
     })
   })
@@ -102,9 +130,9 @@ test.describe('Hero', () => {
     test.use({ viewport: { width: 390, height: 844 } })
 
     test('renders and stacks the CTAs', async ({ page }) => {
-      await page.goto('/')
+      await gotoHome(page)
 
-      const hero = page.getByTestId('hero-section')
+      const hero = page.getByTestId('hero-section').first()
       await expect(hero).toBeVisible()
       await expect(page.locator('#hero-title')).toContainText('Futures')
 
@@ -120,9 +148,9 @@ test.describe('Hero', () => {
     })
 
     test('all hero content is visible without animation', async ({ page }) => {
-      await page.goto('/')
+      await gotoHome(page)
 
-      const hero = page.getByTestId('hero-section')
+      const hero = page.getByTestId('hero-section').first()
       await expect(hero).toBeVisible()
       await expect(page.locator('#hero-title')).toContainText('Futures')
       await expect(hero.getByText(/Prices published/i)).toBeVisible()

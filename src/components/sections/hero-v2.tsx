@@ -626,14 +626,19 @@ export function HeroV2() {
             <div className="w-8 md:w-12 h-[1px] bg-coral-500" />
           </div>
 
-          {/* Social links */}
-          <div className="flex items-center gap-4">
+          {/* Social links. The icons stay 16/20px, but each anchor is a 44px
+              box so the tap target meets the touch minimum — icon-only links
+              are the worst offenders for this. `-ml-3.5` cancels the first
+              box's padding so the row still lines up with the copy above,
+              and the gap is dropped because the padding now does the
+              spacing. */}
+          <div className="-ml-3.5 flex items-center">
             <a
               href="https://www.linkedin.com/company/invenexsolutions"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="text-foreground-muted/50 hover:text-foreground-muted transition-colors duration-300"
+              className="inline-flex h-11 w-11 items-center justify-center text-foreground-muted/50 hover:text-foreground-muted transition-colors duration-300"
             >
               <svg
                 className="w-4 h-4 md:w-5 md:h-5"
@@ -648,7 +653,7 @@ export function HeroV2() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="text-foreground-muted/50 hover:text-foreground-muted transition-colors duration-300"
+              className="inline-flex h-11 w-11 items-center justify-center text-foreground-muted/50 hover:text-foreground-muted transition-colors duration-300"
             >
               <svg
                 className="w-4 h-4 md:w-5 md:h-5"
@@ -663,7 +668,7 @@ export function HeroV2() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="text-foreground-muted/50 hover:text-foreground-muted transition-colors duration-300"
+              className="inline-flex h-11 w-11 items-center justify-center text-foreground-muted/50 hover:text-foreground-muted transition-colors duration-300"
             >
               <svg
                 className="w-4 h-4 md:w-5 md:h-5"
