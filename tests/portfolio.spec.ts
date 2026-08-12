@@ -214,6 +214,11 @@ test.describe('Task 15: Case-study attribution + portfolio metrics', () => {
   test('every card whose metric reads as a +N% figure names a known client', async ({ page }) => {
     await page.goto('/portfolio')
     const cards = page.getByTestId('bento-project-card')
+    // The grid reads `useSearchParams`, so its whole subtree renders on the
+    // client — the cards do not exist in the server HTML. `count()` is a
+    // one-shot read with no auto-retry, so it must be gated on an
+    // auto-waiting assertion or it samples the pre-hydration DOM and sees 0.
+    await expect(cards.first()).toBeAttached()
     const count = await cards.count()
     expect(count).toBeGreaterThan(0)
 

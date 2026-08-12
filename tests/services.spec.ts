@@ -239,7 +239,12 @@ test.describe('Services Overview Page — restructure (Task 11)', () => {
 test.describe('Homepage services preview — real demotion (Task 11 fix round 1)', () => {
   test('the pinned panel track holds exactly the 4 build services, not all 6', async ({ page }) => {
     await page.goto('/');
-    const section = page.getByTestId('services-preview-section');
+    // `.first()` for the same reason the sibling test below uses it: while the
+    // page is still settling, GSAP's pin wraps this section in a `pin-spacer`
+    // and the transition layer can briefly hold a second copy, which trips
+    // strict mode. The source renders the section exactly once, and the
+    // subject here is the panel count, not section identity.
+    const section = page.getByTestId('services-preview-section').first();
     await expect(section).toBeVisible();
 
     const panels = section.locator('[data-svc-panel]');
