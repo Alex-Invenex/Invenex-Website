@@ -213,11 +213,11 @@ export function ProfileClient() {
               <span className="pf-contact-k">Email</span>
               <span className="pf-contact-v">info@invenex.in</span>
             </a>
-            <a className="pf-contact-card" href="tel:+918848414848">
+            <a className="pf-contact-card" href="tel:+919207640042">
               <span className="pf-contact-k">Phone</span>
-              <span className="pf-contact-v">+91 88484 14848</span>
+              <span className="pf-contact-v">+91 92076 40042</span>
             </a>
-            <a className="pf-contact-card" href="https://wa.me/918848414848" target="_blank" rel="noopener noreferrer">
+            <a className="pf-contact-card" href="https://wa.me/919207640042" target="_blank" rel="noopener noreferrer">
               <span className="pf-contact-k">WhatsApp</span>
               <span className="pf-contact-v">Message us</span>
             </a>

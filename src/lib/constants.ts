@@ -175,8 +175,8 @@ export const socialLinks: SocialLink[] = [
 // ============================================
 export const contactInfo = {
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "info@invenex.in",
-  phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+91 88484 14848",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || "+918848414848",
+  phone: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+91 92076 40042",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || "+919207640042",
   address: {
     street: process.env.NEXT_PUBLIC_ADDRESS_STREET || "Koratty",
     city: "Thrissur",

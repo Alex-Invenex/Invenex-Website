@@ -110,7 +110,7 @@ export function ScopeForm({
           name="phone"
           id="scope-phone"
           label="Phone / WhatsApp"
-          placeholder="+91 88484 14848"
+          placeholder="+91 92076 40042"
           autoComplete="tel"
         />
         <Input
