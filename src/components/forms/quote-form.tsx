@@ -10,6 +10,7 @@ import { referralSources } from '@/lib/constants';
 import { getBudgetBands } from '@/lib/pricing';
 import { useCurrency } from '@/components/providers/currency-provider';
 import { submitQuoteRequest } from '@/lib/actions/contact';
+import { TurnstileWidget, type TurnstileHandle } from '@/components/forms/turnstile-widget';
 
 /**
  * Goal-gradient progress indicator (copy deck §11 / P2): the form opens
@@ -51,6 +52,9 @@ export function QuoteForm() {
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const budgetRef = useRef<HTMLSelectElement>(null);
   const sourceRef = useRef<HTMLSelectElement>(null);
+  const turnstileRef = useRef<TurnstileHandle>(null);
+  // When the form appeared, so the server can drop implausibly fast fills.
+  const [mountedAt] = useState(() => Date.now());
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,6 +62,7 @@ export function QuoteForm() {
     setErrors({});
 
     const formData = new FormData(e.currentTarget);
+    formData.set('form-elapsed-ms', String(Date.now() - mountedAt));
     const data = Object.fromEntries(formData);
 
     // Client-side validation
@@ -111,9 +116,11 @@ export function QuoteForm() {
         setIsSuccess(true);
       } else {
         setErrors({ form: result.error || 'Something went wrong. Please try again.' });
+        turnstileRef.current?.reset();
       }
     } catch {
       setErrors({ form: 'Something went wrong. Please try again.' });
+      turnstileRef.current?.reset();
     } finally {
       setIsLoading(false);
     }
@@ -145,6 +152,17 @@ export function QuoteForm() {
       {/* Which currency the visitor saw the budget options in, so the team
           notification shows the matching label server-side. */}
       <input type="hidden" name="currency" value={currency} />
+
+      {/* Honeypot — off-screen, never focusable. Same field as the scope form. */}
+      <input
+        type="text"
+        name="company-website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px]"
+        style={{ position: 'absolute', left: '-9999px' }}
+      />
 
       <Input
         ref={nameRef}
@@ -214,6 +232,8 @@ export function QuoteForm() {
         aria-invalid={errors.source ? 'true' : undefined}
         aria-required="true"
       />
+
+      <TurnstileWidget ref={turnstileRef} />
 
       {errors.form && (
         <p className="text-error text-body-sm" role="alert">

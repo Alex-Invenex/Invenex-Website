@@ -7,6 +7,8 @@ import QuoteConfirmation from '@/emails/quote-confirmation';
 import { contactInfo, referralSources } from '@/lib/constants';
 import { getBudgetBands } from '@/lib/pricing';
 import { isCurrency, type Currency } from '@/lib/currency';
+import { isLikelyBot, verifyTurnstile } from '@/lib/spam';
+import { headers } from 'next/headers';
 import type { ActionResult } from '@/types';
 
 function getBudgetLabel(value: string, currency: Currency): string {
@@ -54,6 +56,21 @@ export async function submitQuoteRequest(
   }
 
   const data = result.data;
+
+  // Silent spam checks run after validation so a real visitor still sees
+  // field errors. Look successful so the bot moves on.
+  if (isLikelyBot(formData, data.name)) {
+    return { success: true, data: { id: 'ignored' } };
+  }
+
+  const ip = (await headers()).get('x-forwarded-for')?.split(',')[0]?.trim();
+  if (!(await verifyTurnstile(formData.get('cf-turnstile-response'), ip))) {
+    return {
+      success: false,
+      error: 'Please complete the verification check above and try again.',
+    };
+  }
+
   // The client sends the currency it displayed the budget select in, so the
   // email shows the same label the visitor picked. Anything unrecognised
   // (missing field, tampered value) falls back to INR rather than failing
